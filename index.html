@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPTIONS TERMINAL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --bg3: #181818;
+    --border: #2a2a2a;
+    --border2: #333333;
+    --text: #e8e8e8;
+    --muted: #666;
+    --dim: #444;
+    --accent: #00ff88;
+    --accent2: #00cc66;
+    --red: #ff4466;
+    --amber: #ffaa00;
+    --blue: #4488ff;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  /* layout */
+  .shell {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 6rem;
+  }
+
+  /* header */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .wordmark {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .wordmark-main {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    color: var(--accent);
+  }
+  .wordmark-sub {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  .status-dot.offline { background: var(--red); animation: none; }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+  .icon-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    transition: all 0.15s;
+  }
+  .icon-btn:hover { border-color: var(--border2); color: var(--text); }
+
+  /* api key modal */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 480px;
+    margin: 1rem;
+  }
+  .modal h2 {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .modal p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+    font-family: var(--sans);
+    line-height: 1.7;
+  }
+  .modal p a { color: var(--accent); text-decoration: none; }
+  .modal p a:hover { text-decoration: underline; }
+  .field-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--dim);
+    margin-bottom: 6px;
+  }
+  .api-input {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.15s;
+    margin-bottom: 1rem;
+  }
+  .api-input:focus { border-color: var(--accent2); }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .btn-cancel {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-cancel:hover { color: var(--text); border-color: var(--border2); }
+  .btn-save {
+    background: var(--accent);
+    border: none;
+    color: #000;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn-save:hover { opacity: 0.85; }
+
+  /* search bar */
+  .search-wrap {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.25rem;
+  }
+  .ticker-input {
+    flex: 1;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    padding: 12px 18px;
+    outline: none;
+    text-transform: uppercase;
+    transition: border-color 0.15s;
+  }
+  .ticker-input::placeholder { font-size: 14px; color: var(--muted); letter-spacing: 0.05em; text-transform: none; font-weight: 300; }
+  .ticker-input:focus { border-color: var(--accent2); }
+  .analyze-btn {
+    background: var(--accent);
+    border: none;
+    border-radius: 6px;
+    color: #000;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+  }
+  .analyze-btn:hover { opacity: 0.85; }
+  .analyze-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* quick picks */
+  .quick-picks {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+    align-items: center;
+  }
+  .qp-label { font-size: 10px; letter-spacing: 0.15em; color: var(--muted); margin-right: 4px; }
+  .qp-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: none;
+    color: var(--dim);
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+  .qp-btn:hover { border-color: var(--accent2); color: var(--accent); }
+
+  /* no key warning */
+  .no-key-banner {
+    display: none;
+    background: rgba(255,68,102,0.08);
+    border: 1px solid rgba(255,68,102,0.25);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+    font-size: 12px;
+    color: var(--red);
+    font-family: var(--sans);
+  }
+  .no-key-banner.show { display: block; }
+  .no-key-banner a { color: var(--red); cursor: pointer; text-decoration: underline; }
+
+  /* loading */
+  .loading-wrap {
+    display: none;
+    padding: 3rem 0;
+    text-align: center;
+  }
+  .loading-wrap.show { display: block; }
+  .load-ticker {
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .load-bar-bg {
+    width: 280px;
+    height: 1px;
+    background: var(--border);
+    margin: 1rem auto;
+    position: relative;
+    overflow: hidden;
+  }
+  .load-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    animation: sweep 1.8s ease-in-out infinite;
+  }
+  @keyframes sweep {
+    0% { width: 0; margin-left: 0; }
+    50% { width: 60%; margin-left: 20%; }
+    100% { width: 0; margin-left: 100%; }
+  }
+  .load-msg {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    min-height: 18px;
+  }
+
+  /* output */
+  .output-wrap { display: none; }
+  .output-wrap.show { display: block; }
+  .output-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+  .output-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+  .output-ticker-badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    background: rgba(0,255,136,0.08);
+    border: 1px solid rgba(0,255,136,0.2);
+    padding: 3px 10px;
+    border-radius: 3px;
+  }
+  .output-body {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.75rem 2rem;
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.8;
+    color: #ccc;
+  }
+  .output-body h2 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 1.75rem 0 0.6rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    text-transform: uppercase;
+  }
+  .output-body h2:first-child { margin-top: 0; }
+  .output-body h3 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+    color: var(--amber);
+    margin: 1.1rem 0 0.4rem;
+  }
+  .output-body strong { color: var(--text); font-weight: 500; }
+  .output-body ul { margin: 0.4rem 0 0.4rem 1.2rem; }
+  .output-body li { margin-bottom: 3px; }
+  .output-body p { margin-bottom: 0.5rem; }
+
+  /* follow-up chips */
+  .followup-wrap {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 1.25rem;
+  }
+  .followup-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    width: 100%;
+    margin-bottom: 2px;
+  }
+  .followup-chip {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: none;
+    color: var(--dim);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .followup-chip:hover { border-color: var(--accent2); color: var(--accent); }
+
+  /* error */
+  .error-wrap {
+    display: none;
+    background: rgba(255,68,102,0.07);
+    border: 1px solid rgba(255,68,102,0.2);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    font-size: 12px;
+    color: var(--red);
+    font-family: var(--mono);
+    letter-spacing: 0.05em;
+  }
+  .error-wrap.show { display: block; }
+
+  /* history sidebar feel — ticker history */
+  .history-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    min-height: 0;
+  }
+  .history-row:empty { display: none; }
+  .history-chip {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--muted);
+    cursor: pointer;
+    background: none;
+    font-family: var(--mono);
+    transition: all 0.1s;
+  }
+  .history-chip:hover { color: var(--text); border-color: var(--border2); }
+
+  /* footer */
+  .footer {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 0.6rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    z-index: 10;
+  }
+
+  @media (max-width: 600px) {
+    .shell { padding: 1.25rem 1rem 5rem; }
+    .ticker-input { font-size: 16px; padding: 10px 12px; }
+    .analyze-btn { padding: 10px 16px; font-size: 11px; }
+    .output-body { padding: 1.25rem; }
+    .wordmark-sub { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="wordmark">
+      <span class="wordmark-main">OPTIONS TERMINAL</span>
+      <span class="wordmark-sub">AI-POWERED ANALYSIS</span>
+    </div>
+    <div class="header-right">
+      <span class="status-dot" id="statusDot"></span>
+      <button class="icon-btn" onclick="openSettings()">⚙ API KEY</button>
+    </div>
+  </div>
+
+  <!-- No key banner -->
+  <div class="no-key-banner" id="noKeyBanner">
+    No API key set. <a onclick="openSettings()">Click here to add your Anthropic API key</a> to get started.
+    Get one free at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>
+  </div>
+
+  <!-- Search -->
+  <div class="search-wrap">
+    <input class="ticker-input" id="tickerInput" placeholder="enter ticker symbol  (NVDA, SPY, TSLA...)" maxlength="8" autocomplete="off" spellcheck="false" />
+    <button class="analyze-btn" id="analyzeBtn" onclick="runAnalysis()">ANALYZE →</button>
+  </div>
+
+  <!-- Quick picks -->
+  <div class="quick-picks">
+    <span class="qp-label">QUICK:</span>
+    <button class="qp-btn" onclick="quickRun('NVDA')">NVDA</button>
+    <button class="qp-btn" onclick="quickRun('SPY')">SPY</button>
+    <button class="qp-btn" onclick="quickRun('TSLA')">TSLA</button>
+    <button class="qp-btn" onclick="quickRun('AAPL')">AAPL</button>
+    <button class="qp-btn" onclick="quickRun('QQQ')">QQQ</button>
+    <button class="qp-btn" onclick="quickRun('AMD')">AMD</button>
+    <button class="qp-btn" onclick="quickRun('META')">META</button>
+    <button class="qp-btn" onclick="quickRun('MSTR')">MSTR</button>
+    <button class="qp-btn" onclick="quickRun('COIN')">COIN</button>
+    <button class="qp-btn" onclick="quickRun('PLTR')">PLTR</button>
+  </div>
+
+  <!-- Recent history -->
+  <div class="history-row" id="historyRow"></div>
+
+  <!-- Loading -->
+  <div class="loading-wrap" id="loadingWrap">
+    <div class="load-ticker" id="loadTicker"></div>
+    <div class="load-bar-bg"><div class="load-bar-fill"></div></div>
+    <div class="load-msg" id="loadMsg">initializing...</div>
+  </div>
+
+  <!-- Output -->
+  <div class="output-wrap" id="outputWrap">
+    <div class="output-meta">
+      <span class="output-label" id="outputLabel">ANALYSIS REPORT</span>
+      <span class="output-ticker-badge" id="outputBadge"></span>
+    </div>
+    <div class="output-body" id="outputBody"></div>
+    <div class="followup-wrap" id="followupWrap"></div>
+  </div>
+
+  <!-- Error -->
+  <div class="error-wrap" id="errorWrap"></div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <span>OPTIONS TERMINAL v1.0</span>
+  <span id="footerTime"></span>
+</div>
+
+<!-- API Key Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2>⚙ ANTHROPIC API KEY</h2>
+    <p>
+      Your key is stored only in your browser's local storage — it never leaves your device and is not in any code.<br><br>
+      Get a free key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys → Create Key.<br>
+      Cost is ~$0.01–0.05 per analysis.
+    </p>
+    <div class="field-label">API KEY</div>
+    <input class="api-input" type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false" />
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeSettings()">CANCEL</button>
+      <button class="btn-save" onclick="saveKey()">SAVE KEY</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const LOAD_MSGS = [
+  "pulling live price action...",
+  "scanning options chain...",
+  "calculating IV rank & skew...",
+  "reading put/call ratios...",
+  "analyzing technical structure...",
+  "computing greek exposures...",
+  "checking upcoming catalysts...",
+  "building contract recommendations...",
+  "synthesizing analysis..."
+];
+
+const SYSTEM = `You are an elite options trading analyst with deep expertise in technical analysis, options flow, derivatives pricing, and market microstructure. You have access to current market data via web search.
+
+When analyzing a ticker for options trading, structure your response with EXACTLY these section headers using ## markdown:
+
+## Market Snapshot
+Current price, today's move %, 52-week range, market cap, sector, next earnings date if known.
+
+## Technical Analysis
+Trend on daily and weekly timeframes. Key support and resistance levels with specific price targets. RSI reading and interpretation. MACD signal. Volume trend. End with a clear bias: BULLISH / BEARISH / NEUTRAL and conviction (low/medium/high).
+
+## Options Market Intelligence
+IV Rank/Percentile estimate, 30-day HV vs IV comparison (options cheap or expensive?), put/call ratio sentiment, notable skew direction, any unusual activity signals or notable flow, next catalyst or event dates.
+
+## Recommended Contracts
+
+### Scalp / Day Trade (0–5 DTE)
+Strike, expiration, direction (call/put), estimated premium range, target gain %, stop loss %, risk/reward ratio, ideal entry condition.
+
+### Swing Trade (1–4 weeks)
+Strike, expiration, direction, estimated premium range, target gain %, stop loss %, risk/reward ratio, why this expiration.
+
+### Position Trade (1–3 months)
+Strike, expiration, OR a spread structure (bull call spread / bear put spread / etc). Entry cost, max profit, max loss, breakeven price, probability estimate.
+
+## Greek Snapshot
+Delta, Theta decay risk, Vega sensitivity to IV change, key risk to the position.
+
+## Bull vs Bear Scenarios
+Bullish case: what needs to happen (2-3 sentences).
+Bearish case: what signals the downside (2-3 sentences).
+
+## Risk Warnings
+Top 3-4 specific risks: IV crush, earnings, macro sensitivity, liquidity, etc.
+
+Use real current data from web search. Be specific with actual strikes and realistic expirations. Write like a professional trader, not a financial advisor. No disclaimers. Be direct and confident.`;
+
+let msgTimer;
+let currentTicker = '';
+let history = JSON.parse(localStorage.getItem('ot_history') || '[]');
+
+function getKey() { return localStorage.getItem('ot_apikey') || ''; }
+function saveKey() {
+  const k = document.getElementById('apiKeyInput').value.trim();
+  if (!k) return;
+  localStorage.setItem('ot_apikey', k);
+  closeSettings();
+  checkKeyStatus();
+}
+function openSettings() {
+  document.getElementById('apiKeyInput').value = getKey();
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeSettings() { document.getElementById('modalOverlay').classList.remove('open'); }
+document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeSettings(); });
+
+function checkKeyStatus() {
+  const has = !!getKey();
+  document.getElementById('statusDot').className = 'status-dot' + (has ? '' : ' offline');
+  document.getElementById('noKeyBanner').className = 'no-key-banner' + (has ? '' : ' show');
+}
+
+function renderHistory() {
+  const row = document.getElementById('historyRow');
+  row.innerHTML = '';
+  if (history.length === 0) return;
+  history.slice(0, 12).forEach(t => {
+    const b = document.createElement('button');
+    b.className = 'history-chip';
+    b.textContent = t;
+    b.onclick = () => quickRun(t);
+    row.appendChild(b);
+  });
+}
+
+function addHistory(ticker) {
+  history = [ticker, ...history.filter(t => t !== ticker)].slice(0, 12);
+  localStorage.setItem('ot_history', JSON.stringify(history));
+  renderHistory();
+}
+
+function quickRun(t) {
+  document.getElementById('tickerInput').value = t;
+  runAnalysis();
+}
+
+document.getElementById('tickerInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') runAnalysis();
+});
+
+function show(id, visible) {
+  document.getElementById(id).className = document.getElementById(id).className.replace(/ ?show/g, '') + (visible ? ' show' : '');
+}
+
+function md(text) {
+  return text
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>[^]*?<\/li>\n?)+/g, m => `<ul>${m}</ul>`)
+    .replace(/\n\n/g, '<br>')
+    .replace(/\n(?!<)/g, ' ');
+}
+
+async function runAnalysis() {
+  const ticker = document.getElementById('tickerInput').value.trim().toUpperCase();
+  if (!ticker) return;
+  const key = getKey();
+  if (!key) { openSettings(); return; }
+
+  currentTicker = ticker;
+  addHistory(ticker);
+  document.getElementById('analyzeBtn').disabled = true;
+  show('outputWrap', false);
+  show('errorWrap', false);
+  show('loadingWrap', true);
+  document.getElementById('loadTicker').textContent = ticker;
+  document.getElementById('followupWrap').innerHTML = '';
+
+  let mi = 0;
+  document.getElementById('loadMsg').textContent = LOAD_MSGS[0];
+  msgTimer = setInterval(() => {
+    mi = (mi + 1) % LOAD_MSGS.length;
+    document.getElementById('loadMsg').textContent = LOAD_MSGS[mi];
+  }, 1100);
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1800,
+        system: SYSTEM,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        messages: [{ role: 'user', content: `Run a full options analysis on ${ticker}. Search for current price, recent price action, options activity, upcoming catalysts, and any relevant news. Give me specific contract recommendations with real strikes and expirations based on today's data.` }]
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error?.message || `HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+    const text = data.content.filter(b => b.type === 'text').map(b => b.text).join('\n');
+
+    clearInterval(msgTimer);
+    show('loadingWrap', false);
+    show('outputWrap', true);
+
+    const now = new Date();
+    document.getElementById('outputLabel').textContent = `ANALYSIS · ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+    document.getElementById('outputBadge').textContent = ticker;
+    document.getElementById('outputBody').innerHTML = md(text);
+
+    const chips = [
+      `Bull call spread on ${ticker}`,
+      `Best puts if ${ticker} drops 10%`,
+      `Earnings play for ${ticker}`,
+      `Iron condor on ${ticker}`,
+      `Compare 30 vs 60 DTE on ${ticker}`
+    ];
+    const fw = document.getElementById('followupWrap');
+    const lbl = document.createElement('div');
+    lbl.className = 'followup-label';
+    lbl.textContent = 'FOLLOW-UP ANALYSIS:';
+    fw.appendChild(lbl);
+    chips.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'followup-chip';
+      btn.textContent = c + ' →';
+      btn.onclick = () => runFollowup(c, ticker);
+      fw.appendChild(btn);
+    });
+
+  } catch (err) {
+    clearInterval(msgTimer);
+    show('loadingWrap', false);
+    show('errorWrap', true);
+    document.getElementById('errorWrap').textContent = `ERROR: ${err.message}`;
+    if (err.message.toLowerCase().includes('auth') || err.message.includes('401')) {
+      document.getElementById('errorWrap').textContent += '\n\nYour API key looks invalid. Click ⚙ API KEY to update it.';
+    }
+  } finally {
+    document.getElementById('analyzeBtn').disabled = false;
+  }
+}
+
+async function runFollowup(query, ticker) {
+  const key = getKey();
+  if (!key) { openSettings(); return; }
+
+  document.getElementById('analyzeBtn').disabled = true;
+  show('outputWrap', false);
+  show('errorWrap', false);
+  show('loadingWrap', true);
+  document.getElementById('loadTicker').textContent = ticker;
+  document.getElementById('loadMsg').textContent = 'running follow-up analysis...';
+  document.getElementById('followupWrap').innerHTML = '';
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1200,
+        system: SYSTEM,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        messages: [{ role: 'user', content: `${query}. Use current market data. Be specific with strikes, expirations, and structure. Current date context: ${new Date().toLocaleDateString()}.` }]
+      })
+    });
+
+    if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || `HTTP ${res.status}`); }
+
+    const data = await res.json();
+    const text = data.content.filter(b => b.type === 'text').map(b => b.text).join('\n');
+
+    show('loadingWrap', false);
+    show('outputWrap', true);
+    document.getElementById('outputLabel').textContent = query.toUpperCase();
+    document.getElementById('outputBadge').textContent = ticker;
+    document.getElementById('outputBody').innerHTML = md(text);
+
+  } catch (err) {
+    show('loadingWrap', false);
+    show('errorWrap', true);
+    document.getElementById('errorWrap').textContent = `ERROR: ${err.message}`;
+  } finally {
+    document.getElementById('analyzeBtn').disabled = false;
+  }
+}
+
+function updateClock() {
+  document.getElementById('footerTime').textContent = new Date().toLocaleTimeString();
+}
+
+checkKeyStatus();
+renderHistory();
+updateClock();
+setInterval(updateClock, 1000);
+</script>
+</body>
+</html>
