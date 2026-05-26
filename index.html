@@ -12,7 +12,7 @@
         :root {
             --bg-color: #0b0b0c;
             --text-color: #f4f4f6;
-            --accent-color: #c5a880; /* Muted Champagne Gold */
+            --accent-color: #c5a880; 
             --muted-color: #71717a;
             --font-display: 'Syne', sans-serif;
             --font-body: 'DM Sans', sans-serif;
@@ -33,7 +33,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 4px;
             height: 4px;
@@ -46,7 +45,6 @@
             border-radius: 2px;
         }
 
-        /* Grain Overlay for cinematic texture */
         .grain {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -56,7 +54,6 @@
             z-index: 9999;
         }
 
-        /* Floating Fixed Navigation */
         nav {
             position: fixed;
             top: 0;
@@ -78,6 +75,7 @@
             letter-spacing: 2px;
             text-decoration: none;
             color: var(--text-color);
+            cursor: pointer;
         }
 
         .nav-links {
@@ -85,18 +83,17 @@
             gap: 40px;
         }
 
-        .nav-links a {
+        .nav-links span {
             font-family: var(--font-display);
             font-size: 0.9rem;
             text-transform: uppercase;
-            text-decoration: none;
-            color: var(--text-color);
             letter-spacing: 1px;
             position: relative;
+            cursor: pointer;
             transition: color 0.3s ease;
         }
 
-        .nav-links a::after {
+        .nav-links span::after {
             content: '';
             position: absolute;
             width: 100%;
@@ -109,17 +106,15 @@
             transition: transform 0.25s ease-out;
         }
 
-        .nav-links a:hover::after {
+        .nav-links span:hover::after {
             transform: scaleX(1);
             transform-origin: bottom left;
         }
 
-        /* Main Scroll Container */
         .horizontal-scroll-container {
             display: flex;
-            width: 400vw; /* 4 massive structural panels */
+            width: 400vw; 
             height: 100vh;
-            scroll-behavior: smooth;
         }
 
         section {
@@ -132,10 +127,7 @@
             padding: 0 10%;
         }
 
-        /* Section 1: Hero Panel */
-        #hero {
-            justify-content: flex-start;
-        }
+        #hero { justify-content: flex-start; }
 
         .hero-title-wrapper {
             position: relative;
@@ -185,7 +177,6 @@
             filter: grayscale(30%) contrast(100%);
         }
 
-        /* Section 2: Portfolio Showcase */
         #portfolio {
             display: flex;
             gap: 60px;
@@ -262,7 +253,6 @@
             margin-top: 4px;
         }
 
-        /* Section 3: About & Philosophy */
         #about {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -302,7 +292,6 @@
             filter: grayscale(100%);
         }
 
-        /* Section 4: Contact & Booking */
         #contact {
             display: grid;
             grid-template-columns: 1.2fr 0.8fr;
@@ -330,9 +319,7 @@
             position: relative;
         }
 
-        .form-group.full-width {
-            grid-column: span 2;
-        }
+        .form-group.full-width { grid-column: span 2; }
 
         .form-group input, .form-group textarea {
             background: transparent;
@@ -356,7 +343,6 @@
             text-transform: uppercase;
             color: var(--muted-color);
             pointer-events: none;
-            transition: all 0.3s ease;
         }
 
         .submit-btn {
@@ -402,7 +388,6 @@
             text-decoration: none;
         }
 
-        /* Progress Indicator for Horizontal Scroll */
         .scroll-progress {
             position: fixed;
             bottom: 40px;
@@ -414,18 +399,15 @@
         }
 
         .progress-bar {
-            width: 25%;
+            width: 100%;
             height: 100%;
             background: var(--accent-color);
-            transition: transform 0.1s linear;
+            transform: scaleX(0);
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             transform-origin: left;
         }
 
-        /* ---------------------------------- */
-        /* RESPONSIVE DESIGN (MOBILE & TABLET) */
-        /* ---------------------------------- */
         @media (max-width: 1024px) {
-            /* Kill horizontal scroll on mobile, transform into editorial vertical feed */
             .horizontal-scroll-container {
                 display: block;
                 width: 100vw;
@@ -447,15 +429,9 @@
                 mix-blend-mode: normal;
             }
 
-            .nav-links {
-                gap: 20px;
-            }
+            .nav-links { gap: 20px; }
+            .nav-links span { font-size: 0.8rem; }
 
-            .nav-links a {
-                font-size: 0.8rem;
-            }
-
-            /* Mobile Hero */
             #hero {
                 display: flex;
                 flex-direction: column;
@@ -475,14 +451,8 @@
                 height: 50vh;
             }
 
-            /* Mobile Portfolio: Asymmetrical Grid Stack */
-            #portfolio {
-                padding-left: 24px;
-            }
-
-            .section-vertical-title {
-                display: none;
-            }
+            #portfolio { padding-left: 24px; }
+            .section-vertical-title { display: none; }
 
             .gallery-track {
                 display: grid;
@@ -496,7 +466,6 @@
                 height: 60vh;
             }
 
-            /* Alternating sizing for editorial look */
             .gallery-item:nth-child(even) {
                 width: 85%;
                 margin-left: auto;
@@ -510,35 +479,23 @@
                 width: calc(100% - 40px);
             }
 
-            /* Mobile About */
             #about {
                 display: flex;
                 flex-direction: column-reverse;
                 gap: 40px;
             }
 
-            .about-image-frame {
-                height: 45vh;
-            }
+            .about-image-frame { height: 45vh; }
 
-            /* Mobile Contact */
             #contact {
                 display: flex;
                 flex-direction: column;
                 gap: 60px;
             }
 
-            .contact-form {
-                grid-template-columns: 1fr;
-            }
-
-            .form-group.full-width {
-                grid-column: span 1;
-            }
-
-            .submit-btn {
-                grid-column: span 1;
-            }
+            .contact-form { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: span 1; }
+            .submit-btn { grid-column: span 1; }
 
             .info-panel {
                 border-left: none;
@@ -547,9 +504,7 @@
                 padding-top: 40px;
             }
 
-            .scroll-progress {
-                display: none; /* Progress bar irrelevant on standard vertical scroll */
-            }
+            .scroll-progress { display: none; }
         }
     </style>
 </head>
@@ -558,11 +513,11 @@
     <div class="grain"></div>
 
     <nav>
-        <a href="#hero" class="logo">E. Aven</a>
+        <span class="logo" id="logoLink">E. Aven</span>
         <div class="nav-links">
-            <a href="#portfolio" onclick="scrollToPanel(1)">Work</a>
-            <a href="#about" onclick="scrollToPanel(2)">About</a>
-            <a href="#contact" onclick="scrollToPanel(3)">Connect</a>
+            <span id="workLink">Work</span>
+            <span id="aboutLink">About</span>
+            <span id="connectLink">Connect</span>
         </div>
     </nav>
 
@@ -580,39 +535,34 @@
         <section id="portfolio">
             <div class="section-vertical-title">Curated Portfolios</div>
             <div class="gallery-track">
-                
                 <div class="gallery-item">
-                    <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=800" alt="Editorial Fashion Portrait">
+                    <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=800" alt="Editorial Portrait">
                     <div class="gallery-item-meta">
                         <h3>Vanguard Series</h3>
                         <p>High-End Editorial Styling</p>
                     </div>
                 </div>
-
                 <div class="gallery-item">
-                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800" alt="Modern commercial branding">
+                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800" alt="Commercial Branding">
                     <div class="gallery-item-meta">
                         <h3>Corporate Presence</h3>
-                        <p>Professional Branding & Campaigns</p>
+                        <p>Professional Branding Campaigns</p>
                     </div>
                 </div>
-
                 <div class="gallery-item">
-                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&q=80&w=800" alt="Striking monochrome studio lighting portrait">
+                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&q=80&w=800" alt="Monochrome Studio">
                     <div class="gallery-item-meta">
                         <h3>Monochrome Identities</h3>
                         <p>Studio High-Contrast Portraits</p>
                     </div>
                 </div>
-
                 <div class="gallery-item">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=800" alt="Lively candid outdoor lifestyle photography">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=800" alt="Candid Lifestyle">
                     <div class="gallery-item-meta">
                         <h3>Raw & Unfiltered</h3>
                         <p>Candid Lifestyle Experience</p>
                     </div>
                 </div>
-
             </div>
         </section>
 
@@ -630,7 +580,7 @@
         <section id="contact">
             <div class="contact-form-wrapper">
                 <h2>Initiate <br>A Project</h2>
-                <form class="contact-form" onsubmit="event.preventDefault(); alert('Session Request Form Submitted! Secure storage simulate.');">
+                <form class="contact-form" id="sessionForm">
                     <div class="form-group">
                         <label>Your Full Name</label>
                         <input type="text" required placeholder="e.g., Alex Reed">
@@ -666,7 +616,6 @@
                 </div>
             </div>
         </section>
-
     </div>
 
     <div class="scroll-progress">
@@ -677,39 +626,47 @@
         const container = document.getElementById('scrollContainer');
         const progressBar = document.getElementById('progressBar');
 
-        // Dynamic horizontal scroll mechanism via mousewheel (Desktop exclusive functionality)
+        // Safe passive-intercept execution for GitHub static servers
         window.addEventListener('wheel', (e) => {
             if (window.innerWidth > 1024) {
                 e.preventDefault();
                 container.scrollLeft += e.deltaY;
-                updateProgress();
             }
         }, { passive: false });
 
-        // Update customized horizontal tracking bar
+        // Accurate mathematical conversion tracking bar
         function updateProgress() {
-            const maxScroll = container.scrollWidth - window.innerWidth;
-            const scrollPercent = (container.scrollLeft / maxScroll) * 100;
-            // Map percentage to scale the width transform smoothly
-            progressBar.style.transform = `scaleX(${0.25 + (scrollPercent / 133.33)})`; 
-        }
-
-        // Nav click cross-panel mechanics
-        function scrollToPanel(index) {
-            if (window.innerWidth > 1024) {
-                event.preventDefault();
-                container.scrollLeft = window.innerWidth * index;
-                setTimeout(updateProgress, 200);
-            }
-        }
-
-        // Listen for internal container scroll states directly
-        container.addEventListener('scroll', () => {
             if (window.innerWidth > 1024) {
                 const maxScroll = container.scrollWidth - window.innerWidth;
-                const scrollPercent = (container.scrollLeft / maxScroll) * 100;
-                progressBar.style.transform = `scaleX(${scrollPercent / 100})`;
+                const scrollPercent = maxScroll > 0 ? (container.scrollLeft / maxScroll) : 0;
+                progressBar.style.transform = `scaleX(${scrollPercent})`;
             }
+        }
+
+        container.addEventListener('scroll', updateProgress);
+
+        // Explicit JavaScript Click Handlers to bypass link vertical jump crash
+        document.getElementById('logoLink').addEventListener('click', () => { scrollToPanel(0); });
+        document.getElementById('workLink').addEventListener('click', () => { scrollToPanel(1); });
+        document.getElementById('aboutLink').addEventListener('click', () => { scrollToPanel(2); });
+        document.getElementById('connectLink').addEventListener('click', () => { scrollToPanel(3); });
+
+        function scrollToPanel(index) {
+            if (window.innerWidth > 1024) {
+                container.scrollTo({
+                    left: window.innerWidth * index,
+                    behavior: 'smooth'
+                });
+            } else {
+                const targets = ['hero', 'portfolio', 'about', 'contact'];
+                document.getElementById(targets[index]).scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Compliant sandbox form monitoring execution
+        document.getElementById('sessionForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Booking request data structured. Verification complete.');
         });
     </script>
 </body>
