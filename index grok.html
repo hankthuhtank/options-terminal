@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OPT TERMINAL � GROK v2.1</title>
+<title>OPT TERMINAL - PRO</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
 <style>
@@ -20,193 +20,93 @@
   --radius:4px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{font-size:13px}
 body{background:var(--bg);color:var(--text);font-family:var(--mono);min-height:100vh;overflow-x:hidden}
-::-webkit-scrollbar{width:3px;height:3px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--border3);border-radius:2px}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:999}
 
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.04) 2px,rgba(0,0,0,.04) 4px);pointer-events:none;z-index:999}
-
+/* ═══ TOPBAR ═══ */
 .topbar{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  height:42px;background:var(--bg);
-  border-bottom:1px solid var(--border2);
-  display:flex;align-items:center;
-  padding:0 1rem;gap:0;
+  height:42px;background:var(--bg);border-bottom:1px solid var(--border2);
+  display:flex;align-items:center;padding:0 1rem;
 }
-.brand{display:flex;align-items:center;gap:8px;margin-right:1.5rem;flex-shrink:0}
-.brand-pulse{
-  width:7px;height:7px;border-radius:50%;
-  background:var(--g);
-  box-shadow:0 0 10px var(--g),0 0 20px var(--g2);
-  animation:pulse 2s ease-in-out infinite;
-}
-.brand-pulse.dead{background:var(--r);box-shadow:0 0 8px var(--r2);animation:none}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.brand{display:flex;align-items:center;gap:8px;margin-right:1.5rem}
+.brand-pulse{width:7px;height:7px;border-radius:50%;background:var(--g);box-shadow:0 0 10px var(--g);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .brand-txt{font-size:11px;font-weight:700;letter-spacing:.3em;color:var(--g)}
-.brand-ver{font-size:8px;color:var(--text3);letter-spacing:.15em;align-self:flex-end;margin-bottom:2px}
 .nav{display:flex;align-items:stretch;flex:1;height:100%}
 .ntab{
-  display:flex;align-items:center;padding:0 1rem;
-  font-size:9px;font-weight:700;letter-spacing:.2em;
-  color:var(--text3);cursor:pointer;border:none;background:none;
-  border-bottom:2px solid transparent;transition:all .15s;
-  font-family:var(--mono);white-space:nowrap;
+  display:flex;align-items:center;padding:0 1rem;font-size:9px;font-weight:700;letter-spacing:.2em;
+  color:var(--text3);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;font-family:var(--mono);
 }
-.ntab:hover{color:var(--text2)}.ntab.on{color:var(--g);border-bottom-color:var(--g)}
-.topbar-r{display:flex;align-items:center;gap:10px;margin-left:auto}
-.ticker-ticker{
-  display:flex;gap:12px;overflow:hidden;
-  max-width:360px;align-items:center;
-}
-.tt-item{font-size:9px;letter-spacing:.08em;color:var(--text3);white-space:nowrap}
-.tt-item .sym{color:var(--text2);margin-right:4px}
-.tt-item .up{color:var(--g)}.tt-item .dn{color:var(--r)}
-.tclock{font-size:10px;color:var(--text3);letter-spacing:.1em;min-width:70px;text-align:right}
+.ntab.on{color:var(--g);border-bottom-color:var(--g)}
 .keybtn{
-  font-family:var(--mono);font-size:9px;font-weight:700;
-  letter-spacing:.15em;padding:5px 12px;
-  border:1px solid var(--g3);border-radius:var(--radius);
-  background:var(--g4);color:var(--g);cursor:pointer;transition:all .12s;
+  font-family:var(--mono);font-size:9px;padding:5px 12px;border:1px solid var(--g3);
+  border-radius:var(--radius);background:var(--g4);color:var(--g);cursor:pointer;
 }
-.keybtn:hover{background:var(--g3)}
 
+/* ═══ LAYOUT SHELL ═══ */
 .shell{padding-top:42px;display:flex;min-height:100vh}
 .sidebar{
-  width:210px;flex-shrink:0;
-  background:var(--bg2);border-right:1px solid var(--border);
-  position:fixed;top:42px;left:0;bottom:0;
-  display:flex;flex-direction:column;overflow-y:auto;z-index:40;
+  width:210px;background:var(--bg2);border-right:1px solid var(--border);
+  position:fixed;top:42px;left:0;bottom:0;display:flex;flex-direction:column;z-index:40;
 }
 .main{margin-left:210px;flex:1;min-width:0}
 .panel{display:none}.panel.on{display:block}
 
-.sb-sec{
-  font-size:8px;font-weight:700;letter-spacing:.25em;
-  color:var(--text3);padding:.85rem .85rem .35rem;text-transform:uppercase;
-}
-.sb-div{height:1px;background:var(--border);margin:.4rem 0}
-.wl-add{display:flex;gap:5px;padding:.5rem .7rem}
-.wl-inp{
-  flex:1;background:var(--bg3);border:1px solid var(--border);
-  border-radius:var(--radius);color:var(--text);
-  font-family:var(--mono);font-size:11px;letter-spacing:.08em;
-  padding:5px 7px;outline:none;text-transform:uppercase;
-  transition:border-color .12s;
-}
-.wl-inp::placeholder{text-transform:none;font-size:9px;color:var(--text3)}
-.wl-inp:focus{border-color:var(--g2)}
-.wl-addbtn{
-  background:var(--g3);border:1px solid var(--g2);
-  border-radius:var(--radius);color:var(--g);
-  font-size:14px;font-weight:700;padding:3px 9px;
-  cursor:pointer;transition:opacity .1s;font-family:var(--mono);
-}
-.wl-addbtn:hover{opacity:.75}
-.wl-list{padding:0 0 .5rem}
-.wl-row{
-  display:flex;align-items:center;padding:5px .85rem;
-  cursor:pointer;border-left:2px solid transparent;
-  transition:all .1s;gap:6px;
-}
-.wl-row:hover{background:var(--bg3);border-left-color:var(--border3)}
-.wl-row.hot{border-left-color:var(--g);background:var(--g4)}
-.wl-sym{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--text);flex:1}
-.wl-chg{font-size:10px;font-weight:700}
-.wl-chg.u{color:var(--g)}.wl-chg.d{color:var(--r)}
-.wl-rm{
-  background:none;border:none;color:var(--border3);
-  font-size:13px;cursor:pointer;padding:0 2px;
-  opacity:0;transition:all .1s;font-family:var(--mono);
-}
-.wl-row:hover .wl-rm{opacity:1}.wl-rm:hover{color:var(--r)}
-.wl-empty{padding:.75rem .85rem;font-size:10px;color:var(--text3);font-family:var(--sans);line-height:1.6}
-
-.apanel{padding:1.25rem;max-width:960px}
-.no-key{
-  display:none;margin-bottom:1rem;
-  background:var(--r4);border:1px solid var(--r3);
-  border-radius:var(--radius);padding:.6rem .9rem;
-  font-size:10px;color:var(--r);font-family:var(--sans);
-}
-.no-key.on{display:block}.no-key a{color:var(--r);cursor:pointer;text-decoration:underline}
+/* ═══ ANALYZE LAYER ═══ */
+.apanel{padding:1.25rem;max-width:1100px;margin:0 auto}
 .sbar{display:flex;gap:7px;margin-bottom:.85rem}
 .t-inp{
-  flex:1;background:var(--bg2);border:1px solid var(--border2);
-  border-radius:var(--radius);color:var(--g);
-  font-family:var(--mono);font-size:22px;font-weight:700;
-  letter-spacing:.18em;padding:11px 16px;outline:none;
-  text-transform:uppercase;transition:border-color .12s;
-  text-shadow:0 0 20px var(--g2);
+  flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);
+  color:var(--g);font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:.18em;
+  padding:11px 16px;outline:none;text-transform:uppercase;text-shadow:0 0 20px var(--g2);
 }
-.t-inp::placeholder{font-size:13px;color:var(--text3);letter-spacing:.04em;text-transform:none;font-weight:400;text-shadow:none}
-.t-inp:focus{border-color:var(--g2);box-shadow:0 0 0 1px var(--g3)}
 .abtn{
-  background:var(--g);border:none;border-radius:var(--radius);
-  color:#000;font-family:var(--mono);font-size:10px;font-weight:700;
-  letter-spacing:.2em;padding:11px 22px;cursor:pointer;
-  transition:all .15s;white-space:nowrap;
-  box-shadow:0 0 20px var(--g3);
+  background:var(--g);border:none;border-radius:var(--radius);color:#000;
+  font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.2em;
+  padding:11px 22px;cursor:pointer;box-shadow:0 0 20px var(--g3);
 }
-.abtn:hover{box-shadow:0 0 30px var(--g2);opacity:.9}
-.abtn:disabled{opacity:.2;cursor:not-allowed;box-shadow:none}
+.qrow{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:1.25rem}
+.qb{
+  font-family:var(--mono);font-size:9px;font-weight:700;padding:3px 8px;
+  border:1px solid var(--border2);border-radius:var(--radius);background:none;color:var(--text3);cursor:pointer;
+}
+.qb:hover{border-color:var(--g2);color:var(--g)}
 
-.model-bar {
-  display:flex; gap:12px; align-items:center; margin-bottom:1rem; flex-wrap:wrap;
-}
-.model-select {
-  background:var(--bg3); color:var(--g); border:1px solid var(--border2);
-  padding:8px 12px; border-radius:var(--radius); font-family:var(--mono); font-size:11px;
-}
-.cost-est { font-size:9px; color:var(--text3); letter-spacing:.15em; }
-
+/* LOADING INDICATOR */
 .ld-wrap{display:none;text-align:center;padding:4rem 0}.ld-wrap.on{display:block}
-.ld-sym{
-  font-size:48px;font-weight:700;letter-spacing:.4em;
-  color:var(--g);text-shadow:0 0 40px var(--g),0 0 80px var(--g2);
-  margin-bottom:.4rem;animation:glitch 4s infinite;
-}
-@keyframes glitch{
-  0%,94%,100%{text-shadow:0 0 40px var(--g),0 0 80px var(--g2)}
-  95%{text-shadow:3px 0 var(--r),-3px 0 var(--b),0 0 40px var(--g)}
-  96%{text-shadow:-3px 0 var(--r),3px 0 var(--b),0 0 40px var(--g)}
-  97%{text-shadow:3px 0 var(--r),-3px 0 var(--b),0 0 40px var(--g)}
-}
-.ld-bar-bg{width:200px;height:1px;background:var(--border2);margin:.9rem auto;overflow:hidden}
-.ld-bar{height:100%;background:var(--g);animation:sweep 1.5s ease-in-out infinite}
-@keyframes sweep{0%{width:0;margin-left:0}50%{width:60%;margin-left:20%}100%{width:0;margin-left:100%}}
-.ld-msg{font-size:9px;letter-spacing:.2em;color:var(--text3)}
+.ld-sym{font-size:32px;font-weight:700;color:var(--g);letter-spacing:.4em;animation:pulse 1.5s infinite}
+.ld-msg{font-size:9px;color:var(--text3);letter-spacing:.15em;margin-top:10px}
 
+/* ═══ NEW COMPACT GRID HIGH-DENSITY DASHBOARD ═══ */
 .out-wrap{display:none}.out-wrap.on{display:block}
-.out-header{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:.85rem;flex-wrap:wrap;gap:8px;
-}
-.out-meta{font-size:8px;letter-spacing:.18em;color:var(--text3)}
-.out-badge{
-  font-size:12px;font-weight:700;letter-spacing:.18em;
-  color:var(--g);background:var(--g4);
-  border:1px solid var(--g3);padding:3px 12px;border-radius:var(--radius);
-  text-shadow:0 0 12px var(--g2);
-}
-.out-body{
-  background:var(--bg2);border:1px solid var(--border);
-  border-radius:6px;padding:1.75rem 2rem;
-  font-family:var(--sans);font-size:13.5px;line-height:1.85;color:#c0c0c0;
-}
-.out-body h2{
-  font-family:var(--mono);font-size:9px;letter-spacing:.28em;font-weight:700;
-  color:var(--g);margin:1.6rem 0 .6rem;
-  padding-bottom:.4rem;border-bottom:1px solid var(--border2);text-transform:uppercase;
-}
-.out-body h3{font-family:var(--mono);font-size:10px;color:var(--a);margin:1.2rem 0 .4rem}
-.err-wrap{
-  display:none;background:var(--r4);border:1px solid var(--r3);
-  border-radius:var(--radius);padding:1rem 1.25rem;
-  font-size:11px;color:var(--r);font-family:var(--mono);
-  letter-spacing:.04em;white-space:pre-line;
-}
+.dashboard-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.db-ticker{font-size:24px;font-weight:700;color:var(--text);letter-spacing:.05em}
+.db-signal{font-size:11px;font-weight:700;padding:4px 12px;border-radius:var(--radius);letter-spacing:.1em}
+.db-signal.bull{background:var(--g4);color:var(--g);border:1px solid var(--g3)}
+.db-signal.bear{background:var(--r4);color:var(--r);border:1px solid var(--r3)}
+.db-signal.neutral{background:var(--a2);color:var(--a);border:1px solid var(--a)}
+
+.db-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:10px;margin-bottom:1rem}
+.db-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:1rem;position:relative}
+.db-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--border3)}
+.db-card.bull::before{background:var(--g)}
+.db-card.bear::before{background:var(--r)}
+.db-card-title{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px}
+
+.db-metric-row{display:flex;justify-content:space-between;border-bottom:1px solid var(--bg3);padding:4px 0;font-size:11px}
+.db-metric-row:last-child{border:none}
+.db-label{color:var(--text2);font-family:var(--sans)}
+.db-value{font-weight:700;text-align:right}
+.db-value.bull{color:var(--g)}.db-value.bear{color:var(--r)}
+
+/* PROSE AND STRATEGY BOXES */
+.db-textbox{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:1.2rem;margin-bottom:10px;font-family:var(--sans);line-height:1.6;font-size:12.5px;color:#c0c0c0}
+.db-textbox h3{font-family:var(--mono);font-size:9px;color:var(--g);letter-spacing:.15em;margin-bottom:6px;text-transform:uppercase}
+
+.rec-pill{display:inline-block;background:var(--b2);color:var(--b);border:1px solid var(--b);font-family:var(--mono);font-size:10px;font-weight:700;padding:4px 10px;border-radius:4px;margin-top:6px}
+
+.err-wrap{display:none;background:var(--r4);border:1px solid var(--r3);padding:1rem;color:var(--r);font-family:var(--mono);font-size:11px;margin-top:10px}
 .err-wrap.on{display:block}
 </style>
 </head>
@@ -214,252 +114,197 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 
 <div class="topbar">
   <div class="brand">
-    <span class="brand-pulse" id="bpulse"></span>
-    <span class="brand-txt">OPT</span>
-    <span class="brand-ver">TERMINAL v2.1 � GROK</span>
+    <span class="brand-pulse"></span>
+    <span class="brand-txt">OPT TERMINAL</span>
   </div>
   <nav class="nav">
-    <button class="ntab on" onclick="sw('analyze',this)">ANALYZE</button>
-    <button class="ntab" onclick="sw('chart',this)">CHART</button>
-    <button class="ntab" onclick="sw('watchlist',this)">WATCHLIST</button>
-    <button class="ntab" onclick="sw('sector',this)">SECTOR</button>
-    <button class="ntab" onclick="sw('scanner',this)">SCANNER</button>
+    <button class="ntab on">ANALYZE</button>
   </nav>
-  <div class="topbar-r">
-    <div class="ticker-ticker" id="topTicker"></div>
-    <span class="tclock" id="clk"></span>
-    <button class="keybtn" onclick="openKey()">? KEY</button>
-  </div>
+  <button class="keybtn" onclick="openKey()">⚙ API KEY</button>
 </div>
 
 <div class="shell">
   <aside class="sidebar">
-    <div class="sb-sec">WATCHLIST</div>
-    <div class="wl-add">
-      <input class="wl-inp" id="wlInp" placeholder="add ticker..." maxlength="8"/>
-      <button class="wl-addbtn" onclick="addWatch()">+</button>
-    </div>
-    <div class="wl-list" id="sbWl"></div>
+    <div style="padding:1rem; font-size:10px; color:var(--text3);">TERMINAL MODULES ACTIVE</div>
   </aside>
 
   <div class="main">
-    <div class="panel on" id="panel-analyze">
+    <div class="panel on">
       <div class="apanel">
-        <div class="no-key" id="nkBanner">
-          No API key set. <a onclick="openKey()">Configure API keys</a>
-        </div>
-
-        <div class="model-bar">
-          <select id="modelSelect" class="model-select">
-            <option value="grok">?? GROK (Recommended - Cheapest)</option>
-            <option value="claude">?? CLAUDE SONNET</option>
-            <option value="gemini">? GEMINI FLASH</option>
-          </select>
-          <span id="costEst" class="cost-est"></span>
-        </div>
-
+        
         <div class="sbar">
-          <input class="t-inp" id="tInp" placeholder="ticker symbol..." maxlength="8" autocomplete="off"/>
-          <button class="abtn" id="aBtn" onclick="runAna()">ANALYZE ?</button>
+          <input class="t-inp" id="tInp" placeholder="TICKER SYMBOL..." maxlength="8" autocomplete="off"/>
+          <button class="abtn" id="aBtn" onclick="runAna()">EXECUTE ANCHOR →</button>
+        </div>
+
+        <div class="qrow">
+          <button class="qb" onclick="qr('SPY')">SPY</button>
+          <button class="qb" onclick="qr('QQQ')">QQQ</button>
+          <button class="qb" onclick="qr('NVDA')">NVDA</button>
+          <button class="qb" onclick="qr('TSLA')">TSLA</button>
         </div>
 
         <div class="ld-wrap" id="ldWrap">
-          <div class="ld-sym" id="ldSym"></div>
-          <div class="ld-bar-bg"><div class="ld-bar"></div></div>
-          <div class="ld-msg" id="ldMsg">analyzing markets...</div>
+          <div class="ld-sym">>> LOADING DATA</div>
+          <div class="ld-msg">INTERROGATING ANTHROPIC CORE DEPLOYMENT...</div>
         </div>
 
         <div class="out-wrap" id="outWrap">
-          <div class="out-header">
-            <span class="out-meta" id="outMeta"></span>
-            <span class="out-badge" id="outBadge"></span>
+          <div class="dashboard-hdr">
+            <div class="db-ticker" id="resTicker">SPY</div>
+            <div class="db-signal" id="resSignal">BULLISH BIAS</div>
           </div>
-          <div class="out-body" id="outBody"></div>
+
+          <div class="db-grid">
+            <div class="db-card" id="card-tech">
+              <div class="db-card-title">Technical Execution</div>
+              <div class="db-metric-row"><span class="db-label">Last Price</span><span class="db-value" id="val-price">—</span></div>
+              <div class="db-metric-row"><span class="db-label">RSI (14)</span><span class="db-value" id="val-rsi">—</span></div>
+              <div class="db-metric-row"><span class="db-label">Trend Alignment</span><span class="db-value" id="val-trend">—</span></div>
+            </div>
+
+            <div class="db-card" id="card-vol">
+              <div class="db-card-title">Volatility Parameters</div>
+              <div class="db-metric-row"><span class="db-label">Implied Vol (IV)</span><span class="db-value" id="val-iv">—</span></div>
+              <div class="db-metric-row"><span class="db-label">IV Rank / Percentile</span><span class="db-value" id="val-ivr">—</span></div>
+              <div class="db-metric-row"><span class="db-label">Put/Call Volume Ratio</span><span class="db-value" id="val-pcr">—</span></div>
+            </div>
+
+            <div class="db-card" id="card-gex">
+              <div class="db-card-title">Market Maker Risk (GEX)</div>
+              <div class="db-metric-row"><span class="db-label">Net Gamma Position</span><span class="db-value" id="val-gexstat">—</span></div>
+              <div class="db-metric-row"><span class="db-label">Gamma Flip Threshold</span><span class="db-value" id="val-gexflip">—</span></div>
+              <div class="db-metric-row"><span class="db-label">Unusual Order Flow</span><span class="db-value" id="val-flow">—</span></div>
+            </div>
+          </div>
+
+          <div class="db-textbox">
+            <h3>Institutional Positioning Summary</h3>
+            <p id="txt-summary">—</p>
+          </div>
+
+          <div class="db-textbox">
+            <h3>Tactical Derivatives Playbook</h3>
+            <p id="txt-playbook">—</p>
+            <div class="rec-pill" id="txt-contract">RECOMMENDED CONTRACT: None</div>
+          </div>
         </div>
 
         <div class="err-wrap" id="errWrap"></div>
       </div>
     </div>
-
-    <div class="panel" id="panel-chart">CHART PANEL COMING SOON</div>
-    <div class="panel" id="panel-watchlist">WATCHLIST PANEL COMING SOON</div>
-    <div class="panel" id="panel-sector">SECTOR PANEL COMING SOON</div>
-    <div class="panel" id="panel-scanner">SCANNER PANEL COMING SOON</div>
-  </div>
-</div>
-
-<div id="keyModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:300;align-items:center;justify-content:center">
-  <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:2rem;width:100%;max-width:460px">
-    <h2 style="font-size:11px;letter-spacing:.25em;color:var(--g);margin-bottom:1rem">API KEYS</h2>
-    
-    <div style="margin-bottom:1rem">
-      <div style="font-size:9px;color:var(--text3);margin-bottom:4px">GROK (xAI)</div>
-      <input id="grokKey" type="password" placeholder="grok api key" style="width:100%;background:var(--bg3);border:1px solid var(--border);padding:9px;border-radius:4px;color:var(--text);font-family:var(--mono)">
-    </div>
-    <div style="margin-bottom:1rem">
-      <div style="font-size:9px;color:var(--text3);margin-bottom:4px">ANTHROPIC (Claude)</div>
-      <input id="claudeKey" type="password" placeholder="sk-ant-..." style="width:100%;background:var(--bg3);border:1px solid var(--border);padding:9px;border-radius:4px;color:var(--text);font-family:var(--mono)">
-    </div>
-    <div style="text-align:right">
-      <button onclick="closeKey()" style="background:none;border:1px solid var(--border);color:var(--text3);padding:8px 16px;margin-right:8px;border-radius:4px;cursor:pointer">CANCEL</button>
-      <button onclick="saveKeys()" style="background:var(--g);color:#000;padding:8px 20px;border:none;border-radius:4px;cursor:pointer;font-weight:700">SAVE KEYS</button>
-    </div>
   </div>
 </div>
 
 <script>
-// STATE
-let currentModel = localStorage.getItem('opt_model') || 'grok';
-
-const MODELS = {
-  grok: { name: "grok-beta", estCost: "0.06-0.12" },
-  claude: { name: "claude-3-5-sonnet-20241022", estCost: "0.60-0.80" },
-  gemini: { name: "gemini-2.0-flash-exp", estCost: "0.03-0.05" }
-};
-
-const SYS = `You are a elite tier-1 options trading analyst. Deliver precise, data-driven, actionable analysis.
-
-Use these exact markdown headers:
-
-## MARKET SNAPSHOT
-## TECHNICAL ANALYSIS
-## OPTIONS INTELLIGENCE
-## TRADE RECOMMENDATIONS
-## RISK MATRIX
-## FINAL SUMMARY
-
-Be concise, use real numbers, specific strikes/levels.`;
-
-function saveKeys() {
-  localStorage.setItem('grok_key', document.getElementById('grokKey').value.trim());
-  localStorage.setItem('claude_key', document.getElementById('claudeKey').value.trim());
-  closeKey();
-  chkKey();
-}
-
+// Key Handling securely in LocalStorage to maintain independence
 function openKey() {
-  document.getElementById('grokKey').value = localStorage.getItem('grok_key') || '';
-  document.getElementById('claudeKey').value = localStorage.getItem('claude_key') || '';
-  document.getElementById('keyModal').style.display = 'flex';
+  const k = prompt("Enter Anthropic API Key:", localStorage.getItem('opt_ant_key') || '');
+  if(k !== null) { localStorage.setItem('opt_ant_key', k); }
 }
-
-function closeKey() {
-  document.getElementById('keyModal').style.display = 'none';
-}
-
-function getKey(model) {
-  if (model === 'grok') return localStorage.getItem('grok_key') || '';
-  if (model === 'claude') return localStorage.getItem('claude_key') || '';
-  return '';
-}
-
-function chkKey() {
-  const hasGrok = !!getKey('grok');
-  document.getElementById('bpulse').className = 'brand-pulse' + (hasGrok ? '' : ' dead');
-}
-
-function sw(id, tab) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
-  document.querySelectorAll('.ntab').forEach(t => t.classList.remove('on'));
-  document.getElementById('panel-' + id).classList.add('on');
-  tab.classList.add('on');
-}
+function qr(sym) { document.getElementById('tInp').value = sym; runAna(); }
 
 async function runAna() {
-  const ticker = document.getElementById('tInp').value.trim().toUpperCase();
-  if (!ticker) return;
+  const sym = document.getElementById('tInp').value.trim().toUpperCase();
+  if(!sym) return;
 
-  const modelType = document.getElementById('modelSelect').value;
-  const key = getKey(modelType);
+  const apiKey = localStorage.getItem('opt_ant_key');
+  if(!apiKey) { alert("Please set your API Key using the top right button first."); return; }
 
-  if (!key) {
-    alert(`Please set your ${modelType.toUpperCase()} API key first.`);
-    openKey();
-    return;
-  }
-
-  document.getElementById('costEst').textContent = `Est. cost: ~$${MODELS[modelType].estCost}`;
-
-  document.getElementById('ldWrap').classList.add('on');
-  document.getElementById('outWrap').classList.remove('on');
+  // Toggle visual engine updates
+  document.getElementById('ldWrap').style.display = 'block';
+  document.getElementById('outWrap').style.display = 'none';
   document.getElementById('errWrap').classList.remove('on');
-  document.getElementById('ldSym').textContent = ticker;
+
+  // MOCK INJECTION FEEDS - In production, extract this data programmatically on your backend/local client 
+  // to avoid sending raw massive strings to the LLM. 
+  const condensedMarketContext = `
+    Ticker: ${sym}
+    Live Spot: 531.40, RSI: 64.2, MA Alignment: Bullish structure above 20,50,200 SMAs.
+    IV: 18.5%, IV Rank: 22%, Put/Call Vol Ratio: 0.58
+    Net GEX: Positive ($4.2B exposure), Gamma Flip: $525.00. Flow: Heavy sweeping block activity on near-term Call options.
+  `;
 
   try {
-    const userMsg = `Perform a complete professional options trading analysis on ${ticker}. Use current market data.`;
-
-    let response;
-    if (modelType === 'grok') {
-      response = await fetch('https://api.x.ai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${key}`
-        },
-        body: JSON.stringify({
-          model: "grok-beta",
-          messages: [
-            { role: "system", content: SYS },
-            { role: "user", content: userMsg }
-          ],
-          temperature: 0.7,
-          max_tokens: 1600
-        })
-      });
-    } else if (modelType === 'claude') {
-      response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': key,
-          'anthropic-version': '2023-06-01'
-        },
-        body: JSON.stringify({
-          model: MODELS.claude.name,
-          max_tokens: 1600,
-          system: SYS,
-          messages: [{ role: "user", content: userMsg }]
-        })
-      });
-    }
-
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    // Calling Anthropic direct endpoint with a strictly locked JSON system layout requirement
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+        'anthropic-dangerous-direct-profiles-allowed': 'true' // For direct prototyping implementation
+      },
+      body: JSON.stringify({
+        model: 'claude-3-5-sonnet-20241022',
+        max_tokens: 500, // Ruthlessly low limit ensures the engine behaves without wasting cash on syntax filler
+        temperature: 0,   // Clear deterministic outputs
+        system: `You are an institutional quantitative risk desk terminal engine. Your sole job is to ingest raw ticker metadata fields and immediately format them back into a raw, clean JSON string object matching the layout structure below.
+        Do not output any words, pleasantries, markdown blocks, backticks, or introductions. Return ONLY the string matching this interface format:
+        {
+          "signal": "BULLISH" or "BEARISH" or "NEUTRAL",
+          "price": "$531.40",
+          "rsi": "64.2",
+          "trend": "Bullish Alignment",
+          "iv": "18.5%",
+          "ivr": "22%",
+          "pcr": "0.58",
+          "gexstat": "+$4.2B (Long Gamma)",
+          "gexflip": "$525.00",
+          "flow": "Bullish Call Sweeps",
+          "summary": "1-2 sentence max institutional dealer exposure risk analysis.",
+          "playbook": "1-2 sentence target options strategy recommendation based on volatility parameter levels.",
+          "contract": "SPY Last Friday Expiring $535 Call"
+        }`,
+        messages: [{ role: 'user', content: `Parse this dataset instantly into the JSON matrix structural specifications: ${condensedMarketContext}` }]
+      })
+    });
 
     const data = await response.json();
-    let text = modelType === 'grok' ? data.choices[0].message.content : data.content[0].text;
+    if(data.error) throw new Error(data.error.message);
 
-    document.getElementById('ldWrap').classList.remove('on');
-    document.getElementById('outWrap').classList.add('on');
-    document.getElementById('outMeta').textContent = `ANALYSIS � ${new Date().toLocaleString()}`;
-    document.getElementById('outBadge').textContent = ticker;
-    document.getElementById('outBody').innerHTML = text
-      .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-      .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    // Extraction processing
+    const contentText = data.content[0].text.trim();
+    const parsed = JSON.parse(contentText);
+
+    // Live Render directly to elements without long walls of text
+    document.getElementById('resTicker').innerText = sym;
+    
+    const sigElement = document.getElementById('resSignal');
+    sigElement.innerText = parsed.signal + " BIAS";
+    sigElement.className = "db-signal " + parsed.signal.toLowerCase();
+
+    // Map Technical fields
+    document.getElementById('val-price').innerText = parsed.price;
+    document.getElementById('val-rsi').innerText = parsed.rsi;
+    document.getElementById('val-trend').innerText = parsed.trend;
+
+    // Map Vol parameters
+    document.getElementById('val-iv').innerText = parsed.iv;
+    document.getElementById('val-ivr').innerText = parsed.ivr;
+    document.getElementById('val-pcr').innerText = parsed.pcr;
+
+    // Map Exposure limits
+    document.getElementById('val-gexstat').innerText = parsed.gexstat;
+    document.getElementById('val-gexflip').innerText = parsed.gexflip;
+    document.getElementById('val-flow').innerText = parsed.flow;
+
+    // Map text descriptions
+    document.getElementById('txt-summary').innerText = parsed.summary;
+    document.getElementById('txt-playbook').innerText = parsed.playbook;
+    document.getElementById('txt-contract').innerText = "RECOMMENDED PLAYBOOK ACTION: " + parsed.contract;
+
+    // Re-adjust UI layout toggles
+    document.getElementById('ldWrap').style.display = 'none';
+    document.getElementById('outWrap').style.display = 'block';
 
   } catch (err) {
-    document.getElementById('ldWrap').classList.remove('on');
-    document.getElementById('errWrap').classList.add('on');
-    document.getElementById('errWrap').innerHTML = `Error: ${err.message}<br><br>Check your API key.`;
+    document.getElementById('ldWrap').style.display = 'none';
+    const errBox = document.getElementById('errWrap');
+    errBox.innerText = "CRITICAL TERMINAL EXCEPTION: " + err.message;
+    errBox.classList.add('on');
   }
 }
-
-// Clock
-function tick() {
-  const n = new Date();
-  document.getElementById('clk').textContent = n.toLocaleString([], {dateStyle:'short', timeStyle:'short'});
-}
-setInterval(tick, 1000); tick();
-
-// Init
-document.getElementById('modelSelect').value = currentModel;
-document.getElementById('modelSelect').onchange = (e) => {
-  currentModel = e.target.value;
-  localStorage.setItem('opt_model', currentModel);
-};
-
-chkKey();
-document.getElementById('tInp').addEventListener('keydown', e => { if (e.key === 'Enter') runAna(); });
 </script>
 </body>
 </html>
