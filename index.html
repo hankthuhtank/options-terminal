@@ -758,9 +758,22 @@ function runAna(){
 
 async function callAI(ticker){
   const wrap = document.getElementById('ldWrap'); const out = document.getElementById('outWrap'); const err = document.getElementById('errWrap');
-  const p = Math.random()>.4; const spot = (100+Math.random()*400).toFixed(2);
+  
+  // 1. Grab actual live metrics from the UI state so the AI isn't blind
+  const currentPrice = document.getElementById('mPrice').innerText || 'N/A';
+  const priceChange = document.getElementById('mChg').innerText || 'N/A';
+  const rsiVal = document.getElementById('ivRsi').innerText || 'N/A';
+  const trendVal = document.getElementById('ivTrend').innerText || 'N/A';
+  
   const sysPrompt = "You are an institutional options market maker & quantitative risk systems desk terminal. Provide dense structural layout using clean markdown headers, bold elements, and lists. Do not waffle.";
-  const userPrompt = `Perform a high-level options matrix scan for ${ticker}. Spot price approx $${spot}. Frame technical trend context, support/resistance boundaries, implied volatility landscape (IVRank/Skew), options flow metrics (block sweeping/whale positioning), dealer gamma exposure boundaries (GEX wall), and list 2 highly precise trade structures (Strike, Expiry, Strategy) complete with distinct Bullish/Bearish directional parameters.`;
+  
+  // 2. Feed actual data into the prompt context
+  const userPrompt = `Perform a high-level options matrix scan for ${ticker}. 
+  CURRENT TERMINAL METRICS:
+  - Spot Price Context: ${currentPrice} (${priceChange})
+  - Technical Matrix: RSI is ${rsiVal}, Trend Score is ${trendVal}
+  
+  Frame technical trend context, support/resistance boundaries, implied volatility landscape (IVRank/Skew), options flow metrics (block sweeping/whale positioning), dealer gamma exposure boundaries (GEX wall), and list 2 highly precise trade structures (Strike, Expiry, Strategy) complete with distinct Bullish/Bearish directional parameters based on this real data.`;
 
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -772,15 +785,19 @@ async function callAI(ticker){
         'anthropic-dangerous-direct-browser-access': 'true' 
       },
       body: JSON.stringify({
-        model:'claude-3-5-sonnet-20241022', max_tokens:1400, system:sysPrompt,
+        // FIX: Swapped to the correct, globally recognized latest model routing string
+        model:'claude-3-5-sonnet-latest', 
+        max_tokens:1400, 
+        system:sysPrompt,
         messages:[{role:'user',content:userPrompt}]
       })
     });
     if(!res.ok){ const txt=await res.text(); throw new Error(txt); }
     const data = await res.json();
     
-    document.getElementById('outBadge').innerText = p?'BULLISH STRIP':'BEARISH BIAS';
-    document.getElementById('outBadge').className = `out-badge ${p?'':'bear'}`;
+    const isBull = !priceChange.includes('-');
+    document.getElementById('outBadge').innerText = isBull ? 'BULLISH STRIP' : 'BEARISH BIAS';
+    document.getElementById('outBadge').className = `out-badge ${isBull ? '' : 'bear'}`;
     document.getElementById('outBody').innerHTML = data.content[0].text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
     wrap.classList.remove('on'); out.classList.add('on');
     
