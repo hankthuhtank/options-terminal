@@ -3,104 +3,714 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elizabeth Aven Photography</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Elizabeth Aven Photography | Central Texas Editorial & Portrait Photographer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Syne:wght@400..800&display=swap" rel="stylesheet">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
-        
-        body { font-family: 'Inter', system-ui, sans-serif; }
-        .serif { font-family: 'Playfair Display', serif; }
-        
-        .hero-bg {
-            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.75)), 
-                             url('https://picsum.photos/id/1015/2000/1200');
+        :root {
+            --bg-color: #0b0b0c;
+            --text-color: #f4f4f6;
+            --accent-color: #c5a880; /* Muted Champagne Gold */
+            --muted-color: #71717a;
+            --font-display: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        /* Grain Overlay for cinematic texture */
+        .grain {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Floating Fixed Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: difference;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--text-color);
+            letter-spacing: 1px;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 1px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--accent-color);
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+
+        .nav-links a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Main Scroll Container */
+        .horizontal-scroll-container {
+            display: flex;
+            width: 400vw; /* 4 massive structural panels */
+            height: 100vh;
+            scroll-behavior: smooth;
+        }
+
+        section {
+            width: 100vw;
+            height: 100vh;
+            flex-shrink: 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+        }
+
+        /* Section 1: Hero Panel */
+        #hero {
+            justify-content: flex-start;
+        }
+
+        .hero-title-wrapper {
+            position: relative;
+            z-index: 5;
+            max-width: 800px;
+        }
+
+        .hero-title-wrapper h1 {
+            font-family: var(--font-display);
+            font-size: clamp(3.5rem, 8vw, 7rem);
+            font-weight: 800;
+            line-height: 0.9;
+            text-transform: uppercase;
+        }
+
+        .hero-title-wrapper h1 span {
+            display: block;
+            color: transparent;
+            -webkit-text-stroke: 1px var(--text-color);
+        }
+
+        .hero-subtitle {
+            margin-top: 30px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        .hero-bg-img {
+            position: absolute;
+            right: 10%;
+            top: 15%;
+            width: 35vw;
+            height: 70vh;
+            background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=1000');
             background-size: cover;
             background-position: center;
+            filter: grayscale(100%) contrast(110%);
+            opacity: 0.6;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
         }
-        
-        .photo-hover:hover img {
+
+        #hero:hover .hero-bg-img {
+            transform: scale(1.02);
+            filter: grayscale(30%) contrast(100%);
+        }
+
+        /* Section 2: Portfolio Showcase */
+        #portfolio {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+            padding-left: 5%;
+        }
+
+        .section-vertical-title {
+            font-family: var(--font-display);
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+            font-size: 4rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.03);
+            position: absolute;
+            left: 20px;
+        }
+
+        .gallery-track {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .gallery-item {
+            position: relative;
+            width: 24vw;
+            height: 55vh;
+            overflow: hidden;
+            background-color: #1a1a1c;
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
+        }
+
+        .gallery-item:hover img {
             transform: scale(1.08);
+            filter: grayscale(0%);
+        }
+
+        .gallery-item-meta {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 10;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .gallery-item:hover .gallery-item-meta {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-item-meta h3 {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        .gallery-item-meta p {
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        /* Section 3: About & Philosophy */
+        #about {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .about-text-block h2 {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            line-height: 1.1;
+        }
+
+        .about-text-block p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #b3b3b3;
+            margin-bottom: 20px;
+        }
+
+        .about-image-frame {
+            width: 100%;
+            height: 65vh;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 20px;
+        }
+
+        .about-image {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=1000');
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(100%);
+        }
+
+        /* Section 4: Contact & Booking */
+        #contact {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 100px;
+            width: 100vw;
+        }
+
+        .contact-form-wrapper h2 {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 40px;
+        }
+
+        .contact-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group input, .form-group textarea {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding: 15px 0;
+            color: var(--text-color);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .form-group label {
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--muted-color);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn {
+            grid-column: span 2;
+            background: var(--text-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 20px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background: var(--accent-color);
+            color: var(--text-color);
+        }
+
+        .info-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 40px;
+            border-left: 1px solid rgba(255,255,255,0.05);
+            padding-left: 60px;
+        }
+
+        .info-item h4 {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+        }
+
+        .info-item p, .info-item a {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        /* Progress Indicator for Horizontal Scroll */
+        .scroll-progress {
+            position: fixed;
+            bottom: 40px;
+            left: 10%;
+            width: 80%;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            z-index: 100;
+        }
+
+        .progress-bar {
+            width: 25%;
+            height: 100%;
+            background: var(--accent-color);
+            transition: transform 0.1s linear;
+            transform-origin: left;
+        }
+
+        /* ---------------------------------- */
+        /* RESPONSIVE DESIGN (MOBILE & TABLET) */
+        /* ---------------------------------- */
+        @media (max-width: 1024px) {
+            /* Kill horizontal scroll on mobile, transform into editorial vertical feed */
+            .horizontal-scroll-container {
+                display: block;
+                width: 100vw;
+                height: auto;
+            }
+
+            section {
+                width: 100vw;
+                height: auto;
+                min-height: 100vh;
+                padding: 120px 24px 60px 24px;
+                display: block;
+            }
+
+            nav {
+                padding: 20px;
+                background: rgba(11, 11, 12, 0.85);
+                backdrop-filter: blur(10px);
+                mix-blend-mode: normal;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .nav-links a {
+                font-size: 0.8rem;
+            }
+
+            /* Mobile Hero */
+            #hero {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .hero-title-wrapper h1 {
+                font-size: 3.5rem;
+                margin-top: 40px;
+            }
+
+            .hero-bg-img {
+                position: relative;
+                right: 0;
+                top: 40px;
+                width: 100%;
+                height: 50vh;
+            }
+
+            /* Mobile Portfolio: Asymmetrical Grid Stack */
+            #portfolio {
+                padding-left: 24px;
+            }
+
+            .section-vertical-title {
+                display: none;
+            }
+
+            .gallery-track {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 40px;
+                width: 100%;
+            }
+
+            .gallery-item {
+                width: 100%;
+                height: 60vh;
+            }
+
+            /* Alternating sizing for editorial look */
+            .gallery-item:nth-child(even) {
+                width: 85%;
+                margin-left: auto;
+            }
+
+            .gallery-item-meta {
+                opacity: 1;
+                transform: translateY(0);
+                background: rgba(11, 11, 12, 0.7);
+                padding: 10px;
+                width: calc(100% - 40px);
+            }
+
+            /* Mobile About */
+            #about {
+                display: flex;
+                flex-direction: column-reverse;
+                gap: 40px;
+            }
+
+            .about-image-frame {
+                height: 45vh;
+            }
+
+            /* Mobile Contact */
+            #contact {
+                display: flex;
+                flex-direction: column;
+                gap: 60px;
+            }
+
+            .contact-form {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .submit-btn {
+                grid-column: span 1;
+            }
+
+            .info-panel {
+                border-left: none;
+                border-top: 1px solid rgba(255,255,255,0.1);
+                padding-left: 0;
+                padding-top: 40px;
+            }
+
+            .scroll-progress {
+                display: none; /* Progress bar irrelevant on standard vertical scroll */
+            }
         }
     </style>
 </head>
-<body class="bg-zinc-950 text-white">
+<body>
 
-    <!-- NAV -->
-    <nav class="fixed top-0 w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/10">
-        <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <span class="text-3xl">📸</span>
-                <span class="text-2xl serif tracking-tight">Elizabeth Aven</span>
-            </div>
-            <div class="hidden md:flex gap-8 text-sm uppercase tracking-widest">
-                <a href="#work" class="hover:text-amber-400 transition-colors">Work</a>
-                <a href="#about" class="hover:text-amber-400 transition-colors">About</a>
-                <a href="#contact" class="hover:text-amber-400 transition-colors">Contact</a>
-            </div>
-            <button onclick="document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}"
-                    class="bg-amber-400 text-black px-6 py-3 rounded-full font-medium hover:bg-amber-300 transition">
-                Book a Session
-            </button>
+    <div class="grain"></div>
+
+    <nav>
+        <a href="#hero" class="logo">E. Aven</a>
+        <div class="nav-links">
+            <a href="#portfolio" onclick="scrollToPanel(1)">Work</a>
+            <a href="#about" onclick="scrollToPanel(2)">About</a>
+            <a href="#contact" onclick="scrollToPanel(3)">Connect</a>
         </div>
     </nav>
 
-    <!-- HERO -->
-    <header class="hero-bg h-screen flex items-center justify-center text-center">
-        <div class="max-w-4xl px-6">
-            <p class="uppercase tracking-[4px] text-amber-400 mb-4">Navasota, Texas</p>
-            <h1 class="text-7xl md:text-8xl serif leading-none mb-6">Moments<br>That Last</h1>
-            <p class="text-xl text-zinc-300 max-w-lg mx-auto">
-                Wedding • Engagement • Family • Maternity Photographer
-            </p>
-            <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="#work" class="bg-white text-black px-10 py-5 rounded-2xl font-medium text-lg">Explore the Work</a>
-                <a href="#contact" class="border border-white/70 hover:bg-white/10 px-10 py-5 rounded-2xl text-lg transition">Get in Touch</a>
+    <div class="horizontal-scroll-container" id="scrollContainer">
+        
+        <section id="hero">
+            <div class="hero-title-wrapper">
+                <h1>Elizabeth Aven</h1>
+                <h1><span>Photography</span></h1>
+                <div class="hero-subtitle">Editorial / Portraiture / Branding / Texas Based</div>
             </div>
-        </div>
-    </header>
+            <div class="hero-bg-img"></div>
+        </section>
 
-    <!-- WORK SECTION -->
-    <section id="work" class="py-24 bg-black">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-5xl serif text-center mb-16">Recent Stories</h2>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="photo-hover bg-zinc-900 rounded-3xl overflow-hidden">
-                    <img src="https://picsum.photos/id/1015/800/1100" class="w-full h-full object-cover transition-all duration-700" alt="Samantha + Hunter">
-                    <div class="p-8">
-                        <h3 class="text-2xl serif">Samantha + Hunter Engagement</h3>
-                        <p class="text-zinc-400 mt-2">Golden hour in the Texas countryside</p>
-                    </div>
-                </div>
+        <section id="portfolio">
+            <div class="section-vertical-title">Curated Portfolios</div>
+            <div class="gallery-track">
                 
-                <div class="photo-hover bg-zinc-900 rounded-3xl overflow-hidden">
-                    <img src="https://picsum.photos/id/201/800/1100" class="w-full h-full object-cover transition-all duration-700" alt="Family Session">
-                    <div class="p-8">
-                        <h3 class="text-2xl serif">Family Sessions</h3>
-                        <p class="text-zinc-400 mt-2">Authentic moments under the live oaks</p>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=800" alt="Editorial Fashion Portrait">
+                    <div class="gallery-item-meta">
+                        <h3>Vanguard Series</h3>
+                        <p>High-End Editorial Styling</p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- CONTACT -->
-    <section id="contact" class="py-32 bg-zinc-900">
-        <div class="max-w-2xl mx-auto text-center px-6">
-            <h2 class="text-5xl serif mb-8">Let's Create Together</h2>
-            <p class="text-xl text-zinc-400 mb-12">Email or message me to book your session</p>
-            
-            <a href="mailto:elizabethaven.photography@hotmail.com" 
-               class="block text-2xl hover:text-amber-400 transition-colors">
-                elizabethaven.photography@hotmail.com
-            </a>
-        </div>
-    </section>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800" alt="Modern commercial branding">
+                    <div class="gallery-item-meta">
+                        <h3>Corporate Presence</h3>
+                        <p>Professional Branding & Campaigns</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&q=80&w=800" alt="Striking monochrome studio lighting portrait">
+                    <div class="gallery-item-meta">
+                        <h3>Monochrome Identities</h3>
+                        <p>Studio High-Contrast Portraits</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=800" alt="Lively candid outdoor lifestyle photography">
+                    <div class="gallery-item-meta">
+                        <h3>Raw & Unfiltered</h3>
+                        <p>Candid Lifestyle Experience</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="about-text-block">
+                <h2>Behind <br>The Glass</h2>
+                <p>Elizabeth Aven is an independent editorial and premium portrait photographer operating throughout Central and East Texas. By rejecting uniform template layouts, her work values authentic human perspective, sharp structural compositions, and intentional styling.</p>
+                <p>Whether capturing multi-layered commercial branding projects or high-concept personal narratives, Elizabeth treats every shutter release as an architectural composition of light, shadows, and true personality.</p>
+            </div>
+            <div class="about-image-frame">
+                <div class="about-image"></div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="contact-form-wrapper">
+                <h2>Initiate <br>A Project</h2>
+                <form class="contact-form" onsubmit="event.preventDefault(); alert('Session Request Form Submitted! Secure storage simulate.');">
+                    <div class="form-group">
+                        <label>Your Full Name</label>
+                        <input type="text" required placeholder="e.g., Alex Reed">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" required placeholder="name@domain.com">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Project Vision / Intent</label>
+                        <input type="text" required placeholder="Editorial, Corporate Profile, Art Commissions...">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Context Details</label>
+                        <textarea rows="4" placeholder="Share timeline preferences, structural requirements, or styling guidelines..."></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Transmit Request</button>
+                </form>
+            </div>
+
+            <div class="info-panel">
+                <div class="info-item">
+                    <h4>Primary Hub</h4>
+                    <p>Austin & Central Texas</p>
+                </div>
+                <div class="info-item">
+                    <h4>Direct Channel</h4>
+                    <p><a href="mailto:elizabethavenphotography@gmail.com">elizabethavenphotography@gmail.com</a></p>
+                </div>
+                <div class="info-item">
+                    <h4>Digital Archive</h4>
+                    <p><a href="https://www.facebook.com/elizabethavenphotography/" target="_blank">facebook.com/elizabethavenphotography</a></p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="scroll-progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
 
     <script>
-        // Simple Tailwind script load check
-        console.log("Elizabeth Aven Photography site loaded");
+        const container = document.getElementById('scrollContainer');
+        const progressBar = document.getElementById('progressBar');
+
+        // Dynamic horizontal scroll mechanism via mousewheel (Desktop exclusive functionality)
+        window.addEventListener('wheel', (e) => {
+            if (window.innerWidth > 1024) {
+                e.preventDefault();
+                container.scrollLeft += e.deltaY;
+                updateProgress();
+            }
+        }, { passive: false });
+
+        // Update customized horizontal tracking bar
+        function updateProgress() {
+            const maxScroll = container.scrollWidth - window.innerWidth;
+            const scrollPercent = (container.scrollLeft / maxScroll) * 100;
+            // Map percentage to scale the width transform smoothly
+            progressBar.style.transform = `scaleX(${0.25 + (scrollPercent / 133.33)})`; 
+        }
+
+        // Nav click cross-panel mechanics
+        function scrollToPanel(index) {
+            if (window.innerWidth > 1024) {
+                event.preventDefault();
+                container.scrollLeft = window.innerWidth * index;
+                setTimeout(updateProgress, 200);
+            }
+        }
+
+        // Listen for internal container scroll states directly
+        container.addEventListener('scroll', () => {
+            if (window.innerWidth > 1024) {
+                const maxScroll = container.scrollWidth - window.innerWidth;
+                const scrollPercent = (container.scrollLeft / maxScroll) * 100;
+                progressBar.style.transform = `scaleX(${scrollPercent / 100})`;
+            }
+        });
     </script>
 </body>
 </html>
