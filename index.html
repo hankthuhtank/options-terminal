@@ -270,6 +270,8 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
   background:var(--bg2);border:1px solid var(--border);
   border-radius:6px;overflow:hidden;margin-bottom:.85rem;
 }
+.pChart{width:100%;height:370px}
+.vChart{width:100%;height:75px}
 .ind-grid{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
   gap:7px;margin-bottom:.85rem;
@@ -552,8 +554,8 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
         <div class="c-err" id="cErr"></div>
         <div class="c-load" id="cLoad">LOADING CHART...</div>
         <div class="chart-box" id="chartBox" style="display:none">
-          <div id="pChart" style="width:100%;height:370px"></div>
-          <div id="vChart" style="width:100%;height:75px"></div>
+          <div id="pChart" class="pChart"></div>
+          <div id="vChart" class="vChart"></div>
         </div>
         <div class="ind-grid" id="indGrid" style="display:none">
           <div class="ind-c" id="ic0"><div class="ind-name">RSI (14)</div><div class="ind-val" id="ivRsi">—</div><div class="ind-sub" id="isRsi">—</div></div>
@@ -763,7 +765,12 @@ async function callAI(ticker){
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method:'POST',
-      headers:{ 'x-api-key':KEY, 'anthropic-version':'2023-06-01', 'content-type':'application/json', 'anthropic-dangerous-direct-profiles-allowed':'true' },
+      headers:{ 
+        'x-api-key': KEY, 
+        'anthropic-version': '2023-06-01', 
+        'content-type': 'application/json', 
+        'anthropic-dangerous-direct-browser-access': 'true' 
+      },
       body: JSON.stringify({
         model:'claude-3-5-sonnet-20241022', max_tokens:1400, system:sysPrompt,
         messages:[{role:'user',content:userPrompt}]
