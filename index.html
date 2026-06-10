@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safi Solutions — Web · Systems · AI · Markets</title>
+<meta name="description" content="Safi Solutions, founded by Helal Safi, builds the websites, systems, AI integration, and market literacy that give businesses an edge. Nationwide. Web development, automation, efficiency, AI adoption, and a guided trading education program.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#06070A;
+  --void-2:#0B0D13;
+  --panel:#10131C;
+  --panel-2:#161A26;
+  --ghost:#9AA3B8;
+  --ghost-dim:#5C6478;
+  --white:#EFF2F8;
+  --cyan:#34E5FF;
+  --cyan-deep:#0FB8D6;
+  --violet:#A06BFF;
+  --violet-deep:#7B3FE4;
+  --magenta:#FF4D9D;
+  --lime:#9DFF57;
+  --red:#FF5C6C;
+  --line:rgba(154,163,184,.14);
+  --line-2:rgba(154,163,184,.08);
+  --glass:rgba(22,26,38,.55);
+  --disp:'Clash Display','Space Grotesk',sans-serif;
+  --body:'Space Grotesk',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--void);color:var(--white);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+::selection{background:var(--cyan);color:var(--void)}
+.wrap{width:min(1200px,92%);margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--cyan)}
+.grad{background:linear-gradient(110deg,var(--cyan),var(--violet) 55%,var(--magenta));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .85s cubic-bezier(.16,.8,.3,1),transform .85s cubic-bezier(.16,.8,.3,1)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}
+  #plasma,#cursor-glow{display:none !important}
+  *{animation-duration:.001s !important;transition-duration:.001s !important}
+}
+
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(46% 38% at 16% 8%, rgba(52,229,255,.10), transparent 70%),
+    radial-gradient(42% 40% at 86% 22%, rgba(160,107,255,.12), transparent 70%),
+    radial-gradient(50% 50% at 50% 110%, rgba(255,77,157,.07), transparent 70%)}
+
+/* custom cursor glow */
+#cursor-glow{position:fixed;top:0;left:0;width:380px;height:380px;border-radius:50%;pointer-events:none;z-index:5;transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(52,229,255,.10), rgba(160,107,255,.05) 40%, transparent 70%);mix-blend-mode:screen;transition:opacity .4s;opacity:0}
+
+#nav,header,main,footer{position:relative;z-index:1}
+
+/* ---------- nav ---------- */
+#nav{position:fixed;top:0;left:0;right:0;z-index:60;padding:18px 0;transition:padding .3s,background .3s,border-color .3s;border-bottom:1px solid transparent}
+#nav.solid{background:rgba(6,7,10,.7);backdrop-filter:blur(16px) saturate(1.4);border-color:var(--line);padding:12px 0}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{display:flex;align-items:center;gap:13px;text-decoration:none}
+.logo svg{width:40px;height:40px;filter:drop-shadow(0 0 10px rgba(52,229,255,.4))}
+.logo .lt{font-family:var(--disp);font-weight:700;font-size:1.2rem;letter-spacing:.08em;line-height:1}
+.logo .lt small{display:block;font-family:var(--mono);font-size:.52rem;letter-spacing:.34em;color:var(--ghost-dim);margin-top:4px}
+.nav-links{display:flex;align-items:center;gap:30px;list-style:none}
+.nav-links a{text-decoration:none;font-family:var(--mono);font-weight:500;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ghost);transition:color .2s}
+.nav-links a:hover,.nav-links a:focus-visible{color:var(--cyan)}
+.nav-cta{position:relative;color:var(--white) !important;padding:10px 20px;border:1px solid var(--line);border-radius:100px;overflow:hidden;transition:border-color .3s,color .3s}
+.nav-cta::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,var(--cyan),var(--violet));opacity:0;transition:opacity .3s;z-index:-1}
+.nav-cta:hover{color:var(--void) !important;border-color:transparent}
+.nav-cta:hover::before{opacity:1}
+.menu-btn{display:none;background:none;border:1px solid var(--line);color:var(--white);padding:9px 14px;font-family:var(--mono);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border-radius:8px}
+@media (max-width:900px){
+  .nav-links{position:fixed;inset:64px 14px auto 14px;background:var(--panel);border:1px solid var(--line);border-radius:18px;flex-direction:column;align-items:stretch;padding:22px;gap:18px;display:none;box-shadow:0 30px 60px rgba(0,0,0,.7)}
+  .nav-links.open{display:flex}.nav-cta{text-align:center}.menu-btn{display:block}
+}
+
+/* ---------- hero ---------- */
+header{position:relative;min-height:100svh;display:flex;align-items:center;padding:130px 0 80px;overflow:hidden}
+#plasma{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.9}
+header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(70% 70% at 50% 50%,transparent 40%,var(--void) 96%)}
+.hero{position:relative;z-index:2;max-width:1000px}
+.hero .badge{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ghost);border:1px solid var(--line);border-radius:100px;padding:8px 16px;margin-bottom:30px;background:var(--glass);backdrop-filter:blur(8px)}
+.hero .badge .live{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime);animation:pulse 1.7s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+.hero h1{font-family:var(--disp);font-weight:700;font-size:clamp(2.7rem,8vw,6.4rem);line-height:.96;letter-spacing:-.015em}
+.hero h1 .line{display:block;overflow:hidden}
+.hero h1 .line span{display:inline-block;transform:translateY(110%);animation:rise .9s cubic-bezier(.16,.85,.3,1) forwards}
+.hero h1 .line:nth-child(2) span{animation-delay:.1s}
+.hero h1 .line:nth-child(3) span{animation-delay:.2s}
+@keyframes rise{to{transform:none}}
+.hero .thesis{font-size:clamp(1.05rem,2.4vw,1.42rem);color:var(--ghost);max-width:660px;margin:30px 0 14px;font-weight:400;opacity:0;animation:fadein .8s ease .5s forwards}
+.hero .thesis b{color:var(--white);font-weight:600}
+.hero .thesis .hl{color:var(--cyan);font-weight:600}
+@keyframes fadein{to{opacity:1}}
+.hero .micro{font-family:var(--mono);font-size:.76rem;color:var(--ghost-dim);letter-spacing:.05em;margin-bottom:38px;opacity:0;animation:fadein .8s ease .65s forwards}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap;opacity:0;animation:fadein .8s ease .8s forwards}
+.btn{position:relative;display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--mono);font-weight:500;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;padding:16px 30px;cursor:pointer;border:1px solid transparent;border-radius:100px;transition:transform .12s,box-shadow .3s,border-color .3s,color .3s;will-change:transform}
+.btn:active{transform:scale(.97)}
+.btn-grad{background:linear-gradient(110deg,var(--cyan),var(--violet));color:var(--void);font-weight:700}
+.btn-grad:hover{box-shadow:0 8px 34px rgba(123,63,228,.5)}
+.btn-glass{border-color:var(--line);color:var(--white);background:var(--glass);backdrop-filter:blur(8px)}
+.btn-glass:hover{border-color:var(--cyan);color:var(--cyan)}
+.scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:2;font-family:var(--mono);font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ghost-dim);display:flex;flex-direction:column;align-items:center;gap:9px;opacity:0;animation:fadein 1s ease 1.1s forwards}
+.scroll-hint .bar{width:1px;height:30px;background:linear-gradient(var(--cyan),transparent);position:relative;overflow:hidden}
+.scroll-hint .bar::after{content:"";position:absolute;top:-30px;left:0;width:1px;height:30px;background:var(--cyan);animation:scrolldown 1.8s ease-in-out infinite}
+@keyframes scrolldown{to{top:30px}}
+
+/* ---------- section scaffold ---------- */
+.section{padding:110px 0;position:relative}
+.sec-head{margin-bottom:54px;max-width:760px}
+.sec-head .idx{font-family:var(--mono);font-size:.74rem;letter-spacing:.24em;color:var(--violet);margin-bottom:16px}
+.sec-head h2{font-family:var(--disp);font-weight:700;font-size:clamp(2.1rem,5.5vw,3.8rem);line-height:1.02;letter-spacing:-.01em}
+.sec-head p{color:var(--ghost);max-width:580px;font-size:1.05rem;margin-top:18px}
+
+/* ---------- stats marquee under hero ---------- */
+.statband{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(11,13,19,.5);position:relative;z-index:1}
+.statband .row{display:grid;grid-template-columns:repeat(4,1fr)}
+.statband .s{padding:34px 24px;text-align:center;border-right:1px solid var(--line-2)}
+.statband .s:last-child{border-right:none}
+.statband .s .n{font-family:var(--disp);font-weight:700;font-size:clamp(1.7rem,3.5vw,2.6rem);line-height:1}
+.statband .s .l{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ghost-dim);margin-top:8px}
+@media (max-width:760px){.statband .row{grid-template-columns:1fr 1fr}.statband .s:nth-child(2){border-right:none}.statband .s:nth-child(1),.statband .s:nth-child(2){border-bottom:1px solid var(--line-2)}}
+
+/* ---------- SERVICES — bento ---------- */
+.bento{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:minmax(150px,auto);gap:16px;perspective:1200px}
+.cell{position:relative;border:1px solid var(--line);border-radius:18px;padding:28px;overflow:hidden;background:var(--panel);transition:border-color .35s,transform .2s ease;display:flex;flex-direction:column;transform-style:preserve-3d;will-change:transform}
+.cell::before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;filter:blur(60px);opacity:0;transition:opacity .4s;pointer-events:none;z-index:0}
+.cell>*{position:relative;z-index:1}
+.cell:hover::before{opacity:.4}
+.cell .cnum{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;color:var(--ghost-dim);margin-bottom:auto}
+.cell .cico{width:42px;height:42px;border:1px solid var(--line);border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--cyan);margin-bottom:16px}
+.cell h3{font-family:var(--disp);font-weight:600;font-size:1.35rem;letter-spacing:-.01em;line-height:1.1;margin-bottom:8px}
+.cell p{color:var(--ghost);font-size:.95rem}
+.cell .ctags{margin-top:16px;display:flex;flex-wrap:wrap;gap:7px}
+.cell .ctags span{font-family:var(--mono);font-size:.64rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ghost-dim);border:1px solid var(--line-2);border-radius:6px;padding:4px 9px}
+.cell.web{grid-column:span 4;grid-row:span 2}
+.cell.web::before{background:var(--cyan);top:-40px;right:-40px}
+.cell.web h3{font-size:2rem}
+.cell.ai{grid-column:span 2;grid-row:span 2;background:linear-gradient(160deg,rgba(160,107,255,.09),rgba(52,229,255,.05));border-color:rgba(160,107,255,.28)}
+.cell.ai::before{background:var(--violet);bottom:-30px;right:-30px;opacity:.3}
+.cell.ai .cico{color:var(--violet)}
+.cell.auto{grid-column:span 2}
+.cell.auto::before{background:var(--cyan);bottom:-40px;left:-40px}
+.cell.eff{grid-column:span 2}
+.cell.eff::before{background:var(--magenta);bottom:-40px;right:-40px}
+.cell.eff .cico{color:var(--magenta)}
+.cell.brand{grid-column:span 2}
+.cell.brand::before{background:var(--lime);top:-40px;left:-40px}
+.cell.brand .cico{color:var(--lime)}
+.cell.markets{grid-column:span 6;background:linear-gradient(120deg,rgba(52,229,255,.06),rgba(160,107,255,.05));border-color:rgba(52,229,255,.22);flex-direction:row;align-items:center;gap:24px}
+.cell.markets .cico{color:var(--cyan);flex:0 0 auto}
+.cell.markets .mtxt{flex:1}
+.cell.markets .go{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;color:var(--cyan);display:inline-flex;align-items:center;gap:8px;white-space:nowrap;border:1px solid rgba(52,229,255,.3);border-radius:100px;padding:12px 20px;transition:background .3s,color .3s}
+.cell.markets .go:hover{background:var(--cyan);color:var(--void)}
+@media (max-width:900px){
+  .bento{grid-template-columns:1fr 1fr}
+  .cell.web,.cell.ai,.cell.auto,.cell.eff,.cell.brand{grid-column:span 2;grid-row:auto}
+  .cell.markets{grid-column:span 2;flex-direction:column;align-items:flex-start}
+}
+@media (max-width:560px){.bento{grid-template-columns:1fr}.cell.web,.cell.ai,.cell.auto,.cell.eff,.cell.brand,.cell.markets{grid-column:span 1}}
+
+/* ---------- PROCESS ---------- */
+.proc{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.pstep{padding:36px 30px;border-right:1px solid var(--line);transition:background .3s}
+.pstep:last-child{border-right:none}
+.pstep:hover{background:var(--panel)}
+.pstep .pb{font-family:var(--mono);font-size:.74rem;color:var(--cyan);letter-spacing:.14em;margin-bottom:18px}
+.pstep h4{font-family:var(--disp);font-weight:600;font-size:1.4rem;margin-bottom:10px}
+.pstep p{color:var(--ghost);font-size:.97rem}
+@media (max-width:760px){.proc{grid-template-columns:1fr}.pstep{border-right:none;border-bottom:1px solid var(--line)}.pstep:last-child{border-bottom:none}}
+
+/* ===== TRADING DESK ===== */
+.desk{background:linear-gradient(180deg,var(--void-2),#070910);border-top:1px solid var(--line);border-bottom:1px solid var(--line);position:relative;overflow:hidden}
+.desk::before{content:"";position:absolute;inset:0;opacity:.4;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(52,229,255,.02) 0 1px,transparent 1px 4px)}
+.desk-bar{display:flex;align-items:center;gap:14px;padding:13px 22px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:.74rem;color:var(--ghost-dim);background:rgba(6,7,10,.6);position:relative;z-index:2;flex-wrap:wrap}
+.desk-bar .dots{display:flex;gap:7px}
+.desk-bar .dots i{width:11px;height:11px;border-radius:50%;display:block}
+.desk-bar .dots i:nth-child(1){background:var(--magenta)}.desk-bar .dots i:nth-child(2){background:var(--violet)}.desk-bar .dots i:nth-child(3){background:var(--cyan)}
+.desk-bar .path{color:var(--ghost)}
+.desk-bar .path .cursor{display:inline-block;width:8px;background:var(--cyan);margin-left:2px;animation:blink 1.1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.desk-bar .tick{margin-left:auto;display:flex;align-items:center;gap:8px;color:var(--lime)}
+.desk-bar .tick .pulse{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime);animation:pulse 1.6s ease-in-out infinite}
+.desk-inner{padding:90px 0 100px;position:relative;z-index:2}
+.desk-head{max-width:720px;margin-bottom:40px}
+.desk-head h2{font-family:var(--disp);font-weight:700;font-size:clamp(2.2rem,6vw,4rem);line-height:1;margin:14px 0 16px}
+.desk-head p{color:var(--ghost);font-size:1.1rem;max-width:640px}
+.desk-head p em{color:var(--cyan);font-style:normal}
+
+/* story + equity curve */
+.story-block{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-bottom:66px}
+.story-block .st-copy h3{font-family:var(--disp);font-weight:600;font-size:1.7rem;line-height:1.2;margin-bottom:18px}
+.story-block .st-copy p{color:var(--ghost);font-size:1.05rem;margin-bottom:16px}
+.story-block .st-copy p strong{color:var(--white);font-weight:600}
+.story-block .st-copy .pq{border-left:2px solid var(--cyan);padding-left:20px;font-family:var(--disp);font-weight:500;font-size:1.2rem;color:var(--white);line-height:1.4;margin-top:24px}
+.equity{border:1px solid var(--line);border-radius:16px;background:rgba(8,11,17,.7);padding:22px;position:relative}
+.equity .eqhead{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:.72rem;color:var(--ghost-dim);letter-spacing:.08em;margin-bottom:12px}
+.equity .eqhead b{color:var(--lime)}
+.equity svg{display:block;width:100%;height:200px;overflow:visible}
+.equity .annot{position:absolute;font-family:var(--mono);font-size:.64rem;letter-spacing:.04em;padding:3px 8px;border-radius:6px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .5s}
+.equity .annot.show{opacity:1}
+.equity .annot.loss{color:var(--red);border:1px solid rgba(255,92,108,.4);background:rgba(255,92,108,.08)}
+.equity .annot.win{color:var(--lime);border:1px solid rgba(157,255,87,.4);background:rgba(157,255,87,.08)}
+@media (max-width:880px){.story-block{grid-template-columns:1fr;gap:32px}}
+
+/* what makes it different */
+.diff{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:66px}
+.diff .d{border:1px solid var(--line);border-radius:14px;padding:26px;background:rgba(8,11,17,.5);transition:border-color .3s,transform .3s}
+.diff .d:hover{border-color:rgba(52,229,255,.35);transform:translateY(-4px)}
+.diff .d .di{color:var(--cyan);margin-bottom:14px}
+.diff .d h4{font-family:var(--disp);font-weight:600;font-size:1.2rem;margin-bottom:8px}
+.diff .d p{color:var(--ghost);font-size:.94rem}
+@media (max-width:760px){.diff{grid-template-columns:1fr}}
+
+.tiers{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:60px}
+.tier{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:36px 32px;position:relative;transition:border-color .3s,transform .3s;overflow:hidden}
+.tier:hover{transform:translateY(-5px)}
+.tier.t1:hover{border-color:var(--cyan)}
+.tier.t2{border-color:rgba(160,107,255,.4)}
+.tier.t2::before{content:"";position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:var(--violet);filter:blur(70px);opacity:.25;pointer-events:none}
+.tier .ribbon{position:absolute;top:20px;right:20px;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--void);background:linear-gradient(110deg,var(--cyan),var(--violet));padding:6px 13px;border-radius:100px}
+.tier .tname{font-family:var(--disp);font-weight:600;font-size:1.6rem}
+.tier .tdur{font-family:var(--mono);font-size:.74rem;color:var(--ghost-dim);letter-spacing:.08em;margin-top:6px}
+.tier .price{font-family:var(--disp);font-weight:700;font-size:3.4rem;margin:20px 0 4px;line-height:1}
+.tier .price small{font-family:var(--mono);font-size:.82rem;color:var(--ghost-dim);font-weight:400;letter-spacing:.06em}
+.tier .tfor{color:var(--ghost);font-size:.96rem;margin-bottom:22px;min-height:40px}
+.tier ul{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:26px}
+.tier li{font-size:.95rem;color:var(--white);padding-left:26px;position:relative;line-height:1.45}
+.tier li::before{content:"→";position:absolute;left:0;top:0;color:var(--cyan);font-family:var(--mono)}
+.tier.t2 li::before{color:var(--violet)}
+.tier .tres{font-style:italic;font-size:.92rem;color:var(--ghost-dim);border-top:1px solid var(--line);padding-top:18px;margin-bottom:24px}
+@media (max-width:760px){.tiers{grid-template-columns:1fr}}
+.curr-head{display:flex;align-items:baseline;gap:14px;margin-bottom:26px}
+.curr-head h3{font-family:var(--disp);font-weight:600;font-size:1.7rem}
+.curr-head .cl{font-family:var(--mono);font-size:.72rem;color:var(--ghost-dim);letter-spacing:.12em}
+.sessions{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.sess{border:1px solid var(--line);border-radius:14px;background:rgba(8,11,17,.6);overflow:hidden;transition:border-color .25s}
+.sess[open]{border-color:rgba(52,229,255,.35)}
+.sess summary{padding:20px 22px;cursor:pointer;display:flex;align-items:center;gap:16px;list-style:none;outline:none}
+.sess summary::-webkit-details-marker{display:none}
+.sess summary:focus-visible{outline:2px solid var(--cyan);outline-offset:-2px;border-radius:14px}
+.sess .snum{font-family:var(--disp);font-weight:700;font-size:1.5rem;background:linear-gradient(160deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;min-width:42px}
+.sess .stitle{font-family:var(--disp);font-weight:500;font-size:1.12rem;flex:1;line-height:1.2}
+.sess .chev{color:var(--ghost-dim);transition:transform .3s;font-family:var(--mono)}
+.sess[open] .chev{transform:rotate(90deg)}
+.sess .sbody{padding:0 22px 22px 80px;color:var(--ghost);font-size:.96rem}
+@media (max-width:760px){.sessions{grid-template-columns:1fr}.sess .sbody{padding-left:22px}}
+.desk-disc{margin-top:32px;font-family:var(--mono);font-size:.74rem;color:var(--ghost-dim);letter-spacing:.02em;line-height:1.7;border-left:2px solid var(--line);padding-left:16px;max-width:700px}
+
+/* ---------- ABOUT (now last) ---------- */
+.about-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:start}
+.about h2{font-family:var(--disp);font-weight:700;font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;margin:16px 0 24px}
+.about p{color:var(--ghost);font-size:1.14rem;margin-bottom:18px}
+.about p strong{color:var(--white);font-weight:600}
+.about .sig{font-family:var(--disp);font-weight:600;font-size:1.4rem;line-height:1.4;color:var(--white);border-left:2px solid var(--cyan);padding-left:24px;margin-top:30px}
+.id-card{background:var(--glass);border:1px solid var(--line);border-radius:20px;padding:32px;backdrop-filter:blur(14px);position:relative;overflow:hidden}
+.id-card::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),var(--violet),transparent)}
+.id-card .ich{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ghost-dim);margin-bottom:22px;display:flex;justify-content:space-between}
+.id-row{display:flex;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px solid var(--line-2);align-items:baseline}
+.id-row:last-child{border-bottom:none}
+.id-row .k{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ghost-dim)}
+.id-row .v{font-weight:600;text-align:right;font-size:.98rem}
+.id-row .v .grad{font-weight:700}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);border:1px solid rgba(52,229,255,.3);border-radius:100px;padding:6px 13px;background:rgba(52,229,255,.05)}
+@media (max-width:900px){.about-grid{grid-template-columns:1fr;gap:40px}}
+
+/* ---------- CONTACT ---------- */
+.contact{position:relative;border:1px solid var(--line);border-radius:24px;padding:clamp(40px,7vw,80px);text-align:center;overflow:hidden;background:var(--glass);backdrop-filter:blur(14px)}
+.contact::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(60% 80% at 50% -10%,rgba(52,229,255,.16),transparent 60%),radial-gradient(50% 60% at 80% 120%,rgba(160,107,255,.16),transparent 60%)}
+.contact .inner{position:relative}
+.contact h2{font-family:var(--disp);font-weight:700;font-size:clamp(2.2rem,6vw,4.2rem);line-height:1;margin:16px 0 20px}
+.contact p{color:var(--ghost);max-width:540px;margin:0 auto 32px;font-size:1.1rem}
+.contact .cta-row{justify-content:center;animation:none;opacity:1}
+
+/* ---------- footer ---------- */
+footer.site{padding:50px 0 44px;border-top:1px solid var(--line);margin-top:100px}
+.foot-inner{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.foot-inner .fl{display:flex;align-items:center;gap:13px}
+.foot-inner .fl svg{width:34px;height:34px}
+.foot-inner .ft{font-family:var(--disp);font-weight:700;letter-spacing:.06em;line-height:1.1}
+.foot-inner .ft small{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(--ghost-dim);font-weight:400;margin-top:4px}
+.foot-inner .fr{font-family:var(--mono);font-size:.74rem;color:var(--ghost-dim);text-align:right;line-height:1.9}
+@media (max-width:600px){.foot-inner{flex-direction:column;text-align:center}.foot-inner .fr{text-align:center}}
+a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+</style>
+</head>
+<body>
+
+<div id="cursor-glow" aria-hidden="true"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="cv" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#34E5FF"/><stop offset=".55" stop-color="#A06BFF"/><stop offset="1" stop-color="#FF4D9D"/>
+  </linearGradient>
+  <g id="mono">
+    <path d="M24 3 L42 13 V35 L24 45 L6 35 V13 Z" fill="none" stroke="url(#cv)" stroke-width="1.4" opacity=".5"/>
+    <path d="M31 17 C31 14.2 28 13 24 13 C19.5 13 17.5 15 17.5 17.6 C17.5 24 32 21.2 32 28.5 C32 32 29 34 24 34 C20 34 17 32.8 17 30"
+      fill="none" stroke="url(#cv)" stroke-width="3.4" stroke-linecap="round"/>
+  </g>
+</defs></svg>
+
+<nav id="nav" aria-label="Main">
+  <div class="wrap nav-inner">
+    <a class="logo" href="#top">
+      <svg viewBox="0 0 48 48"><use href="#mono"/></svg>
+      <span class="lt">SAFI<small>SOLUTIONS</small></span>
+    </a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks">Menu</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#desk">Trading Desk</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact" class="nav-cta">Let's talk</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header id="top">
+  <canvas id="plasma" aria-hidden="true"></canvas>
+  <div class="wrap hero">
+    <div class="badge"><span class="live"></span>Open for new work · Nationwide</div>
+    <h1>
+      <span class="line"><span>Sharper sites.</span></span>
+      <span class="line"><span>Leaner systems.</span></span>
+      <span class="line"><span class="grad" id="rotword">A real edge.</span></span>
+    </h1>
+    <p class="thesis">Most people go looking for a solution once a problem shows up. I work the other way — I start with the <span class="hl">solution in mind and design toward it</span>, whether that's the website, the workflow, the AI that should be doing the busywork, or the markets you're trying to understand. <b>Tech, taste, and a trader's read on risk.</b></p>
+    <p class="micro">// web development · ai integration · automation · efficiency · trading education</p>
+    <div class="cta-row">
+      <a class="btn btn-grad magnetic" href="#services">See what I build</a>
+      <a class="btn btn-glass magnetic" href="#desk">Enter the trading desk →</a>
+    </div>
+  </div>
+  <div class="scroll-hint" aria-hidden="true"><span>Scroll</span><span class="bar"></span></div>
+</header>
+
+<div class="statband">
+  <div class="wrap"><div class="row">
+    <div class="s"><div class="n grad" data-count="10" data-suffix="+">0</div><div class="l">Years in ops &amp; management</div></div>
+    <div class="s"><div class="n grad" data-count="100" data-suffix="%">0</div><div class="l">Custom-built, never templated</div></div>
+    <div class="s"><div class="n grad" data-count="5" data-suffix="">0</div><div class="l">Disciplines under one roof</div></div>
+    <div class="s"><div class="n grad" data-text="US">—</div><div class="l">Serving clients nationwide</div></div>
+  </div></div>
+</div>
+
+<main>
+<!-- SERVICES BENTO -->
+<section class="section" id="services">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="idx">01 / WHAT I BUILD</div>
+      <h2>One operator, <span class="grad">a full stack of solutions.</span></h2>
+      <p>Web is the heartbeat. Everything around it exists to help a business run leaner, adopt what's next, and show up sharper than its size suggests.</p>
+    </div>
+    <div class="bento reveal">
+      <article class="cell web tilt">
+        <span class="cnum">01</span>
+        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></span>
+        <h3>Web design &amp; development</h3>
+        <p>Custom, fast, mobile-first sites built to earn trust on the first scroll and turn visitors into customers — not a template with a logo dropped on top. The kind of site you're standing in right now.</p>
+        <div class="ctags"><span>Custom build</span><span>Mobile + desktop</span><span>Booking / leads</span><span>SEO basics</span><span>Self-editable</span></div>
+      </article>
+      <article class="cell ai tilt">
+        <span class="cnum">02</span>
+        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="12" rx="3"/><path d="M12 7V4M9 1h6M9 13h.01M15 13h.01M2 12h3M19 12h3"/></svg></span>
+        <h3>AI integration</h3>
+        <p>The smart shops are already letting AI handle the repetitive, time-eating work. I help you adopt it where it actually pays off — support replies, content, lead handling, data — without the hype or the guesswork.</p>
+        <div class="ctags"><span>Chat &amp; support</span><span>Content</span><span>Smart automation</span><span>Sensible adoption</span></div>
+      </article>
+      <article class="cell auto tilt">
+        <span class="cnum">03</span>
+        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></span>
+        <h3>Automation &amp; systems</h3>
+        <p>Wire the tools you already use together and let the busywork run itself.</p>
+        <div class="ctags"><span>Integrations</span><span>Workflows</span><span>Dashboards</span></div>
+      </article>
+      <article class="cell eff tilt">
+        <span class="cnum">04</span>
+        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 19l5-5 4 3 7-8"/></svg></span>
+        <h3>Efficiency &amp; margin</h3>
+        <p>A fresh set of eyes on where time and money quietly slip out.</p>
+        <div class="ctags"><span>Cost review</span><span>Process</span><span>Pricing</span></div>
+      </article>
+      <article class="cell brand tilt">
+        <span class="cnum">05</span>
+        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></span>
+        <h3>Digital presence</h3>
+        <p>Logo, Google, reviews — the details that make a small shop read as the established thing.</p>
+        <div class="ctags"><span>Identity</span><span>Google</span><span>Reviews</span></div>
+      </article>
+      <article class="cell markets">
+        <span class="cico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16l5-5 4 4 8-9M21 6v5M21 6h-5"/></svg></span>
+        <div class="mtxt">
+          <h3 style="font-size:1.5rem;margin-bottom:6px">Trading education</h3>
+          <p>The markets explained straight — assets, charts, risk, psychology — by someone who learned them the hard way. Anyone can read the theory; the value is having it shown to you, and being told what <em>not</em> to do.</p>
+        </div>
+        <a class="go" href="#desk">Open the trading desk →</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section" id="process" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="idx">02 / HOW IT GOES</div>
+      <h2>Start from the outcome. <span class="grad">Build back to it.</span></h2>
+      <p>A decade across management and operations taught me to read a business quickly — and to leave it better than a one-and-done project ever could.</p>
+    </div>
+    <div class="proc reveal">
+      <div class="pstep"><div class="pb">PHASE 01</div><h4>Understand the goal</h4><p>We get clear on what "better" actually means for you — more leads, less manual work, lower cost, a presence people trust. The destination comes first.</p></div>
+      <div class="pstep"><div class="pb">PHASE 02</div><h4>Build toward it</h4><p>The site, the systems, the AI and automation behind them — designed around the outcome, not bolted on after. Leaner to run, sharper to look at.</p></div>
+      <div class="pstep"><div class="pb">PHASE 03</div><h4>Hand you the keys</h4><p>You get something you can actually run — clear and documented — so the gains stick long after I step back.</p></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- TRADING DESK -->
+<section class="desk" id="desk">
+  <div class="desk-bar">
+    <span class="dots"><i></i><i></i><i></i></span>
+    <span class="path" id="termPath">safi@solutions: ~/trading-desk<span class="cursor">&nbsp;</span></span>
+    <span class="tick"><span class="pulse"></span>SESSIONS OPEN</span>
+  </div>
+  <div class="wrap desk-inner">
+    <div class="desk-head reveal">
+      <div class="eyebrow">03 / TRADING EDUCATION</div>
+      <h2>The Trading <span class="grad">Desk.</span></h2>
+      <p>No signals, no hype, no "get rich by Friday." Just the structure I had to learn the slow, expensive way — taught one-on-one, so the market makes sense <em>before</em> your money's on the line.</p>
+    </div>
+
+    <!-- STORY + EQUITY CURVE -->
+    <div class="story-block reveal">
+      <div class="st-copy">
+        <h3>I blew it before I built it.</h3>
+        <p>I didn't come to this with a plan. I came in chasing green candles and social-media hype, and the market did what it does to everyone who starts that way — <strong>it took its tuition.</strong> Stretches of losses, revenge trades that dug the hole deeper, the whole cycle.</p>
+        <p>What turned it around wasn't a magic indicator. It was <strong>structure</strong> — understanding risk, sizing, the psychology, and most of all learning <strong>when not to trade.</strong> Consistency came after the lessons I wish someone had just walked me through.</p>
+        <p class="pq">That's the whole point of this program: a shortcut through the expensive part.</p>
+      </div>
+      <div class="equity">
+        <div class="eqhead"><span>EQUITY CURVE · the honest version</span><span><b>consistency →</b></span></div>
+        <svg id="eqSvg" viewBox="0 0 520 200" preserveAspectRatio="none" aria-hidden="true">
+          <defs><linearGradient id="eqfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9DFF57" stop-opacity=".25"/><stop offset="1" stop-color="#9DFF57" stop-opacity="0"/></linearGradient></defs>
+          <line x1="0" y1="150" x2="520" y2="150" stroke="rgba(154,163,184,.16)" stroke-dasharray="4 5"/>
+          <path id="eqFill" d="" fill="url(#eqfill)" opacity="0"/>
+          <path id="eqLine" d="" fill="none" stroke="#9DFF57" stroke-width="2.2" stroke-linejoin="round"
+            stroke-dasharray="1400" stroke-dashoffset="1400"/>
+        </svg>
+        <span class="annot loss" id="annLoss">▼ the tuition years</span>
+        <span class="annot win" id="annWin">▲ structure → consistency</span>
+      </div>
+    </div>
+
+    <!-- WHAT MAKES IT DIFFERENT -->
+    <div class="diff reveal">
+      <div class="d">
+        <div class="di"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 10l7-7 7 7"/></svg></div>
+        <h4>Shown, not just told</h4>
+        <p>Every piece of this is researchable on your own. The difference is having someone walk you through it live, answer the "but why" in real time, and catch the mistakes before they cost you.</p>
+      </div>
+      <div class="d">
+        <div class="di"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+        <h4>What <em>not</em> to do</h4>
+        <p>Most courses sell you setups. I spend just as much time on the traps — the revenge trades, the FOMO entries, the account-killers I learned about firsthand.</p>
+      </div>
+      <div class="d">
+        <div class="di"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM12 6v6l4 2"/></svg></div>
+        <h4>Built around you</h4>
+        <p>One-on-one and paced to where you actually are — whether the goal is understanding before you risk a dollar, or putting real structure under what you're already doing.</p>
+      </div>
+    </div>
+
+    <div class="tiers reveal">
+      <div class="tier t1">
+        <div class="tname">Starter Session</div>
+        <div class="tdur">// 1 hour · for beginners</div>
+        <div class="price">$99<small> / session</small></div>
+        <p class="tfor">For the curious who just want it to finally click.</p>
+        <ul>
+          <li>Long-term investing vs. fast trading</li>
+          <li>What stocks, options, futures, crypto &amp; forex really are</li>
+          <li>How apps and brokers actually work</li>
+          <li>How charts show price movement</li>
+          <li>Why indicators aren't magic</li>
+          <li>The rules that keep an account alive</li>
+        </ul>
+        <p class="tres">You walk out with the confusion gone — and the beginner mistakes avoided.</p>
+        <a class="btn btn-glass magnetic" href="#contact" style="width:100%;justify-content:center">Book the starter</a>
+      </div>
+      <div class="tier t2">
+        <span class="ribbon">Goes deepest</span>
+        <div class="tname">Deep Dive</div>
+        <div class="tdur">// 2.5 hours · for the serious</div>
+        <div class="price grad">$200<small> / session</small></div>
+        <p class="tfor">Everything in the Starter, plus the real framework.</p>
+        <ul>
+          <li>How real strategies get built</li>
+          <li>When <em>not</em> to trade</li>
+          <li>How news &amp; earnings move price</li>
+          <li>How to size a position</li>
+          <li>Why traders blow up — the psychology underneath</li>
+          <li>Build your own trading rulebook</li>
+          <li>Get accounts set up practice/trade-ready</li>
+        </ul>
+        <p class="tres">You leave with structure instead of guesses.</p>
+        <a class="btn btn-grad magnetic" href="#contact" style="width:100%;justify-content:center">Book the deep dive</a>
+      </div>
+    </div>
+
+    <div class="curr-head reveal">
+      <h3>The 8-session path</h3>
+      <span class="cl">// the full arc, start to plan</span>
+    </div>
+    <div class="sessions reveal" id="sessions"></div>
+
+    <p class="desk-disc reveal">Educational only. Safi Solutions teaches market structure, terminology, and process — not financial advice, trade signals, or any promise of profit. Trading carries real risk of loss: your capital, your decisions. Only ever risk what you can afford to lose.</p>
+  </div>
+</section>
+
+<!-- ABOUT (last) -->
+<section class="section about" id="about">
+  <div class="wrap about-grid">
+    <div class="reveal">
+      <div class="eyebrow">04 / WHO'S BEHIND IT</div>
+      <h2>Meet <span class="grad">Helal Safi.</span></h2>
+      <p>I'm a first-generation Lebanese-American out of <strong>Paris, Texas</strong>, and I studied <strong>computer science and economics at Texas State</strong> — which is a tidy way of saying I think in systems and I think in incentives, usually at the same time.</p>
+      <p>I'm most at home where <strong>tech meets the outdoors</strong>, and the way I approach work is simple: I'd rather start with the outcome someone's after and engineer toward it than patch problems one at a time. Same instinct, whether I'm building a site, wiring up automation, or reading a chart.</p>
+      <p><strong>Safi Solutions</strong> is where all of that comes together — the web, the systems, the AI, and the markets — under one roof.</p>
+      <div class="sig">Tech and incentives, pointed at one thing:<br><span class="grad">making the work work better.</span></div>
+    </div>
+    <aside class="id-card reveal">
+      <div class="ich"><span>// founder</span><span>SAFI_OS</span></div>
+      <div class="id-row"><span class="k">Name</span><span class="v">Helal Safi</span></div>
+      <div class="id-row"><span class="k">Company</span><span class="v">Safi Solutions</span></div>
+      <div class="id-row"><span class="k">Base</span><span class="v">Paris, Texas</span></div>
+      <div class="id-row"><span class="k">Origin</span><span class="v">First-gen Lebanese 🇱🇧</span></div>
+      <div class="id-row"><span class="k">Studied</span><span class="v">CS + Economics<br>Texas State</span></div>
+      <div class="id-row"><span class="k">Runs on</span><span class="v"><span class="grad">Tech · nature · markets</span></span></div>
+      <div class="tags">
+        <span class="tag">Web Dev</span><span class="tag">AI</span><span class="tag">Automation</span><span class="tag">Ops</span><span class="tag">Markets</span>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact" style="padding-top:0">
+  <div class="wrap">
+    <div class="contact reveal">
+      <div class="inner">
+        <div class="eyebrow">05 / START</div>
+        <h2>Know the outcome <span class="grad">you're after?</span></h2>
+        <p>A site that should be pulling more weight, an operation that could run leaner, AI you've been meaning to put to work, or the markets you want to finally understand — let's start there.</p>
+        <div class="cta-row">
+          <a class="btn btn-grad magnetic" href="mailto:hello@safisolutions.com?subject=Let's%20build%20something">Start a conversation</a>
+          <a class="btn btn-glass magnetic" href="#desk">Book a trading session</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap foot-inner">
+    <div class="fl">
+      <svg viewBox="0 0 48 48"><use href="#mono"/></svg>
+      <span class="ft">SAFI SOLUTIONS<small>HELAL SAFI · NATIONWIDE</small></span>
+    </div>
+    <div class="fr">
+      Web · AI · Systems · Markets<br>
+      © <span id="yr"></span> Safi Solutions — built in-house, naturally.
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ===== 8 SESSIONS (no homework) ===== */
+const SESSIONS=[
+  ["Investing vs. Trading","The real gap between buy-and-hold investing and short-term trading — pace, risk, mindset, and which one actually fits your goals."],
+  ["What Are Assets?","Stocks, options, futures, forex, and crypto in plain language — what each one is, how it moves, and the risk baked into it."],
+  ["Getting Started","Capital, brokers, and setup — how much to start with, which platforms fit beginners vs. pros, funding safely, and why demos come first."],
+  ["Chart Reading","Candlesticks decoded — open, high, low, close, what red and green really mean, the common patterns, and the right time frames."],
+  ["Indicators","Moving averages, RSI, MACD, Bollinger Bands, volume — what they show, how to read them, and why they should never stand alone."],
+  ["Strategies & Financials","The major strategy families and how setups get built — plus reading earnings, balance sheets, and valuation the simple way."],
+  ["Risk & Psychology","Stop-losses, position sizing, and the greed/fear cycle that wrecks accounts — the mental game that decides who lasts."],
+  ["Taxes & Your Plan","The tax basics worth knowing, the resources worth trusting, and assembling everything into your own written trading plan."]
+];
+document.getElementById('sessions').innerHTML=SESSIONS.map((s,i)=>`
+  <details class="sess"${i===0?' open':''}>
+    <summary><span class="snum">${('0'+(i+1)).slice(-2)}</span><span class="stitle">${s[0]}</span><span class="chev">▸</span></summary>
+    <div class="sbody">${s[1]}</div>
+  </details>`).join('');
+
+/* ===== hero rotating last word ===== */
+(function(){
+  const el=document.getElementById('rotword'); if(!el) return;
+  const words=['A real edge.','An unfair edge.','A clear advantage.','Built to convert.'];
+  let i=0;
+  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ.';
+  function scramble(to){
+    const dur=520, start=performance.now(), from=el.textContent;
+    const len=Math.max(from.length,to.length);
+    function frame(t){
+      const p=Math.min(1,(t-start)/dur);
+      let out='';
+      for(let k=0;k<len;k++){
+        if(p*len>k){ out+=to[k]||''; }
+        else { out+= to[k]? chars[Math.floor(Math.random()*chars.length)] : ''; }
+      }
+      el.textContent=out;
+      if(p<1) requestAnimationFrame(frame); else el.textContent=to;
+    }
+    requestAnimationFrame(frame);
+  }
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    setInterval(()=>{ i=(i+1)%words.length; scramble(words[i]); }, 2600);
+  }
+})();
+
+/* ===== count-up stats ===== */
+(function(){
+  const seen=new WeakSet();
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(!e.isIntersecting||seen.has(e.target))return; seen.add(e.target);
+      const el=e.target, txt=el.getAttribute('data-text');
+      if(txt){ el.textContent=txt; return; }
+      const end=+el.getAttribute('data-count'), suf=el.getAttribute('data-suffix')||'';
+      const dur=1300, start=performance.now();
+      function f(t){ const p=Math.min(1,(t-start)/dur); const v=Math.round(end*(1-Math.pow(1-p,3))); el.textContent=v+suf; if(p<1)requestAnimationFrame(f); }
+      requestAnimationFrame(f);
+    });
+  },{threshold:.6});
+  document.querySelectorAll('.statband .n').forEach(n=>io.observe(n));
+})();
+
+/* ===== equity curve draw on scroll ===== */
+(function(){
+  // hand-shaped: choppy losses dipping, then steady climb
+  const pts=[[0,120],[40,135],[70,118],[100,150],[135,138],[165,168],[195,150],[225,160],[255,140],[285,128],[315,112],[350,98],[385,86],[420,72],[455,60],[490,46],[520,38]];
+  const line=pts.map((p,i)=>`${i?'L':'M'}${p[0]},${p[1]}`).join(' ');
+  const eqLine=document.getElementById('eqLine'), eqFill=document.getElementById('eqFill');
+  eqLine.setAttribute('d',line);
+  eqFill.setAttribute('d',line+' L520,200 L0,200 Z');
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(!e.isIntersecting)return;
+      eqLine.style.transition='stroke-dashoffset 2.2s cubic-bezier(.4,.1,.2,1)';
+      eqLine.style.strokeDashoffset='0';
+      eqFill.style.transition='opacity 1.2s ease 1s'; eqFill.style.opacity='1';
+      setTimeout(()=>{const a=document.getElementById('annLoss');a.style.left='14%';a.style.top='62%';a.classList.add('show');},700);
+      setTimeout(()=>{const w=document.getElementById('annWin');w.style.right='6%';w.style.top='20%';w.classList.add('show');},1700);
+      io.disconnect();
+    });
+  },{threshold:.4});
+  io.observe(document.getElementById('eqSvg'));
+})();
+
+/* ===== plasma hero mesh ===== */
+(function(){
+  const c=document.getElementById('plasma'); if(!c) return;
+  const ctx=c.getContext('2d'); let w,h,dpr,t=0,raf,mx=.5,my=.4,tmx=.5,tmy=.4;
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function size(){ dpr=Math.min(devicePixelRatio||1,1.6); w=c.clientWidth; h=c.clientHeight; c.width=w*dpr; c.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+  size(); addEventListener('resize',size);
+  const cols=26;
+  function draw(){
+    t+=0.006; mx+=(tmx-mx)*0.05; my+=(tmy-my)*0.05;
+    ctx.clearRect(0,0,w,h);
+    const sx=w/cols;
+    for(let i=0;i<=cols;i++){
+      ctx.beginPath();
+      for(let j=0;j<=18;j++){
+        const px=i*sx, baseY=(h/18)*j;
+        const warp=Math.sin(i*0.5+t*2+j*0.3)*14 + Math.cos(j*0.6 - t*1.6)*12;
+        const mdx=(px/w)-mx, mdy=(baseY/h)-my;
+        const pull=Math.exp(-(mdx*mdx+mdy*mdy)*7)*48;
+        const x=px+warp + mdx*pull, y=baseY + Math.sin(i*0.4+t)*8 + mdy*pull;
+        j?ctx.lineTo(x,y):ctx.moveTo(x,y);
+      }
+      const hue=188+(i/cols)*82;
+      ctx.strokeStyle=`hsla(${hue},100%,65%,0.16)`; ctx.lineWidth=1; ctx.stroke();
+    }
+    raf=requestAnimationFrame(draw);
+  }
+  if(!reduce){ addEventListener('mousemove',e=>{const r=c.getBoundingClientRect();tmx=(e.clientX-r.left)/r.width;tmy=(e.clientY-r.top)/r.height;}); draw(); }
+})();
+
+/* ===== cursor glow ===== */
+(function(){
+  const g=document.getElementById('cursor-glow'); if(!g||!matchMedia('(hover:hover)').matches||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let x=innerWidth/2,y=innerHeight/2,tx=x,ty=y;
+  addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY;g.style.opacity='1';});
+  addEventListener('mouseleave',()=>g.style.opacity='0');
+  (function loop(){ x+=(tx-x)*.15; y+=(ty-y)*.15; g.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%)`; requestAnimationFrame(loop); })();
+})();
+
+/* ===== 3D tilt on bento cells ===== */
+if(matchMedia('(hover:hover)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+  document.querySelectorAll('.tilt').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const px=(e.clientX-r.left)/r.width-.5, py=(e.clientY-r.top)/r.height-.5;
+      card.style.transform=`translateY(-5px) rotateX(${(-py*6).toFixed(2)}deg) rotateY(${(px*7).toFixed(2)}deg)`;
+    });
+    card.addEventListener('mouseleave',()=>card.style.transform='');
+  });
+}
+
+/* ===== magnetic buttons ===== */
+if(matchMedia('(hover:hover)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+  document.querySelectorAll('.magnetic').forEach(btn=>{
+    btn.addEventListener('mousemove',e=>{const r=btn.getBoundingClientRect();const x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2;btn.style.transform=`translate(${x*0.2}px,${y*0.28}px)`;});
+    btn.addEventListener('mouseleave',()=>btn.style.transform='');
+  });
+}
+
+/* ===== nav / reveal ===== */
+const nav=document.getElementById('nav'),menuBtn=document.getElementById('menuBtn'),navLinks=document.getElementById('navLinks');
+addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>40),{passive:true});
+nav.classList.toggle('solid',scrollY>40);
+menuBtn.addEventListener('click',()=>{const o=navLinks.classList.toggle('open');menuBtn.setAttribute('aria-expanded',o);});
+navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{navLinks.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');}));
+const io2=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io2.unobserve(e.target);}})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>io2.observe(el));
+document.getElementById('yr').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
