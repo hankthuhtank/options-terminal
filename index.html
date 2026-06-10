@@ -90,8 +90,11 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .hero .badge .live{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime);animation:pulse 1.7s ease-in-out infinite}
 @keyframes pulse{50%{opacity:.35}}
 .hero h1{font-family:var(--disp);font-weight:700;font-size:clamp(2.7rem,8vw,6.4rem);line-height:.96;letter-spacing:-.015em}
-.hero h1 .line{display:block;overflow:hidden}
+.hero h1 .line{display:block;overflow:hidden;padding-bottom:.14em;margin-bottom:-.14em}
 .hero h1 .line span{display:inline-block;transform:translateY(110%);animation:rise .9s cubic-bezier(.16,.85,.3,1) forwards}
+.hero h1 .line.rot{display:grid}
+.hero h1 .line.rot>span{grid-area:1/1;white-space:nowrap}
+.hero h1 .rot-ghost{visibility:hidden;pointer-events:none}
 .hero h1 .line:nth-child(2) span{animation-delay:.1s}
 .hero h1 .line:nth-child(3) span{animation-delay:.2s}
 @keyframes rise{to{transform:none}}
@@ -233,7 +236,7 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .tier .tfor{color:var(--ghost);font-size:.96rem;margin-bottom:22px;min-height:40px}
 .tier ul{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:26px}
 .tier li{font-size:.95rem;color:var(--white);padding-left:26px;position:relative;line-height:1.45}
-.tier li::before{content:"?";position:absolute;left:0;top:0;color:var(--cyan);font-family:var(--mono)}
+.tier li::before{content:"✓";position:absolute;left:0;top:0;color:var(--cyan);font-family:var(--mono)}
 .tier.t2 li::before{color:var(--violet)}
 .tier .tres{font-style:italic;font-size:.92rem;color:var(--ghost-dim);border-top:1px solid var(--line);padding-top:18px;margin-bottom:24px}
 @media (max-width:760px){.tiers{grid-template-columns:1fr}}
@@ -261,7 +264,12 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .about p strong{color:var(--white);font-weight:600}
 .about .sig{font-family:var(--disp);font-weight:600;font-size:1.4rem;line-height:1.4;color:var(--white);border-left:2px solid var(--cyan);padding-left:24px;margin-top:30px}
 .id-card{background:var(--glass);border:1px solid var(--line);border-radius:20px;padding:32px;backdrop-filter:blur(14px);position:relative;overflow:hidden}
-.id-card::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),var(--violet),transparent)}
+.id-card::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),var(--violet),transparent);z-index:2}
+.id-photo{margin:-32px -32px 26px;position:relative;aspect-ratio:1/1;overflow:hidden;border-bottom:1px solid var(--line);background:#15161A}
+.id-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;display:block;filter:saturate(.94) contrast(1.03)}
+.id-photo::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(6,7,10,.18) 0%,transparent 24%,transparent 58%,rgba(15,18,27,.92) 100%)}
+.id-photo .ph-cap{position:absolute;left:22px;bottom:16px;z-index:1;font-family:var(--mono);font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan)}
 .id-card .ich{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ghost-dim);margin-bottom:22px;display:flex;justify-content:space-between}
 .id-row{display:flex;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px solid var(--line-2);align-items:baseline}
 .id-row:last-child{border-bottom:none}
@@ -270,7 +278,10 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .id-row .v .grad{font-weight:700}
 .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
 .tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);border:1px solid rgba(52,229,255,.3);border-radius:100px;padding:6px 13px;background:rgba(52,229,255,.05)}
-@media (max-width:900px){.about-grid{grid-template-columns:1fr;gap:40px}}
+@media (max-width:900px){.about-grid{grid-template-columns:1fr;gap:40px}.id-card{max-width:520px}}
+
+.cell .clink{margin-top:18px;align-self:flex-start;font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;color:var(--cyan);text-decoration:none;border:1px solid rgba(52,229,255,.3);border-radius:100px;padding:9px 16px;transition:background .3s,color .3s}
+.cell .clink:hover{background:var(--cyan);color:var(--void)}
 
 /* ---------- CONTACT ---------- */
 .contact{position:relative;border:1px solid var(--line);border-radius:24px;padding:clamp(40px,7vw,80px);text-align:center;overflow:hidden;background:var(--glass);backdrop-filter:blur(14px)}
@@ -280,6 +291,25 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .contact h2{font-family:var(--disp);font-weight:700;font-size:clamp(2.2rem,6vw,4.2rem);line-height:1;margin:16px 0 20px}
 .contact p{color:var(--ghost);max-width:540px;margin:0 auto 32px;font-size:1.1rem}
 .contact .cta-row{justify-content:center;animation:none;opacity:1}
+
+/* inquiry form */
+.iq{max-width:760px;margin:0 auto;text-align:left}
+.iq-form{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.iq-field{display:flex;flex-direction:column;gap:8px}
+.iq-field.full{grid-column:1/-1}
+.iq-field label{font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ghost-dim)}
+.iq-field label em{color:var(--cyan);font-style:normal}
+.iq-field input,.iq-field select,.iq-field textarea{width:100%;background:rgba(8,11,17,.75);border:1px solid var(--line);border-radius:12px;padding:15px 17px;color:var(--white);font-family:var(--body);font-size:.98rem;outline:none;transition:border-color .25s,box-shadow .25s;appearance:none}
+.iq-field input::placeholder,.iq-field textarea::placeholder{color:var(--ghost-dim)}
+.iq-field input:focus,.iq-field select:focus,.iq-field textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(52,229,255,.12)}
+.iq-field select{cursor:pointer;background-image:linear-gradient(45deg,transparent 50%,var(--ghost) 50%),linear-gradient(135deg,var(--ghost) 50%,transparent 50%);background-position:calc(100% - 21px) 50%,calc(100% - 16px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+.iq-field select option{background:var(--panel);color:var(--white)}
+.iq-field textarea{min-height:130px;resize:vertical}
+.iq-form .btn{grid-column:1/-1;justify-content:center;width:100%;border:none}
+.iq-foot{grid-column:1/-1;text-align:center;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:var(--ghost-dim)}
+.iq-foot b{color:var(--white);font-weight:600}
+.iq-foot a{color:var(--cyan);text-decoration:none}
+@media (max-width:680px){.iq-form{grid-template-columns:1fr}.iq-field{grid-column:1/-1}}
 
 /* ---------- footer ---------- */
 footer.site{padding:50px 0 44px;border-top:1px solid var(--line);margin-top:100px}
@@ -331,13 +361,13 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
     <h1>
       <span class="line"><span>Sharper sites.</span></span>
       <span class="line"><span>Leaner systems.</span></span>
-      <span class="line"><span class="grad" id="rotword">A real edge.</span></span>
+      <span class="line rot"><span class="grad" id="rotword">A real edge.</span><span class="rot-ghost" aria-hidden="true">A clear advantage.</span></span>
     </h1>
     <p class="thesis">Most people go looking for a solution once a problem shows up. I work the other way — I start with the <span class="hl">solution in mind and design toward it</span>, whether that's the website, the workflow, the AI that should be doing the busywork, or the markets you're trying to understand. <b>Tech, taste, and a trader's read on risk.</b></p>
     <p class="micro">// web development · ai integration · automation · efficiency · trading education</p>
     <div class="cta-row">
       <a class="btn btn-grad magnetic" href="#services">See what I build</a>
-      <a class="btn btn-glass magnetic" href="#desk">Enter the trading desk ?</a>
+      <a class="btn btn-glass magnetic" href="#desk">Enter the trading desk →</a>
     </div>
   </div>
   <div class="scroll-hint" aria-hidden="true"><span>Scroll</span><span class="bar"></span></div>
@@ -368,6 +398,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
         <h3>Web design &amp; development</h3>
         <p>Custom, fast, mobile-first sites built to earn trust on the first scroll and turn visitors into customers — not a template with a logo dropped on top. The kind of site you're standing in right now.</p>
         <div class="ctags"><span>Custom build</span><span>Mobile + desktop</span><span>Booking / leads</span><span>SEO basics</span><span>Self-editable</span></div>
+        <a class="clink" href="https://yourfuturesite.org" target="_blank" rel="noopener">See a live build — yourfuturesite.org →</a>
       </article>
       <article class="cell ai tilt">
         <span class="cnum">02</span>
@@ -403,7 +434,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
           <h3 style="font-size:1.5rem;margin-bottom:6px">Trading education</h3>
           <p>The markets explained straight — assets, charts, risk, psychology — by someone who learned them the hard way. Anyone can read the theory; the value is having it shown to you, and being told what <em>not</em> to do.</p>
         </div>
-        <a class="go" href="#desk">Open the trading desk ?</a>
+        <a class="go" href="#desk">Open the trading desk →</a>
       </article>
     </div>
   </div>
@@ -448,7 +479,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
         <p class="pq">That's the whole point of this program: a shortcut through the expensive part.</p>
       </div>
       <div class="equity">
-        <div class="eqhead"><span>EQUITY CURVE · the honest version</span><span><b>consistency ?</b></span></div>
+        <div class="eqhead"><span>EQUITY CURVE · the honest version</span><span><b>consistency ↗</b></span></div>
         <svg id="eqSvg" viewBox="0 0 520 200" preserveAspectRatio="none" aria-hidden="true">
           <defs><linearGradient id="eqfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9DFF57" stop-opacity=".25"/><stop offset="1" stop-color="#9DFF57" stop-opacity="0"/></linearGradient></defs>
           <line x1="0" y1="150" x2="520" y2="150" stroke="rgba(154,163,184,.16)" stroke-dasharray="4 5"/>
@@ -456,8 +487,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
           <path id="eqLine" d="" fill="none" stroke="#9DFF57" stroke-width="2.2" stroke-linejoin="round"
             stroke-dasharray="1400" stroke-dashoffset="1400"/>
         </svg>
-        <span class="annot loss" id="annLoss">? the tuition years</span>
-        <span class="annot win" id="annWin">? structure ? consistency</span>
+        <span class="annot loss" id="annLoss">↓ the tuition years</span>
+        <span class="annot win" id="annWin">↑ structure → consistency</span>
       </div>
     </div>
 
@@ -539,11 +570,15 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
       <div class="sig">Tech and incentives, pointed at one thing:<br><span class="grad">making the work work better.</span></div>
     </div>
     <aside class="id-card reveal">
+      <div class="id-photo">
+        <img src="images/profphoto.png" alt="Helal Safi, founder of Safi Solutions" loading="lazy">
+        <span class="ph-cap">// HELAL.SAFI</span>
+      </div>
       <div class="ich"><span>// founder</span><span>SAFI_OS</span></div>
       <div class="id-row"><span class="k">Name</span><span class="v">Helal Safi</span></div>
       <div class="id-row"><span class="k">Company</span><span class="v">Safi Solutions</span></div>
       <div class="id-row"><span class="k">Base</span><span class="v">Paris, Texas</span></div>
-      <div class="id-row"><span class="k">Origin</span><span class="v">First-gen Lebanese ????</span></div>
+      <div class="id-row"><span class="k">Origin</span><span class="v">First-gen Lebanese 🇱🇧</span></div>
       <div class="id-row"><span class="k">Studied</span><span class="v">CS + Economics<br>Texas State</span></div>
       <div class="id-row"><span class="k">Runs on</span><span class="v"><span class="grad">Tech · nature · markets</span></span></div>
       <div class="tags">
@@ -560,10 +595,48 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
       <div class="inner">
         <div class="eyebrow">05 / START</div>
         <h2>Know the outcome <span class="grad">you're after?</span></h2>
-        <p>A site that should be pulling more weight, an operation that could run leaner, AI you've been meaning to put to work, or the markets you want to finally understand — let's start there.</p>
-        <div class="cta-row">
-          <a class="btn btn-grad magnetic" href="mailto:hello@safisolutions.com?subject=Let's%20build%20something">Start a conversation</a>
-          <a class="btn btn-glass magnetic" href="#desk">Book a trading session</a>
+        <p>Fill this out and it lands straight in my inbox — a site, a leaner operation, AI put to work, or the markets finally explained. No pressure, no mailing lists.</p>
+        <div class="iq">
+          <form class="iq-form" action="https://formsubmit.co/safihelal@gmail.com" method="POST">
+            <input type="hidden" name="_subject" value="New inquiry — safisolutions.org">
+            <input type="hidden" name="_template" value="table">
+            <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+            <div class="iq-field">
+              <label for="iq-name">Your name <em>*</em></label>
+              <input id="iq-name" name="name" type="text" placeholder="Jane Smith" required>
+            </div>
+            <div class="iq-field">
+              <label for="iq-biz">Business name</label>
+              <input id="iq-biz" name="business" type="text" placeholder="Smith's Coffee Co.">
+            </div>
+            <div class="iq-field">
+              <label for="iq-email">Email <em>*</em></label>
+              <input id="iq-email" name="email" type="email" placeholder="you@business.com" required>
+            </div>
+            <div class="iq-field">
+              <label for="iq-phone">Phone (optional)</label>
+              <input id="iq-phone" name="phone" type="tel" placeholder="(555) 555-5555">
+            </div>
+            <div class="iq-field full">
+              <label for="iq-interest">I'm interested in…</label>
+              <select id="iq-interest" name="interest">
+                <option>Web design &amp; development</option>
+                <option>AI integration</option>
+                <option>Automation &amp; systems</option>
+                <option>Efficiency &amp; margin review</option>
+                <option>Digital presence / brand</option>
+                <option>Trading education — Starter Session ($99)</option>
+                <option>Trading education — Deep Dive ($200)</option>
+                <option>Something else</option>
+              </select>
+            </div>
+            <div class="iq-field full">
+              <label for="iq-msg">Tell me what you're after (optional)</label>
+              <textarea id="iq-msg" name="message" placeholder="The outcome you want, where you are now, anything useful…"></textarea>
+            </div>
+            <button class="btn btn-grad magnetic" type="submit">Send my inquiry →</button>
+            <p class="iq-foot">Goes directly to <b>Safi Solutions</b> · no spam, no mailing lists · or email <a href="mailto:safihelal@gmail.com">safihelal@gmail.com</a></p>
+          </form>
         </div>
       </div>
     </div>
@@ -577,7 +650,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
       <span class="ft">SAFI SOLUTIONS<small>HELAL SAFI · NATIONWIDE</small></span>
     </div>
     <div class="fr">
-      Web · AI · Systems · Markets<br>
+      Web · AI · Systems · Markets · <a href="mailto:safihelal@gmail.com" style="color:var(--cyan);text-decoration:none">safihelal@gmail.com</a><br>
       © <span id="yr"></span> Safi Solutions — built in-house, naturally.
     </div>
   </div>
@@ -597,7 +670,7 @@ const SESSIONS=[
 ];
 document.getElementById('sessions').innerHTML=SESSIONS.map((s,i)=>`
   <details class="sess"${i===0?' open':''}>
-    <summary><span class="snum">${('0'+(i+1)).slice(-2)}</span><span class="stitle">${s[0]}</span><span class="chev">?</span></summary>
+    <summary><span class="snum">${('0'+(i+1)).slice(-2)}</span><span class="stitle">${s[0]}</span><span class="chev">›</span></summary>
     <div class="sbody">${s[1]}</div>
   </details>`).join('');
 
