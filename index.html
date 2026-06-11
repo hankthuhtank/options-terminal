@@ -1,10 +1,101 @@
+
+Claude finished the response
+/plugin marketplace add nextlevelbuilder/ui-ux-pro-max-skill
+/plugin install ui-ux-pro-max@ui-ux-pro-max-skill
+
+download these so we have a wider access to web creating tools
+8:46 AM
+I can't run those commands. They look like Claude Code plugin commands, but this is the web/app chat interface, not Claude Code, so there's no /plugin marketplace or /plugin install system here. There's also nothing I can "download" into this environment to permanently extend my tools — my capabilities here are fixed per session and don't persist.
+
+A couple of things worth clarifying so you can get what you're after:
+
+That marketplace path (nextlevelbuilder/ui-ux-pro-max-skill) is a third-party GitHub repo. Plugins like that only work inside Claude Code, the agentic coding tool that runs in your terminal/IDE. If you want plugin/marketplace access for web and UI/UX building, that's where it lives — you'd run those exact /plugin commands there, not in this chat.
+
+That said, for the web-creation work you actually do, I already have solid built-in capability in this chat without any plugin:
+
+Full HTML/CSS/JS single-file apps — like your options terminal index.html on GitHub Pages
+React artifacts with Tailwind, recharts, d3, lucide icons, etc.
+Anthropic-API-powered artifacts (Claude-in-Claude) for AI-driven dashboards
+A frontend-design skill I can pull in for higher-quality visual design
+So if your goal is just "better web/UI building tools," tell me what you want to build and I'll produce paste-ready code directly here.
+
+Do you want me to set up Claude Code for the plugin route, or would you rather just build the thing here?
+
+If Claude Code is the direction, I can point you to it:
+
+Recommended apps and extensions
+Browse all
+Claude Code
+Build, debug, and ship from your terminal.
+Claude Code is where those /plugin commands will actually work — install it, then run the marketplace-add and install commands from your terminal.
+
+But if you'd rather skip all that and just build, tell me what UI/UX or web piece you want and I'll write it paste-ready right here. What are you working on?
+
+
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Safi Solutions — Web · Systems · AI · Markets</title> <meta name="description" content="Safi Solutions, founded by Helal Safi, builds the websites, syste
+
+pasted
+
+okay several adjustments i want to make.
+
+at the top, in the middle where my logo is (not the top left), there's alot of space between Safi and Solutions (vertically) i want to bring them a little closer
+
+second, the area where my services are offered. i feel like i went a little overboard. it's overwhelming to offer that many services. i want to bring a digital marketing approach now. bringing older businesses to digital age.
+
+i've created thetraderdesk.org which now has all my trading information/package. i want to redo the trading area because it kind of pops up out of nowhere but also links to my actual website. let's re-do the structure of everything and make it look cleaner, with more focus on the few services i can offer and expand on those
+
+8:50 AM
+
+Weighing design preservation against structural overhaul needs
+Weighing design preservation against structural overhaul needs
+I'll restructure this for you. Let me check the design skill first, then rebuild the file with the three changes baked in.
+
+
+Reconciled design consistency while restructuring services strategically
+Reconciled design consistency while restructuring services strategically
+Now I'll rebuild the file with all three changes. I'm keeping your whole design language — fonts, plasma hero, bento, colors — and only restructuring content: tighter logo stack, a focused 4-pillar digital-marketing services section, and a clean trading band that links out to thetraderdesk.org instead of dumping the whole program inline.
+
+
+Validated request and prepared to implement design revisions
+Validated request and prepared to implement design revisions
+Done. All three changes, design language untouched.
+
+1 — Hero logo spacing. The gap was coming from the default line-height: 1.6 on the "SAFI" / "SOLUTIONS" divs. I set line-height: 0.9 on both and tightened the offset to -2px, so they now stack tightly. (The old gap: -2px on the parent did nothing — negative flex gaps clamp to 0.)
+
+2 — Services, refocused. Cut from six offerings down to four pillars framed around a digital-marketing / "into the digital age" thesis, each with expanded copy:
+
+A website that does the selling (flagship, big cell)
+Modern tools, quietly working (AI & automation)
+Get found where it counts (local SEO, Google Business, maps, reviews)
+Look the part (brand identity, social, content)
+The headline is now "Bringing local business into the digital age," and I updated the hero subline, micro tags, stat band ("4 core services, done deeply"), and the contact form options to match.
+
+3 — Trading section. Removed the entire inline program (tiers, 8-session list, story block) and replaced it with a clean two-column bridge band — short framing + a kept mini equity-curve visual + one prominent "Visit The Trader Desk →" button pointing to https://thetraderdesk.org. It no longer "pops up out of nowhere": it reads as a clearly separate venture (eyebrow "Beyond the agency") and sends people to the real site. I also removed the now-dead sessions JS so there are no console errors.
+
+Two things to check on your end:
+
+The hero CTA "Enter the trading desk" became "Start a project →" (→ contact), since the desk is now a light external link. Say the word if you'd rather it point back to the trading band.
+images/profphoto.png and the yourfuturesite.org live-build link are unchanged — confirm those paths are still right when you upload.
+
+Index
+Code · HTML 
+
+
+
+
+
+Claude is AI and can make mistakes. Please double-check responses.
+
+
+raw
+Index · HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Safi Solutions — Web · Systems · AI · Markets</title>
-<meta name="description" content="Safi Solutions, founded by Helal Safi, builds the websites, systems, AI integration, and market literacy that give businesses an edge. Nationwide. Web development, automation, efficiency, AI adoption, and a guided trading education program.">
+<title>Safi Solutions — Web · Digital Marketing · AI · Systems</title>
+<meta name="description" content="Safi Solutions, founded by Helal Safi, brings local businesses into the digital age — modern websites, getting found, brand presence, and AI-powered automation. Nationwide.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap" rel="stylesheet">
@@ -46,19 +137,19 @@ a{color:inherit}
   #plasma,#cursor-glow{display:none !important}
   *{animation-duration:.001s !important;transition-duration:.001s !important}
 }
-
+ 
 body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
     radial-gradient(46% 38% at 16% 8%, rgba(0,201,167,.10), transparent 70%),
     radial-gradient(42% 40% at 86% 22%, rgba(99,102,241,.12), transparent 70%),
     radial-gradient(50% 50% at 50% 110%, rgba(244,114,182,.07), transparent 70%)}
-
+ 
 /* custom cursor glow */
 #cursor-glow{position:fixed;top:0;left:0;width:380px;height:380px;border-radius:50%;pointer-events:none;z-index:5;transform:translate(-50%,-50%);
   background:radial-gradient(circle, rgba(0,201,167,.10), rgba(99,102,241,.05) 40%, transparent 70%);mix-blend-mode:screen;transition:opacity .4s;opacity:0}
-
+ 
 #nav,header,main,footer{position:relative;z-index:1}
-
+ 
 /* ---------- nav ---------- */
 #nav{position:fixed;top:0;left:0;right:0;z-index:60;padding:18px 0;transition:padding .3s,background .3s,border-color .3s;border-bottom:1px solid transparent}
 #nav.solid{background:rgba(6,7,10,.7);backdrop-filter:blur(16px) saturate(1.4);border-color:var(--line);padding:12px 0}
@@ -79,7 +170,7 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
   .nav-links{position:fixed;inset:64px 14px auto 14px;background:var(--panel);border:1px solid var(--line);border-radius:18px;flex-direction:column;align-items:stretch;padding:22px;gap:18px;display:none;box-shadow:0 30px 60px rgba(0,0,0,.7)}
   .nav-links.open{display:flex}.nav-cta{text-align:center}.menu-btn{display:block}
 }
-
+ 
 /* ---------- hero ---------- */
 header{position:relative;min-height:100svh;display:flex;align-items:center;padding:130px 0 80px;overflow:hidden}
 #plasma{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.9}
@@ -113,14 +204,14 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .scroll-hint .bar{width:1px;height:30px;background:linear-gradient(var(--cyan),transparent);position:relative;overflow:hidden}
 .scroll-hint .bar::after{content:"";position:absolute;top:-30px;left:0;width:1px;height:30px;background:var(--cyan);animation:scrolldown 1.8s ease-in-out infinite}
 @keyframes scrolldown{to{top:30px}}
-
+ 
 /* ---------- section scaffold ---------- */
 .section{padding:110px 0;position:relative}
 .sec-head{margin-bottom:54px;max-width:760px}
 .sec-head .idx{font-family:var(--mono);font-size:.74rem;letter-spacing:.24em;color:var(--cyan);margin-bottom:16px}
 .sec-head h2{font-family:var(--disp);font-weight:700;font-size:clamp(2.1rem,5.5vw,3.8rem);line-height:1.02;letter-spacing:-.01em}
 .sec-head p{color:var(--ghost);max-width:580px;font-size:1.05rem;margin-top:18px}
-
+ 
 /* ---------- stats marquee under hero ---------- */
 .statband{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(11,13,19,.5);position:relative;z-index:1}
 .statband .row{display:grid;grid-template-columns:repeat(4,1fr)}
@@ -129,7 +220,7 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .statband .s .n{font-family:var(--disp);font-weight:700;font-size:clamp(1.7rem,3.5vw,2.6rem);line-height:1}
 .statband .s .l{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ghost-dim);margin-top:8px}
 @media (max-width:760px){.statband .row{grid-template-columns:1fr 1fr}.statband .s:nth-child(2){border-right:none}.statband .s:nth-child(1),.statband .s:nth-child(2){border-bottom:1px solid var(--line-2)}}
-
+ 
 /* ---------- SERVICES — bento ---------- */
 .bento{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:minmax(150px,auto);gap:16px;perspective:1200px}
 .cell{position:relative;border:1px solid var(--line);border-radius:18px;padding:28px;overflow:hidden;background:var(--panel);transition:border-color .35s,transform .2s ease;display:flex;flex-direction:column;transform-style:preserve-3d;will-change:transform}
@@ -148,26 +239,20 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .cell.ai{grid-column:span 2;grid-row:span 2;background:linear-gradient(160deg,rgba(59,130,246,.09),rgba(0,201,167,.05));border-color:rgba(59,130,246,.28)}
 .cell.ai::before{background:var(--blue);bottom:-30px;right:-30px;opacity:.3}
 .cell.ai .cico{color:var(--blue)}
-.cell.auto{grid-column:span 2}
-.cell.auto::before{background:var(--cyan);bottom:-40px;left:-40px}
-.cell.eff{grid-column:span 2}
-.cell.eff::before{background:var(--cyan);bottom:-40px;right:-40px}
-.cell.eff .cico{color:var(--cyan)}
-.cell.brand{grid-column:span 2}
+.cell.found{grid-column:span 3}
+.cell.found::before{background:var(--cyan);top:-40px;right:-40px}
+.cell.found .cico{color:var(--cyan)}
+.cell.brand{grid-column:span 3}
 .cell.brand::before{background:var(--lime);top:-40px;left:-40px}
 .cell.brand .cico{color:var(--lime)}
-.cell.markets{grid-column:span 6;background:linear-gradient(120deg,rgba(0,201,167,.06),rgba(59,130,246,.05));border-color:rgba(0,201,167,.22);flex-direction:row;align-items:center;gap:24px}
-.cell.markets .cico{color:var(--cyan);flex:0 0 auto}
-.cell.markets .mtxt{flex:1}
-.cell.markets .go{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;color:var(--cyan);display:inline-flex;align-items:center;gap:8px;white-space:nowrap;border:1px solid rgba(0,201,167,.3);border-radius:100px;padding:12px 20px;transition:background .3s,color .3s}
-.cell.markets .go:hover{background:var(--cyan);color:var(--void)}
 @media (max-width:900px){
   .bento{grid-template-columns:1fr 1fr}
-  .cell.web,.cell.ai,.cell.auto,.cell.eff,.cell.brand{grid-column:span 2;grid-row:auto}
-  .cell.markets{grid-column:span 2;flex-direction:column;align-items:flex-start}
+  .cell.web,.cell.ai,.cell.found,.cell.brand{grid-column:span 2;grid-row:auto}
 }
-@media (max-width:560px){.bento{grid-template-columns:1fr}.cell.web,.cell.ai,.cell.auto,.cell.eff,.cell.brand,.cell.markets{grid-column:span 1}}
-
+@media (max-width:560px){.bento{grid-template-columns:1fr}.cell.web,.cell.ai,.cell.found,.cell.brand{grid-column:span 1}}
+.cell .clink{margin-top:18px;align-self:flex-start;font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;color:var(--cyan);text-decoration:none;border:1px solid rgba(52,229,255,.3);border-radius:100px;padding:9px 16px;transition:background .3s,color .3s}
+.cell .clink:hover{background:var(--cyan);color:var(--void)}
+ 
 /* ---------- PROCESS ---------- */
 .proc{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:18px;overflow:hidden}
 .pstep{padding:36px 30px;border-right:1px solid var(--line);transition:background .3s}
@@ -177,8 +262,8 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .pstep h4{font-family:var(--disp);font-weight:600;font-size:1.4rem;margin-bottom:10px}
 .pstep p{color:var(--ghost);font-size:.97rem}
 @media (max-width:760px){.proc{grid-template-columns:1fr}.pstep{border-right:none;border-bottom:1px solid var(--line)}.pstep:last-child{border-bottom:none}}
-
-/* ===== TRADING DESK ===== */
+ 
+/* ===== TRADING DESK — external bridge ===== */
 .desk{background:linear-gradient(180deg,var(--void-2),#070910);border-top:1px solid var(--line);border-bottom:1px solid var(--line);position:relative;overflow:hidden}
 .desk::before{content:"";position:absolute;inset:0;opacity:.4;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,201,167,.02) 0 1px,transparent 1px 4px)}
 .desk-bar{display:flex;align-items:center;gap:14px;padding:13px 22px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:.74rem;color:var(--ghost-dim);background:rgba(6,7,10,.6);position:relative;z-index:2;flex-wrap:wrap}
@@ -191,17 +276,13 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .desk-bar .tick{margin-left:auto;display:flex;align-items:center;gap:8px;color:var(--lime)}
 .desk-bar .tick .pulse{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime);animation:pulse 1.6s ease-in-out infinite}
 .desk-inner{padding:90px 0 100px;position:relative;z-index:2}
-.desk-head{max-width:720px;margin-bottom:40px}
-.desk-head h2{font-family:var(--disp);font-weight:700;font-size:clamp(2.2rem,6vw,4rem);line-height:1;margin:14px 0 16px}
-.desk-head p{color:var(--ghost);font-size:1.1rem;max-width:640px}
-.desk-head p em{color:var(--cyan);font-style:normal}
-
-/* story + equity curve */
-.story-block{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-bottom:66px}
-.story-block .st-copy h3{font-family:var(--disp);font-weight:600;font-size:1.7rem;line-height:1.2;margin-bottom:18px}
-.story-block .st-copy p{color:var(--ghost);font-size:1.05rem;margin-bottom:16px}
-.story-block .st-copy p strong{color:var(--white);font-weight:600}
-.story-block .st-copy .pq{border-left:2px solid var(--cyan);padding-left:20px;font-family:var(--disp);font-weight:500;font-size:1.2rem;color:var(--white);line-height:1.4;margin-top:24px}
+.desk-split{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.desk-copy h2{font-family:var(--disp);font-weight:700;font-size:clamp(2.2rem,6vw,4rem);line-height:1;margin:14px 0 18px}
+.desk-copy p{color:var(--ghost);font-size:1.1rem;max-width:560px;margin-bottom:26px}
+.desk-copy p em{color:var(--cyan);font-style:normal}
+.desk-copy .btn{border:none}
+@media (max-width:880px){.desk-split{grid-template-columns:1fr;gap:38px}}
+ 
 .equity{border:1px solid var(--line);border-radius:16px;background:rgba(8,11,17,.7);padding:22px;position:relative}
 .equity .eqhead{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:.72rem;color:var(--ghost-dim);letter-spacing:.08em;margin-bottom:12px}
 .equity .eqhead b{color:var(--lime)}
@@ -210,53 +291,10 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .equity .annot.show{opacity:1}
 .equity .annot.loss{color:var(--red);border:1px solid rgba(255,92,108,.4);background:rgba(255,92,108,.08)}
 .equity .annot.win{color:var(--lime);border:1px solid rgba(157,255,87,.4);background:rgba(157,255,87,.08)}
-@media (max-width:880px){.story-block{grid-template-columns:1fr;gap:32px}}
-
-/* what makes it different */
-.diff{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:66px}
-.diff .d{border:1px solid var(--line);border-radius:14px;padding:26px;background:rgba(8,11,17,.5);transition:border-color .3s,transform .3s}
-.diff .d:hover{border-color:rgba(52,229,255,.35);transform:translateY(-4px)}
-.diff .d .di{color:var(--cyan);margin-bottom:14px}
-.diff .d h4{font-family:var(--disp);font-weight:600;font-size:1.2rem;margin-bottom:8px}
-.diff .d p{color:var(--ghost);font-size:.94rem}
-@media (max-width:760px){.diff{grid-template-columns:1fr}}
-
-.tiers{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:60px}
-.tier{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:36px 32px;position:relative;transition:border-color .3s,transform .3s;overflow:hidden}
-.tier:hover{transform:translateY(-5px)}
-.tier.t1:hover{border-color:var(--cyan)}
-.tier.t2{border-color:rgba(59,130,246,.4)}
-.tier.t2::before{content:"";position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:var(--blue);filter:blur(70px);opacity:.25;pointer-events:none}
-.tier .ribbon{position:absolute;top:20px;right:20px;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--void);background:linear-gradient(110deg,var(--cyan),var(--blue));padding:6px 13px;border-radius:100px}
-.tier .tname{font-family:var(--disp);font-weight:600;font-size:1.6rem}
-.tier .tdur{font-family:var(--mono);font-size:.74rem;color:var(--ghost-dim);letter-spacing:.08em;margin-top:6px}
-.tier .price{font-family:var(--disp);font-weight:700;font-size:3.4rem;margin:20px 0 4px;line-height:1}
-.tier .price small{font-family:var(--mono);font-size:.82rem;color:var(--ghost-dim);font-weight:400;letter-spacing:.06em}
-.tier .tfor{color:var(--ghost);font-size:.96rem;margin-bottom:22px;min-height:40px}
-.tier ul{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:26px}
-.tier li{font-size:.95rem;color:var(--white);padding-left:26px;position:relative;line-height:1.45}
-.tier li::before{content:"✓";position:absolute;left:0;top:0;color:var(--cyan);font-family:var(--mono)}
-.tier.t2 li::before{color:var(--blue)}
-.tier .tres{font-style:italic;font-size:.92rem;color:var(--ghost-dim);border-top:1px solid var(--line);padding-top:18px;margin-bottom:24px}
-@media (max-width:760px){.tiers{grid-template-columns:1fr}}
-.curr-head{display:flex;align-items:baseline;gap:14px;margin-bottom:26px}
-.curr-head h3{font-family:var(--disp);font-weight:600;font-size:1.7rem}
-.curr-head .cl{font-family:var(--mono);font-size:.72rem;color:var(--ghost-dim);letter-spacing:.12em}
-.sessions{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.sess{border:1px solid var(--line);border-radius:14px;background:rgba(8,11,17,.6);overflow:hidden;transition:border-color .25s}
-.sess[open]{border-color:rgba(52,229,255,.35)}
-.sess summary{padding:20px 22px;cursor:pointer;display:flex;align-items:center;gap:16px;list-style:none;outline:none}
-.sess summary::-webkit-details-marker{display:none}
-.sess summary:focus-visible{outline:2px solid var(--cyan);outline-offset:-2px;border-radius:14px}
-.sess .snum{font-family:var(--disp);font-weight:700;font-size:1.5rem;background:linear-gradient(160deg,var(--cyan),var(--blue));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;min-width:42px}
-.sess .stitle{font-family:var(--disp);font-weight:500;font-size:1.12rem;flex:1;line-height:1.2}
-.sess .chev{color:var(--ghost-dim);transition:transform .3s;font-family:var(--mono)}
-.sess[open] .chev{transform:rotate(90deg)}
-.sess .sbody{padding:0 22px 22px 80px;color:var(--ghost);font-size:.96rem}
-@media (max-width:760px){.sessions{grid-template-columns:1fr}.sess .sbody{padding-left:22px}}
-.desk-disc{margin-top:32px;font-family:var(--mono);font-size:.74rem;color:var(--ghost-dim);letter-spacing:.02em;line-height:1.7;border-left:2px solid var(--line);padding-left:16px;max-width:700px}
-
-/* ---------- ABOUT (now last) ---------- */
+ 
+.desk-disc{margin-top:24px;font-family:var(--mono);font-size:.72rem;color:var(--ghost-dim);letter-spacing:.02em;line-height:1.7;border-left:2px solid var(--line);padding-left:16px;max-width:560px}
+ 
+/* ---------- ABOUT ---------- */
 .about-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:start}
 .about h2{font-family:var(--disp);font-weight:700;font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;margin:16px 0 24px}
 .about p{color:var(--ghost);font-size:1.14rem;margin-bottom:18px}
@@ -278,10 +316,7 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
 .tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);border:1px solid rgba(52,229,255,.3);border-radius:100px;padding:6px 13px;background:rgba(52,229,255,.05)}
 @media (max-width:900px){.about-grid{grid-template-columns:1fr;gap:40px}.id-card{max-width:520px}}
-
-.cell .clink{margin-top:18px;align-self:flex-start;font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;color:var(--cyan);text-decoration:none;border:1px solid rgba(52,229,255,.3);border-radius:100px;padding:9px 16px;transition:background .3s,color .3s}
-.cell .clink:hover{background:var(--cyan);color:var(--void)}
-
+ 
 /* ---------- CONTACT ---------- */
 .contact{position:relative;border:1px solid var(--line);border-radius:24px;padding:clamp(40px,7vw,80px);text-align:center;overflow:hidden;background:var(--glass);backdrop-filter:blur(14px)}
 .contact::before{content:"";position:absolute;inset:0;pointer-events:none;
@@ -290,7 +325,7 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .contact h2{font-family:var(--disp);font-weight:700;font-size:clamp(2.2rem,6vw,4.2rem);line-height:1;margin:16px 0 20px}
 .contact p{color:var(--ghost);max-width:540px;margin:0 auto 32px;font-size:1.1rem}
 .contact .cta-row{justify-content:center;animation:none;opacity:1}
-
+ 
 /* inquiry form */
 .iq{max-width:760px;margin:0 auto;text-align:left}
 .iq-form{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -309,7 +344,7 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .iq-foot b{color:var(--white);font-weight:600}
 .iq-foot a{color:var(--cyan);text-decoration:none}
 @media (max-width:680px){.iq-form{grid-template-columns:1fr}.iq-field{grid-column:1/-1}}
-
+ 
 /* ---------- footer ---------- */
 footer.site{padding:50px 0 44px;border-top:1px solid var(--line);margin-top:100px}
 .foot-inner{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
@@ -323,9 +358,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
 </style>
 </head>
 <body>
-
+ 
 <div id="cursor-glow" aria-hidden="true"></div>
-
+ 
 <nav id="nav" aria-label="Main">
   <div class="wrap nav-inner">
     <a class="logo" href="#top">
@@ -335,113 +370,99 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks">Menu</button>
     <ul class="nav-links" id="navLinks">
       <li><a href="#services">Services</a></li>
-      <li><a href="#desk">Trading Desk</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#desk">Trading</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#contact" class="nav-cta">Let's talk</a></li>
     </ul>
   </div>
 </nav>
-
+ 
 <header id="top">
   <canvas id="plasma" aria-hidden="true"></canvas>
   <div class="wrap hero">
 <div style="margin-bottom:60px; display: flex; align-items: flex-start; gap: 32px; justify-content: flex-start;">
-  
+ 
   <!-- § symbol -->
   <div style="font-family: 'Technor', sans-serif; font-size: 10.5rem; font-weight: 900; color: #00C9A7; line-height: 0.78; text-shadow: 0 0 20px rgba(0,201,167,0.6); margin-top: -10px;">§</div>
-  
+ 
   <!-- Text block -->
-  <div style="display: flex; flex-direction: column; gap: -2px;">
-    <div style="font-family: 'Technor', sans-serif; font-size: 4.2rem; font-weight: 700; letter-spacing: -0.05em; background: linear-gradient(110deg, #EEF2FA, #00C9A7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">SAFI</div>
-    <div style="font-family: 'Technor', sans-serif; font-size: 4.2rem; font-weight: 700; letter-spacing: -0.05em; background: linear-gradient(110deg, #00C9A7, #3B82F6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-top: -6px;">SOLUTIONS</div>
-    <div style="font-family: var(--mono); font-size: 1.05rem; letter-spacing: 0.42em; color: #5E6B85; margin-top: 10px;">L.L.C.</div>
+  <div style="display: flex; flex-direction: column;">
+    <div style="font-family: 'Technor', sans-serif; font-size: 4.2rem; font-weight: 700; line-height: 0.9; letter-spacing: -0.05em; background: linear-gradient(110deg, #EEF2FA, #00C9A7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">SAFI</div>
+    <div style="font-family: 'Technor', sans-serif; font-size: 4.2rem; font-weight: 700; line-height: 0.9; letter-spacing: -0.05em; background: linear-gradient(110deg, #00C9A7, #3B82F6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-top: -2px;">SOLUTIONS</div>
+    <div style="font-family: var(--mono); font-size: 1.05rem; letter-spacing: 0.42em; color: #5E6B85; margin-top: 12px;">L.L.C.</div>
   </div>
 </div>
-  
-
+ 
+ 
     <div class="badge"><span class="live"></span>Open for new work · Nationwide</div>
     <h1>
       <span class="line"><span>Modernizing legacy.</span></span>
-      <span class="line"><span>Teaching old dogs</span></span>
-      <span class="line rot"><span class="grad" id="rotword">new tricks.</span><span class="rot-ghost" aria-hidden="true">a real edge.</span></span>
+      <span class="line"><span>Bringing business</span></span>
+      <span class="line rot"><span class="grad" id="rotword">into the now.</span><span class="rot-ghost" aria-hidden="true">a real edge.</span></span>
     </h1>
-    <p class="thesis">Most people go looking for a solution once a problem shows up. I work the other way — I start with the <span class="hl">solution in mind and design toward it</span>, whether that's the website, the workflow, the AI that should be doing the busywork, or the markets you're trying to understand. <b>Tech, taste, and a trader's read on risk.</b></p>
-    <p class="micro">// web development · ai integration · automation · efficiency · trading education</p>
+    <p class="thesis">Most people go looking for a fix once a problem shows up. I work the other way — I start with the <span class="hl">outcome and design toward it.</span> For a local business that usually means one thing: a real presence online. The website, the way you get found, the brand, and the modern tools doing the busywork behind it. <b>Tech, taste, and a decade reading how businesses run.</b></p>
+    <p class="micro">// websites · seo &amp; local presence · brand &amp; content · ai &amp; automation</p>
     <div class="cta-row">
       <a class="btn btn-grad magnetic" href="#services">See what I build</a>
-      <a class="btn btn-glass magnetic" href="#desk">Enter the trading desk →</a>
+      <a class="btn btn-glass magnetic" href="#contact">Start a project →</a>
     </div>
   </div>
   <div class="scroll-hint" aria-hidden="true"><span>Scroll</span><span class="bar"></span></div>
 </header>
-
+ 
 <div class="statband">
   <div class="wrap"><div class="row">
     <div class="s"><div class="n grad" data-count="10" data-suffix="+">0</div><div class="l">Years in ops &amp; management</div></div>
     <div class="s"><div class="n grad" data-count="100" data-suffix="%">0</div><div class="l">Custom-built, never templated</div></div>
-    <div class="s"><div class="n grad" data-count="5" data-suffix="">0</div><div class="l">Disciplines under one roof</div></div>
+    <div class="s"><div class="n grad" data-count="4" data-suffix="">0</div><div class="l">Core services, done deeply</div></div>
     <div class="s"><div class="n grad" data-text="US">—</div><div class="l">Serving clients nationwide</div></div>
   </div></div>
 </div>
-
+ 
 <main>
 <!-- SERVICES BENTO -->
 <section class="section" id="services">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="idx">01 / WHAT I BUILD</div>
-      <h2>One operator, <span class="grad">a full stack of solutions.</span></h2>
-      <p>Web is the heartbeat. Everything around it exists to help a business run leaner, adopt what's next, and show up sharper than its size suggests.</p>
+      <div class="idx">01 / WHAT I DO</div>
+      <h2>Bringing local business <span class="grad">into the digital age.</span></h2>
+      <p>Web is the heartbeat. Around it: getting found, looking the part, and letting modern tools carry the busywork — the handful of things that actually move the needle, done properly instead of spread thin.</p>
     </div>
     <div class="bento reveal">
       <article class="cell web tilt">
         <span class="cnum">01</span>
         <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></span>
-        <h3>Web design &amp; development</h3>
-        <p>Custom, fast, mobile-first sites built to earn trust on the first scroll and turn visitors into customers — not a template with a logo dropped on top. The kind of site you're standing in right now.</p>
-        <div class="ctags"><span>Custom build</span><span>Mobile + desktop</span><span>Booking / leads</span><span>SEO basics</span><span>Self-editable</span></div>
+        <h3>A website that does the selling</h3>
+        <p>Custom, fast, mobile-first — built to earn trust on the first scroll and turn visitors into customers, not a template with a logo dropped on top. For a lot of older businesses, this is the leap from word-of-mouth to a storefront that works around the clock, takes bookings, and answers the questions you're tired of repeating. The kind of site you're standing in right now.</p>
+        <div class="ctags"><span>Custom build</span><span>Mobile + desktop</span><span>Booking / leads</span><span>Fast &amp; secure</span><span>Self-editable</span></div>
         <a class="clink" href="https://yourfuturesite.org" target="_blank" rel="noopener">See a live build — yourfuturesite.org →</a>
       </article>
       <article class="cell ai tilt">
         <span class="cnum">02</span>
         <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="12" rx="3"/><path d="M12 7V4M9 1h6M9 13h.01M15 13h.01M2 12h3M19 12h3"/></svg></span>
-        <h3>AI integration</h3>
-        <p>The smart shops are already letting AI handle the repetitive, time-eating work. I help you adopt it where it actually pays off — support replies, content, lead handling, data — without the hype or the guesswork.</p>
-        <div class="ctags"><span>Chat &amp; support</span><span>Content</span><span>Smart automation</span><span>Sensible adoption</span></div>
+        <h3>Modern tools, quietly working</h3>
+        <p>The smart shops already let AI and automation handle the repetitive, time-eating work — support replies, follow-ups, scheduling, data moving between the apps you already use. I help you adopt it where it actually pays off, without the hype or the guesswork.</p>
+        <div class="ctags"><span>AI support</span><span>Automations</span><span>Integrations</span><span>Less busywork</span></div>
       </article>
-      <article class="cell auto tilt">
+      <article class="cell found tilt">
         <span class="cnum">03</span>
-        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></span>
-        <h3>Automation &amp; systems</h3>
-        <p>Wire the tools you already use together and let the busywork run itself.</p>
-        <div class="ctags"><span>Integrations</span><span>Workflows</span><span>Dashboards</span></div>
-      </article>
-      <article class="cell eff tilt">
-        <span class="cnum">04</span>
-        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 19l5-5 4 3 7-8"/></svg></span>
-        <h3>Efficiency &amp; margin</h3>
-        <p>A fresh set of eyes on where time and money quietly slip out.</p>
-        <div class="ctags"><span>Cost review</span><span>Process</span><span>Pricing</span></div>
+        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.3-7-11a7 7 0 0114 0c0 4.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.4"/></svg></span>
+        <h3>Get found where it counts</h3>
+        <p>Google Business Profile, local search, maps, and reviews — so when someone nearby searches for what you do, you're the one that shows up, looking established and worth trusting.</p>
+        <div class="ctags"><span>Local SEO</span><span>Google Business</span><span>Reviews</span><span>Maps</span></div>
       </article>
       <article class="cell brand tilt">
-        <span class="cnum">05</span>
+        <span class="cnum">04</span>
         <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></span>
-        <h3>Digital presence</h3>
-        <p>Logo, Google, reviews — the details that make a small shop read as the established thing.</p>
-        <div class="ctags"><span>Identity</span><span>Google</span><span>Reviews</span></div>
-      </article>
-      <article class="cell markets">
-        <span class="cico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16l5-5 4 4 8-9M21 6v5M21 6h-5"/></svg></span>
-        <div class="mtxt">
-          <h3 style="font-size:1.5rem;margin-bottom:6px">Trading education</h3>
-          <p>The markets explained straight — assets, charts, risk, psychology — by someone who learned them the hard way. Anyone can read the theory; the value is having it shown to you, and being told what <em>not</em> to do.</p>
-        </div>
-        <a class="go" href="#desk">Open the trading desk →</a>
+        <h3>Look the part</h3>
+        <p>Logo, identity, and a tidy social presence with content worth posting — the small details that make a local shop read as the established name in town.</p>
+        <div class="ctags"><span>Brand identity</span><span>Social presence</span><span>Content</span></div>
       </article>
     </div>
   </div>
 </section>
-
+ 
 <!-- PROCESS -->
 <section class="section" id="process" style="padding-top:0">
   <div class="wrap">
@@ -451,124 +472,57 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
       <p>A decade across management and operations taught me to read a business quickly — and to leave it better than a one-and-done project ever could.</p>
     </div>
     <div class="proc reveal">
-      <div class="pstep"><div class="pb">PHASE 01</div><h4>Understand the goal</h4><p>We get clear on what "better" actually means for you — more leads, less manual work, lower cost, a presence people trust. The destination comes first.</p></div>
-      <div class="pstep"><div class="pb">PHASE 02</div><h4>Build toward it</h4><p>The site, the systems, the AI and automation behind them — designed around the outcome, not bolted on after. Leaner to run, sharper to look at.</p></div>
+      <div class="pstep"><div class="pb">PHASE 01</div><h4>Understand the goal</h4><p>We get clear on what "better" actually means for you — more leads, less manual work, a presence people trust. The destination comes first.</p></div>
+      <div class="pstep"><div class="pb">PHASE 02</div><h4>Build toward it</h4><p>The site, the search presence, the brand, and the automation behind them — designed around the outcome, not bolted on after. Leaner to run, sharper to look at.</p></div>
       <div class="pstep"><div class="pb">PHASE 03</div><h4>Hand you the keys</h4><p>You get something you can actually run — clear and documented — so the gains stick long after I step back.</p></div>
     </div>
   </div>
 </section>
 </main>
-
-<!-- TRADING DESK -->
+ 
+<!-- TRADING DESK — bridge to thetraderdesk.org -->
 <section class="desk" id="desk">
   <div class="desk-bar">
     <span class="dots"><i></i><i></i><i></i></span>
-    <span class="tick"><span class="pulse"></span>SESSIONS OPEN</span>
+    <span class="path">thetraderdesk.org<span class="cursor">&nbsp;</span></span>
+    <span class="tick"><span class="pulse"></span>NOW LIVE</span>
   </div>
   <div class="wrap desk-inner">
-    <div class="desk-head reveal">
-      <div class="eyebrow">03 / TRADING EDUCATION</div>
-      <h2>The Trading <span class="grad">Desk.</span></h2>
-      <p>No signals, no hype, no "get rich by Friday." Just the structure I had to learn the slow, expensive way — taught one-on-one, so the market makes sense <em>before</em> your money's on the line.</p>
-    </div>
-
-    <!-- STORY + EQUITY CURVE -->
-    <div class="story-block reveal">
-      <div class="st-copy">
-        <h3>I blew it before I built it.</h3>
-        <p>I didn't come to this with a plan. I came in chasing green candles and social-media hype, and the market did what it does to everyone who starts that way — <strong>it took its tuition.</strong> Stretches of losses, revenge trades that dug the hole deeper, the whole cycle.</p>
-        <p>What turned it around wasn't a magic indicator. It was <strong>structure</strong> — understanding risk, sizing, the psychology, and most of all learning <strong>when not to trade.</strong> Consistency came after the lessons I wish someone had just walked me through.</p>
-        <p class="pq">That's the whole point of this program: a shortcut through the expensive part.</p>
+    <div class="desk-split">
+      <div class="desk-copy reveal">
+        <div class="eyebrow">03 / BEYOND THE AGENCY</div>
+        <h2>I also teach the <span class="grad">markets.</span></h2>
+        <p>Same instinct as the agency work — start from the outcome, build back to it — pointed at trading. No signals, no hype: just the structure I had to learn the slow, expensive way, taught one-on-one so the market makes sense <em>before</em> your money's on the line. It's grown into its own thing now, with its own home.</p>
+        <a class="btn btn-grad magnetic" href="https://thetraderdesk.org" target="_blank" rel="noopener">Visit The Trader Desk →</a>
+        <p class="desk-disc">Educational only — market structure, terminology, and process, not financial advice, signals, or any promise of profit. Trading carries real risk of loss.</p>
       </div>
-      <div class="equity">
-        <div class="eqhead"><span>EQUITY CURVE · the honest version</span><span><b>consistency ↗</b></span></div>
-        <svg id="eqSvg" viewBox="0 0 520 200" preserveAspectRatio="none" aria-hidden="true">
-          <defs><linearGradient id="eqfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34D399" stop-opacity=".25"/><stop offset="1" stop-color="#34D399" stop-opacity="0"/></linearGradient></defs>
-          <line x1="0" y1="150" x2="520" y2="150" stroke="rgba(156,169,196,.16)" stroke-dasharray="4 5"/>
-          <path id="eqFill" d="" fill="url(#eqfill)" opacity="0"/>
-          <path id="eqLine" d="" fill="none" stroke="#34D399" stroke-width="2.2" stroke-linejoin="round"
-            stroke-dasharray="1400" stroke-dashoffset="1400"/>
-        </svg>
-        <span class="annot loss" id="annLoss">↓ the tuition years</span>
-        <span class="annot win" id="annWin">↑ structure → consistency</span>
+      <div class="desk-visual reveal">
+        <div class="equity">
+          <div class="eqhead"><span>EQUITY CURVE · the honest version</span><span><b>consistency ↗</b></span></div>
+          <svg id="eqSvg" viewBox="0 0 520 200" preserveAspectRatio="none" aria-hidden="true">
+            <defs><linearGradient id="eqfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34D399" stop-opacity=".25"/><stop offset="1" stop-color="#34D399" stop-opacity="0"/></linearGradient></defs>
+            <line x1="0" y1="150" x2="520" y2="150" stroke="rgba(156,169,196,.16)" stroke-dasharray="4 5"/>
+            <path id="eqFill" d="" fill="url(#eqfill)" opacity="0"/>
+            <path id="eqLine" d="" fill="none" stroke="#34D399" stroke-width="2.2" stroke-linejoin="round"
+              stroke-dasharray="1400" stroke-dashoffset="1400"/>
+          </svg>
+          <span class="annot loss" id="annLoss">↓ the tuition years</span>
+          <span class="annot win" id="annWin">↑ structure → consistency</span>
+        </div>
       </div>
     </div>
-
-    <!-- WHAT MAKES IT DIFFERENT -->
-    <div class="diff reveal">
-      <div class="d">
-        <div class="di"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 10l7-7 7 7"/></svg></div>
-        <h4>Shown, not just told</h4>
-        <p>Every piece of this is researchable on your own. The difference is having someone walk you through it live, answer the "but why" in real time, and catch the mistakes before they cost you.</p>
-      </div>
-      <div class="d">
-        <div class="di"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
-        <h4>What <em>not</em> to do</h4>
-        <p>Most courses sell you setups. I spend just as much time on the traps — the revenge trades, the FOMO entries, the account-killers I learned about firsthand.</p>
-      </div>
-      <div class="d">
-        <div class="di"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM12 6v6l4 2"/></svg></div>
-        <h4>Built around you</h4>
-        <p>One-on-one and paced to where you actually are — whether the goal is understanding before you risk a dollar, or putting real structure under what you're already doing.</p>
-      </div>
-    </div>
-
-    <div class="tiers reveal">
-      <div class="tier t1">
-        <div class="tname">Starter Session</div>
-        <div class="tdur">// 1 hour · for beginners</div>
-        <div class="price">$99<small> / session</small></div>
-        <p class="tfor">For the curious who just want it to finally click.</p>
-        <ul>
-          <li>Long-term investing vs. fast trading</li>
-          <li>What stocks, options, futures, crypto &amp; forex really are</li>
-          <li>How apps and brokers actually work</li>
-          <li>How charts show price movement</li>
-          <li>Why indicators aren't magic</li>
-          <li>The rules that keep an account alive</li>
-        </ul>
-        <p class="tres">You walk out with the confusion gone — and the beginner mistakes avoided.</p>
-        <a class="btn btn-glass magnetic" href="#contact" style="width:100%;justify-content:center">Book the starter</a>
-      </div>
-      <div class="tier t2">
-        <span class="ribbon">Goes deepest</span>
-        <div class="tname">Deep Dive</div>
-        <div class="tdur">// 2.5 hours · for the serious</div>
-        <div class="price grad">$200<small> / session</small></div>
-        <p class="tfor">Everything in the Starter, plus the real framework.</p>
-        <ul>
-          <li>How real strategies get built</li>
-          <li>When <em>not</em> to trade</li>
-          <li>How news &amp; earnings move price</li>
-          <li>How to size a position</li>
-          <li>Why traders blow up — the psychology underneath</li>
-          <li>Build your own trading rulebook</li>
-          <li>Get accounts set up practice/trade-ready</li>
-        </ul>
-        <p class="tres">You leave with structure instead of guesses.</p>
-        <a class="btn btn-grad magnetic" href="#contact" style="width:100%;justify-content:center">Book the deep dive</a>
-      </div>
-    </div>
-
-    <div class="curr-head reveal">
-      <h3>The 8-session path</h3>
-      <span class="cl">// the full arc, start to plan</span>
-    </div>
-    <div class="sessions reveal" id="sessions"></div>
-
-    <p class="desk-disc reveal">Educational only. Safi Solutions teaches market structure, terminology, and process — not financial advice, trade signals, or any promise of profit. Trading carries real risk of loss: your capital, your decisions. Only ever risk what you can afford to lose.</p>
   </div>
 </section>
-
-<!-- ABOUT (last) -->
+ 
+<!-- ABOUT -->
 <section class="section about" id="about">
   <div class="wrap about-grid">
     <div class="reveal">
       <div class="eyebrow">04 / WHO'S BEHIND IT</div>
       <h2>Meet <span class="grad">Helal Safi.</span></h2>
       <p>I'm a first-generation Lebanese-American out of <strong>Paris, Texas</strong>, and I studied <strong>computer science and economics at Texas State</strong> — which is a tidy way of saying I think in systems and I think in incentives, usually at the same time.</p>
-      <p>I'm most at home where <strong>tech meets the outdoors</strong>, and the way I approach work is simple: I'd rather start with the outcome someone's after and engineer toward it than patch problems one at a time. Same instinct, whether I'm building a site, wiring up automation, or reading a chart.</p>
-      <p><strong>Safi Solutions</strong> is where all of that comes together — the web, the systems, the AI, and the markets — under one roof.</p>
+      <p>I'm most at home where <strong>tech meets the outdoors</strong>, and the way I approach work is simple: I'd rather start with the outcome someone's after and engineer toward it than patch problems one at a time. Same instinct, whether I'm building a site, dialing in your local search, or reading a chart.</p>
+      <p><strong>Safi Solutions</strong> is where it comes together — the web, the marketing, the systems, and the AI — pointed at one thing: getting local businesses seen, trusted, and running leaner.</p>
       <div class="sig">Tech and incentives, pointed at one thing:<br><span class="grad">making the work work better.</span></div>
     </div>
     <aside class="id-card reveal">
@@ -584,12 +538,12 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
       <div class="id-row"><span class="k">Studied</span><span class="v">CS + Economics<br>Texas State</span></div>
       <div class="id-row"><span class="k">Runs on</span><span class="v"><span class="grad">Tech · nature · markets</span></span></div>
       <div class="tags">
-        <span class="tag">Web Dev</span><span class="tag">AI</span><span class="tag">Automation</span><span class="tag">Ops</span><span class="tag">Markets</span>
+        <span class="tag">Web Dev</span><span class="tag">SEO</span><span class="tag">Brand</span><span class="tag">AI</span><span class="tag">Automation</span>
       </div>
     </aside>
   </div>
 </section>
-
+ 
 <!-- CONTACT -->
 <section class="section" id="contact" style="padding-top:0">
   <div class="wrap">
@@ -597,7 +551,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
       <div class="inner">
         <div class="eyebrow">05 / START</div>
         <h2>Know the outcome <span class="grad">you're after?</span></h2>
-        <p>Fill this out and it lands straight in my inbox — a site, a leaner operation, AI put to work, or the markets finally explained. No pressure, no mailing lists.</p>
+        <p>Fill this out and it lands straight in my inbox — a new site, getting found locally, a sharper brand, or AI put to work. No pressure, no mailing lists.</p>
         <div class="iq">
           <form class="iq-form" action="https://formsubmit.co/safihelal@gmail.com" method="POST">
             <input type="hidden" name="_subject" value="New inquiry — safisolutions.org">
@@ -622,14 +576,12 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
             <div class="iq-field full">
               <label for="iq-interest">I'm interested in…</label>
               <select id="iq-interest" name="interest">
-                <option>Web design &amp; development</option>
-                <option>AI integration</option>
-                <option>Automation &amp; systems</option>
-                <option>Efficiency &amp; margin review</option>
-                <option>Digital presence / brand</option>
-                <option>Trading education — Starter Session ($99)</option>
-                <option>Trading education — Deep Dive ($200)</option>
-                <option>Something else</option>
+                <option>A new website</option>
+                <option>Getting found — SEO &amp; local presence</option>
+                <option>Brand &amp; content</option>
+                <option>AI &amp; automation</option>
+                <option>A full digital makeover</option>
+                <option>Not sure yet / something else</option>
               </select>
             </div>
             <div class="iq-field full">
@@ -644,7 +596,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
     </div>
   </div>
 </section>
-
+ 
 <footer class="site">
   <div class="wrap foot-inner">
     <div class="fl">
@@ -652,34 +604,17 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
       <span class="ft">SAFI SOLUTIONS<small>HELAL SAFI · NATIONWIDE</small></span>
     </div>
     <div class="fr">
-      Web · AI · Systems · Markets · <a href="mailto:safihelal@gmail.com" style="color:var(--cyan);text-decoration:none">safihelal@gmail.com</a><br>
+      Web · Marketing · AI · Systems · <a href="mailto:safihelal@gmail.com" style="color:var(--cyan);text-decoration:none">safihelal@gmail.com</a><br>
       © <span id="yr"></span> Safi Solutions — built in-house, naturally.
     </div>
   </div>
 </footer>
-
+ 
 <script>
-/* ===== 8 SESSIONS (no homework) ===== */
-const SESSIONS=[
-  ["Investing vs. Trading","The real gap between buy-and-hold investing and short-term trading — pace, risk, mindset, and which one actually fits your goals."],
-  ["What Are Assets?","Stocks, options, futures, forex, and crypto in plain language — what each one is, how it moves, and the risk baked into it."],
-  ["Getting Started","Capital, brokers, and setup — how much to start with, which platforms fit beginners vs. pros, funding safely, and why demos come first."],
-  ["Chart Reading","Candlesticks decoded — open, high, low, close, what red and green really mean, the common patterns, and the right time frames."],
-  ["Indicators","Moving averages, RSI, MACD, Bollinger Bands, volume — what they show, how to read them, and why they should never stand alone."],
-  ["Strategies & Financials","The major strategy families and how setups get built — plus reading earnings, balance sheets, and valuation the simple way."],
-  ["Risk & Psychology","Stop-losses, position sizing, and the greed/fear cycle that wrecks accounts — the mental game that decides who lasts."],
-  ["Taxes & Your Plan","The tax basics worth knowing, the resources worth trusting, and assembling everything into your own written trading plan."]
-];
-document.getElementById('sessions').innerHTML=SESSIONS.map((s,i)=>`
-  <details class="sess"${i===0?' open':''}>
-    <summary><span class="snum">${('0'+(i+1)).slice(-2)}</span><span class="stitle">${s[0]}</span><span class="chev">›</span></summary>
-    <div class="sbody">${s[1]}</div>
-  </details>`).join('');
-
 /* ===== hero rotating last word ===== */
 (function(){
   const el=document.getElementById('rotword'); if(!el) return;
-  const words=['A real edge.','An unfair edge.','A clear advantage.','Built to convert.'];
+  const words=['into the now.','found online.','built to convert.','impossible to miss.'];
   let i=0;
   const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ.';
   function scramble(to){
@@ -701,7 +636,7 @@ document.getElementById('sessions').innerHTML=SESSIONS.map((s,i)=>`
     setInterval(()=>{ i=(i+1)%words.length; scramble(words[i]); }, 2600);
   }
 })();
-
+ 
 /* ===== count-up stats ===== */
 (function(){
   const seen=new WeakSet();
@@ -718,13 +653,14 @@ document.getElementById('sessions').innerHTML=SESSIONS.map((s,i)=>`
   },{threshold:.6});
   document.querySelectorAll('.statband .n').forEach(n=>io.observe(n));
 })();
-
+ 
 /* ===== equity curve draw on scroll ===== */
 (function(){
+  const eqLine=document.getElementById('eqLine'), eqFill=document.getElementById('eqFill');
+  if(!eqLine||!eqFill) return;
   // hand-shaped: choppy losses dipping, then steady climb
   const pts=[[0,120],[40,135],[70,118],[100,150],[135,138],[165,168],[195,150],[225,160],[255,140],[285,128],[315,112],[350,98],[385,86],[420,72],[455,60],[490,46],[520,38]];
   const line=pts.map((p,i)=>`${i?'L':'M'}${p[0]},${p[1]}`).join(' ');
-  const eqLine=document.getElementById('eqLine'), eqFill=document.getElementById('eqFill');
   eqLine.setAttribute('d',line);
   eqFill.setAttribute('d',line+' L520,200 L0,200 Z');
   const io=new IntersectionObserver(es=>{
@@ -740,7 +676,7 @@ document.getElementById('sessions').innerHTML=SESSIONS.map((s,i)=>`
   },{threshold:.4});
   io.observe(document.getElementById('eqSvg'));
 })();
-
+ 
 /* ===== plasma hero mesh ===== */
 (function(){
   const c=document.getElementById('plasma'); if(!c) return;
@@ -770,7 +706,7 @@ document.getElementById('sessions').innerHTML=SESSIONS.map((s,i)=>`
   }
   if(!reduce){ addEventListener('mousemove',e=>{const r=c.getBoundingClientRect();tmx=(e.clientX-r.left)/r.width;tmy=(e.clientY-r.top)/r.height;}); draw(); }
 })();
-
+ 
 /* ===== cursor glow ===== */
 (function(){
   const g=document.getElementById('cursor-glow'); if(!g||!matchMedia('(hover:hover)').matches||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -779,7 +715,7 @@ document.getElementById('sessions').innerHTML=SESSIONS.map((s,i)=>`
   addEventListener('mouseleave',()=>g.style.opacity='0');
   (function loop(){ x+=(tx-x)*.15; y+=(ty-y)*.15; g.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%)`; requestAnimationFrame(loop); })();
 })();
-
+ 
 /* ===== 3D tilt on bento cells ===== */
 if(matchMedia('(hover:hover)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches){
   document.querySelectorAll('.tilt').forEach(card=>{
@@ -791,7 +727,7 @@ if(matchMedia('(hover:hover)').matches && !matchMedia('(prefers-reduced-motion: 
     card.addEventListener('mouseleave',()=>card.style.transform='');
   });
 }
-
+ 
 /* ===== magnetic buttons ===== */
 if(matchMedia('(hover:hover)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches){
   document.querySelectorAll('.magnetic').forEach(btn=>{
@@ -799,7 +735,7 @@ if(matchMedia('(hover:hover)').matches && !matchMedia('(prefers-reduced-motion: 
     btn.addEventListener('mouseleave',()=>btn.style.transform='');
   });
 }
-
+ 
 /* ===== nav / reveal ===== */
 const nav=document.getElementById('nav'),menuBtn=document.getElementById('menuBtn'),navLinks=document.getElementById('navLinks');
 addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>40),{passive:true});
@@ -812,3 +748,4 @@ document.getElementById('yr').textContent=new Date().getFullYear();
 </script>
 </body>
 </html>
+ 
