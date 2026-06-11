@@ -301,6 +301,35 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .iq-foot a{color:var(--cyan);text-decoration:none}
 @media (max-width:680px){.iq-form{grid-template-columns:1fr}.iq-field{grid-column:1/-1}}
 
+/* ---------- BILL REVIEW form ---------- */
+.bill{max-width:780px;margin:0 auto}
+.bill-form{background:var(--glass);border:1px solid var(--line);border-radius:22px;padding:clamp(26px,4vw,40px);backdrop-filter:blur(14px);position:relative;overflow:hidden}
+.bill-form::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),var(--blue),transparent);background-size:200% 100%;animation:sheen 4s linear infinite}
+.seg{display:inline-flex;gap:6px;background:rgba(8,11,17,.6);border:1px solid var(--line);border-radius:100px;padding:6px;margin-bottom:26px}
+.seg-btn{font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ghost);background:none;border:none;border-radius:100px;padding:11px 20px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:color .25s,background .25s}
+.seg-btn.active{color:var(--void);background:linear-gradient(110deg,var(--cyan),var(--blue));font-weight:700}
+.bill-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+@media (max-width:600px){.bill-grid{grid-template-columns:1fr}}
+.exp{border:1px solid var(--line);border-radius:16px;background:rgba(8,11,17,.45);padding:20px;margin-bottom:22px}
+.exp-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ghost-dim);margin-bottom:14px}
+.exp-head .exp-total b{color:var(--lime);font-size:.98rem}
+.exp-rows{display:flex;flex-direction:column;gap:10px}
+.exp-row{display:flex;gap:10px;align-items:center;animation:fadein .35s ease}
+.exp-row .exp-name{flex:1;min-width:0;background:rgba(8,11,17,.75);border:1px solid var(--line);border-radius:10px;padding:13px 14px;color:var(--white);font-family:var(--body);font-size:.95rem;outline:none;transition:border-color .25s}
+.exp-row .exp-cost{display:flex;align-items:center;gap:6px;background:rgba(8,11,17,.75);border:1px solid var(--line);border-radius:10px;padding:0 12px;width:128px;transition:border-color .25s}
+.exp-row .exp-cost span{color:var(--ghost-dim);font-family:var(--mono)}
+.exp-row .exp-amt{width:100%;background:none;border:none;padding:13px 0;color:var(--white);font-family:var(--mono);font-size:.95rem;outline:none;-moz-appearance:textfield}
+.exp-row .exp-amt::-webkit-outer-spin-button,.exp-row .exp-amt::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.exp-row .exp-name:focus{border-color:var(--cyan)}
+.exp-row .exp-cost:focus-within{border-color:var(--cyan)}
+.exp-del{flex:0 0 auto;width:42px;height:42px;border-radius:10px;border:1px solid var(--line);background:none;color:var(--ghost-dim);font-size:1.35rem;line-height:1;cursor:pointer;transition:color .2s,border-color .2s}
+.exp-del:hover{color:var(--red);border-color:rgba(248,113,113,.4)}
+.exp-add{margin-top:14px;font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;color:var(--cyan);background:none;border:1px dashed rgba(0,201,167,.4);border-radius:100px;padding:11px 18px;cursor:pointer;transition:background .25s}
+.exp-add:hover{background:rgba(0,201,167,.1)}
+.bill-form .iq-field.full{margin-bottom:22px}
+.bill-form .btn{width:100%;justify-content:center;border:none;margin-top:4px}
+.bill-form .iq-foot{margin-top:16px}
+
 /* ---------- footer ---------- */
 footer.site{padding:50px 0 44px;border-top:1px solid var(--line);margin-top:100px}
 .foot-inner{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
@@ -358,7 +387,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
       <span class="line"><span>Bringing business</span></span>
       <span class="line rot"><span class="grad" id="rotword">into the now.</span><span class="rot-ghost" aria-hidden="true">a real edge.</span></span>
     </h1>
-    <p class="thesis">Most people go looking for a fix once a problem shows up. I work the other way — I start with the <span class="hl">outcome and design toward it.</span> For a local business that usually means one thing: a real presence online. The website, the way you get found, the brand, and the modern tools doing the busywork behind it. <b>Tech, taste, and a decade reading how businesses run.</b></p>
+    <p class="thesis">Most people go looking for a fix once a problem shows up. I work the other way — I start with the <span class="hl">outcome and design toward it.</span> For a local business that usually means a real presence online: a website people trust, social that stays active, showing up when folks search nearby — and lower bills behind it all. <b>Tech, taste, and a decade reading how businesses run.</b></p>
     <p class="micro">// websites · social media · getting found · lower your bills</p>
     <div class="cta-row">
       <a class="btn btn-grad magnetic" href="#services">See what I build</a>
@@ -410,15 +439,15 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
   <div class="wrap" style="margin-top:54px">
     <div class="bento reveal">
       <article class="cell web tilt">
-        <span class="cnum">01 · BREAD &amp; BUTTER</span>
+        <span class="cnum">01</span>
         <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></span>
         <h3>A website that brings people in</h3>
-        <p>Your shop, online and open 24/7. Folks find your menu, your hours, and your story — then book a table, place an order, or just decide you're the spot. Fast, polished, and built to turn a quick phone search into someone walking through your door. The kind of site you're standing in right now.</p>
-        <div class="ctags"><span>Menu &amp; ordering</span><span>Bookings</span><span>Mobile-first</span><span>Yours to edit</span></div>
+        <p>Your shop, online and open 24/7. Folks find your menu, your hours, your photos, and your story — and decide you're the spot before they even call. Fast, polished, and built to turn a quick phone search into someone walking through your door. The kind of site you're standing in right now.</p>
+        <div class="ctags"><span>Menu &amp; info</span><span>Photos</span><span>Mobile-first</span><span>Yours to edit</span></div>
         <a class="clink" href="https://yourfuturesite.org" target="_blank" rel="noopener">See a live build — yourfuturesite.org →</a>
       </article>
       <article class="cell social tilt">
-        <span class="cnum">02 · BREAD &amp; BUTTER</span>
+        <span class="cnum">02</span>
         <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.4 8.4 0 01-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.4 8.4 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></span>
         <h3>Your social media, handled</h3>
         <p>You shouldn't be up at 11pm wondering what to post. I keep your Instagram and Facebook alive with on-brand posts, reels, and replies — so you stay top-of-mind and look professional without lifting a finger.</p>
@@ -433,10 +462,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
       </article>
       <article class="cell smart tilt">
         <span class="cnum">04</span>
-        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>
-        <h3>Let the busywork run itself</h3>
-        <p>Online orders that land straight in the kitchen, texts that confirm bookings, common questions answered automatically. Simple modern tools that quietly hand you back hours every week.</p>
-        <div class="ctags"><span>Online orders</span><span>Auto-replies</span><span>Booking</span><span>Time back</span></div>
+        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>
+        <h3>Everything they need, in one place</h3>
+        <p>Hours, location, parking, your full menu or service list, photos, and the answers to the questions you're tired of hearing on the phone — all on one clean, easy page. Folks show up already knowing what to expect.</p>
+        <div class="ctags"><span>Hours &amp; location</span><span>Menu / services</span><span>Photos</span><span>FAQs</span></div>
       </article>
       <article class="cell bills">
         <span class="cico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span>
@@ -448,7 +477,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
             <span class="bb"><b>Residential</b> — cheaper fiber &amp; home Wi-Fi</span>
           </div>
         </div>
-        <a class="go" href="#contact">See what I can save you →</a>
+        <a class="go" href="#savings">See what I can save you →</a>
       </article>
     </div>
   </div>
@@ -479,18 +508,18 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
     </div>
     <div class="proc reveal">
       <div class="pstep"><div class="pb">PHASE 01</div><h4>Understand the goal</h4><p>We get clear on what "better" actually means for you — more leads, less manual work, a presence people trust. The destination comes first.</p></div>
-      <div class="pstep"><div class="pb">PHASE 02</div><h4>Build toward it</h4><p>The site, the search presence, the brand, and the automation behind them — designed around the outcome, not bolted on after. Leaner to run, sharper to look at.</p></div>
+      <div class="pstep"><div class="pb">PHASE 02</div><h4>Build toward it</h4><p>The site, your social, getting you found, and the bills behind it all — built around the outcome, not bolted on after. Leaner to run, sharper to look at.</p></div>
       <div class="pstep"><div class="pb">PHASE 03</div><h4>Hand you the keys</h4><p>You get something you can actually run — clear and documented — so the gains stick long after I step back.</p></div>
     </div>
   </div>
 </section>
 </main>
 
-<!-- TRADING DESK — bridge to thetradingdesk.org -->
+<!-- TRADING DESK — bridge to thetraderdesk.org -->
 <section class="desk" id="desk">
   <div class="desk-bar">
     <span class="dots"><i></i><i></i><i></i></span>
-    <span class="path">thetradingdesk.org<span class="cursor">&nbsp;</span></span>
+    <span class="path">thetraderdesk.org<span class="cursor">&nbsp;</span></span>
     <span class="tick"><span class="pulse"></span>NOW LIVE</span>
   </div>
   <div class="wrap desk-inner">
@@ -499,7 +528,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
         <div class="eyebrow">04 / BEYOND THE AGENCY</div>
         <h2>I also teach the <span class="grad">markets.</span></h2>
         <p>Same instinct as the agency work — start from the outcome, build back to it — pointed at trading. No signals, no hype: just the structure I had to learn the slow, expensive way, taught one-on-one so the market makes sense <em>before</em> your money's on the line. It's grown into its own thing now, with its own home.</p>
-        <a class="btn btn-grad magnetic" href="https://thetradingdesk.org" target="_blank" rel="noopener">Visit The Trading Desk →</a>
+        <a class="btn btn-grad magnetic" href="https://thetraderdesk.org" target="_blank" rel="noopener">Visit The Trader Desk →</a>
         <p class="desk-disc">Educational only — market structure, terminology, and process, not financial advice, signals, or any promise of profit. Trading carries real risk of loss.</p>
       </div>
       <div class="desk-visual reveal">
@@ -526,9 +555,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
     <div class="reveal">
       <div class="eyebrow">05 / WHO'S BEHIND IT</div>
       <h2>Meet <span class="grad">Helal Safi.</span></h2>
-      <p>I'm a first-generation Lebanese-American out of <strong>Paris, Texas</strong>, and I studied <strong>computer science and economics at Texas State</strong> which is a tidy way of saying I think in systems andin incentives, usually at the same time.</p>
-      <p>I love the outdoors, as well as incorporating modern tech into our every day lives.  I've recently completed a 45 day road trip throughout the west coast, and came across many amazing businesses, however some of the best ones did <strong>not have an online presence.</strong></p>
-      <p><strong>Safi Solutions</strong> is where it comes together — the web, the marketing, the systems, and the cost savings —> pointed at one thing: getting local businesses seen, trusted, and running leaner.</p>
+      <p>I'm a first-generation Lebanese-American out of <strong>Paris, Texas</strong>, and I studied <strong>computer science and economics at Texas State</strong> — which is a tidy way of saying I think in systems and I think in incentives, usually at the same time.</p>
+      <p>I'm most at home where <strong>tech meets the outdoors</strong>, and the way I approach work is simple: I'd rather start with the outcome someone's after and engineer toward it than patch problems one at a time. Same instinct, whether I'm building a site, dialing in your local search, or reading a chart.</p>
+      <p><strong>Safi Solutions</strong> is where it comes together — the website, the marketing, getting you found, and keeping your costs down — pointed at one thing: getting local businesses seen, trusted, and running leaner.</p>
       <div class="sig">Tech and incentives, pointed at one thing:<br><span class="grad">making the work work better.</span></div>
     </div>
     <aside class="id-card reveal">
@@ -544,9 +573,53 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
       <div class="id-row"><span class="k">Studied</span><span class="v">CS + Economics<br>Texas State</span></div>
       <div class="id-row"><span class="k">Runs on</span><span class="v"><span class="grad">Tech · nature · markets</span></span></div>
       <div class="tags">
-        <span class="tag">Web Dev</span><span class="tag">SEO</span><span class="tag">Brand</span><span class="tag">AI</span><span class="tag">Automation</span>
+        <span class="tag">Web Dev</span><span class="tag">SEO</span><span class="tag">Social</span><span class="tag">Reviews</span><span class="tag">Savings</span>
       </div>
     </aside>
+  </div>
+</section>
+
+<!-- BILL REVIEW -->
+<section class="section" id="savings" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="idx">06 / KEEP MORE OF WHAT YOU EARN</div>
+      <h2>Find what you're <span class="grad">overpaying.</span></h2>
+      <p>Tell me what you're spending each month — internet, phone, and the rest — and I'll see where I can get it down, for your business or your home. Costs nothing to look.</p>
+    </div>
+    <div class="bill reveal">
+      <form class="bill-form" id="billForm" action="https://formsubmit.co/safihelal@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="New bill review — Safi Solutions">
+        <input type="hidden" name="_template" value="table">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+        <input type="hidden" name="Property type" id="billType" value="Commercial">
+        <input type="hidden" name="Monthly total listed" id="billTotal" value="$0">
+        <input type="hidden" name="Spending breakdown" id="billBreakdown" value="">
+
+        <div class="seg" role="group" aria-label="Property type">
+          <button type="button" class="seg-btn active" data-type="Commercial">🏪 Commercial</button>
+          <button type="button" class="seg-btn" data-type="Residential">🏠 Residential</button>
+        </div>
+
+        <div class="bill-grid">
+          <div class="iq-field"><label for="b-name">Your name <em>*</em></label><input id="b-name" name="name" type="text" placeholder="Jane Smith" required></div>
+          <div class="iq-field"><label for="b-email">Email <em>*</em></label><input id="b-email" name="email" type="email" placeholder="you@email.com" required></div>
+          <div class="iq-field"><label for="b-phone">Phone (optional)</label><input id="b-phone" name="phone" type="tel" placeholder="(555) 555-5555"></div>
+          <div class="iq-field" id="bizField"><label for="b-biz">Business name</label><input id="b-biz" name="business" type="text" placeholder="Smith's Coffee Co."></div>
+        </div>
+
+        <div class="exp">
+          <div class="exp-head"><span>Your current monthly spending</span><span class="exp-total">Total: <b id="expTotal">$0</b> / mo</span></div>
+          <div class="exp-rows" id="expRows"></div>
+          <button type="button" class="exp-add" id="expAdd">+ Add another bill</button>
+        </div>
+
+        <div class="iq-field full"><label for="b-notes">Anything else? (optional)</label><textarea id="b-notes" name="notes" placeholder="Who you're with now, contracts ending soon, slow service, anything useful…"></textarea></div>
+
+        <button class="btn btn-grad magnetic" type="submit">Send my spending — see what I can save →</button>
+        <p class="iq-foot">Goes straight to <b>Helal</b> at Safi Solutions · no spam, no obligation · or email <a href="mailto:safihelal@gmail.com">safihelal@gmail.com</a></p>
+      </form>
+    </div>
   </div>
 </section>
 
@@ -555,9 +628,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
   <div class="wrap">
     <div class="contact reveal">
       <div class="inner">
-        <div class="eyebrow">06 / START</div>
+        <div class="eyebrow">07 / START</div>
         <h2>Know the outcome <span class="grad">you're after?</span></h2>
-        <p>Fill this out and it lands straight in my inbox — a new site, getting found locally, a sharper brand, or AI put to work. No pressure, no mailing lists.</p>
+        <p>Fill this out and it lands straight in my inbox — a new site, getting found locally, social handled, or lower bills. No pressure, no mailing lists.</p>
         <div class="iq">
           <form class="iq-form" action="https://formsubmit.co/safihelal@gmail.com" method="POST">
             <input type="hidden" name="_subject" value="New inquiry — safisolutions.org">
@@ -610,7 +683,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
       <span class="ft">SAFI SOLUTIONS<small>HELAL SAFI · NATIONWIDE</small></span>
     </div>
     <div class="fr">
-      Web · Marketing · AI · Systems · <a href="mailto:safihelal@gmail.com" style="color:var(--cyan);text-decoration:none">safihelal@gmail.com</a><br>
+      Web · Marketing · Local SEO · Savings · <a href="mailto:safihelal@gmail.com" style="color:var(--cyan);text-decoration:none">safihelal@gmail.com</a><br>
       © <span id="yr"></span> Safi Solutions — built in-house, naturally.
     </div>
   </div>
@@ -747,32 +820,32 @@ if(matchMedia('(hover:hover)').matches && !matchMedia('(prefers-reduced-motion: 
   const CHECK='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
   const P={
     coffee:{tab:'Coffee Shop',em:'☕',name:'The Daily Grind',pfor:'For coffee shops & cafés',tag:'Most popular',
-      line:'Your café — online, busy, and off your late-night to-do list.',
+      line:'Your café — online, easy to find, and off your late-night to-do list.',
       items:[
-        ['A website with your live menu','Hours, location, and online ordering, open 24/7.'],
+        ['A website with your menu & photos','Hours, location, and your story — open 24/7.'],
         ['Found on "coffee near me"','Google profile, map pin, and photos dialed in.'],
         ['Social media, fully managed','On-brand posts & reels every month — hands off for you.'],
         ['Reviews working for you','More 5-stars, gathered and shown off.'],
-        ['A look at your bills','Cheaper internet & POS — keep more per cup.'],
+        ['A look at your bills','Cheaper internet & phone — keep more per cup.'],
         ['One person to call','Me. No call centers, no runaround.']
       ]},
     restaurant:{tab:'Restaurant',em:'🍽️',name:'The Full House',pfor:'For restaurants & bars',tag:'',
-      line:'A full house, online from open to last call.',
+      line:'Easy to find, easy to love, from open to last call.',
       items:[
-        ['Menu, reservations & ordering','Everything a hungry visitor needs in one tap.'],
+        ['Menu, hours & photos online','Everything a hungry visitor needs, in one place.'],
         ['Win the "best near me" search','Google + maps tuned to your cuisine and area.'],
         ['Social run for you','Posts, reels, and replies that fill tables.'],
         ['Reputation managed','Reviews watched, answered, and turned into proof.'],
-        ['Cheaper floor & kitchen internet','Solid connectivity for POS, Wi-Fi, and phones.'],
+        ['Cheaper floor & kitchen internet','Lower connectivity and phone bills.'],
         ['A direct line to me','One contact for the whole operation.']
       ]},
     salon:{tab:'Barber & Salon',em:'💈',name:'The Regular',pfor:'For barbershops & salons',tag:'',
-      line:'Chairs full, phone quiet, regulars coming back.',
+      line:'Chairs full, regulars coming back, found by new faces.',
       items:[
-        ['Booking-first website','Clients book from their phone in seconds.'],
+        ['A polished website','Services, prices, and photos on their phone.'],
         ['Show up for "[service] near me"','Local search and maps set up properly.'],
         ['Before & afters, posted','Your best work, turned into social proof.'],
-        ['Automatic reminders','Fewer no-shows, fuller chairs.'],
+        ['Social media, kept active','Posts and replies handled for you.'],
         ['Lower shop bills','Internet and phone costs trimmed down.'],
         ['One point of contact','Always me, always reachable.']
       ]},
@@ -807,6 +880,50 @@ if(matchMedia('(hover:hover)').matches && !matchMedia('(prefers-reduced-motion: 
   let revealed=false;
   const pio=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!revealed){revealed=true;stagger();}})},{threshold:.25});
   pio.observe(cardEl);
+})();
+
+/* ===== bill review form ===== */
+(function(){
+  const form=document.getElementById('billForm'); if(!form) return;
+  const rows=document.getElementById('expRows'), addBtn=document.getElementById('expAdd');
+  const billTotal=document.getElementById('billTotal'), billBreakdown=document.getElementById('billBreakdown'),
+        billType=document.getElementById('billType'), bizField=document.getElementById('bizField');
+
+  function recalc(){
+    let t=0; rows.querySelectorAll('.exp-amt').forEach(a=>{const v=parseFloat(a.value);if(!isNaN(v))t+=v;});
+    document.getElementById('expTotal').textContent='$'+t.toLocaleString();
+  }
+  function addRow(name){
+    const d=document.createElement('div'); d.className='exp-row';
+    d.innerHTML=`<input class="exp-name" type="text" placeholder="e.g. Internet" aria-label="What it's for" value="${name||''}">`+
+      `<div class="exp-cost"><span>$</span><input type="number" min="0" step="1" class="exp-amt" placeholder="0" aria-label="Monthly cost"></div>`+
+      `<button type="button" class="exp-del" aria-label="Remove this bill">×</button>`;
+    d.querySelector('.exp-del').addEventListener('click',()=>{d.remove();recalc();});
+    d.querySelector('.exp-amt').addEventListener('input',recalc);
+    rows.appendChild(d);
+  }
+  ['Internet','Phone'].forEach(addRow); addRow('');
+  addBtn.addEventListener('click',()=>addRow(''));
+
+  form.querySelectorAll('.seg-btn').forEach(b=>{
+    b.addEventListener('click',()=>{
+      form.querySelectorAll('.seg-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      billType.value=b.dataset.type;
+      bizField.style.display=(b.dataset.type==='Residential')?'none':'flex';
+    });
+  });
+
+  form.addEventListener('submit',()=>{
+    let t=0; const lines=[];
+    rows.querySelectorAll('.exp-row').forEach(r=>{
+      const n=r.querySelector('.exp-name').value.trim();
+      const raw=r.querySelector('.exp-amt').value, v=parseFloat(raw);
+      if(n||raw!==''){ const amt=isNaN(v)?0:v; t+=amt; lines.push((n||'(unspecified)')+' — $'+amt+'/mo'); }
+    });
+    billBreakdown.value=lines.length?lines.join('  |  '):'(none listed)';
+    billTotal.value='$'+t.toLocaleString()+' / mo';
+  });
 })();
 
 /* ===== nav / reveal ===== */
