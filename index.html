@@ -63,7 +63,7 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
 #nav{position:fixed;top:0;left:0;right:0;z-index:60;padding:18px 0;transition:padding .3s,background .3s,border-color .3s;border-bottom:1px solid transparent}
 #nav.solid{background:rgba(6,7,10,.7);backdrop-filter:blur(16px) saturate(1.4);border-color:var(--line);padding:12px 0}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px}
-.logo{display:flex;align-items:center;gap:13px;text-decoration:none}
+.logo{display:flex;align-items:center;gap:18px;text-decoration:none}
 .logo svg{width:42px;height:42px;filter:drop-shadow(0 0 12px rgba(0,201,167,.4)); flex-shrink: 0;}
 .logo .lt{font-family:var(--disp);font-weight:700;font-size:1.2rem;letter-spacing:.08em;line-height:1}
 .logo .lt small{display:block;font-family:var(--mono);font-size:.52rem;letter-spacing:.34em;color:var(--ghost-dim);margin-top:4px}
@@ -328,9 +328,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
 
 <nav id="nav" aria-label="Main">
   <div class="wrap nav-inner">
-   <a class="logo" href="#top">
-    <div style="font-family: 'Technor', sans-serif; font-size: 2.4rem; font-weight: 900; line-height: 1; color: #00C9A7; text-shadow: 0 0 20px rgba(0,201,167,0.6);">§</div>
-    <span class="lt">SAFI<small style="margin-top: -8px;">SOLUTIONS</small></span>
+    <a class="logo" href="#top">
+      <div style="font-family: 'Technor', sans-serif; font-size: 2.2rem; font-weight: 900; line-height: 0.9; color: #00C9A7; text-shadow: 0 0 20px rgba(0,201,167,0.6); margin-top: -2px;">§</div>
+      <span class="lt" style="margin-left: 6px;">SAFI<small>SOLUTIONS</small></span>
     </a>
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks">Menu</button>
     <ul class="nav-links" id="navLinks">
@@ -345,16 +345,16 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
 <header id="top">
   <canvas id="plasma" aria-hidden="true"></canvas>
   <div class="wrap hero">
-<div style="margin-bottom:60px; display: flex; align-items: center; gap: 12px; justify-content: flex-start;">
+<div style="margin-bottom:60px; display: flex; align-items: flex-start; gap: 32px; justify-content: flex-start;">
   
-  <!-- Just the § symbol -->
-  <div style="font-family: 'Technor', sans-serif; font-size: 12rem; font-weight: 900; color: #00C9A7; line-height: 0.9; text-shadow: 0 0 20px rgba(0,201,167,0.6);">§</div>
+  <!-- § symbol -->
+  <div style="font-family: 'Technor', sans-serif; font-size: 10.5rem; font-weight: 900; color: #00C9A7; line-height: 0.78; text-shadow: 0 0 20px rgba(0,201,167,0.6); margin-top: -10px;">§</div>
   
   <!-- Text block -->
-  <div>
+  <div style="display: flex; flex-direction: column; gap: -2px;">
     <div style="font-family: 'Technor', sans-serif; font-size: 4.2rem; font-weight: 700; letter-spacing: -0.05em; background: linear-gradient(110deg, #EEF2FA, #00C9A7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">SAFI</div>
-    <div style="font-family: 'Technor', sans-serif; font-size: 4.2rem; font-weight: 700; letter-spacing: -0.05em; background: linear-gradient(110deg, #00C9A7, #3B82F6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">SOLUTIONS</div>
-    <div style="font-family: var(--mono); font-size: 1.1rem; letter-spacing: 0.4em; color: #5E6B85; margin-top: 8px;">L.L.C.</div>
+    <div style="font-family: 'Technor', sans-serif; font-size: 4.2rem; font-weight: 700; letter-spacing: -0.05em; background: linear-gradient(110deg, #00C9A7, #3B82F6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-top: -6px;">SOLUTIONS</div>
+    <div style="font-family: var(--mono); font-size: 1.05rem; letter-spacing: 0.42em; color: #5E6B85; margin-top: 10px;">L.L.C.</div>
   </div>
 </div>
   
