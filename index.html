@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Safi Solutions — Web · Digital Marketing · AI · Systems</title>
-<meta name="description" content="Safi Solutions, founded by Helal Safi, brings local businesses into the digital age — modern websites, getting found, brand presence, and AI-powered automation. Nationwide.">
+<title>Safi Solutions — Websites · Digital Marketing · Local SEO · Bill Savings</title>
+<meta name="description" content="Safi Solutions, founded by Helal Safi, brings local businesses online — clean informative websites, social media management, getting found on Google, and lower internet & operating bills. Commercial & residential. Nationwide.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap" rel="stylesheet">
@@ -46,19 +46,19 @@ a{color:inherit}
   #plasma,#cursor-glow{display:none !important}
   *{animation-duration:.001s !important;transition-duration:.001s !important}
 }
- 
+
 body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
     radial-gradient(46% 38% at 16% 8%, rgba(0,201,167,.10), transparent 70%),
     radial-gradient(42% 40% at 86% 22%, rgba(99,102,241,.12), transparent 70%),
     radial-gradient(50% 50% at 50% 110%, rgba(244,114,182,.07), transparent 70%)}
- 
+
 /* custom cursor glow */
 #cursor-glow{position:fixed;top:0;left:0;width:380px;height:380px;border-radius:50%;pointer-events:none;z-index:5;transform:translate(-50%,-50%);
   background:radial-gradient(circle, rgba(0,201,167,.10), rgba(99,102,241,.05) 40%, transparent 70%);mix-blend-mode:screen;transition:opacity .4s;opacity:0}
- 
+
 #nav,header,main,footer{position:relative;z-index:1}
- 
+
 /* ---------- nav ---------- */
 #nav{position:fixed;top:0;left:0;right:0;z-index:60;padding:18px 0;transition:padding .3s,background .3s,border-color .3s;border-bottom:1px solid transparent}
 #nav.solid{background:rgba(6,7,10,.7);backdrop-filter:blur(16px) saturate(1.4);border-color:var(--line);padding:12px 0}
@@ -79,7 +79,7 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
   .nav-links{position:fixed;inset:64px 14px auto 14px;background:var(--panel);border:1px solid var(--line);border-radius:18px;flex-direction:column;align-items:stretch;padding:22px;gap:18px;display:none;box-shadow:0 30px 60px rgba(0,0,0,.7)}
   .nav-links.open{display:flex}.nav-cta{text-align:center}.menu-btn{display:block}
 }
- 
+
 /* ---------- hero ---------- */
 header{position:relative;min-height:100svh;display:flex;align-items:center;padding:130px 0 80px;overflow:hidden}
 #plasma{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.9}
@@ -113,14 +113,14 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .scroll-hint .bar{width:1px;height:30px;background:linear-gradient(var(--cyan),transparent);position:relative;overflow:hidden}
 .scroll-hint .bar::after{content:"";position:absolute;top:-30px;left:0;width:1px;height:30px;background:var(--cyan);animation:scrolldown 1.8s ease-in-out infinite}
 @keyframes scrolldown{to{top:30px}}
- 
+
 /* ---------- section scaffold ---------- */
 .section{padding:110px 0;position:relative}
 .sec-head{margin-bottom:54px;max-width:760px}
 .sec-head .idx{font-family:var(--mono);font-size:.74rem;letter-spacing:.24em;color:var(--cyan);margin-bottom:16px}
 .sec-head h2{font-family:var(--disp);font-weight:700;font-size:clamp(2.1rem,5.5vw,3.8rem);line-height:1.02;letter-spacing:-.01em}
 .sec-head p{color:var(--ghost);max-width:580px;font-size:1.05rem;margin-top:18px}
- 
+
 /* ---------- stats marquee under hero ---------- */
 .statband{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(11,13,19,.5);position:relative;z-index:1}
 .statband .row{display:grid;grid-template-columns:repeat(4,1fr)}
@@ -129,7 +129,7 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .statband .s .n{font-family:var(--disp);font-weight:700;font-size:clamp(1.7rem,3.5vw,2.6rem);line-height:1}
 .statband .s .l{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ghost-dim);margin-top:8px}
 @media (max-width:760px){.statband .row{grid-template-columns:1fr 1fr}.statband .s:nth-child(2){border-right:none}.statband .s:nth-child(1),.statband .s:nth-child(2){border-bottom:1px solid var(--line-2)}}
- 
+
 /* ---------- SERVICES — bento ---------- */
 .bento{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:minmax(150px,auto);gap:16px;perspective:1200px}
 .cell{position:relative;border:1px solid var(--line);border-radius:18px;padding:28px;overflow:hidden;background:var(--panel);transition:border-color .35s,transform .2s ease;display:flex;flex-direction:column;transform-style:preserve-3d;will-change:transform}
@@ -145,23 +145,70 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .cell.web{grid-column:span 4;grid-row:span 2}
 .cell.web::before{background:var(--cyan);top:-40px;right:-40px}
 .cell.web h3{font-size:2rem}
-.cell.ai{grid-column:span 2;grid-row:span 2;background:linear-gradient(160deg,rgba(59,130,246,.09),rgba(0,201,167,.05));border-color:rgba(59,130,246,.28)}
-.cell.ai::before{background:var(--blue);bottom:-30px;right:-30px;opacity:.3}
-.cell.ai .cico{color:var(--blue)}
+.cell.social{grid-column:span 2;grid-row:span 2;background:linear-gradient(160deg,rgba(59,130,246,.11),rgba(0,201,167,.05));border-color:rgba(59,130,246,.30)}
+.cell.social::before{background:var(--blue);bottom:-30px;right:-30px;opacity:.3}
+.cell.social .cico{color:var(--blue)}
 .cell.found{grid-column:span 3}
 .cell.found::before{background:var(--cyan);top:-40px;right:-40px}
 .cell.found .cico{color:var(--cyan)}
-.cell.brand{grid-column:span 3}
-.cell.brand::before{background:var(--lime);top:-40px;left:-40px}
-.cell.brand .cico{color:var(--lime)}
+.cell.smart{grid-column:span 3}
+.cell.smart::before{background:var(--lime);bottom:-40px;left:-40px}
+.cell.smart .cico{color:var(--lime)}
+.cell.bills{grid-column:span 6;background:linear-gradient(120deg,rgba(0,201,167,.07),rgba(59,130,246,.05));border-color:rgba(0,201,167,.22);flex-direction:row;align-items:center;gap:28px;flex-wrap:wrap}
+.cell.bills .cico{color:var(--cyan);flex:0 0 auto;width:52px;height:52px}
+.cell.bills .btxt{flex:1;min-width:280px}
+.cell.bills .btxt em{color:var(--cyan);font-style:normal}
+.cell.bills .bsplit{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.cell.bills .bsplit .bb{font-family:var(--mono);font-size:.66rem;letter-spacing:.04em;color:var(--ghost);border:1px solid var(--line);border-radius:8px;padding:8px 12px;background:rgba(8,11,17,.4)}
+.cell.bills .bsplit .bb b{color:var(--cyan);font-weight:700}
+.cell.bills .go{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;color:var(--cyan);text-decoration:none;white-space:nowrap;border:1px solid rgba(0,201,167,.3);border-radius:100px;padding:14px 22px;transition:background .3s,color .3s}
+.cell.bills .go:hover{background:var(--cyan);color:var(--void)}
 @media (max-width:900px){
   .bento{grid-template-columns:1fr 1fr}
-  .cell.web,.cell.ai,.cell.found,.cell.brand{grid-column:span 2;grid-row:auto}
+  .cell.web,.cell.social,.cell.found,.cell.smart{grid-column:span 2;grid-row:auto}
+  .cell.bills{grid-column:span 2;flex-direction:column;align-items:flex-start}
 }
-@media (max-width:560px){.bento{grid-template-columns:1fr}.cell.web,.cell.ai,.cell.found,.cell.brand{grid-column:span 1}}
+@media (max-width:560px){.bento{grid-template-columns:1fr}.cell.web,.cell.social,.cell.found,.cell.smart,.cell.bills{grid-column:span 1}}
 .cell .clink{margin-top:18px;align-self:flex-start;font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;color:var(--cyan);text-decoration:none;border:1px solid rgba(52,229,255,.3);border-radius:100px;padding:9px 16px;transition:background .3s,color .3s}
 .cell .clink:hover{background:var(--cyan);color:var(--void)}
- 
+
+/* ---------- SERVICES marquee + animated border ---------- */
+@property --ang{syntax:'<angle>';inherits:false;initial-value:0deg}
+.cell.web::after{content:"";position:absolute;inset:0;border-radius:18px;padding:1px;background:conic-gradient(from var(--ang),transparent 0 60%,var(--cyan) 76%,var(--blue) 88%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.5;pointer-events:none;z-index:2;animation:spin-border 6s linear infinite}
+@keyframes spin-border{to{--ang:360deg}}
+.svc-marquee{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(11,13,19,.4);-webkit-mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+.svc-marquee .track{display:flex;align-items:center;width:max-content;animation:marq 32s linear infinite}
+.svc-marquee:hover .track{animation-play-state:paused}
+.svc-marquee .chip{font-family:var(--mono);font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ghost);padding:15px 22px;display:inline-flex;align-items:center;gap:9px;white-space:nowrap}
+.svc-marquee .chip b{color:var(--white);font-weight:600}
+.svc-marquee .chip.dot{color:var(--ghost-dim);padding:15px 4px}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* ---------- PACKAGE showcase ---------- */
+.pkg-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.pkg-tab{font-family:var(--mono);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ghost);border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(6px);border-radius:100px;padding:12px 20px;cursor:pointer;display:inline-flex;align-items:center;gap:9px;transition:color .25s,border-color .25s,background .25s,transform .12s}
+.pkg-tab .em{font-size:1.05rem}
+.pkg-tab:hover{color:var(--white);border-color:rgba(0,201,167,.4)}
+.pkg-tab:active{transform:scale(.96)}
+.pkg-tab.active{color:var(--void);border-color:transparent;background:linear-gradient(110deg,var(--cyan),var(--blue));font-weight:700}
+.pkg-card{position:relative;border:1px solid var(--line);border-radius:22px;background:linear-gradient(160deg,var(--panel),var(--void-2));overflow:hidden}
+.pkg-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),var(--blue),transparent);background-size:200% 100%;animation:sheen 4s linear infinite;z-index:3}
+@keyframes sheen{to{background-position:-200% 0}}
+.pkg-head{display:flex;align-items:center;gap:18px;padding:30px 34px;border-bottom:1px solid var(--line)}
+.pkg-head .pem{font-size:2.6rem;line-height:1}
+.pkg-head .pname{font-family:var(--disp);font-weight:700;font-size:1.7rem;line-height:1.1}
+.pkg-head .pfor{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ghost-dim);margin-top:7px}
+.pkg-head .ptag{margin-left:auto;font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--void);background:linear-gradient(110deg,var(--cyan),var(--blue));border-radius:100px;padding:7px 14px;white-space:nowrap}
+.pkg-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:0 36px;padding:10px 34px 8px}
+.pkg-list li{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--line-2);opacity:0;transform:translateY(12px);transition:opacity .5s cubic-bezier(.16,.8,.3,1),transform .5s cubic-bezier(.16,.8,.3,1)}
+.pkg-list li.show{opacity:1;transform:none}
+.pkg-list li .pi{flex:0 0 auto;width:32px;height:32px;border-radius:9px;border:1px solid rgba(0,201,167,.3);display:flex;align-items:center;justify-content:center;color:var(--cyan);background:rgba(0,201,167,.06)}
+.pkg-list li .pc strong{display:block;font-weight:600;font-size:1.02rem;margin-bottom:3px;line-height:1.25}
+.pkg-list li .pc span{color:var(--ghost);font-size:.9rem;line-height:1.4}
+.pkg-foot{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:24px 34px 30px}
+.pkg-foot .pline{font-family:var(--disp);font-weight:500;font-size:1.2rem;color:var(--white);max-width:60%}
+@media (max-width:680px){.pkg-list{grid-template-columns:1fr;gap:0}.pkg-head{flex-wrap:wrap}.pkg-head .ptag{margin-left:0}.pkg-foot .pline{max-width:100%}}
+
 /* ---------- PROCESS ---------- */
 .proc{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:18px;overflow:hidden}
 .pstep{padding:36px 30px;border-right:1px solid var(--line);transition:background .3s}
@@ -171,7 +218,7 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .pstep h4{font-family:var(--disp);font-weight:600;font-size:1.4rem;margin-bottom:10px}
 .pstep p{color:var(--ghost);font-size:.97rem}
 @media (max-width:760px){.proc{grid-template-columns:1fr}.pstep{border-right:none;border-bottom:1px solid var(--line)}.pstep:last-child{border-bottom:none}}
- 
+
 /* ===== TRADING DESK — external bridge ===== */
 .desk{background:linear-gradient(180deg,var(--void-2),#070910);border-top:1px solid var(--line);border-bottom:1px solid var(--line);position:relative;overflow:hidden}
 .desk::before{content:"";position:absolute;inset:0;opacity:.4;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,201,167,.02) 0 1px,transparent 1px 4px)}
@@ -191,7 +238,7 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .desk-copy p em{color:var(--cyan);font-style:normal}
 .desk-copy .btn{border:none}
 @media (max-width:880px){.desk-split{grid-template-columns:1fr;gap:38px}}
- 
+
 .equity{border:1px solid var(--line);border-radius:16px;background:rgba(8,11,17,.7);padding:22px;position:relative}
 .equity .eqhead{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:.72rem;color:var(--ghost-dim);letter-spacing:.08em;margin-bottom:12px}
 .equity .eqhead b{color:var(--lime)}
@@ -200,9 +247,9 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .equity .annot.show{opacity:1}
 .equity .annot.loss{color:var(--red);border:1px solid rgba(255,92,108,.4);background:rgba(255,92,108,.08)}
 .equity .annot.win{color:var(--lime);border:1px solid rgba(157,255,87,.4);background:rgba(157,255,87,.08)}
- 
+
 .desk-disc{margin-top:24px;font-family:var(--mono);font-size:.72rem;color:var(--ghost-dim);letter-spacing:.02em;line-height:1.7;border-left:2px solid var(--line);padding-left:16px;max-width:560px}
- 
+
 /* ---------- ABOUT ---------- */
 .about-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:start}
 .about h2{font-family:var(--disp);font-weight:700;font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;margin:16px 0 24px}
@@ -225,7 +272,7 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
 .tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);border:1px solid rgba(52,229,255,.3);border-radius:100px;padding:6px 13px;background:rgba(52,229,255,.05)}
 @media (max-width:900px){.about-grid{grid-template-columns:1fr;gap:40px}.id-card{max-width:520px}}
- 
+
 /* ---------- CONTACT ---------- */
 .contact{position:relative;border:1px solid var(--line);border-radius:24px;padding:clamp(40px,7vw,80px);text-align:center;overflow:hidden;background:var(--glass);backdrop-filter:blur(14px)}
 .contact::before{content:"";position:absolute;inset:0;pointer-events:none;
@@ -234,7 +281,7 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .contact h2{font-family:var(--disp);font-weight:700;font-size:clamp(2.2rem,6vw,4.2rem);line-height:1;margin:16px 0 20px}
 .contact p{color:var(--ghost);max-width:540px;margin:0 auto 32px;font-size:1.1rem}
 .contact .cta-row{justify-content:center;animation:none;opacity:1}
- 
+
 /* inquiry form */
 .iq{max-width:760px;margin:0 auto;text-align:left}
 .iq-form{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -253,7 +300,7 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .iq-foot b{color:var(--white);font-weight:600}
 .iq-foot a{color:var(--cyan);text-decoration:none}
 @media (max-width:680px){.iq-form{grid-template-columns:1fr}.iq-field{grid-column:1/-1}}
- 
+
 /* ---------- footer ---------- */
 footer.site{padding:50px 0 44px;border-top:1px solid var(--line);margin-top:100px}
 .foot-inner{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
@@ -267,9 +314,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
 </style>
 </head>
 <body>
- 
+
 <div id="cursor-glow" aria-hidden="true"></div>
- 
+
 <nav id="nav" aria-label="Main">
   <div class="wrap nav-inner">
     <a class="logo" href="#top">
@@ -279,6 +326,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks">Menu</button>
     <ul class="nav-links" id="navLinks">
       <li><a href="#services">Services</a></li>
+      <li><a href="#packages">Packages</a></li>
       <li><a href="#process">Process</a></li>
       <li><a href="#desk">Trading</a></li>
       <li><a href="#about">About</a></li>
@@ -286,15 +334,15 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
     </ul>
   </div>
 </nav>
- 
+
 <header id="top">
   <canvas id="plasma" aria-hidden="true"></canvas>
   <div class="wrap hero">
 <div style="margin-bottom:60px; display: flex; align-items: flex-start; gap: 32px; justify-content: flex-start;">
- 
+
   <!-- § symbol -->
   <div style="font-family: 'Technor', sans-serif; font-size: 10.5rem; font-weight: 900; color: #00C9A7; line-height: 0.78; text-shadow: 0 0 20px rgba(0,201,167,0.6); margin-top: -10px;">§</div>
- 
+
   <!-- Text block -->
   <div style="display: flex; flex-direction: column;">
     <div style="font-family: 'Technor', sans-serif; font-size: 4.2rem; font-weight: 700; line-height: 0.9; letter-spacing: -0.05em; background: linear-gradient(110deg, #EEF2FA, #00C9A7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">SAFI</div>
@@ -302,16 +350,16 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
     <div style="font-family: var(--mono); font-size: 1.05rem; letter-spacing: 0.42em; color: #5E6B85; margin-top: 12px;">L.L.C.</div>
   </div>
 </div>
- 
- 
+
+
     <div class="badge"><span class="live"></span>Open for new work · Nationwide</div>
     <h1>
-      <span class="line"><span>Modernizing legacy</span></span>
+      <span class="line"><span>Modernizing legacy.</span></span>
       <span class="line"><span>Bringing business</span></span>
       <span class="line rot"><span class="grad" id="rotword">into the now.</span><span class="rot-ghost" aria-hidden="true">a real edge.</span></span>
     </h1>
     <p class="thesis">Most people go looking for a fix once a problem shows up. I work the other way — I start with the <span class="hl">outcome and design toward it.</span> For a local business that usually means one thing: a real presence online. The website, the way you get found, the brand, and the modern tools doing the busywork behind it. <b>Tech, taste, and a decade reading how businesses run.</b></p>
-    <p class="micro">// websites · seo &amp; local presence · brand &amp; content · ai &amp; automation</p>
+    <p class="micro">// websites · social media · getting found · lower your bills</p>
     <div class="cta-row">
       <a class="btn btn-grad magnetic" href="#services">See what I build</a>
       <a class="btn btn-glass magnetic" href="#contact">Start a project →</a>
@@ -319,64 +367,113 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
   </div>
   <div class="scroll-hint" aria-hidden="true"><span>Scroll</span><span class="bar"></span></div>
 </header>
- 
+
 <div class="statband">
   <div class="wrap"><div class="row">
     <div class="s"><div class="n grad" data-count="10" data-suffix="+">0</div><div class="l">Years in ops &amp; management</div></div>
     <div class="s"><div class="n grad" data-count="100" data-suffix="%">0</div><div class="l">Custom-built, never templated</div></div>
-    <div class="s"><div class="n grad" data-count="4" data-suffix="">0</div><div class="l">Core services, done deeply</div></div>
+    <div class="s"><div class="n grad" data-count="5" data-suffix="">0</div><div class="l">Ways I grow your business</div></div>
     <div class="s"><div class="n grad" data-text="US">—</div><div class="l">Serving clients nationwide</div></div>
   </div></div>
 </div>
- 
+
 <main>
 <!-- SERVICES BENTO -->
 <section class="section" id="services">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="idx">01 / WHAT I DO</div>
-      <h2>Bringing local business <span class="grad">into the digital age.</span></h2>
-      <p>Web is the heartbeat. Around it: getting found, looking the part, and letting modern tools carry the busywork — the handful of things that actually move the needle, done properly instead of spread thin.</p>
+      <h2>More customers. Less busywork. <span class="grad">Lower bills.</span></h2>
+      <p>You run the shop — I run the parts that get people through the door and keep your costs down. No jargon, no fluff. Here's how I help a place like yours.</p>
     </div>
+  </div>
+
+  <div class="svc-marquee reveal" aria-hidden="true">
+    <div class="track">
+      <span class="chip">☕ <b>Coffee shops</b></span><span class="chip dot">/</span>
+      <span class="chip">🍽️ <b>Restaurants</b></span><span class="chip dot">/</span>
+      <span class="chip">💈 <b>Barbershops</b></span><span class="chip dot">/</span>
+      <span class="chip">💅 <b>Salons</b></span><span class="chip dot">/</span>
+      <span class="chip">🌮 <b>Food trucks</b></span><span class="chip dot">/</span>
+      <span class="chip">🔧 <b>Home services</b></span><span class="chip dot">/</span>
+      <span class="chip">🏠 <b>Households</b></span><span class="chip dot">/</span>
+      <span class="chip">☕ <b>Coffee shops</b></span><span class="chip dot">/</span>
+      <span class="chip">🍽️ <b>Restaurants</b></span><span class="chip dot">/</span>
+      <span class="chip">💈 <b>Barbershops</b></span><span class="chip dot">/</span>
+      <span class="chip">💅 <b>Salons</b></span><span class="chip dot">/</span>
+      <span class="chip">🌮 <b>Food trucks</b></span><span class="chip dot">/</span>
+      <span class="chip">🔧 <b>Home services</b></span><span class="chip dot">/</span>
+      <span class="chip">🏠 <b>Households</b></span><span class="chip dot">/</span>
+    </div>
+  </div>
+
+  <div class="wrap" style="margin-top:54px">
     <div class="bento reveal">
       <article class="cell web tilt">
-        <span class="cnum">01</span>
+        <span class="cnum">01 · BREAD &amp; BUTTER</span>
         <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></span>
-        <h3>A website that does the selling</h3>
-        <p>Custom, fast, mobile-first — built to earn trust on the first scroll and turn visitors into customers, not a template with a logo dropped on top. For a lot of older businesses, this is the leap from word-of-mouth to a storefront that works around the clock, takes bookings, and answers the questions you're tired of repeating. The kind of site you're standing in right now.</p>
-        <div class="ctags"><span>Custom build</span><span>Mobile + desktop</span><span>Booking / leads</span><span>Fast &amp; secure</span><span>Self-editable</span></div>
+        <h3>A website that brings people in</h3>
+        <p>Your shop, online and open 24/7. Folks find your menu, your hours, and your story — then book a table, place an order, or just decide you're the spot. Fast, polished, and built to turn a quick phone search into someone walking through your door. The kind of site you're standing in right now.</p>
+        <div class="ctags"><span>Menu &amp; ordering</span><span>Bookings</span><span>Mobile-first</span><span>Yours to edit</span></div>
         <a class="clink" href="https://yourfuturesite.org" target="_blank" rel="noopener">See a live build — yourfuturesite.org →</a>
       </article>
-      <article class="cell ai tilt">
-        <span class="cnum">02</span>
-        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="12" rx="3"/><path d="M12 7V4M9 1h6M9 13h.01M15 13h.01M2 12h3M19 12h3"/></svg></span>
-        <h3>Modern tools, quietly working</h3>
-        <p>The smart shops already let AI and automation handle the repetitive, time-eating work — support replies, follow-ups, scheduling, data moving between the apps you already use. I help you adopt it where it actually pays off, without the hype or the guesswork.</p>
-        <div class="ctags"><span>AI support</span><span>Automations</span><span>Integrations</span><span>Less busywork</span></div>
+      <article class="cell social tilt">
+        <span class="cnum">02 · BREAD &amp; BUTTER</span>
+        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.4 8.4 0 01-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.4 8.4 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></span>
+        <h3>Your social media, handled</h3>
+        <p>You shouldn't be up at 11pm wondering what to post. I keep your Instagram and Facebook alive with on-brand posts, reels, and replies — so you stay top-of-mind and look professional without lifting a finger.</p>
+        <div class="ctags"><span>Posts &amp; reels</span><span>Captions</span><span>Replies &amp; DMs</span><span>Done monthly</span></div>
       </article>
       <article class="cell found tilt">
         <span class="cnum">03</span>
         <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.3-7-11a7 7 0 0114 0c0 4.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.4"/></svg></span>
-        <h3>Get found where it counts</h3>
-        <p>Google Business Profile, local search, maps, and reviews — so when someone nearby searches for what you do, you're the one that shows up, looking established and worth trusting.</p>
-        <div class="ctags"><span>Local SEO</span><span>Google Business</span><span>Reviews</span><span>Maps</span></div>
+        <h3>Be the one they find on Google</h3>
+        <p>When someone nearby searches "coffee near me" or "best tacos in town," you want to be the first thing they see — great photos, right hours, glowing reviews. I get your Google profile working for you.</p>
+        <div class="ctags"><span>Google profile</span><span>Maps</span><span>Reviews</span><span>"Near me"</span></div>
       </article>
-      <article class="cell brand tilt">
+      <article class="cell smart tilt">
         <span class="cnum">04</span>
-        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></span>
-        <h3>Look the part</h3>
-        <p>Logo, identity, and a tidy social presence with content worth posting — the small details that make a local shop read as the established name in town.</p>
-        <div class="ctags"><span>Brand identity</span><span>Social presence</span><span>Content</span></div>
+        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>
+        <h3>Let the busywork run itself</h3>
+        <p>Online orders that land straight in the kitchen, texts that confirm bookings, common questions answered automatically. Simple modern tools that quietly hand you back hours every week.</p>
+        <div class="ctags"><span>Online orders</span><span>Auto-replies</span><span>Booking</span><span>Time back</span></div>
+      </article>
+      <article class="cell bills">
+        <span class="cico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span>
+        <div class="btxt">
+          <h3 style="font-size:1.5rem;margin-bottom:6px">Lower your bills — shop <em>and</em> home</h3>
+          <p>Beyond the marketing, I help you keep more of what you earn. I've got access to internet &amp; fiber deals most people never see, plus a sharp eye for the recurring costs quietly draining your account.</p>
+          <div class="bsplit">
+            <span class="bb"><b>Commercial</b> — internet, phone &amp; POS for less</span>
+            <span class="bb"><b>Residential</b> — cheaper fiber &amp; home Wi-Fi</span>
+          </div>
+        </div>
+        <a class="go" href="#contact">See what I can save you →</a>
       </article>
     </div>
   </div>
 </section>
- 
+
+<!-- PACKAGE SHOWCASE -->
+<section class="section" id="packages" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="idx">02 / WHAT WORKING TOGETHER LOOKS LIKE</div>
+      <h2>Pick your spot. <span class="grad">See the package.</span></h2>
+      <p>No mystery menus or confusing add-ons. Here's a real example of what I'd put together for a business — or a home — like yours. Tap your type to see it. Pricing's just a short conversation, shaped to what you actually need.</p>
+    </div>
+    <div class="pkg reveal">
+      <div class="pkg-tabs" id="pkgTabs"></div>
+      <div class="pkg-card" id="pkgCard"></div>
+    </div>
+  </div>
+</section>
+
 <!-- PROCESS -->
 <section class="section" id="process" style="padding-top:0">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="idx">02 / HOW IT GOES</div>
+      <div class="idx">03 / HOW IT GOES</div>
       <h2>Start from the outcome. <span class="grad">Build back to it.</span></h2>
       <p>A decade across management and operations taught me to read a business quickly — and to leave it better than a one-and-done project ever could.</p>
     </div>
@@ -388,7 +485,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
   </div>
 </section>
 </main>
- 
+
 <!-- TRADING DESK — bridge to thetraderdesk.org -->
 <section class="desk" id="desk">
   <div class="desk-bar">
@@ -399,7 +496,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
   <div class="wrap desk-inner">
     <div class="desk-split">
       <div class="desk-copy reveal">
-        <div class="eyebrow">03 / BEYOND THE AGENCY</div>
+        <div class="eyebrow">04 / BEYOND THE AGENCY</div>
         <h2>I also teach the <span class="grad">markets.</span></h2>
         <p>Same instinct as the agency work — start from the outcome, build back to it — pointed at trading. No signals, no hype: just the structure I had to learn the slow, expensive way, taught one-on-one so the market makes sense <em>before</em> your money's on the line. It's grown into its own thing now, with its own home.</p>
         <a class="btn btn-grad magnetic" href="https://thetraderdesk.org" target="_blank" rel="noopener">Visit The Trader Desk →</a>
@@ -422,17 +519,17 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
     </div>
   </div>
 </section>
- 
+
 <!-- ABOUT -->
 <section class="section about" id="about">
   <div class="wrap about-grid">
     <div class="reveal">
-      <div class="eyebrow">04 / WHO'S BEHIND IT</div>
-      <h2>Meet <span class="grad">Helal <strong>"Hank"</strong> Safi.</span></h2>
-      <p>I'm a first-generation Lebanese-American out of <strong>Paris, Texas</strong>, and I studied <strong>computer science and economics at Texas State</strong> which is a tidy way of saying I think in systems and in incentives, usually at the same time.</p>
-      <p>I'm most at home where <strong>tech meets the outdoors</strong>, and the way I approach work is simple: I'd rather start with the outcome someone's after and engineer toward it than patch problems one at a time.</p>
-      <p><strong>Safi Solutions</strong> is where it comes together — the web, the marketing, the systems, and the AI — pointed at one thing: getting local businesses seen, trusted, and running leaner.</p>
-      <div class="sig">Tech and incentives, pointed at one thing:<br><span class="grad">making the work <strong>work</strong> better.</span></div>
+      <div class="eyebrow">05 / WHO'S BEHIND IT</div>
+      <h2>Meet <span class="grad">Helal Safi.</span></h2>
+      <p>I'm a first-generation Lebanese-American out of <strong>Paris, Texas</strong>, and I studied <strong>computer science and economics at Texas State</strong> which is a tidy way of saying I think in systems andin incentives, usually at the same time.</p>
+      <p>I love the outdoors, as well as incorporating modern tech into our every day lives.  I've recently completed a 45 day road trip throughout the west coast, and came across many amazing businesses, however some of the best ones did <strong>not have an online presence.</strong></p>
+      <p><strong>Safi Solutions</strong> is where it comes together — the web, the marketing, the systems, and the cost savings —> pointed at one thing: getting local businesses seen, trusted, and running leaner.</p>
+      <div class="sig">Tech and incentives, pointed at one thing:<br><span class="grad">making the work work better.</span></div>
     </div>
     <aside class="id-card reveal">
       <div class="id-photo">
@@ -452,13 +549,13 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
     </aside>
   </div>
 </section>
- 
+
 <!-- CONTACT -->
 <section class="section" id="contact" style="padding-top:0">
   <div class="wrap">
     <div class="contact reveal">
       <div class="inner">
-        <div class="eyebrow">05 / START</div>
+        <div class="eyebrow">06 / START</div>
         <h2>Know the outcome <span class="grad">you're after?</span></h2>
         <p>Fill this out and it lands straight in my inbox — a new site, getting found locally, a sharper brand, or AI put to work. No pressure, no mailing lists.</p>
         <div class="iq">
@@ -486,10 +583,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
               <label for="iq-interest">I'm interested in…</label>
               <select id="iq-interest" name="interest">
                 <option>A new website</option>
-                <option>Getting found — SEO &amp; local presence</option>
-                <option>Brand &amp; content</option>
-                <option>AI &amp; automation</option>
-                <option>A full digital makeover</option>
+                <option>Social media management</option>
+                <option>Getting found on Google</option>
+                <option>Lower my bills (internet, fiber &amp; cost review)</option>
+                <option>The full package</option>
                 <option>Not sure yet / something else</option>
               </select>
             </div>
@@ -505,7 +602,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
     </div>
   </div>
 </section>
- 
+
 <footer class="site">
   <div class="wrap foot-inner">
     <div class="fl">
@@ -518,7 +615,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
     </div>
   </div>
 </footer>
- 
+
 <script>
 /* ===== hero rotating last word ===== */
 (function(){
@@ -545,7 +642,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
     setInterval(()=>{ i=(i+1)%words.length; scramble(words[i]); }, 2600);
   }
 })();
- 
+
 /* ===== count-up stats ===== */
 (function(){
   const seen=new WeakSet();
@@ -562,7 +659,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
   },{threshold:.6});
   document.querySelectorAll('.statband .n').forEach(n=>io.observe(n));
 })();
- 
+
 /* ===== equity curve draw on scroll ===== */
 (function(){
   const eqLine=document.getElementById('eqLine'), eqFill=document.getElementById('eqFill');
@@ -585,7 +682,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
   },{threshold:.4});
   io.observe(document.getElementById('eqSvg'));
 })();
- 
+
 /* ===== plasma hero mesh ===== */
 (function(){
   const c=document.getElementById('plasma'); if(!c) return;
@@ -615,7 +712,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
   }
   if(!reduce){ addEventListener('mousemove',e=>{const r=c.getBoundingClientRect();tmx=(e.clientX-r.left)/r.width;tmy=(e.clientY-r.top)/r.height;}); draw(); }
 })();
- 
+
 /* ===== cursor glow ===== */
 (function(){
   const g=document.getElementById('cursor-glow'); if(!g||!matchMedia('(hover:hover)').matches||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -624,7 +721,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
   addEventListener('mouseleave',()=>g.style.opacity='0');
   (function loop(){ x+=(tx-x)*.15; y+=(ty-y)*.15; g.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%)`; requestAnimationFrame(loop); })();
 })();
- 
+
 /* ===== 3D tilt on bento cells ===== */
 if(matchMedia('(hover:hover)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches){
   document.querySelectorAll('.tilt').forEach(card=>{
@@ -636,7 +733,7 @@ if(matchMedia('(hover:hover)').matches && !matchMedia('(prefers-reduced-motion: 
     card.addEventListener('mouseleave',()=>card.style.transform='');
   });
 }
- 
+
 /* ===== magnetic buttons ===== */
 if(matchMedia('(hover:hover)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches){
   document.querySelectorAll('.magnetic').forEach(btn=>{
@@ -644,7 +741,74 @@ if(matchMedia('(hover:hover)').matches && !matchMedia('(prefers-reduced-motion: 
     btn.addEventListener('mouseleave',()=>btn.style.transform='');
   });
 }
- 
+
+/* ===== package showcase ===== */
+(function(){
+  const CHECK='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+  const P={
+    coffee:{tab:'Coffee Shop',em:'☕',name:'The Daily Grind',pfor:'For coffee shops & cafés',tag:'Most popular',
+      line:'Your café — online, busy, and off your late-night to-do list.',
+      items:[
+        ['A website with your live menu','Hours, location, and online ordering, open 24/7.'],
+        ['Found on "coffee near me"','Google profile, map pin, and photos dialed in.'],
+        ['Social media, fully managed','On-brand posts & reels every month — hands off for you.'],
+        ['Reviews working for you','More 5-stars, gathered and shown off.'],
+        ['A look at your bills','Cheaper internet & POS — keep more per cup.'],
+        ['One person to call','Me. No call centers, no runaround.']
+      ]},
+    restaurant:{tab:'Restaurant',em:'🍽️',name:'The Full House',pfor:'For restaurants & bars',tag:'',
+      line:'A full house, online from open to last call.',
+      items:[
+        ['Menu, reservations & ordering','Everything a hungry visitor needs in one tap.'],
+        ['Win the "best near me" search','Google + maps tuned to your cuisine and area.'],
+        ['Social run for you','Posts, reels, and replies that fill tables.'],
+        ['Reputation managed','Reviews watched, answered, and turned into proof.'],
+        ['Cheaper floor & kitchen internet','Solid connectivity for POS, Wi-Fi, and phones.'],
+        ['A direct line to me','One contact for the whole operation.']
+      ]},
+    salon:{tab:'Barber & Salon',em:'💈',name:'The Regular',pfor:'For barbershops & salons',tag:'',
+      line:'Chairs full, phone quiet, regulars coming back.',
+      items:[
+        ['Booking-first website','Clients book from their phone in seconds.'],
+        ['Show up for "[service] near me"','Local search and maps set up properly.'],
+        ['Before & afters, posted','Your best work, turned into social proof.'],
+        ['Automatic reminders','Fewer no-shows, fuller chairs.'],
+        ['Lower shop bills','Internet and phone costs trimmed down.'],
+        ['One point of contact','Always me, always reachable.']
+      ]},
+    home:{tab:'Home / Residential',em:'🏠',name:'The Home Base',pfor:'For households & homeowners',tag:'Residential',
+      line:'A connected home that quietly costs you less.',
+      items:[
+        ['Cheaper home fiber & internet','Access to deals most people never see — set up for you.'],
+        ['A sweep of your monthly bills','Find the quiet costs draining your account.'],
+        ['Whole-home Wi-Fi that reaches','Coverage guidance for every room.'],
+        ['A simple personal site (optional)','Portfolio, landing page, or family hub.'],
+        ['Plain English, no jargon','Explained the way a neighbor would.'],
+        ['One person who picks up','Real help, not a support queue.']
+      ]}
+  };
+  const tabsEl=document.getElementById('pkgTabs'), cardEl=document.getElementById('pkgCard');
+  if(!tabsEl||!cardEl) return;
+  tabsEl.innerHTML=Object.entries(P).map(([k,p],i)=>`<button class="pkg-tab${i?'':' active'}" data-k="${k}"><span class="em">${p.em}</span>${p.tab}</button>`).join('');
+  function stagger(){ cardEl.querySelectorAll('.pkg-list li').forEach((li,i)=>{ li.classList.remove('show'); setTimeout(()=>li.classList.add('show'), 50+i*70); }); }
+  function render(k,animate){
+    const p=P[k];
+    cardEl.innerHTML=
+      '<div class="pkg-head"><span class="pem">'+p.em+'</span>'+
+      '<div><div class="pname">'+p.name+'</div><div class="pfor">'+p.pfor+'</div></div>'+
+      (p.tag?'<span class="ptag">'+p.tag+'</span>':'')+'</div>'+
+      '<ul class="pkg-list">'+p.items.map(it=>'<li><span class="pi">'+CHECK+'</span><span class="pc"><strong>'+it[0]+'</strong><span>'+it[1]+'</span></span></li>').join('')+'</ul>'+
+      '<div class="pkg-foot"><span class="pline">'+p.line+'</span><a class="btn btn-grad" href="#contact">Get this set up →</a></div>';
+    tabsEl.querySelectorAll('.pkg-tab').forEach(b=>b.classList.toggle('active', b.dataset.k===k));
+    if(animate) stagger();
+  }
+  tabsEl.addEventListener('click',e=>{const b=e.target.closest('.pkg-tab'); if(!b)return; render(b.dataset.k,true);});
+  render('coffee',false);
+  let revealed=false;
+  const pio=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!revealed){revealed=true;stagger();}})},{threshold:.25});
+  pio.observe(cardEl);
+})();
+
 /* ===== nav / reveal ===== */
 const nav=document.getElementById('nav'),menuBtn=document.getElementById('menuBtn'),navLinks=document.getElementById('navLinks');
 addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>40),{passive:true});
@@ -657,4 +821,3 @@ document.getElementById('yr').textContent=new Date().getFullYear();
 </script>
 </body>
 </html>
- 
