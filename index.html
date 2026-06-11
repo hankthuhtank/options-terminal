@@ -27,7 +27,7 @@
   --line:rgba(156,169,196,.12);
   --line-2:rgba(156,169,196,.06);
   --glass:rgba(26,36,64,.55);
-  --disp:'Clash Display','Space Grotesk',sans-serif;
+  --disp:'Technor','Space Grotesk',sans-serif;
   --body:'Space Grotesk',sans-serif;
   --mono:'JetBrains Mono',monospace;
 }
@@ -329,18 +329,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
 <nav id="nav" aria-label="Main">
   <div class="wrap nav-inner">
     <a class="logo" href="#top">
-      <svg width="42" height="42" viewBox="0 0 48 48" aria-hidden="true">
-        <defs>
-          <linearGradient id="sgrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#00C9A7"/>
-            <stop offset="50%" stop-color="#3B82F6"/>
-            <stop offset="100%" stop-color="#2563EB"/>
-          </linearGradient>
-        </defs>
-        <!-- Stylized double S -->
-        <path d="M24 6 Q12 12 12 24 Q12 36 24 42 Q36 36 36 24 Q36 12 24 6" fill="none" stroke="url(#sgrad)" stroke-width="7" stroke-linecap="round"/>
-        <path d="M24 13 Q18 17 18 24 Q18 31 24 35 Q30 31 30 24 Q30 17 24 13" fill="none" stroke="#EEF2FA" stroke-width="3.5" stroke-linecap="round"/>
-      </svg>
+      <div style="font-family: 'Technor', sans-serif; font-size: 2.4rem; font-weight: 900; line-height: 1; color: #00C9A7; text-shadow: 0 0 20px rgba(0,201,167,0.6);">S</div>
       <span class="lt">SAFI<small>SOLUTIONS</small></span>
     </a>
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks">Menu</button>
@@ -356,28 +345,16 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
 <header id="top">
   <canvas id="plasma" aria-hidden="true"></canvas>
   <div class="wrap hero">
-    <div style="margin-bottom:50px; text-align: center;">
-      <!-- Large recreated logo -->
-      <div style="display: inline-flex; align-items: center; gap: 24px; filter: drop-shadow(0 25px 50px rgba(0, 201, 167, 0.3));">
-        <svg width="180" height="180" viewBox="0 0 48 48" aria-hidden="true" style="flex-shrink: 0;">
-          <defs>
-            <linearGradient id="herograd" x1="0%" y1="20%" x2="100%" y2="80%">
-              <stop offset="0%" stop-color="#00C9A7"/>
-              <stop offset="45%" stop-color="#3B82F6"/>
-              <stop offset="100%" stop-color="#2563EB"/>
-            </linearGradient>
-          </defs>
-          <!-- Large stylized S -->
-          <path d="M24 4 Q10 13 10 24 Q10 35 24 44 Q38 35 38 24 Q38 13 24 4" fill="none" stroke="url(#herograd)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M24 13 Q17 18 17 24 Q17 30 24 35 Q31 30 31 24 Q31 18 24 13" fill="none" stroke="#EEF2FA" stroke-width="4" stroke-linecap="round"/>
-        </svg>
-        <div style="text-align: left; line-height: 1;">
-          <div style="font-family: 'Clash Display', 'Space Grotesk', sans-serif; font-size: 4.8rem; font-weight: 700; letter-spacing: -0.04em; color: #EEF2FA;">SAFI</div>
-          <div style="font-family: 'Space Grotesk', sans-serif; font-size: 1.85rem; font-weight: 600; letter-spacing: 0.02em; color: #00C9A7; margin-top: -12px;">SOLUTIONS</div>
-          <div style="font-family: var(--mono); font-size: 0.95rem; letter-spacing: 0.25em; color: #5E6B85; margin-top: 4px;">L.L.C.</div>
-        </div>
+    <div style="margin-bottom:60px; text-align: center;">
+      <!-- Large S placeholder -->
+      <div style="margin-bottom: 30px; display: inline-block; filter: drop-shadow(0 30px 60px rgba(0, 201, 167, 0.4));">
+        <div style="font-family: 'Technor', sans-serif; font-size: 14rem; font-weight: 900; line-height: 0.8; letter-spacing: -0.08em; background: linear-gradient(110deg, #00C9A7, #3B82F6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">S</div>
       </div>
-      <div style="margin-top: 12px; font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.18em; color: #5E6B85; text-align: center;">TECHNOLOGY CONSULTING. SMART SOLUTIONS.</div>
+      <div style="margin-top: -20px;">
+        <div style="font-family: 'Technor', sans-serif; font-size: 5.8rem; font-weight: 700; letter-spacing: -0.05em; background: linear-gradient(110deg, #EEF2FA, #00C9A7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SAFI SOLUTIONS</div>
+        <div style="font-family: var(--mono); font-size: 1.1rem; letter-spacing: 0.4em; color: #5E6B85; margin-top: 8px;">L.L.C.</div>
+        <div style="font-family: var(--mono); font-size: 0.85rem; letter-spacing: 0.25em; color: #5E6B85; margin-top: 12px;">TECHNOLOGY CONSULTING. SMART SOLUTIONS.</div>
+      </div>
     </div>
     <div class="badge"><span class="live"></span>Open for new work · Nationwide</div>
     <h1>
@@ -675,8 +652,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
             <stop offset="50%" stop-color="#3B82F6"/>
           </linearGradient>
         </defs>
-        <path d="M24 6 Q12 12 12 24 Q12 36 24 42 Q36 36 36 24 Q36 12 24 6" fill="none" stroke="url(#footgrad)" stroke-width="6" stroke-linecap="round"/>
-        <path d="M24 13 Q18 17 18 24 Q18 31 24 35 Q30 31 30 24 Q30 17 24 13" fill="none" stroke="#EEF2FA" stroke-width="3" stroke-linecap="round"/>
+        <path d="M12 8 Q8 17 17 23 Q8 29 12 39 Q21 34 24 23 Q27 34 36 39 Q41 29 30 23 Q41 17 36 8 Q24 14 12 8" fill="none" stroke="url(#footgrad)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15 14 Q13 19 20 23 Q13 27 15 32 Q22 28 24 23 Q26 28 33 32 Q35 27 29 23 Q35 19 32 14 Q24 18 15 14" fill="none" stroke="#EEF2FA" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <span class="ft">SAFI SOLUTIONS<small>HELAL SAFI · NATIONWIDE</small></span>
     </div>
