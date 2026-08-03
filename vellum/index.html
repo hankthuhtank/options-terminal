@@ -256,25 +256,12 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 }
 .manicule[data-on="true"]{opacity:1;transform:translateX(0);}
 
-/* text column — pricked and ruled, as a scribe would */
+/* text column */
 .column{padding:36px 56px 150px;max-width:780px;margin:0 auto;width:100%;position:relative;}
-/* Ruling only on larger screens — mixed inline content + rubrics make
-   perfect line registration unreliable on phones, so we disable it there. */
-.column[data-ruled="true"] .scripture{
-  background-image:repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent calc(var(--lead) - 1px),
-    var(--rule) calc(var(--lead) - 1px),
-    var(--rule) var(--lead)
-  );
-  background-size: 100% var(--lead);
-  background-position: 0 0;
-}
-@media (max-width: 1080px){
-  .column[data-ruled="true"] .scripture{ background-image: none; }
-  #btnRule{ display: none; }
-}
+/* Ruling removed — mixed headings, verse numbers and inline runs made
+   perfect registration unreliable on every viewport. Clean text is better. */
+.column[data-ruled="true"] .scripture{ background-image: none; }
+#btnRule{ display: none !important; }
 .scripture{ margin-top: 0; padding-top: 0; }
 
 /* gloss column */
@@ -489,8 +476,8 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 .sea{fill:var(--lapis);fill-opacity:.15;}
 .sea-hatch{stroke:var(--lapis);stroke-opacity:.34;stroke-width:.7;fill:none;}
 .river{fill:none;stroke:var(--lapis);stroke-width:1.3;opacity:.6;stroke-linecap:round;}
-.place-panel{margin-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:26px;}
-@media(max-width:820px){.place-panel{grid-template-columns:1fr;}}
+.place-panel{margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:28px 32px;}
+@media(max-width:820px){.place-panel{grid-template-columns:1fr; gap:20px;}}
 
 /* ── cast ────────────────────────────────────────────────── */
 .seek{
@@ -596,80 +583,89 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
   :root{--gloss:0px;--rail:0px;}
   .spread{grid-template-columns:1fr;}
   .rail{display:none;}
+  /* no page-turn transform on mobile — it traps position:fixed children */
+  .leaf[data-open="true"]{ animation: none; }
 
-  /* Bottom sheet — clean, full-width, reliable on phones */
+  /* Right-side drawer, same idea as the left spine */
   .gloss{
     position: fixed !important;
-    left: 0 !important;
+    top: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
-    top: auto !important;
-    width: 100% !important;
-    height: min(56vh, 480px) !important;
-    max-height: 68dvh !important;
-    z-index: 90;
-    border-left: none !important;
-    border-top: 1px solid var(--rule-hard) !important;
-    border-radius: 16px 16px 0 0;
-    background: var(--vellum);
-    transform: translateY(110%);
-    transition: transform .36s cubic-bezier(.32,.72,.25,1);
-    box-shadow: 0 -10px 36px rgba(43,36,27,.2);
-    display: flex;
+    left: auto !important;
+    width: min(300px, 85vw) !important;
+    height: 100% !important;
+    max-height: none !important;
+    z-index: 100;
+    border-left: 1px solid var(--rule-hard) !important;
+    border-top: none !important;
+    border-radius: 0 !important;
+    background: var(--vellum-lit) !important;
+    transform: translateX(105%) !important;
+    transition: transform .32s cubic-bezier(.4,0,.2,1) !important;
+    box-shadow: -12px 0 32px rgba(43,36,27,.22);
+    display: flex !important;
     flex-direction: column;
     overflow: hidden;
   }
-  .gloss[data-open="true"]{ transform: translateY(0); }
-  .gloss-body{ flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 12px 16px 32px; }
-  .column{ padding: 20px 16px 110px; }
+  .gloss[data-open="true"]{
+    transform: translateX(0) !important;
+  }
+  .gloss-body{
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px 16px 40px;
+  }
+  .column{ padding: 20px 16px 80px; }
   .gloss-toggle{ display: inline-flex !important; }
 }
 
-/* Handle bar at the top of the sheet */
+/* Close control on the drawer */
 .gloss-drag{
   display: none;
   position: relative;
   top: auto; left: auto;
   width: 100%;
-  height: 36px;
-  padding: 0;
-  background: transparent;
-  color: transparent; /* handle bar only — text is for a11y */
-  font-size: 0;
+  height: 48px;
+  padding: 0 16px;
+  background: var(--vellum);
+  color: var(--gall-soft);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
   writing-mode: horizontal-tb;
   place-items: center;
+  justify-content: flex-start;
   border-radius: 0;
   z-index: 2;
   flex-shrink: 0;
   border-bottom: 1px solid var(--rule);
   cursor: pointer;
+  text-align: left;
 }
-.gloss-drag::before{
-  content: "";
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 42px;
-  height: 4px;
-  border-radius: 2px;
-  background: var(--gall-faint);
-  opacity: .55;
+.gloss-drag::before{ display: none; }
+.gloss[data-open="true"] .gloss-drag{ display: flex; align-items: center; gap: 8px; }
+.gloss-drag::after{
+  content: "← Close";
+  color: var(--gall-soft);
+  font-size: 10px;
+  letter-spacing: .12em;
 }
-.gloss[data-open="true"] .gloss-drag{ display: grid; }
 .gloss-toggle{ display: none; }
 
-/* Dim behind the open sheet */
+/* Dim behind the open drawer */
 body[data-gloss="open"]::after{
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 85;
-  background: rgba(43,36,27,.3);
+  z-index: 95;
+  background: rgba(43,36,27,.35);
   pointer-events: auto;
-  animation: fade .22s ease both;
+  animation: fade .2s ease both;
 }
-[data-theme="dark"] body[data-gloss="open"]::after{ background: rgba(0,0,0,.5); }
+[data-theme="dark"] body[data-gloss="open"]::after{ background: rgba(0,0,0,.55); }
 
 @media(max-width:760px){
   .wide{padding:20px 12px 80px;}
@@ -680,8 +676,8 @@ body[data-gloss="open"]::after{
   .desk{gap:18px;}
   body{font-size:15.5px;}
   :root{--lead:26px;}
-  .column{padding:14px 12px 100px;}
-  .gloss{ height: min(60vh, 460px) !important; }
+  .column{padding:14px 12px 70px;}
+  .gloss{ width: min(290px, 88vw) !important; }
   .apparatus{gap:5px; padding-bottom:10px; margin-bottom:14px;}
   .tool{height:28px; padding:0 9px; font-size:9px;}
   .pick{height:28px;}
@@ -821,11 +817,24 @@ body[data-gloss="open"]::after{
 
 /* ══ ATLAS v2 ══════════════════════════════════════════════ */
 .atlas-shell{
-  display:grid;grid-template-columns:minmax(0,1fr) 296px;
+  display:grid;grid-template-columns:minmax(0,1fr) 280px;
   border:1px solid var(--rule-hard);background:var(--vellum-lit);
+  min-height: 480px;
 }
-@media(max-width:940px){.atlas-shell{grid-template-columns:1fr;}}
-.atlas-stage{position:relative;overflow:hidden;}
+@media(max-width:940px){
+  .atlas-shell{
+    grid-template-columns:1fr;
+    min-height: 0;
+  }
+}
+.atlas-stage{
+  position:relative;overflow:hidden;
+  min-height: 420px;
+  background: var(--vellum-lit);
+}
+@media(max-width:940px){
+  .atlas-stage{ min-height: 320px; }
+}
 .atlas-svg{display:block;width:100%;height:auto;cursor:grab;touch-action:none;user-select:none;}
 .atlas-svg:active{cursor:grabbing;}
 
@@ -883,28 +892,37 @@ body[data-gloss="open"]::after{
 .selring{fill:none;stroke:var(--gold);stroke-width:1.6;opacity:.9;}
 
 /* the index beside the map — the real way to find a place */
-.atlas-index{border-left:1px solid var(--rule);display:flex;flex-direction:column;min-height:0;}
-@media(max-width:940px){.atlas-index{border-left:none;border-top:1px solid var(--rule);}}
-.idx-head{padding:14px 16px 10px;border-bottom:1px solid var(--rule);flex-shrink:0;}
+.atlas-index{
+  border-left:1px solid var(--rule);
+  display:flex;flex-direction:column;min-height:0;
+  background: var(--vellum);
+}
+@media(max-width:940px){
+  .atlas-index{
+    border-left:none;
+    border-top:1px solid var(--rule);
+  }
+}
+.idx-head{padding:16px 16px 12px;border-bottom:1px solid var(--rule);flex-shrink:0;}
 .idx-cap{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gall-faint);}
 .idx-seek{
-  width:100%;margin-top:9px;border:1px solid var(--rule-hard);background:var(--vellum);
-  padding:8px 11px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--gall);
+  width:100%;margin-top:10px;border:1px solid var(--rule-hard);background:var(--vellum-lit);
+  padding:9px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--gall);
 }
 .idx-seek::placeholder{color:var(--gall-faint);text-transform:uppercase;font-size:9.5px;letter-spacing:.12em;}
-.idx-list{overflow-y:auto;max-height:430px;scrollbar-width:thin;}
-@media(max-width:940px){.idx-list{max-height:260px;}}
+.idx-list{overflow-y:auto;max-height:440px;scrollbar-width:thin; flex:1;}
+@media(max-width:940px){.idx-list{max-height:220px;}}
 .idx{
   width:100%;display:grid;grid-template-columns:14px 1fr auto;gap:10px;align-items:baseline;
-  padding:8px 16px;text-align:left;border-bottom:1px solid var(--rule);transition:background .14s;
+  padding:10px 16px;text-align:left;border-bottom:1px solid var(--rule);transition:background .14s;
 }
-.idx:hover{background:var(--vellum);}
+.idx:hover{background:var(--vellum-lit);}
 .idx[data-sel="true"]{background:var(--vellum-deep);}
 .idx .ico{width:12px;height:12px;color:var(--gall-soft);align-self:center;}
 .idx[data-sel="true"] .ico{color:var(--vermilion);}
-.idx .nm{font-size:15.5px;line-height:21px;color:var(--gall);}
+.idx .nm{font-size:15px;line-height:1.35;color:var(--gall);}
 .idx .ct{font-family:var(--mono);font-size:9.5px;color:var(--gall-faint);letter-spacing:.04em;}
-.idx-foot{padding:11px 16px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gall-faint);line-height:1.8;}
+.idx-foot{padding:12px 16px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gall-faint);line-height:1.8;}
 
 /* ══ AUDIO TRANSPORT ═══════════════════════════════════════ */
 .transport{
@@ -1304,7 +1322,7 @@ body[data-gloss="open"]::after{
     </div>
 
     <aside class="gloss" id="glossPanel">
-      <button class="gloss-drag" id="glossClose" aria-label="Close">Close</button>
+      <button class="gloss-drag" id="glossClose" aria-label="Close panel"></button>
       <div class="gloss-tabs" role="tablist">
         <button class="gloss-tab" data-pane="notes" role="tab" aria-selected="true">Marks</button>
         <button class="gloss-tab" data-pane="xref" role="tab" aria-selected="false">Threads</button>
@@ -2893,16 +2911,29 @@ function showLeaf(id, push){
   }
 }
 
+/* Keep a reference so we can put the panel back where it belongs on desktop */
+let glossHome = null;
 function openGloss(on){
-  const g=$("#glossPanel");
-  g.dataset.open = on ? "true":"false";
-  $("#btnGloss").dataset.on = on ? "true":"false";
-  // on mobile the bottom sheet gets a quiet dim behind it
-  if(window.innerWidth < 1080){
-    document.body.dataset.gloss = on ? "open" : "closed";
-  } else {
-    document.body.dataset.gloss = "closed";
+  const g = $("#glossPanel");
+  if(!g) return;
+  if(!glossHome) glossHome = g.parentElement;
+
+  const mobile = window.innerWidth < 1080;
+
+  if(on && mobile){
+    // Move to body so no ancestor transform can trap position:fixed
+    if(g.parentElement !== document.body) document.body.appendChild(g);
+  } else if(!on && mobile && glossHome && g.parentElement === document.body){
+    // put it back when closing so desktop layout still works after rotate
+    glossHome.appendChild(g);
+  } else if(!mobile && glossHome && g.parentElement !== glossHome){
+    glossHome.appendChild(g);
   }
+
+  g.dataset.open = on ? "true" : "false";
+  const btn = $("#btnGloss");
+  if(btn) btn.dataset.on = on ? "true" : "false";
+  document.body.dataset.gloss = (on && mobile) ? "open" : "closed";
 }
 
 /* ═══ WIRING ═══════════════════════════════════════════════ */
