@@ -286,13 +286,16 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 }
 .gloss-tabs{display:flex;border-bottom:1px solid var(--rule);flex-shrink:0;}
 .gloss-tab{
-  flex:1;padding:11px 4px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;
+  flex:1;padding:12px 4px;font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;
   text-transform:uppercase;color:var(--gall-faint);border-right:1px solid var(--rule);
   transition:color .18s,background .18s; text-align:center;
 }
 .gloss-tab:last-child{border-right:none;}
 .gloss-tab[aria-selected="true"]{color:var(--vermilion);background:var(--vellum-lit);}
 .gloss-body{flex:1;overflow-y:auto;padding:16px 14px 50px; -webkit-overflow-scrolling:touch;}
+@media(max-width:1080px){
+  .gloss-tab{ padding: 13px 4px; font-size: 10px; letter-spacing: .12em; }
+}
 .gloss-pane{display:none;}
 .gloss-pane[data-open="true"]{display:block;}
 .gloss-empty{
@@ -594,66 +597,77 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
   .spread{grid-template-columns:1fr;}
   .rail{display:none;}
 
-  /* Proper right-side drawer — stays fully inside the viewport */
+  /* Bottom sheet — clean, full-width, reliable on phones */
   .gloss{
     position: fixed !important;
-    top: 0 !important;
+    left: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
-    left: auto !important;
-    width: min(300px, 82vw) !important;
-    height: 100% !important;
-    max-height: 100dvh !important;
+    top: auto !important;
+    width: 100% !important;
+    height: min(56vh, 480px) !important;
+    max-height: 68dvh !important;
     z-index: 90;
-    border-left: 1px solid var(--rule-hard);
-    border-top: none !important;
-    background: var(--vellum-lit);
-    transform: translateX(105%);
-    transition: transform .3s cubic-bezier(.4,0,.2,1);
-    box-shadow: -10px 0 30px rgba(43,36,27,.2);
+    border-left: none !important;
+    border-top: 1px solid var(--rule-hard) !important;
+    border-radius: 16px 16px 0 0;
+    background: var(--vellum);
+    transform: translateY(110%);
+    transition: transform .36s cubic-bezier(.32,.72,.25,1);
+    box-shadow: 0 -10px 36px rgba(43,36,27,.2);
     display: flex;
     flex-direction: column;
     overflow: hidden;
   }
-  .gloss[data-open="true"]{ transform: translateX(0); }
-  .gloss-body{ flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-  .column{ padding: 20px 16px 80px; }
+  .gloss[data-open="true"]{ transform: translateY(0); }
+  .gloss-body{ flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 12px 16px 32px; }
+  .column{ padding: 20px 16px 110px; }
   .gloss-toggle{ display: inline-flex !important; }
 }
 
-/* Close tab on the left edge of the drawer */
+/* Handle bar at the top of the sheet */
 .gloss-drag{
   display: none;
-  position: absolute;
-  top: 16px;
-  left: -40px;
-  width: 40px;
-  height: 52px;
+  position: relative;
+  top: auto; left: auto;
+  width: 100%;
+  height: 36px;
   padding: 0;
-  background: var(--gall);
-  color: var(--vellum);
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
+  background: transparent;
+  color: transparent; /* handle bar only — text is for a11y */
+  font-size: 0;
+  writing-mode: horizontal-tb;
   place-items: center;
-  border-radius: 6px 0 0 6px;
+  border-radius: 0;
   z-index: 2;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--rule);
+  cursor: pointer;
+}
+.gloss-drag::before{
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 42px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--gall-faint);
+  opacity: .55;
 }
 .gloss[data-open="true"] .gloss-drag{ display: grid; }
 .gloss-toggle{ display: none; }
 
-/* Dim behind the open drawer */
+/* Dim behind the open sheet */
 body[data-gloss="open"]::after{
   content: "";
   position: fixed;
   inset: 0;
   z-index: 85;
-  background: rgba(43,36,27,.32);
+  background: rgba(43,36,27,.3);
   pointer-events: auto;
-  animation: fade .2s ease both;
+  animation: fade .22s ease both;
 }
 [data-theme="dark"] body[data-gloss="open"]::after{ background: rgba(0,0,0,.5); }
 
@@ -666,8 +680,8 @@ body[data-gloss="open"]::after{
   .desk{gap:18px;}
   body{font-size:15.5px;}
   :root{--lead:26px;}
-  .column{padding:14px 12px 70px;}
-  .gloss{ width: min(280px, 84vw) !important; }
+  .column{padding:14px 12px 100px;}
+  .gloss{ height: min(60vh, 460px) !important; }
   .apparatus{gap:5px; padding-bottom:10px; margin-bottom:14px;}
   .tool{height:28px; padding:0 9px; font-size:9px;}
   .pick{height:28px;}
@@ -1290,9 +1304,9 @@ body[data-gloss="open"]::after{
     </div>
 
     <aside class="gloss" id="glossPanel">
-      <button class="gloss-drag" id="glossClose">Close</button>
+      <button class="gloss-drag" id="glossClose" aria-label="Close">Close</button>
       <div class="gloss-tabs" role="tablist">
-        <button class="gloss-tab" data-pane="notes" role="tab" aria-selected="true">Marginalia</button>
+        <button class="gloss-tab" data-pane="notes" role="tab" aria-selected="true">Marks</button>
         <button class="gloss-tab" data-pane="xref" role="tab" aria-selected="false">Threads</button>
         <button class="gloss-tab" data-pane="comm" role="tab" aria-selected="false">Commentary</button>
       </div>
@@ -1453,7 +1467,7 @@ body[data-gloss="open"]::after{
       <kbd>G</kbd><span>Show or hide the gloss column</span>
       <kbd>L</kbd><span>Listen &mdash; opens the narration transport</span>
       <kbd>?</kbd><span>This card</span>
-      <kbd>Click a verse</kbd><span>Pins a pointing hand in the margin and files it under Marginalia</span>
+      <kbd>Click a verse</kbd><span>Marks the verse and opens Marks / Threads / Commentary</span>
       <kbd>Drag the map</kbd><span>Pan; scroll or +/&minus; to zoom; FIT to reset</span>
       <kbd>A place name</kbd><span>Click the name on the plate, the glyph, or the index &mdash; all three open it below</span>
       <kbd>A relative</kbd><span>In the Register, every family name is a link, so you can walk a bloodline</span>
@@ -1926,12 +1940,12 @@ function toggleVerse(v){
 function renderNotes(){
   const p=$("#paneNotes");
   if(!S.marked.size){
-    p.innerHTML=`<div class="gl-head">Marginalia</div><p class="gloss-empty">Click any verse and a pointing hand goes in the margin beside it. Medieval readers drew these by hand — they called them manicules — to mark the lines worth coming back to.</p>`;
+    p.innerHTML=`<div class="gl-head">Marks</div><p class="gloss-empty">Tap any verse to mark it. On larger screens a pointing hand appears in the margin (medieval readers called these manicules). Your marked verses collect here so you can come back to them.</p>`;
     return;
   }
   const vs=[...S.marked].sort((a,b)=>a-b);
   const byNum={}; (S.chapterData? S.chapterData.chapter.content:[]).forEach(n=>{ if(n.type==="verse") byNum[n.number]=n; });
-  p.innerHTML = `<div class="gl-head">Marginalia — ${vs.length} marked</div>` + vs.map(v=>{
+  p.innerHTML = `<div class="gl-head">Marks — ${vs.length}</div>` + vs.map(v=>{
     const t = byNum[v] ? verseText(byNum[v]) : "";
     return `<div class="gl-card pinned"><span class="gl-ref">${esc(name(S.book))} ${S.chapter}:${v}</span><p>${esc(t.slice(0,240))}${t.length>240?"…":""}</p></div>`;
   }).join("") + `<button class="ask" id="askGloss">Explain the marked verses</button><div id="askOut"></div>`;
@@ -2883,9 +2897,11 @@ function openGloss(on){
   const g=$("#glossPanel");
   g.dataset.open = on ? "true":"false";
   $("#btnGloss").dataset.on = on ? "true":"false";
-  // on mobile the side drawer benefits from a quiet dim
+  // on mobile the bottom sheet gets a quiet dim behind it
   if(window.innerWidth < 1080){
     document.body.dataset.gloss = on ? "open" : "closed";
+  } else {
+    document.body.dataset.gloss = "closed";
   }
 }
 
@@ -3199,7 +3215,7 @@ const FIGS={
 
 const HOW=[
   {n:"I", id:"read", name:"Reading Desk", fig:"read",
-   body:"The whole Bible, in <b>any of sixteen English translations</b>, on a page ruled the way a scribe ruled one. <b>Click a verse</b> and a pointing hand — a manicule, which is what medieval readers actually drew — pins it in the margin. The column on the right then carries three things for it: your marked verses, its cross-references, and Tyndale's sourced note.",
+   body:"The whole Bible, in <b>any of sixteen English translations</b>, on a page ruled the way a scribe ruled one. <b>Click a verse</b> to mark it. On larger screens a pointing hand appears in the margin; on phones a sheet slides up with your marks, the cross-references, and Tyndale's sourced note.",
    go:"Open the reading desk"},
   {n:"II", id:"chronicle", name:"Chronicle", fig:"chronicle",
    body:"The book is long and most of it isn't plot. These are <b>48 passages in canonical order</b> that carry the story, gathered into six quires. Each one has a hook written for someone who isn't religious. Read them all and you know the shape of the thing.",
