@@ -607,8 +607,11 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 .how{max-width:1080px;margin:0 auto;padding:52px 56px 0;}
 .how-row{
   display:grid;grid-template-columns:112px minmax(0,1fr) 210px;gap:30px;align-items:start;
+  grid-template-areas:"num txt fig";
   padding:30px 0;border-bottom:1px solid var(--rule);
 }
+.how-n{grid-area:num;} .how-txt{grid-area:txt;} .how-fig{grid-area:fig;}
+.how-row.solo{grid-template-columns:112px minmax(0,1fr);grid-template-areas:"num txt";border-bottom:none;}
 .how-row:last-child{border-bottom:none;}
 .how-n{
   font-family:var(--caps);font-size:38px;letter-spacing:.06em;color:var(--vellum-sink);
@@ -631,12 +634,38 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
   display:grid;place-items:center;overflow:hidden;
 }
 .how-fig svg{width:100%;height:100%;display:block;}
+/* ── the frontispiece on a narrow screen ───────────────────
+   The drawing leads as a full-width plate, then the numeral
+   and the text sit under it as one block. Nothing half-width,
+   nothing orphaned.                                          */
 @media(max-width:900px){
-  .how-row{grid-template-columns:56px minmax(0,1fr);}
-  .how-n{font-size:28px;}
-  .how-fig{grid-column:1/-1;max-width:280px;}
-  .how{padding:40px 20px 0;}
+  .how{padding:34px 20px 0;}
+  .how-row{
+    grid-template-columns:46px minmax(0,1fr);
+    grid-template-areas:"fig fig" "num txt";
+    gap:0 14px;padding:28px 0 32px;
+  }
+  .how-row.solo{grid-template-columns:46px minmax(0,1fr);grid-template-areas:"num txt";}
+  .how-fig{width:100%;max-width:none;aspect-ratio:1.5;margin-bottom:20px;}
+  .how-n{font-size:27px;line-height:1;text-align:right;padding-top:4px;}
+  .how-name{font-size:14px;}
   .front-plate{padding:44px 20px 40px;}
+}
+@media(max-width:640px){
+  .how{padding:26px 16px 0;}
+  .how-row{grid-template-columns:34px minmax(0,1fr);gap:0 11px;padding:24px 0 28px;}
+  .how-row.solo{grid-template-columns:34px minmax(0,1fr);}
+  .how-n{font-size:21px;padding-top:3px;}
+  .how-body{font-size:16px;line-height:27px;}
+  .how-fig{margin-bottom:16px;}
+  /* the vine is drawn for a wide plate; stretched into a phone
+     it distorts, so the page keeps the diamond rule instead */
+  .front-vine{display:none;}
+  .front-plate{padding:34px 16px 32px;}
+  .front-kicker{font-size:8.5px;letter-spacing:.22em;line-height:1.7;}
+  .front-lede{font-size:17.5px;line-height:29px;}
+  .front-go{flex-direction:column;align-items:stretch;}
+  .big-btn{justify-content:center;padding:14px 18px;}
 }
 
 /* ══ ATLAS v2 ══════════════════════════════════════════════ */
@@ -1043,11 +1072,11 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
   <div class="how" id="howRows"></div>
 
   <div class="how" style="padding-top:10px">
-    <div class="how-row" style="grid-template-columns:112px minmax(0,1fr);border-bottom:none">
+    <div class="how-row solo">
       <div class="how-n">&#10022;</div>
-      <div>
+      <div class="how-txt">
         <h3 class="how-name">Nothing here is invented</h3>
-        <p class="how-body">Every verse, note, profile and cross-reference is fetched live from open APIs while you read. The coordinates on the map are real survey coordinates. If a thing on this page can't be traced to a source, it isn't on this page — and the one feature that generates text says so on its face.</p>
+        <p class="how-body">Everything on this page was copied from somewhere, and every somewhere is named. The verses, the notes, the people, the coordinates on the map — all of it comes from open scholarly collections whose compilers are credited at the end. If something couldn't be traced to a source, it didn't go in.</p>
         <button class="how-jump" data-leaf="sources">See the colophon &#8594;</button>
       </div>
     </div>
@@ -2960,7 +2989,7 @@ function buildFront(){
   const box=$("#howRows"); if(!box) return;
   box.innerHTML=HOW.map(r=>`<div class="how-row">
       <div class="how-n">${r.n}</div>
-      <div>
+      <div class="how-txt">
         <h3 class="how-name">${r.name}</h3>
         <p class="how-body">${r.body}</p>
         <button class="how-jump" data-leaf="${r.id}">${r.go} &#8594;</button>
