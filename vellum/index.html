@@ -40,11 +40,34 @@
   --caps:  "Cinzel", "Trajan Pro", Georgia, serif;
   --mono:  "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
 
-  --lead: 34px;              /* the ruling interval. text sits on it. */
+  --lead: 32px;              /* the ruling interval. text sits on it. */
   --spine: 244px;            /* the left binding rail */
   --rail: 54px;
   --gloss: 320px;
   --topbar: 0px;
+}
+
+/* Dark theme — warm iron-gall night, not pure black */
+[data-theme="dark"]{
+  --vellum:      #1C1914;
+  --vellum-lit:  #25211B;
+  --vellum-deep: #2E2922;
+  --vellum-sink: #3A342C;
+
+  --gall:        #E8DFC8;
+  --gall-soft:   #C2B59A;
+  --gall-faint:  #8A7F68;
+
+  --vermilion:   #E05A42;
+  --vermilion-lt:#F07A62;
+  --lapis:       #6B9AD4;
+  --lapis-lt:    #8BB4E0;
+  --verdigris:   #7A9E7C;
+  --gold:        #D4AC49;
+  --gold-lt:     #E8C86A;
+
+  --rule:        rgba(232,223,200,.12);
+  --rule-hard:   rgba(232,223,200,.22);
 }
 
 *{box-sizing:border-box;}
@@ -54,21 +77,26 @@ body{
   background:var(--vellum);
   color:var(--gall);
   font-family:var(--serif);
-  font-size:19px;
+  font-size:17.5px;
   line-height:var(--lead);
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
   overflow-x:hidden;
+  transition: background-color .35s ease, color .35s ease;
 }
 /* faint fibre + quiet grain in the skin — no drop shadows, no torn edges */
 body::before{
-  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.62;
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.55;
   background:
     radial-gradient(circle at 18% 12%, rgba(168,131,44,.09), transparent 42%),
     radial-gradient(circle at 84% 78%, rgba(76,107,79,.07), transparent 46%),
     radial-gradient(circle at 62% 30%, rgba(43,36,27,.055), transparent 38%),
     url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.17 0 0 0 0 0.14 0 0 0 0 0.11 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-blend-mode: multiply, multiply, multiply, soft-light;
+}
+[data-theme="dark"] body::before{
+  opacity:.35;
+  background-blend-mode: soft-light, soft-light, soft-light, soft-light;
 }
 ::selection{background:rgba(179,43,23,.22);}
 
@@ -168,11 +196,20 @@ a{color:var(--lapis);text-decoration-thickness:1px;text-underline-offset:3px;}
 
 /* ── mobile binding bar ──────────────────────────────────── */
 .bindbar{
-  display:none;position:sticky;top:0;z-index:65;height:52px;
-  align-items:center;gap:12px;padding:0 14px;
+  display:none;position:sticky;top:0;z-index:65;height:50px;
+  align-items:center;gap:10px;padding:0 12px;
   background:var(--vellum);border-bottom:1px solid var(--rule-hard);
 }
-.bindbar .wordmark{font-size:18px;letter-spacing:.26em;}
+.bindbar .gilt-num{font-family:var(--mono);font-size:10px;color:var(--gall-soft);letter-spacing:.04em; flex-shrink:0;}
+.bindbar .wordmark{font-size:18px;letter-spacing:.26em; flex:1; text-align:center;}
+.theme-m{
+  width:34px; height:34px; flex-shrink:0;
+  font-size:16px; color:var(--gall-soft);
+  display:grid; place-items:center;
+  border-radius:50%;
+  transition: color .2s, background .2s;
+}
+.theme-m:hover{color:var(--vermilion); background:rgba(179,43,23,.08);}
 .burger{width:26px;height:18px;position:relative;flex-shrink:0;}
 .burger i{position:absolute;left:0;right:0;height:1.6px;background:var(--gall);transition:transform .26s,opacity .2s;}
 .burger i:nth-child(1){top:0;} .burger i:nth-child(2){top:8px;} .burger i:nth-child(3){top:16px;}
@@ -224,9 +261,20 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 .column[data-ruled="true"] .scripture{
   background-image:repeating-linear-gradient(
     to bottom,
-    transparent 0, transparent calc(var(--lead) - 1px),
-    var(--rule) calc(var(--lead) - 1px), var(--rule) var(--lead));
-  background-position:0 8px;
+    transparent 0,
+    transparent calc(var(--lead) - 1px),
+    var(--rule) calc(var(--lead) - 1px),
+    var(--rule) var(--lead)
+  );
+  background-size: 100% var(--lead);
+  background-position: 0 0;
+  /* lines sit just under each baseline; the first line of text
+     starts at the top of this element so the gradient origin matches */
+}
+.scripture{
+  /* keep the first line flush so ruling stays locked */
+  margin-top: 0;
+  padding-top: 0;
 }
 
 /* gloss column */
@@ -320,11 +368,17 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 .chapter-line b{color:var(--vermilion);font-weight:500;}
 
 /* ── scripture ───────────────────────────────────────────── */
-.scripture{margin-top:26px;}
+.scripture{margin-top:20px;}
+.verse{font-size: inherit; line-height: inherit;}
 .rubric{
-  font-family:var(--caps);font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--vermilion);margin:calc(var(--lead)) 0 0;line-height:var(--lead);
+  font-family:var(--caps);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--vermilion);margin:calc(var(--lead) * 1.15) 0 0;line-height:var(--lead);
   page-break-after:avoid;
+  /* keep rubric on the grid but give it a clear background so the ruling doesn't fight it */
+  background: var(--vellum);
+  display: block;
+  position: relative;
+  z-index: 1;
 }
 .verse{
   display:inline;position:relative;
@@ -442,17 +496,21 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
   margin-bottom:24px;
 }
 .seek::placeholder{color:var(--gall-faint);text-transform:uppercase;font-size:10px;letter-spacing:.12em;}
-.roster{display:grid;grid-template-columns:repeat(auto-fill,minmax(174px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);}
+.roster{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);}
 .person{
-  background:var(--vellum);padding:13px 14px;text-align:left;transition:background .15s;
+  background:var(--vellum);padding:12px 13px;text-align:left;transition:background .15s;
+  min-width:0; overflow:hidden;
 }
 .person:hover{background:var(--vellum-lit);}
 .person[aria-current="true"]{background:var(--vellum-deep);}
-.person-name{font-family:var(--serif);font-size:16.5px;color:var(--gall);line-height:22px;}
-.person-ref{font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--gall-faint);margin-top:3px;}
+.person-name{
+  font-family:var(--serif);font-size:15.5px;color:var(--gall);line-height:1.35;
+  overflow-wrap:anywhere; word-break:break-word; hyphens:auto;
+}
+.person-ref{font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--gall-faint);margin-top:4px;}
 .profile{
-  margin-top:30px;padding:28px 32px;border:1px solid var(--rule-hard);background:var(--vellum-lit);
-  max-width:720px;
+  margin-top:28px;padding:22px 20px;border:1px solid var(--rule-hard);background:var(--vellum-lit);
+  max-width:720px; overflow-wrap:anywhere; word-break:break-word;
 }
 .profile h3{font-family:var(--caps);font-weight:700;font-size:28px;letter-spacing:.12em;text-transform:uppercase;margin:0 0 6px;line-height:1.1;}
 .profile .src{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gall-faint);margin-bottom:22px;}
@@ -535,26 +593,60 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
   :root{--gloss:0px;--rail:0px;}
   .spread{grid-template-columns:1fr;}
   .rail{display:none;}
+  /* side drawer instead of bottom sheet — keeps reading + notes side-by-side */
   .gloss{
-    position:fixed;left:0;right:0;bottom:0;top:auto;height:64vh;z-index:70;
-    border-left:none;border-top:2px solid var(--gall);background:var(--vellum);
-    transform:translateY(101%);transition:transform .32s cubic-bezier(.4,0,.2,1);
+    position:fixed;top:0;right:0;bottom:0;left:auto;
+    width:min(320px, 86vw); height:100%; z-index:80;
+    border-left:1px solid var(--rule-hard); border-top:none;
+    background:var(--vellum-lit);
+    transform:translateX(102%);
+    transition:transform .32s cubic-bezier(.4,0,.2,1);
+    box-shadow: -12px 0 28px rgba(43,36,27,.18);
   }
-  .gloss[data-open="true"]{transform:translateY(0);}
+  .gloss[data-open="true"]{transform:translateX(0);}
   .gloss-drag{display:block;}
-  .column{padding:26px 20px 130px;}
+  .column{padding:22px 18px 100px;}
   .gloss-toggle{display:inline-flex;}
 }
-.gloss-drag{display:none;position:absolute;top:-2px;right:0;padding:8px 14px;background:var(--gall);color:var(--vellum);font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;}
+.gloss-drag{
+  display:none;position:absolute;top:14px;left:-38px;
+  width:38px;height:48px;padding:0;
+  background:var(--gall);color:var(--vellum);
+  font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  writing-mode:vertical-rl; text-orientation:mixed;
+  place-items:center;
+  border-radius:5px 0 0 5px;
+  z-index:1;
+}
+.gloss[data-open="true"] .gloss-drag{display:grid;}
 .gloss-toggle{display:none;}
+
+/* quiet dim when the mobile gloss drawer is open */
+body[data-gloss="open"]::after{
+  content:""; position:fixed; inset:0; z-index:75;
+  background:rgba(43,36,27,.28); pointer-events:auto;
+  animation: fade .22s ease both;
+}
+[data-theme="dark"] body[data-gloss="open"]::after{ background:rgba(0,0,0,.45); }
 @media(max-width:760px){
-  .wide{padding:28px 18px 100px;}
+  .wide{padding:22px 14px 90px;}
   .tagline{display:none;}
-  .book-title{font-size:32px;letter-spacing:.05em;}
-  .initial{width:96px;height:96px;}
-  .desk{gap:26px;}
-  body{font-size:18px;}
-  :root{--lead:32px;}
+  .book-title{font-size:26px;letter-spacing:.04em;}
+  .initial{width:72px;height:72px;}
+  .opening{gap:14px; margin-bottom:4px;}
+  .desk{gap:20px;}
+  body{font-size:16px;}
+  :root{--lead:27px;}
+  .column{padding:16px 12px 80px;}
+  .gloss{width:min(290px, 86vw);}
+  .apparatus{gap:6px; padding-bottom:12px; margin-bottom:16px;}
+  .tool{height:30px; padding:0 10px; font-size:9.5px;}
+  .pick{height:30px;}
+  .pick select{font-size:10px; padding:0 22px 0 8px;}
+  .stepper{height:30px;}
+  .stepper button{width:28px;}
+  .rubric{font-size:11px; letter-spacing:.14em;}
+  .vnum{font-size:9px;}
 }
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.001ms !important;transition-duration:.001ms !important;}
@@ -649,33 +741,39 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
    and the text sit under it as one block. Nothing half-width,
    nothing orphaned.                                          */
 @media(max-width:900px){
-  .how{padding:34px 20px 0;}
+  .how{padding:28px 18px 0;}
   .how-row{
-    grid-template-columns:46px minmax(0,1fr);
-    grid-template-areas:"fig fig" "num txt";
-    gap:0 14px;padding:28px 0 32px;
+    /* keep number + text + small fig side-by-side when possible */
+    grid-template-columns:40px minmax(0,1fr) 110px;
+    grid-template-areas:"num txt fig";
+    gap:12px 14px;padding:22px 0 26px; align-items:start;
   }
-  .how-row.solo{grid-template-columns:46px minmax(0,1fr);grid-template-areas:"num txt";}
-  .how-fig{width:100%;max-width:none;aspect-ratio:1.5;margin-bottom:20px;}
-  .how-n{font-size:27px;line-height:1;text-align:right;padding-top:4px;}
-  .how-name{font-size:17px;}
-  .front-plate{padding:44px 20px 40px;}
+  .how-row.solo{grid-template-columns:40px minmax(0,1fr);grid-template-areas:"num txt";}
+  .how-fig{width:110px; max-width:110px; aspect-ratio:1.35; margin:0; align-self:start;}
+  .how-n{font-size:24px;line-height:1;text-align:right;padding-top:2px;}
+  .how-name{font-size:18px; letter-spacing:.14em;}
+  .how-body{font-size:15.5px; line-height:26px;}
+  .front-plate{padding:36px 18px 32px;}
 }
 @media(max-width:640px){
-  .how{padding:26px 16px 0;}
-  .how-row{grid-template-columns:34px minmax(0,1fr);gap:0 11px;padding:24px 0 28px;}
-  .how-row.solo{grid-template-columns:34px minmax(0,1fr);}
-  .how-n{font-size:21px;padding-top:3px;}
-  .how-body{font-size:16px;line-height:27px;}
-  .how-fig{margin-bottom:16px;}
+  .how{padding:20px 14px 0;}
+  .how-row{
+    grid-template-columns:32px minmax(0,1fr) 88px;
+    gap:8px 10px; padding:18px 0 22px;
+  }
+  .how-row.solo{grid-template-columns:32px minmax(0,1fr);}
+  .how-n{font-size:20px;padding-top:1px;}
+  .how-name{font-size:16px;}
+  .how-body{font-size:15px;line-height:25px;}
+  .how-fig{width:88px; max-width:88px; aspect-ratio:1.3;}
   /* the vine is drawn for a wide plate; stretched into a phone
      it distorts, so the page keeps the diamond rule instead */
   .front-vine{display:none;}
-  .front-plate{padding:34px 16px 32px;}
+  .front-plate{padding:28px 14px 26px;}
   .front-kicker{font-size:8.5px;letter-spacing:.22em;line-height:1.7;}
-  .front-lede{font-size:17.5px;line-height:29px;}
-  .front-go{flex-direction:column;align-items:stretch;}
-  .big-btn{justify-content:center;padding:14px 18px;}
+  .front-lede{font-size:16.5px;line-height:27px;}
+  .front-go{flex-direction:column;align-items:stretch; gap:10px;}
+  .big-btn{justify-content:center;padding:13px 16px; font-size:12px;}
 }
 
 /* ══ ATLAS v2 ══════════════════════════════════════════════ */
@@ -932,8 +1030,9 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 }
 @media(max-width:760px){
   .wide{padding:26px 16px 90px;}
-  .leaf-title{font-size:30px;letter-spacing:.10em;}
-  .leaf-sub{font-size:16.5px;line-height:27px;}
+  .leaf-title{font-size:28px;letter-spacing:.10em; margin-bottom:10px;}
+  .leaf-sub{font-size:15.5px;line-height:25px;}
+  .leaf-head{margin-bottom:28px; padding-bottom:18px;}
   .head-orn{max-width:220px;}
 
   /* reading desk */
@@ -948,16 +1047,19 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
   .tp-play{width:42px;height:42px;}
 
   /* register */
-  .roster{grid-template-columns:repeat(auto-fill,minmax(142px,1fr));}
-  .person{padding:11px 12px;}
-  .person-name{font-size:15.5px;line-height:20px;}
+  .roster{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
+  .person{padding:10px 11px;}
+  .person-name{font-size:14.5px;line-height:1.3;}
   .profile{padding:20px 18px;margin-top:22px;}
   .profile h3{font-size:24px;}
   .easton p,.profile p{font-size:16.5px;line-height:28px;}
   .chip{font-size:14.5px;padding:4px 9px;}
 
   /* chronicle + scriptorium */
-  .folios{grid-template-columns:1fr;}
+  .folios{grid-template-columns:1fr 1fr;}
+  .folio{min-height:100px; padding:12px 11px 14px;}
+  .folio-name{font-size:15.5px; line-height:20px;}
+  .folio-hook{font-size:12.5px; line-height:18px;}
   .collation{padding:20px 18px;}
   .q-text{font-size:18px;line-height:29px;}
   .opt{padding:11px 12px;font-size:15.5px;min-height:44px;}
@@ -977,9 +1079,11 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
   .help-grid span{font-size:15.5px;line-height:23px;}
 }
 @media(max-width:420px){
-  .quire-grid{grid-template-columns:repeat(5,1fr);}
-  .front-title{letter-spacing:.16em;}
+  .quire-grid{grid-template-columns:repeat(6,1fr);}
+  .front-title{letter-spacing:.14em; font-size:clamp(32px,9vw,48px);}
   .roster{grid-template-columns:1fr 1fr;}
+  .folios{grid-template-columns:1fr 1fr;}
+  .folio-name{font-size:14.5px;}
   .tp-time{font-size:9.5px;}
 }
 /* thumbs, not cursors */
@@ -1002,7 +1106,8 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 <div class="bindbar">
   <button class="burger" id="burger" aria-label="Open the contents"><i></i><i></i><i></i></button>
   <span class="wordmark">VELL<b>V</b>M</span>
-  <span class="gilt-num" id="giltNumM" style="margin-left:auto">0/48</span>
+  <button id="btnThemeM" class="theme-m" title="Toggle light / dark" aria-label="Toggle theme">◐</button>
+  <span class="gilt-num" id="giltNumM">0/48</span>
 </div>
 <div class="scrim" id="scrim"></div>
 
@@ -1056,6 +1161,7 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
       <span class="gilt-track"><span class="gilt-fill" id="giltFill"></span></span>
     </div>
     <div class="spine-links">
+      <button id="btnTheme" title="Toggle light / dark">Theme</button>
       <button id="btnHelp">Keys &amp; help</button>
       <button data-leaf="sources">Sources</button>
     </div>
@@ -1574,6 +1680,19 @@ const S = {
   gilt:{}, leaf:"read", collation:null
 };
 
+/* ── theme (light / dark) ─────────────────────────────────── */
+async function applyTheme(theme){
+  const t = theme === "dark" ? "dark" : "light";
+  document.documentElement.dataset.theme = t === "dark" ? "dark" : "";
+  await store.set("vellum:theme", t);
+  const label = t === "dark" ? "Light" : "Dark";
+  const btn = $("#btnTheme"); if(btn) btn.textContent = label;
+}
+async function toggleTheme(){
+  const cur = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+  await applyTheme(cur === "dark" ? "light" : "dark");
+}
+
 /* ── shared helpers ──────────────────────────────────────── */
 const name = id => (S.byId[id] && S.byId[id].commonName) || id;
 const refStr = (b,c,v,ev) => name(b)+" "+c+":"+v+(ev&&ev!==v?"–"+ev:"");
@@ -1631,6 +1750,8 @@ async function boot(){
 
   const saved = await store.get("vellum:gilt");
   if(saved) S.gilt = saved;
+  const savedTheme = await store.get("vellum:theme");
+  if(savedTheme) await applyTheme(savedTheme);
 
   loadTranslations();
   buildChronicle(); buildSources(); buildQuireGrid(); refreshGilt();
@@ -2684,6 +2805,10 @@ function openGloss(on){
   const g=$("#glossPanel");
   g.dataset.open = on ? "true":"false";
   $("#btnGloss").dataset.on = on ? "true":"false";
+  // on mobile the side drawer benefits from a quiet dim
+  if(window.innerWidth < 1080){
+    document.body.dataset.gloss = on ? "open" : "closed";
+  }
 }
 
 /* ═══ WIRING ═══════════════════════════════════════════════ */
@@ -2726,6 +2851,11 @@ $("#btnRule").addEventListener("click",e=>{
 });
 $("#btnGloss").addEventListener("click",()=> openGloss($("#glossPanel").dataset.open!=="true"));
 $("#glossClose").addEventListener("click",()=> openGloss(false));
+document.addEventListener("click", e=>{
+  if(document.body.dataset.gloss === "open" && !e.target.closest(".gloss") && !e.target.closest("#btnGloss")){
+    openGloss(false);
+  }
+});
 $$(".gloss-tab").forEach(t=> t.addEventListener("click",()=>{
   $$(".gloss-tab").forEach(x=>x.setAttribute("aria-selected","false"));
   t.setAttribute("aria-selected","true");
@@ -2777,6 +2907,8 @@ $("#scrim").addEventListener("click",()=> document.body.dataset.spine="closed");
 /* ── help ─────────────────────────────────────────────────── */
 const openHelp = on => $("#help").dataset.open = on ? "true" : "false";
 $("#btnHelp").addEventListener("click",()=>openHelp(true));
+$("#btnTheme")?.addEventListener("click", toggleTheme);
+$("#btnThemeM")?.addEventListener("click", toggleTheme);
 $("#helpClose").addEventListener("click",()=>openHelp(false));
 $("#help").addEventListener("click",e=>{ if(e.target.id==="help") openHelp(false); });
 
@@ -2785,7 +2917,7 @@ const LEAVES=["read","chronicle","atlas","cast","threads","scriptorium","sources
 document.addEventListener("keydown",e=>{
   if(e.metaKey||e.ctrlKey||e.altKey) return;
   if(/input|select|textarea/i.test(e.target.tagName)) return;
-  if(e.key==="Escape"){ openHelp(false); document.body.dataset.spine="closed"; return; }
+  if(e.key==="Escape"){ openHelp(false); openGloss(false); document.body.dataset.spine="closed"; return; }
   if(e.key==="?"||(e.key==="/"&&e.shiftKey)){ e.preventDefault(); openHelp(true); return; }
   if(e.key==="0"){ showLeaf("frontispiece"); return; }
   if(/^[1-7]$/.test(e.key)){ showLeaf(LEAVES[+e.key-1]); return; }
