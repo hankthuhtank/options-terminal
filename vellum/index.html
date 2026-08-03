@@ -1,0 +1,2979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VELLUM — the book, taken apart</title>
+<meta name="description" content="An interactive way into the Bible as literature and history. Every word fetched live from open data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   VELLUM — pigment box
+   Ground from the actual materials of a manuscript: iron gall
+   ink, vermilion (cinnabar), ultramarine (lapis), verdigris,
+   orpiment gold, on cool calfskin.
+   ============================================================ */
+:root{
+  --vellum:      #E4DAC4;
+  --vellum-lit:  #EDE5D3;
+  --vellum-deep: #D5C7A8;
+  --vellum-sink: #C6B692;
+
+  --gall:        #2B241B;
+  --gall-soft:   #5A4E3E;
+  --gall-faint:  #8A7C66;
+
+  --vermilion:   #B32B17;
+  --vermilion-lt:#D4573C;
+  --lapis:       #1F4A87;
+  --lapis-lt:    #3D6FB0;
+  --verdigris:   #4C6B4F;
+  --gold:        #A8832C;
+  --gold-lt:     #D4AC49;
+
+  --rule:        rgba(43,36,27,.16);
+  --rule-hard:   rgba(43,36,27,.34);
+
+  --serif: "Cardo", "Iowan Old Style", Georgia, serif;
+  --caps:  "Cinzel", "Trajan Pro", Georgia, serif;
+  --mono:  "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  --lead: 34px;              /* the ruling interval. text sits on it. */
+  --spine: 244px;            /* the left binding rail */
+  --rail: 54px;
+  --gloss: 320px;
+  --topbar: 0px;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--vellum);
+  color:var(--gall);
+  font-family:var(--serif);
+  font-size:19px;
+  line-height:var(--lead);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+/* faint fibre in the skin — flat, no drop shadows, no torn edges */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(168,131,44,.07), transparent 42%),
+    radial-gradient(circle at 84% 78%, rgba(76,107,79,.06), transparent 46%),
+    radial-gradient(circle at 62% 30%, rgba(43,36,27,.045), transparent 38%);
+}
+::selection{background:rgba(179,43,23,.22);}
+
+button,input,select,textarea{font:inherit;color:inherit;}
+button{background:none;border:none;cursor:pointer;padding:0;}
+a{color:var(--lapis);text-decoration-thickness:1px;text-underline-offset:3px;}
+:focus-visible{outline:2px solid var(--vermilion);outline-offset:3px;}
+
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;}
+.caps{font-family:var(--caps);letter-spacing:.14em;text-transform:uppercase;}
+
+/* ══ THE SPINE — left binding rail ═════════════════════════ */
+.spine{
+  position:fixed;top:0;left:0;bottom:0;width:var(--spine);z-index:70;
+  background:var(--vellum-lit);
+  border-right:1px solid var(--rule-hard);
+  display:flex;flex-direction:column;
+  transition:transform .34s cubic-bezier(.4,0,.2,1);
+}
+/* the sewing: three stitch stations down the binding edge */
+.spine::after{
+  content:"";position:absolute;top:0;bottom:0;right:-1px;width:9px;
+  background:
+    linear-gradient(to bottom, transparent 12%, var(--gall-faint) 12%, var(--gall-faint) 12.7%, transparent 12.7%),
+    linear-gradient(to bottom, transparent 49.6%, var(--gall-faint) 49.6%, var(--gall-faint) 50.3%, transparent 50.3%),
+    linear-gradient(to bottom, transparent 87%, var(--gall-faint) 87%, var(--gall-faint) 87.7%, transparent 87.7%);
+  opacity:.5;pointer-events:none;
+}
+.colophon{
+  padding:22px 20px 16px;border-bottom:1px solid var(--rule);flex-shrink:0;
+  position:relative;
+}
+.wordmark{
+  display:block;
+  font-family:var(--caps);font-weight:700;font-size:23px;
+  letter-spacing:.28em;color:var(--gall);line-height:1.1;
+}
+.wordmark b{color:var(--vermilion);font-weight:700;}
+.tagline{
+  display:block;margin-top:7px;
+  font-family:var(--mono);font-size:9px;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--gall-faint);
+}
+
+/* quire tabs — numeral, name, and what the thing actually does */
+.quires{flex:1;overflow-y:auto;padding:8px 0 4px;scrollbar-width:thin;}
+.quires::-webkit-scrollbar{width:5px;}
+.quires::-webkit-scrollbar-thumb{background:var(--vellum-sink);}
+.quire{
+  position:relative;width:100%;text-align:left;
+  display:grid;grid-template-columns:30px 1fr;gap:0 10px;align-items:baseline;
+  padding:9px 18px 10px 14px;
+  border-left:3px solid transparent;
+  transition:background .16s, border-color .16s;
+}
+.quire .qn{
+  font-family:var(--mono);font-size:10px;letter-spacing:.04em;
+  color:var(--gall-faint);text-align:right;transition:color .16s;
+}
+.quire .qname{
+  font-family:var(--caps);font-size:13px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--gall);transition:color .16s;
+}
+.quire .qsub{
+  grid-column:2;font-family:var(--serif);font-style:italic;
+  font-size:14px;line-height:19px;color:var(--gall-faint);margin-top:1px;
+}
+.quire:hover{background:rgba(198,182,146,.32);}
+.quire:hover .qn{color:var(--vermilion-lt);}
+.quire[aria-current="true"]{background:var(--vellum);border-left-color:var(--vermilion);}
+.quire[aria-current="true"] .qname{color:var(--vermilion);}
+.quire[aria-current="true"] .qn{color:var(--vermilion);}
+.quire[aria-current="true"] .qsub{color:var(--gall-soft);}
+
+.spine-foot{
+  flex-shrink:0;border-top:1px solid var(--rule);padding:13px 18px 15px;
+}
+.gilt-meter{display:block;}
+.gilt-line{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.gilt-cap{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gall-faint);}
+.gilt-num{font-family:var(--mono);font-size:10px;color:var(--gall-soft);letter-spacing:.05em;}
+.gilt-track{display:block;width:100%;height:5px;background:var(--vellum-sink);position:relative;overflow:hidden;}
+.gilt-fill{
+  position:absolute;inset:0 auto 0 0;width:0%;
+  background:linear-gradient(90deg,var(--gold),var(--gold-lt));
+  transition:width .7s cubic-bezier(.4,0,.2,1);
+}
+.spine-links{display:flex;gap:14px;margin-top:12px;}
+.spine-links button{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--gall-faint);border-bottom:1px solid transparent;padding-bottom:2px;
+}
+.spine-links button:hover{color:var(--vermilion);border-bottom-color:var(--vermilion);}
+
+/* ── mobile binding bar ──────────────────────────────────── */
+.bindbar{
+  display:none;position:sticky;top:0;z-index:65;height:52px;
+  align-items:center;gap:12px;padding:0 14px;
+  background:var(--vellum);border-bottom:1px solid var(--rule-hard);
+}
+.bindbar .wordmark{font-size:17px;letter-spacing:.24em;}
+.burger{width:26px;height:18px;position:relative;flex-shrink:0;}
+.burger i{position:absolute;left:0;right:0;height:1.6px;background:var(--gall);transition:transform .26s,opacity .2s;}
+.burger i:nth-child(1){top:0;} .burger i:nth-child(2){top:8px;} .burger i:nth-child(3){top:16px;}
+body[data-spine="open"] .burger i:nth-child(1){transform:translateY(8px) rotate(45deg);}
+body[data-spine="open"] .burger i:nth-child(2){opacity:0;}
+body[data-spine="open"] .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg);}
+.scrim{
+  display:none;position:fixed;inset:0;z-index:66;background:rgba(43,36,27,.42);
+  opacity:0;transition:opacity .3s;
+}
+body[data-spine="open"] .scrim{display:block;opacity:1;}
+
+/* ══ page shell ════════════════════════════════════════════ */
+.book{margin-left:var(--spine);position:relative;z-index:1;}
+.leaf{position:relative;display:none;}
+.leaf[data-open="true"]{display:block;animation:turn .42s cubic-bezier(.22,.7,.3,1) both;}
+@keyframes turn{
+  from{opacity:0;transform:translateY(9px) rotateX(1.4deg);transform-origin:top center;}
+  to{opacity:1;transform:none;}
+}
+
+.spread{
+  display:grid;
+  grid-template-columns:var(--rail) minmax(0,1fr) var(--gloss);
+  min-height:100vh;align-items:start;
+}
+
+/* margin rail — where manicules live */
+.rail{
+  position:sticky;top:0;height:100vh;
+  border-right:1px solid var(--rule);padding-top:26px;overflow:hidden;
+}
+.rail-label{
+  writing-mode:vertical-rl;transform:rotate(180deg);
+  font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gall-faint);margin:0 auto;
+  position:absolute;bottom:20px;left:0;right:0;text-align:center;
+}
+.manicule-layer{position:absolute;inset:0;}
+.manicule{
+  position:absolute;right:6px;width:26px;height:20px;
+  color:var(--vermilion);opacity:0;transform:translateX(-8px);
+  transition:opacity .3s, transform .3s;
+}
+.manicule[data-on="true"]{opacity:1;transform:translateX(0);}
+
+/* text column — pricked and ruled, as a scribe would */
+.column{padding:30px 52px 140px;max-width:760px;margin:0 auto;width:100%;position:relative;}
+.column[data-ruled="true"] .scripture{
+  background-image:repeating-linear-gradient(
+    to bottom,
+    transparent 0, transparent calc(var(--lead) - 1px),
+    var(--rule) calc(var(--lead) - 1px), var(--rule) var(--lead));
+  background-position:0 8px;
+}
+
+/* gloss column */
+.gloss{
+  position:sticky;top:0;height:100vh;
+  border-left:1px solid var(--rule);
+  background:rgba(213,199,168,.28);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.gloss-tabs{display:flex;border-bottom:1px solid var(--rule);flex-shrink:0;}
+.gloss-tab{
+  flex:1;padding:12px 6px;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--gall-faint);border-right:1px solid var(--rule);
+  transition:color .18s,background .18s;
+}
+.gloss-tab:last-child{border-right:none;}
+.gloss-tab[aria-selected="true"]{color:var(--vermilion);background:var(--vellum-lit);}
+.gloss-body{flex:1;overflow-y:auto;padding:20px 20px 60px;}
+.gloss-pane{display:none;}
+.gloss-pane[data-open="true"]{display:block;}
+.gloss-empty{
+  font-family:var(--mono);font-size:11px;line-height:1.9;color:var(--gall-faint);
+  letter-spacing:.03em;text-transform:none;
+}
+</style>
+</head>
+<style>
+/* ── reading apparatus ───────────────────────────────────── */
+.apparatus{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+  padding-bottom:18px;margin-bottom:26px;border-bottom:1px solid var(--rule);
+}
+.pick{
+  position:relative;display:inline-flex;align-items:center;
+  border:1px solid var(--rule-hard);background:var(--vellum-lit);
+  height:32px;
+}
+.pick select{
+  appearance:none;background:none;border:none;
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  color:var(--gall);padding:0 26px 0 11px;height:100%;cursor:pointer;
+}
+.pick::after{
+  content:"";position:absolute;right:9px;top:50%;width:5px;height:5px;
+  border-right:1px solid var(--gall-soft);border-bottom:1px solid var(--gall-soft);
+  transform:translateY(-70%) rotate(45deg);pointer-events:none;
+}
+.stepper{display:inline-flex;border:1px solid var(--rule-hard);height:32px;background:var(--vellum-lit);}
+.stepper button{
+  width:32px;display:grid;place-items:center;color:var(--gall-soft);
+  border-right:1px solid var(--rule);transition:background .15s,color .15s;
+}
+.stepper button:last-child{border-right:none;}
+.stepper button:hover:not(:disabled){background:var(--vellum-deep);color:var(--vermilion);}
+.stepper button:disabled{opacity:.3;cursor:default;}
+.tool{
+  height:32px;padding:0 12px;border:1px solid var(--rule-hard);background:var(--vellum-lit);
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gall-soft);display:inline-flex;align-items:center;gap:7px;
+  transition:background .15s,color .15s,border-color .15s;
+}
+.tool:hover{background:var(--vellum-deep);color:var(--gall);}
+.tool[data-on="true"]{border-color:var(--vermilion);color:var(--vermilion);}
+.tool[data-on="true"] .dot{background:var(--vermilion);}
+.dot{width:5px;height:5px;background:var(--gall-faint);border-radius:50%;}
+
+/* ── the illuminated initial: the signature ──────────────── */
+.opening{display:flex;gap:22px;align-items:flex-start;margin-bottom:4px;}
+.initial{width:132px;height:132px;flex-shrink:0;}
+.initial svg{display:block;width:100%;height:100%;}
+.vine{fill:none;stroke:var(--gold);stroke-width:1.6;stroke-linecap:round;}
+.vine-draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:scribe 1.5s cubic-bezier(.55,0,.35,1) forwards;}
+@keyframes scribe{to{stroke-dashoffset:0;}}
+.leafdot{fill:var(--gold-lt);opacity:0;animation:gild .5s ease forwards;}
+@keyframes gild{to{opacity:1;}}
+.initial-letter{
+  font-family:var(--caps);font-weight:700;fill:var(--vermilion);
+  text-anchor:middle;opacity:0;
+  animation:strike .7s cubic-bezier(.2,.8,.3,1) .55s forwards;
+}
+@keyframes strike{from{opacity:0;transform:scale(.86);}to{opacity:1;transform:scale(1);}}
+.initial-ground{fill:var(--lapis);}
+.initial-frame{fill:none;stroke:var(--gold);stroke-width:2.5;}
+
+.opening-meta{padding-top:6px;min-width:0;}
+.book-title{
+  font-family:var(--caps);font-weight:700;font-size:31px;letter-spacing:.05em;
+  line-height:1.12;margin:0 0 6px;color:var(--gall);
+}
+.chapter-line{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--gall-faint);}
+.chapter-line b{color:var(--vermilion);font-weight:500;}
+
+/* ── scripture ───────────────────────────────────────────── */
+.scripture{margin-top:26px;}
+.rubric{
+  font-family:var(--caps);font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--vermilion);margin:calc(var(--lead)) 0 0;line-height:var(--lead);
+  page-break-after:avoid;
+}
+.verse{
+  display:inline;position:relative;
+  transition:background .2s;
+  cursor:pointer;
+}
+.verse:hover{background:rgba(31,74,135,.07);}
+.verse[data-marked="true"]{background:rgba(179,43,23,.11);border-bottom:1px solid var(--vermilion);}
+.vnum{
+  font-family:var(--mono);font-size:10px;color:var(--vermilion);
+  vertical-align:.42em;margin-right:5px;letter-spacing:0;user-select:none;
+}
+.verse[data-jesus="true"]{color:#7A2317;}
+.poem{display:block;padding-left:2.2em;}
+.fnote{
+  font-family:var(--mono);font-size:9px;color:var(--lapis);vertical-align:.5em;
+  margin:0 2px;cursor:help;border-bottom:1px dotted var(--lapis);
+}
+.footnotes{
+  margin-top:calc(var(--lead)*1.4);padding-top:16px;border-top:1px solid var(--rule);
+  font-size:14px;line-height:26px;color:var(--gall-soft);
+}
+.footnotes h4{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gall-faint);margin:0 0 10px;font-weight:400;}
+.footnotes li{margin-bottom:6px;}
+.footnotes b{font-family:var(--mono);font-size:10px;color:var(--vermilion);font-weight:400;}
+
+.loading{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gall-faint);padding:40px 0;}
+.loading::after{content:"";animation:ell 1.4s steps(4,end) infinite;}
+@keyframes ell{0%{content:"";}25%{content:"·";}50%{content:"··";}75%{content:"···";}}
+.err{
+  border-left:2px solid var(--vermilion);padding:12px 16px;background:rgba(179,43,23,.06);
+  font-family:var(--mono);font-size:11.5px;line-height:1.75;color:var(--gall-soft);letter-spacing:.02em;
+}
+.err b{color:var(--vermilion);font-weight:500;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.12em;font-size:10px;}
+
+/* ── gloss contents ──────────────────────────────────────── */
+.gl-head{
+  font-family:var(--caps);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--vermilion);margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule);
+}
+.gl-card{
+  border-left:2px solid var(--rule-hard);padding:2px 0 2px 12px;margin-bottom:18px;
+  font-size:15px;line-height:25px;color:var(--gall-soft);
+}
+.gl-card.pinned{border-left-color:var(--vermilion);}
+.gl-ref{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--vermilion);text-transform:uppercase;display:block;margin-bottom:5px;}
+.gl-card p{margin:0 0 9px;}
+.xref{
+  display:flex;align-items:baseline;gap:9px;padding:7px 0;
+  border-bottom:1px dotted var(--rule);width:100%;text-align:left;
+  transition:background .15s;
+}
+.xref:hover{background:rgba(31,74,135,.07);}
+.xref .r{font-family:var(--mono);font-size:11px;color:var(--lapis);flex-shrink:0;letter-spacing:.02em;}
+.xref .s{font-family:var(--mono);font-size:9px;color:var(--gall-faint);margin-left:auto;flex-shrink:0;}
+.xref .bar{height:2px;background:var(--lapis);opacity:.5;flex-shrink:0;}
+
+.ask{
+  width:100%;border:1px solid var(--rule-hard);background:var(--vellum-lit);
+  padding:10px 12px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--gall-soft);margin-bottom:14px;
+  transition:background .15s,color .15s;
+}
+.ask:hover:not(:disabled){background:var(--vellum-deep);color:var(--vermilion);}
+.ask:disabled{opacity:.45;cursor:default;}
+.machine-note{
+  font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gall-faint);border:1px dashed var(--rule-hard);padding:5px 8px;margin-bottom:12px;
+}
+
+/* ── chronicle ───────────────────────────────────────────── */
+.wide{max-width:1180px;margin:0 auto;padding:40px 44px 120px;}
+.leaf-head{margin-bottom:38px;padding-bottom:22px;border-bottom:1px solid var(--rule-hard);}
+.leaf-title{font-family:var(--caps);font-weight:700;font-size:26px;letter-spacing:.12em;text-transform:uppercase;margin:0 0 8px;}
+.leaf-sub{font-size:16.5px;line-height:27px;color:var(--gall-soft);max-width:640px;margin:0;}
+
+.era{margin-bottom:44px;}
+.era-bar{display:flex;align-items:baseline;gap:14px;margin-bottom:16px;}
+.era-num{font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:.14em;}
+.era-name{font-family:var(--caps);font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:var(--gall);}
+.era-rule{flex:1;height:1px;background:var(--rule);}
+.era-count{font-family:var(--mono);font-size:9.5px;color:var(--gall-faint);letter-spacing:.1em;}
+
+.folios{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);}
+.folio{
+  background:var(--vellum);padding:15px 16px 17px;text-align:left;
+  position:relative;transition:background .18s;min-height:112px;
+  display:flex;flex-direction:column;
+}
+.folio:hover{background:var(--vellum-lit);}
+.folio-ref{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--vermilion);margin-bottom:6px;}
+.folio-name{font-family:var(--serif);font-size:18px;line-height:24px;color:var(--gall);margin-bottom:6px;}
+.folio-hook{font-size:13.5px;line-height:20px;color:var(--gall-faint);margin-top:auto;}
+.folio[data-gilt="true"]{background:linear-gradient(160deg,rgba(212,172,73,.20),rgba(168,131,44,.07));}
+.folio[data-gilt="true"] .folio-name{color:#6E5518;}
+.gilt-mark{position:absolute;top:12px;right:13px;width:13px;height:13px;color:var(--gold);opacity:0;transition:opacity .3s;}
+.folio[data-gilt="true"] .gilt-mark{opacity:1;}
+
+/* ── atlas ───────────────────────────────────────────────── */
+.atlas-svg{display:block;width:100%;height:auto;}
+.sea{fill:var(--lapis);fill-opacity:.15;}
+.sea-hatch{stroke:var(--lapis);stroke-opacity:.34;stroke-width:.7;fill:none;}
+.river{fill:none;stroke:var(--lapis);stroke-width:1.3;opacity:.6;stroke-linecap:round;}
+.place-panel{margin-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:26px;}
+@media(max-width:820px){.place-panel{grid-template-columns:1fr;}}
+
+/* ── cast ────────────────────────────────────────────────── */
+.seek{
+  width:100%;max-width:420px;border:1px solid var(--rule-hard);background:var(--vellum-lit);
+  padding:10px 13px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--gall);
+  margin-bottom:24px;
+}
+.seek::placeholder{color:var(--gall-faint);text-transform:uppercase;font-size:10px;letter-spacing:.12em;}
+.roster{display:grid;grid-template-columns:repeat(auto-fill,minmax(174px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);}
+.person{
+  background:var(--vellum);padding:13px 14px;text-align:left;transition:background .15s;
+}
+.person:hover{background:var(--vellum-lit);}
+.person[aria-current="true"]{background:var(--vellum-deep);}
+.person-name{font-family:var(--serif);font-size:16.5px;color:var(--gall);line-height:22px;}
+.person-ref{font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--gall-faint);margin-top:3px;}
+.profile{
+  margin-top:30px;padding:28px 32px;border:1px solid var(--rule-hard);background:var(--vellum-lit);
+  max-width:720px;
+}
+.profile h3{font-family:var(--caps);font-size:22px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 4px;}
+.profile .src{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gall-faint);margin-bottom:20px;}
+.profile p{font-size:17px;line-height:29px;margin:0 0 16px;color:var(--gall);}
+.profile p.study{font-family:var(--mono);font-size:11px;line-height:22px;color:var(--gall-soft);letter-spacing:.02em;border-top:1px solid var(--rule);padding-top:14px;}
+
+/* ── threads ─────────────────────────────────────────────── */
+.thread-stage{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:0;border:1px solid var(--rule-hard);}
+@media(max-width:900px){.thread-stage{grid-template-columns:1fr;}}
+.thread-svg{display:block;width:100%;height:auto;background:var(--vellum-lit);}
+.thread-side{border-left:1px solid var(--rule);padding:22px 20px;background:rgba(213,199,168,.28);}
+.tnode{cursor:pointer;}
+.tnode circle{transition:r .2s,fill .2s;}
+.tnode:hover circle{fill:var(--vermilion);}
+.tlink{fill:none;stroke:var(--lapis);opacity:.32;transition:opacity .2s,stroke .2s;}
+.tlink.hot{opacity:.95;stroke:var(--vermilion);}
+.tlabel{font-family:var(--mono);font-size:9.5px;fill:var(--gall-soft);letter-spacing:.02em;}
+.thub{fill:var(--vermilion);}
+.thub-ring{fill:none;stroke:var(--vermilion);opacity:.3;}
+
+/* ── scriptorium ─────────────────────────────────────────── */
+.desk{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:38px;}
+@media(max-width:960px){.desk{grid-template-columns:1fr;}}
+.quire-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;}
+@media(max-width:700px){.quire-grid{grid-template-columns:repeat(6,1fr);}}
+.leafcell{
+  aspect-ratio:.72;background:var(--vellum-deep);border:1px solid var(--rule-hard);
+  position:relative;transition:transform .2s,background .3s;
+}
+.leafcell:hover{transform:translateY(-2px);}
+.leafcell[data-gilt="true"]{
+  background:linear-gradient(155deg,var(--gold-lt),var(--gold));
+  border-color:var(--gold);
+}
+.leafcell span{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-family:var(--mono);font-size:8px;color:var(--gall-faint);
+}
+.leafcell[data-gilt="true"] span{color:rgba(43,36,27,.6);}
+
+.collation{border:1px solid var(--rule-hard);background:var(--vellum-lit);padding:26px 28px;min-height:320px;}
+.q-kind{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.q-text{font-size:20px;line-height:32px;margin:0 0 22px;}
+.q-text em{font-style:normal;background:rgba(179,43,23,.12);padding:0 6px;border-bottom:1px solid var(--vermilion);}
+.opts{display:flex;flex-direction:column;gap:1px;background:var(--rule);border:1px solid var(--rule);}
+.opt{
+  background:var(--vellum);padding:12px 15px;text-align:left;font-size:16.5px;line-height:24px;
+  transition:background .15s;display:flex;align-items:baseline;gap:11px;
+}
+.opt:hover:not(:disabled){background:var(--vellum-lit);}
+.opt .k{font-family:var(--mono);font-size:9.5px;color:var(--gall-faint);flex-shrink:0;}
+.opt[data-state="right"]{background:rgba(76,107,79,.20);}
+.opt[data-state="right"] .k{color:var(--verdigris);}
+.opt[data-state="wrong"]{background:rgba(179,43,23,.13);}
+.opt[data-state="wrong"] .k{color:var(--vermilion);}
+.opt:disabled{cursor:default;}
+.verdict{margin-top:20px;font-size:15.5px;line-height:26px;color:var(--gall-soft);}
+.verdict b{color:var(--gall);font-weight:700;}
+.tally{display:flex;gap:6px;margin-bottom:20px;}
+.pip{width:22px;height:4px;background:var(--vellum-sink);}
+.pip[data-p="1"]{background:var(--verdigris);}
+.pip[data-p="0"]{background:var(--vermilion);}
+
+/* ── sources ─────────────────────────────────────────────── */
+.sources{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);}
+.source{background:var(--vellum);padding:20px 22px;}
+.source h4{font-family:var(--caps);font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;margin:0 0 4px;color:var(--gall);}
+.source .lic{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--verdigris);margin-bottom:10px;}
+.source p{font-size:14.5px;line-height:24px;color:var(--gall-soft);margin:0 0 8px;}
+
+.footer-rule{
+  margin-top:70px;padding-top:20px;border-top:1px solid var(--rule-hard);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gall-faint);text-align:center;line-height:2;
+}
+
+/* ── responsive ──────────────────────────────────────────── */
+@media(max-width:1080px){
+  :root{--gloss:0px;--rail:0px;}
+  .spread{grid-template-columns:1fr;}
+  .rail{display:none;}
+  .gloss{
+    position:fixed;left:0;right:0;bottom:0;top:auto;height:64vh;z-index:70;
+    border-left:none;border-top:2px solid var(--gall);background:var(--vellum);
+    transform:translateY(101%);transition:transform .32s cubic-bezier(.4,0,.2,1);
+  }
+  .gloss[data-open="true"]{transform:translateY(0);}
+  .gloss-drag{display:block;}
+  .column{padding:26px 20px 130px;}
+  .gloss-toggle{display:inline-flex;}
+}
+.gloss-drag{display:none;position:absolute;top:-2px;right:0;padding:8px 14px;background:var(--gall);color:var(--vellum);font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;}
+.gloss-toggle{display:none;}
+@media(max-width:760px){
+  .wide{padding:28px 18px 100px;}
+  .tagline{display:none;}
+  .book-title{font-size:25px;}
+  .initial{width:96px;height:96px;}
+  .desk{gap:26px;}
+  body{font-size:18px;}
+  :root{--lead:32px;}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms !important;transition-duration:.001ms !important;}
+  .vine-draw{stroke-dashoffset:0;}
+  .initial-letter{opacity:1;}
+  .leafdot{opacity:1;}
+}
+</style>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   VELLUM — second gathering: frontispiece, atlas, transport,
+   help, and the ornaments.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── section heads get a rubricated ornament ─────────────── */
+.leaf-head{position:relative;}
+.head-orn{display:block;width:100%;max-width:340px;height:14px;margin:0 0 16px;color:var(--vermilion);opacity:.75;}
+.leaf-title{position:relative;}
+
+/* ══ FRONTISPIECE ══════════════════════════════════════════ */
+.front{padding:0 0 90px;}
+.front-plate{
+  position:relative;border-bottom:1px solid var(--rule-hard);
+  padding:64px 56px 56px;overflow:hidden;
+}
+.front-vine{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;color:var(--gold);opacity:.55;}
+.front-inner{position:relative;max-width:760px;margin:0 auto;text-align:center;}
+.front-kicker{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.30em;text-transform:uppercase;
+  color:var(--vermilion);margin-bottom:20px;
+}
+.front-title{
+  font-family:var(--caps);font-weight:700;font-size:clamp(38px,7vw,74px);
+  letter-spacing:.20em;line-height:1.06;margin:0 0 6px;color:var(--gall);
+}
+.front-title b{color:var(--vermilion);font-weight:700;}
+.front-rule{
+  width:180px;height:0;margin:22px auto;border-top:1px solid var(--rule-hard);position:relative;
+}
+.front-rule::after{
+  content:"";position:absolute;left:50%;top:-3.5px;width:7px;height:7px;
+  transform:translateX(-50%) rotate(45deg);background:var(--vermilion);
+}
+.front-lede{
+  font-size:21px;line-height:34px;color:var(--gall-soft);margin:0 auto 30px;max-width:620px;
+}
+.front-lede em{font-style:italic;color:var(--gall);}
+.front-go{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.big-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  border:1px solid var(--gall);background:var(--gall);color:var(--vellum-lit);
+  padding:13px 24px;font-family:var(--caps);font-size:12px;letter-spacing:.17em;text-transform:uppercase;
+  transition:background .2s,color .2s,transform .2s;
+}
+.big-btn:hover{background:var(--vermilion);border-color:var(--vermilion);transform:translateY(-1px);}
+.big-btn.ghost{background:none;color:var(--gall);}
+.big-btn.ghost:hover{background:var(--gall);color:var(--vellum-lit);}
+
+/* how it works — a numbered gathering, not feature cards */
+.how{max-width:1080px;margin:0 auto;padding:52px 56px 0;}
+.how-row{
+  display:grid;grid-template-columns:112px minmax(0,1fr) 210px;gap:30px;align-items:start;
+  padding:30px 0;border-bottom:1px solid var(--rule);
+}
+.how-row:last-child{border-bottom:none;}
+.how-n{
+  font-family:var(--caps);font-size:38px;letter-spacing:.06em;color:var(--vellum-sink);
+  line-height:1;text-align:right;padding-top:2px;transition:color .25s;
+}
+.how-row:hover .how-n{color:var(--vermilion);}
+.how-name{
+  font-family:var(--caps);font-size:15px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--gall);margin:0 0 8px;
+}
+.how-body{font-size:17px;line-height:29px;color:var(--gall-soft);margin:0 0 14px;}
+.how-body b{color:var(--gall);font-weight:400;border-bottom:1px solid var(--vermilion);}
+.how-jump{
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--vermilion);border-bottom:1px solid transparent;padding-bottom:2px;
+}
+.how-jump:hover{border-bottom-color:var(--vermilion);}
+.how-fig{
+  border:1px solid var(--rule);background:var(--vellum-lit);aspect-ratio:1.5;
+  display:grid;place-items:center;overflow:hidden;
+}
+.how-fig svg{width:100%;height:100%;display:block;}
+@media(max-width:900px){
+  .how-row{grid-template-columns:56px minmax(0,1fr);}
+  .how-n{font-size:28px;}
+  .how-fig{grid-column:1/-1;max-width:280px;}
+  .how{padding:40px 20px 0;}
+  .front-plate{padding:44px 20px 40px;}
+}
+
+/* ══ ATLAS v2 ══════════════════════════════════════════════ */
+.atlas-shell{
+  display:grid;grid-template-columns:minmax(0,1fr) 296px;
+  border:1px solid var(--rule-hard);background:var(--vellum-lit);
+}
+@media(max-width:940px){.atlas-shell{grid-template-columns:1fr;}}
+.atlas-stage{position:relative;overflow:hidden;}
+.atlas-svg{display:block;width:100%;height:auto;cursor:grab;touch-action:none;user-select:none;}
+.atlas-svg:active{cursor:grabbing;}
+
+.atlas-ctl{
+  position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:1px;
+  background:var(--rule-hard);border:1px solid var(--rule-hard);
+}
+.atlas-ctl button{
+  width:34px;height:34px;background:var(--vellum);color:var(--gall-soft);
+  font-family:var(--mono);font-size:15px;line-height:1;display:grid;place-items:center;
+  transition:background .15s,color .15s;
+}
+.atlas-ctl button:hover{background:var(--vermilion);color:var(--vellum-lit);}
+.atlas-ctl button.sm{font-size:9px;letter-spacing:.06em;}
+
+.atlas-scale{
+  position:absolute;left:16px;bottom:14px;
+  font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--gall-faint);display:flex;align-items:center;gap:8px;
+}
+.atlas-scale .bar{display:block;height:5px;border:1px solid var(--gall-faint);border-top:none;}
+
+/* map glyphs */
+.gsite{cursor:pointer;}
+.glyph{fill:var(--vellum-lit);stroke:var(--gall);stroke-width:1;stroke-linejoin:round;transition:fill .16s,stroke .16s;}
+.glyph-roof{fill:var(--gall-soft);stroke:none;}
+.gsite:hover .glyph{fill:var(--vermilion);stroke:var(--vermilion);}
+.gsite:hover .glyph-roof{fill:var(--vermilion);}
+.gsite[data-sel="true"] .glyph{fill:var(--gold-lt);stroke:var(--gall);}
+.gsite[data-sel="true"] .glyph-roof{fill:var(--gall);}
+.glyph-mtn{fill:var(--verdigris);fill-opacity:.30;stroke:var(--verdigris);stroke-width:1;stroke-linejoin:round;transition:fill-opacity .16s;}
+.gsite:hover .glyph-mtn{fill-opacity:.7;}
+.gsite[data-sel="true"] .glyph-mtn{fill:var(--gold-lt);fill-opacity:.85;stroke:var(--gold);}
+.glyph-hatch{stroke:var(--verdigris);stroke-width:.6;opacity:.7;fill:none;}
+
+.mapname{
+  font-family:var(--serif);font-size:12.5px;fill:var(--gall);
+  paint-order:stroke;stroke:var(--vellum-lit);stroke-width:3.4px;stroke-linejoin:round;
+  pointer-events:none;
+}
+.mapname[data-i]{pointer-events:auto;cursor:pointer;}
+.mapname[data-i]:hover{fill:var(--vermilion);}
+.mapname.nat{font-style:italic;fill:var(--verdigris);}
+.mapname.sea{font-style:italic;fill:var(--lapis);opacity:.8;letter-spacing:.16em;font-size:11.5px;}
+.mapregion{
+  font-family:var(--caps);font-size:13px;letter-spacing:.36em;fill:var(--gall-faint);
+  opacity:.5;text-anchor:middle;pointer-events:none;text-transform:uppercase;
+}
+.cartouche-box{fill:var(--gall);stroke:none;}
+.cartouche-tx{font-family:var(--mono);font-size:10px;fill:var(--vellum-lit);letter-spacing:.07em;}
+.selring{fill:none;stroke:var(--gold);stroke-width:1.6;opacity:.9;}
+
+/* the index beside the map — the real way to find a place */
+.atlas-index{border-left:1px solid var(--rule);display:flex;flex-direction:column;min-height:0;}
+@media(max-width:940px){.atlas-index{border-left:none;border-top:1px solid var(--rule);}}
+.idx-head{padding:14px 16px 10px;border-bottom:1px solid var(--rule);flex-shrink:0;}
+.idx-cap{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gall-faint);}
+.idx-seek{
+  width:100%;margin-top:9px;border:1px solid var(--rule-hard);background:var(--vellum);
+  padding:8px 11px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--gall);
+}
+.idx-seek::placeholder{color:var(--gall-faint);text-transform:uppercase;font-size:9.5px;letter-spacing:.12em;}
+.idx-list{overflow-y:auto;max-height:430px;scrollbar-width:thin;}
+@media(max-width:940px){.idx-list{max-height:260px;}}
+.idx{
+  width:100%;display:grid;grid-template-columns:14px 1fr auto;gap:10px;align-items:baseline;
+  padding:8px 16px;text-align:left;border-bottom:1px solid var(--rule);transition:background .14s;
+}
+.idx:hover{background:var(--vellum);}
+.idx[data-sel="true"]{background:var(--vellum-deep);}
+.idx .ico{width:12px;height:12px;color:var(--gall-soft);align-self:center;}
+.idx[data-sel="true"] .ico{color:var(--vermilion);}
+.idx .nm{font-size:15.5px;line-height:21px;color:var(--gall);}
+.idx .ct{font-family:var(--mono);font-size:9.5px;color:var(--gall-faint);letter-spacing:.04em;}
+.idx-foot{padding:11px 16px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gall-faint);line-height:1.8;}
+
+/* ══ AUDIO TRANSPORT ═══════════════════════════════════════ */
+.transport{
+  display:none;margin:18px 0 26px;border:1px solid var(--rule-hard);background:var(--vellum-lit);
+}
+.transport[data-open="true"]{display:block;animation:slidein .28s ease both;}
+@keyframes slidein{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
+.tp-row{display:flex;align-items:center;gap:14px;padding:11px 14px;}
+.tp-row+.tp-row{border-top:1px solid var(--rule);}
+.tp-play{
+  width:38px;height:38px;flex-shrink:0;border:1px solid var(--gall);background:var(--gall);
+  color:var(--vellum-lit);display:grid;place-items:center;transition:background .18s;
+}
+.tp-play:hover{background:var(--vermilion);border-color:var(--vermilion);}
+.tp-play svg{width:13px;height:13px;fill:currentColor;}
+.tp-scrub{flex:1;position:relative;height:22px;display:flex;align-items:center;cursor:pointer;}
+.tp-track{width:100%;height:4px;background:var(--vellum-sink);position:relative;}
+.tp-done{position:absolute;inset:0 auto 0 0;width:0;background:var(--vermilion);}
+.tp-time{font-family:var(--mono);font-size:10px;color:var(--gall-faint);letter-spacing:.04em;flex-shrink:0;min-width:82px;text-align:right;}
+.tp-lab{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--gall-faint);flex-shrink:0;}
+.rates{display:flex;gap:1px;background:var(--rule);border:1px solid var(--rule);}
+.rate{
+  padding:5px 10px;background:var(--vellum);font-family:var(--mono);font-size:10px;
+  letter-spacing:.03em;color:var(--gall-soft);transition:background .14s,color .14s;
+}
+.rate:hover{background:var(--vellum-lit);}
+.rate[data-on="true"]{background:var(--gall);color:var(--vellum-lit);}
+.tp-reader{
+  border:1px solid var(--rule-hard);background:var(--vellum);padding:5px 8px;
+  font-family:var(--mono);font-size:10px;color:var(--gall-soft);
+}
+@media(max-width:700px){
+  .tp-row{flex-wrap:wrap;gap:9px;}
+  .tp-time{min-width:0;}
+}
+
+/* ══ HELP OVERLAY ══════════════════════════════════════════ */
+.help{
+  position:fixed;inset:0;z-index:90;display:none;
+  background:rgba(43,36,27,.55);padding:40px 20px;overflow-y:auto;
+}
+.help[data-open="true"]{display:block;animation:fade .22s ease both;}
+@keyframes fade{from{opacity:0;}to{opacity:1;}}
+.help-card{
+  max-width:640px;margin:0 auto;background:var(--vellum);border:1px solid var(--gall);
+  padding:34px 38px 30px;position:relative;
+}
+.help-card h3{font-family:var(--caps);font-size:17px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 4px;}
+.help-card .sub{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gall-faint);margin-bottom:22px;}
+.help-grid{display:grid;grid-template-columns:auto 1fr;gap:9px 18px;align-items:baseline;}
+.help-grid kbd{
+  font-family:var(--mono);font-size:10px;border:1px solid var(--rule-hard);
+  background:var(--vellum-lit);padding:3px 8px;white-space:nowrap;
+}
+.help-grid span{font-size:16px;line-height:24px;color:var(--gall-soft);}
+.help-close{position:absolute;top:12px;right:14px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gall-faint);}
+.help-close:hover{color:var(--vermilion);}
+
+/* ══ ORNAMENT + FEEDBACK ═══════════════════════════════════ */
+.leafcell[data-gilt="true"].fresh{animation:gild .9s ease both;}
+@keyframes gild{
+  0%{background:var(--vellum-deep);box-shadow:inset 0 0 0 0 rgba(212,172,73,0);}
+  40%{background:var(--gold-lt);}
+  100%{background:linear-gradient(155deg,var(--gold-lt),var(--gold));}
+}
+.folio{transition:transform .18s,background .3s,border-color .3s;}
+.folio:hover{transform:translateY(-2px);}
+
+/* the toast that confirms something happened */
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);z-index:95;
+  background:var(--gall);color:var(--vellum-lit);padding:11px 20px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+  opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;
+}
+.toast[data-on="true"]{opacity:1;transform:translate(-50%,0);}
+
+/* the quiet failure note — a remark, not an alarm */
+.quiet-note{
+  font-family:var(--mono);font-size:10px;line-height:1.9;letter-spacing:.03em;
+  color:var(--gall-faint);border-left:1px solid var(--rule-hard);padding:2px 0 2px 12px;margin:14px 0 0;
+}
+.ask.ghost{
+  background:none;color:var(--gall-faint);border:1px dashed var(--rule-hard);
+}
+.ask.ghost:hover{color:var(--vermilion);border-color:var(--vermilion);border-style:solid;}
+
+/* ══ THE REGISTER ══════════════════════════════════════════ */
+.rollbar{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:14px;}
+.rollbar .seek{margin-bottom:0;max-width:300px;flex:1 1 220px;}
+.sortset{display:flex;gap:1px;background:var(--rule);border:1px solid var(--rule);}
+.sortb{
+  padding:8px 14px;background:var(--vellum);font-family:var(--mono);font-size:10px;
+  letter-spacing:.11em;text-transform:uppercase;color:var(--gall-soft);transition:background .14s,color .14s;
+}
+.sortb:hover{background:var(--vellum-lit);}
+.sortb[data-on="true"]{background:var(--gall);color:var(--vellum-lit);}
+.rollcount{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gall-faint);}
+
+.alpharail{display:flex;flex-wrap:wrap;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:22px;}
+.alpha{
+  min-width:32px;padding:7px 8px;background:var(--vellum);font-family:var(--caps);font-size:11.5px;
+  letter-spacing:.08em;color:var(--gall-soft);flex:1 0 auto;transition:background .14s,color .14s;
+}
+.alpha:hover{background:var(--vellum-lit);color:var(--vermilion);}
+.alpha[data-on="true"]{background:var(--vermilion);color:var(--vellum-lit);}
+
+.rollwait{grid-column:1/-1;padding:34px 26px;background:var(--vellum-lit);}
+.rollwait p{font-family:var(--mono);font-size:11px;line-height:1.95;color:var(--gall-faint);max-width:520px;margin:10px 0 0;letter-spacing:.02em;}
+
+.alsocalled{font-style:italic;color:var(--gall-soft);font-size:16px;margin:-8px 0 18px;}
+.kin{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:14px 0 4px;margin:0 0 22px;}
+.kinrow{display:grid;grid-template-columns:88px 1fr;gap:10px;align-items:baseline;margin-bottom:10px;}
+.kinlab{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gall-faint);}
+.kinset{display:flex;flex-wrap:wrap;gap:6px;}
+.chip{
+  border:1px solid var(--rule-hard);background:var(--vellum);padding:3px 10px;
+  font-size:15px;line-height:22px;color:var(--gall);transition:background .14s,border-color .14s;
+}
+.chip:hover{background:var(--vermilion);border-color:var(--vermilion);color:var(--vellum-lit);}
+.easton p{font-size:17px;line-height:29px;margin:0 0 16px;color:var(--gall);}
+.refjump{
+  color:var(--lapis);border-bottom:1px solid rgba(31,74,135,.4);font:inherit;
+  padding:0;transition:color .14s,border-color .14s;
+}
+.refjump:hover{color:var(--vermilion);border-bottom-color:var(--vermilion);}
+@media(max-width:640px){
+  .kinrow{grid-template-columns:1fr;gap:4px;}
+  .rollbar .seek{max-width:none;}
+  .alpha{min-width:28px;padding:6px 5px;font-size:11px;}
+}
+
+/* ══ LAYOUT OVERRIDES FOR THE SPINE ════════════════════════ */
+@media(max-width:1180px){
+  :root{--spine:0px;}
+  .spine{
+    width:270px;transform:translateX(-100%);
+    box-shadow:none;
+  }
+  body[data-spine="open"] .spine{transform:translateX(0);}
+  .bindbar{display:flex;}
+  .book{margin-left:0;}
+  .rail{top:52px;height:calc(100vh - 52px);}
+  .gloss{top:52px;height:calc(100vh - 52px);}
+}
+@media(max-width:1180px) and (min-width:1081px){
+  .spread{grid-template-columns:var(--rail) minmax(0,1fr) var(--gloss);}
+}
+@media(max-width:1080px){
+  .gloss{top:auto;height:64vh;}
+}
+@media(max-width:760px){
+  .front-lede{font-size:19px;line-height:31px;}
+  .atlas-ctl button{width:30px;height:30px;}
+  .help-card{padding:26px 22px 22px;}
+}
+
+/* ══ PHONES ════════════════════════════════════════════════
+   The two SVG views are drawn in user units and scaled to fit,
+   so their type is enlarged in unit-space rather than in CSS.
+   ═══════════════════════════════════════════════════════ */
+@media(max-width:940px){
+  /* never trap the page scroll under a finger on the map */
+  .atlas-svg{touch-action:pan-y;}
+  .atlas-ctl button{width:40px;height:40px;font-size:17px;}
+  .atlas-ctl button.sm{font-size:10px;}
+  .tlabel{font-size:13px;}
+  .thub-ring{stroke-dasharray:3 8;}
+}
+@media(max-width:760px){
+  .wide{padding:26px 16px 90px;}
+  .leaf-title{font-size:22px;}
+  .leaf-sub{font-size:16px;line-height:26px;}
+  .head-orn{max-width:220px;}
+
+  /* reading desk */
+  .apparatus{gap:8px;}
+  .tool{padding:7px 11px;min-height:34px;}
+  .pick select{min-height:34px;}
+  .opening{gap:16px;}
+  .transport .tp-row{padding:10px 11px;}
+  .rates{flex-wrap:wrap;}
+  .rate{padding:7px 9px;font-size:10.5px;min-height:32px;}
+  .tp-reader{min-height:32px;}
+  .tp-play{width:42px;height:42px;}
+
+  /* register */
+  .roster{grid-template-columns:repeat(auto-fill,minmax(142px,1fr));}
+  .person{padding:11px 12px;}
+  .person-name{font-size:15.5px;line-height:20px;}
+  .profile{padding:20px 18px;margin-top:22px;}
+  .profile h3{font-size:19px;}
+  .easton p,.profile p{font-size:16.5px;line-height:28px;}
+  .chip{font-size:14.5px;padding:4px 9px;}
+
+  /* chronicle + scriptorium */
+  .folios{grid-template-columns:1fr;}
+  .collation{padding:20px 18px;}
+  .q-text{font-size:18px;line-height:29px;}
+  .opt{padding:11px 12px;font-size:15.5px;min-height:44px;}
+  .era-bar{flex-wrap:wrap;gap:8px;}
+
+  /* threads */
+  .thread-side{padding:18px 16px;}
+
+  /* colophon */
+  .source{padding:17px 16px;}
+  .footer-rule{font-size:8.5px;letter-spacing:.1em;}
+
+  /* help */
+  .help{padding:20px 12px;}
+  .help-grid{grid-template-columns:1fr;gap:3px 0;}
+  .help-grid kbd{justify-self:start;margin-top:9px;}
+  .help-grid span{font-size:15.5px;line-height:23px;}
+}
+@media(max-width:420px){
+  .quire-grid{grid-template-columns:repeat(5,1fr);}
+  .front-title{letter-spacing:.16em;}
+  .roster{grid-template-columns:1fr 1fr;}
+  .tp-time{font-size:9.5px;}
+}
+/* thumbs, not cursors */
+@media(hover:none){
+  button{-webkit-tap-highlight-color:rgba(179,43,23,.14);}
+  .folio:hover,.leafcell:hover{transform:none;}
+  .idx{padding:11px 16px;}
+  .alpha{min-height:38px;}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .leaf[data-open="true"]{animation:none;}
+  .transport[data-open="true"]{animation:none;}
+  .leafcell[data-gilt="true"].fresh{animation:none;}
+}
+</style>
+<body>
+
+<!-- ══ mobile binding bar ═══════════════════════════════════ -->
+<div class="bindbar">
+  <button class="burger" id="burger" aria-label="Open the contents"><i></i><i></i><i></i></button>
+  <span class="wordmark">VELL<b>V</b>M</span>
+  <span class="gilt-num" id="giltNumM" style="margin-left:auto">0/48</span>
+</div>
+<div class="scrim" id="scrim"></div>
+
+<!-- ══ THE SPINE ════════════════════════════════════════════ -->
+<nav class="spine" id="spine" aria-label="Contents">
+  <div class="colophon">
+    <span class="wordmark">VELL<b>V</b>M</span>
+    <span class="tagline">the book, taken apart</span>
+  </div>
+
+  <div class="quires" id="quires">
+    <button class="quire" data-leaf="frontispiece">
+      <span class="qn">&#10022;</span><span class="qname">Frontispiece</span>
+      <span class="qsub">Start here — what all of this does</span>
+    </button>
+    <button class="quire" data-leaf="read">
+      <span class="qn">I</span><span class="qname">Reading Desk</span>
+      <span class="qsub">Any chapter, any translation. Mark verses.</span>
+    </button>
+    <button class="quire" data-leaf="chronicle">
+      <span class="qn">II</span><span class="qname">Chronicle</span>
+      <span class="qsub">The 48 stories that carry the plot</span>
+    </button>
+    <button class="quire" data-leaf="atlas">
+      <span class="qn">III</span><span class="qname">Atlas</span>
+      <span class="qsub">Where it happened, on real coordinates</span>
+    </button>
+    <button class="quire" data-leaf="cast">
+      <span class="qn">IV</span><span class="qname">Register</span>
+      <span class="qsub">Who's who — 125 sourced profiles</span>
+    </button>
+    <button class="quire" data-leaf="threads">
+      <span class="qn">V</span><span class="qname">Threads</span>
+      <span class="qsub">How any verse links to the rest</span>
+    </button>
+    <button class="quire" data-leaf="scriptorium">
+      <span class="qn">VI</span><span class="qname">Scriptorium</span>
+      <span class="qsub">The game. Earn your gold leaf.</span>
+    </button>
+    <button class="quire" data-leaf="sources">
+      <span class="qn">VII</span><span class="qname">Colophon</span>
+      <span class="qsub">Who made this and where it comes from</span>
+    </button>
+  </div>
+
+  <div class="spine-foot">
+    <div class="gilt-meter" title="Leaves illuminated">
+      <span class="gilt-line">
+        <span class="gilt-cap">Gilt</span><span class="gilt-num" id="giltNum">0/48</span>
+      </span>
+      <span class="gilt-track"><span class="gilt-fill" id="giltFill"></span></span>
+    </div>
+    <div class="spine-links">
+      <button id="btnHelp">Keys &amp; help</button>
+      <button data-leaf="sources">Sources</button>
+    </div>
+  </div>
+</nav>
+
+<div class="book">
+
+<!-- ══ 0. FRONTISPIECE ══════════════════════════════════════ -->
+<main class="leaf front" id="leaf-frontispiece" data-open="true">
+  <div class="front-plate">
+    <svg class="front-vine" id="frontVine" viewBox="0 0 1200 460" preserveAspectRatio="none" aria-hidden="true"></svg>
+    <div class="front-inner">
+      <div class="front-kicker">An apparatus for reading the Bible as literature</div>
+      <h1 class="front-title">VELL<b>V</b>M</h1>
+      <div class="front-rule"></div>
+      <p class="front-lede">Before it was doctrine it was an <em>object</em> — copied by hand onto animal skin, for a thousand years, by people who left notes in the margins. This is that book taken apart into the pieces you'd actually want: the text, the map, the people, the links between verses, and a workshop where you earn the gold.</p>
+      <div class="front-go">
+        <button class="big-btn" data-leaf="chronicle">Begin with the stories</button>
+        <button class="big-btn ghost" data-leaf="read">Open the reading desk</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="how" id="howRows"></div>
+
+  <div class="how" style="padding-top:10px">
+    <div class="how-row" style="grid-template-columns:112px minmax(0,1fr);border-bottom:none">
+      <div class="how-n">&#10022;</div>
+      <div>
+        <h3 class="how-name">Nothing here is invented</h3>
+        <p class="how-body">Every verse, note, profile and cross-reference is fetched live from open APIs while you read. The coordinates on the map are real survey coordinates. If a thing on this page can't be traced to a source, it isn't on this page — and the one feature that generates text says so on its face.</p>
+        <button class="how-jump" data-leaf="sources">See the colophon &#8594;</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ══ I. READING DESK ══════════════════════════════════════ -->
+<main class="leaf" id="leaf-read">
+  <div class="spread">
+    <aside class="rail">
+      <div class="manicule-layer" id="manicules"></div>
+      <div class="rail-label">margin</div>
+    </aside>
+
+    <div class="column" id="readColumn" data-ruled="true">
+      <div class="apparatus">
+        <span class="pick"><select id="selBook" aria-label="Book"></select></span>
+        <span class="stepper">
+          <button id="prevCh" aria-label="Previous chapter">&#8249;</button>
+          <button id="nextCh" aria-label="Next chapter">&#8250;</button>
+        </span>
+        <span class="pick"><select id="selChapter" aria-label="Chapter"></select></span>
+        <span class="pick"><select id="selTrans" aria-label="Translation"></select></span>
+        <button class="tool" id="btnRule" data-on="true"><span class="dot"></span>Ruling</button>
+        <button class="tool" id="btnAudio"><span class="dot"></span>Listen</button>
+        <button class="tool gloss-toggle" id="btnGloss"><span class="dot"></span>Gloss</button>
+      </div>
+
+      <div class="transport" id="transport">
+        <div class="tp-row">
+          <button class="tp-play" id="tpPlay" aria-label="Play or pause">
+            <svg viewBox="0 0 12 12" id="tpIcon"><path d="M2 1l9 5-9 5z"/></svg>
+          </button>
+          <span class="tp-scrub" id="tpScrub" role="slider" tabindex="0" aria-label="Seek">
+            <span class="tp-track"><span class="tp-done" id="tpDone"></span></span>
+          </span>
+          <span class="tp-time" id="tpTime">0:00 / 0:00</span>
+        </div>
+        <div class="tp-row">
+          <span class="tp-lab">Speed</span>
+          <span class="rates" id="rates">
+            <button class="rate" data-r="0.5">0.5&#215;</button>
+            <button class="rate" data-r="0.75">0.75&#215;</button>
+            <button class="rate" data-r="1" data-on="true">1&#215;</button>
+            <button class="rate" data-r="1.25">1.25&#215;</button>
+            <button class="rate" data-r="1.5">1.5&#215;</button>
+            <button class="rate" data-r="2">2&#215;</button>
+          </span>
+          <span class="tp-lab" style="margin-left:auto">Reader</span>
+          <select class="tp-reader" id="tpReader" aria-label="Narrator"></select>
+        </div>
+      </div>
+
+      <div class="opening">
+        <div class="initial" id="initial" aria-hidden="true"></div>
+        <div class="opening-meta">
+          <h1 class="book-title" id="bookTitle">&nbsp;</h1>
+          <div class="chapter-line" id="chapterLine">&nbsp;</div>
+        </div>
+      </div>
+
+      <audio id="player" style="display:none" preload="none"></audio>
+      <div class="scripture" id="scripture"><div class="loading">Unrolling</div></div>
+      <div class="footnotes" id="footnotes"></div>
+    </div>
+
+    <aside class="gloss" id="glossPanel">
+      <button class="gloss-drag" id="glossClose">Close</button>
+      <div class="gloss-tabs" role="tablist">
+        <button class="gloss-tab" data-pane="notes" role="tab" aria-selected="true">Marginalia</button>
+        <button class="gloss-tab" data-pane="xref" role="tab" aria-selected="false">Threads</button>
+        <button class="gloss-tab" data-pane="comm" role="tab" aria-selected="false">Commentary</button>
+      </div>
+      <div class="gloss-body">
+        <div class="gloss-pane" data-pane="notes" data-open="true" id="paneNotes"></div>
+        <div class="gloss-pane" data-pane="xref" id="paneXref"></div>
+        <div class="gloss-pane" data-pane="comm" id="paneComm"></div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<!-- ══ II. CHRONICLE ════════════════════════════════════════ -->
+<main class="leaf" id="leaf-chronicle">
+  <div class="wide">
+    <div class="leaf-head">
+      <svg class="head-orn" viewBox="0 0 340 14" aria-hidden="true"><path d="M0 7h96M244 7h96" stroke="currentColor" stroke-width="1"/><path d="M108 7q7-6 14 0-7 6-14 0zM170 2l4 5-4 5-4-5zM218 7q7-6 14 0-7 6-14 0z" fill="currentColor"/><path d="M126 7h34M180 7h34" stroke="currentColor" stroke-width=".7"/></svg>
+      <h2 class="leaf-title">Chronicle</h2>
+      <p class="leaf-sub">Forty-eight stories in the order the book tells them, gathered into six quires. This is the spine of the whole thing — read only these and you'd know the plot. <b>Click a folio to open that passage in the reading desk.</b> Pass its collation in the Scriptorium and the folio turns gold.</p>
+    </div>
+    <div id="chronicleBody"></div>
+  </div>
+</main>
+
+<!-- ══ III. ATLAS ═══════════════════════════════════════════ -->
+<main class="leaf" id="leaf-atlas">
+  <div class="wide">
+    <div class="leaf-head">
+      <svg class="head-orn" viewBox="0 0 340 14" aria-hidden="true"><path d="M0 7h96M244 7h96" stroke="currentColor" stroke-width="1"/><path d="M108 7q7-6 14 0-7 6-14 0zM170 2l4 5-4 5-4-5zM218 7q7-6 14 0-7 6-14 0z" fill="currentColor"/><path d="M126 7h34M180 7h34" stroke="currentColor" stroke-width=".7"/></svg>
+      <h2 class="leaf-title">Atlas</h2>
+      <p class="leaf-sub">Almost everything happens in a strip of land you could drive across in a day. The places are drawn the way a medieval cartographer drew them — walled towns and scalloped hills — but sat on <b>real survey coordinates</b> from OpenBible.info. <b>Drag to move, scroll or use +/&minus; to zoom, and pick any name from the index to fly to it.</b></p>
+    </div>
+    <div class="apparatus" style="margin-bottom:0;border-bottom:none;padding-bottom:14px">
+      <button class="tool" id="extHeart" data-on="true"><span class="dot"></span>The Heartland</button>
+      <button class="tool" id="extWide"><span class="dot"></span>The Wider World</button>
+      <span class="mono" style="color:var(--gall-faint);margin-left:6px">Town size &#8594; how often the place is named in the text</span>
+    </div>
+
+    <div class="atlas-shell">
+      <div class="atlas-stage">
+        <svg class="atlas-svg" id="atlasSvg" viewBox="0 0 1000 620" role="img" aria-label="Map of the biblical world"></svg>
+        <div class="atlas-ctl">
+          <button id="mapIn" aria-label="Zoom in">+</button>
+          <button id="mapOut" aria-label="Zoom out">&minus;</button>
+          <button id="mapReset" class="sm" aria-label="Reset the view">FIT</button>
+        </div>
+        <div class="atlas-scale" id="mapScale"></div>
+      </div>
+      <div class="atlas-index">
+        <div class="idx-head">
+          <div class="idx-cap" id="idxCap">Index of places</div>
+          <input class="idx-seek" id="idxSeek" placeholder="Find a place" autocomplete="off">
+        </div>
+        <div class="idx-list" id="idxList"></div>
+        <div class="idx-foot">Coastlines simplified &middot; site coordinates exact</div>
+      </div>
+    </div>
+
+    <div class="place-panel">
+      <div id="placeInfo"><p class="gloss-empty">Pick a place from the index or the map.</p></div>
+      <div id="placeVerses"></div>
+    </div>
+  </div>
+</main>
+
+<!-- ══ IV. REGISTER ═════════════════════════════════════════ -->
+<main class="leaf" id="leaf-cast">
+  <div class="wide">
+    <div class="leaf-head">
+      <svg class="head-orn" viewBox="0 0 340 14" aria-hidden="true"><path d="M0 7h96M244 7h96" stroke="currentColor" stroke-width="1"/><path d="M108 7q7-6 14 0-7 6-14 0zM170 2l4 5-4 5-4-5zM218 7q7-6 14 0-7 6-14 0z" fill="currentColor"/><path d="M126 7h34M180 7h34" stroke="currentColor" stroke-width=".7"/></svg>
+      <h2 class="leaf-title">Register</h2>
+      <p class="leaf-sub">Every named person in the Bible &mdash; <b>3,067 of them</b>, not a curated few. Each carries their family links, how many verses name them, and Easton's 1897 dictionary entry where one exists. <b>Click a name to open the entry; blue text inside it opens the passage; family names are clickable too</b>, so you can walk a bloodline from Adam down.</p>
+    </div>
+
+    <div class="rollbar">
+      <input class="seek" id="castSeek" placeholder="Find a person" autocomplete="off">
+      <span class="sortset">
+        <button class="sortb" id="sortFame" data-on="true">Most named</button>
+        <button class="sortb" id="sortAZ">A&ndash;Z</button>
+      </span>
+      <span class="rollcount" id="rollCount"></span>
+    </div>
+    <div class="alpharail" id="alphaRail"></div>
+    <div class="roster" id="roster"></div>
+    <div id="profileOut"></div>
+  </div>
+</main>
+
+<!-- ══ V. THREADS ═══════════════════════════════════════════ -->
+<main class="leaf" id="leaf-threads">
+  <div class="wide">
+    <div class="leaf-head">
+      <svg class="head-orn" viewBox="0 0 340 14" aria-hidden="true"><path d="M0 7h96M244 7h96" stroke="currentColor" stroke-width="1"/><path d="M108 7q7-6 14 0-7 6-14 0zM170 2l4 5-4 5-4-5zM218 7q7-6 14 0-7 6-14 0z" fill="currentColor"/><path d="M126 7h34M180 7h34" stroke="currentColor" stroke-width=".7"/></svg>
+      <h2 class="leaf-title">Threads</h2>
+      <p class="leaf-sub">The book quotes and answers itself constantly. This draws the 344,799-link cross-reference web out from whatever verse you pick — <b>thicker line and closer to the centre means a stronger link</b>, green is the Hebrew Bible, blue is the New Testament. <b>Click any node to go read it.</b></p>
+    </div>
+    <div class="apparatus">
+      <span class="pick"><select id="thBook" aria-label="Book"></select></span>
+      <span class="pick"><select id="thChapter" aria-label="Chapter"></select></span>
+      <span class="pick"><select id="thVerse" aria-label="Verse"></select></span>
+    </div>
+    <div class="thread-stage">
+      <svg class="thread-svg" id="threadSvg" viewBox="0 0 760 620" role="img" aria-label="Cross-reference web"></svg>
+      <div class="thread-side" id="threadSide"></div>
+    </div>
+  </div>
+</main>
+
+<!-- ══ VI. SCRIPTORIUM ══════════════════════════════════════ -->
+<main class="leaf" id="leaf-scriptorium">
+  <div class="wide">
+    <div class="leaf-head">
+      <svg class="head-orn" viewBox="0 0 340 14" aria-hidden="true"><path d="M0 7h96M244 7h96" stroke="currentColor" stroke-width="1"/><path d="M108 7q7-6 14 0-7 6-14 0zM170 2l4 5-4 5-4-5zM218 7q7-6 14 0-7 6-14 0z" fill="currentColor"/><path d="M126 7h34M180 7h34" stroke="currentColor" stroke-width=".7"/></svg>
+      <h2 class="leaf-title">Scriptorium</h2>
+      <p class="leaf-sub">You're an apprentice. Before a copy left the workshop a second scribe read it against the exemplar line by line — that check was called a <em>collation</em>. <b>Click any cell in the Great Quire to sit for its collation:</b> eight questions built from the real text of that passage. Six right out of eight and the leaf is gilded for good.</p>
+    </div>
+    <div class="desk">
+      <div>
+        <div class="era-bar"><span class="era-name">The Great Quire</span><span class="era-rule"></span><span class="era-count" id="quireCount">0 of 48 gilded</span></div>
+        <div class="quire-grid" id="quireGrid"></div>
+        <div style="margin-top:26px" id="deskPrompt"></div>
+      </div>
+      <div class="collation" id="collation">
+        <div class="q-kind">Collation</div>
+        <p class="q-text">Pick a leaf from the quire to begin. Eight questions, drawn from the passage itself.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ══ VII. COLOPHON ════════════════════════════════════════ -->
+<main class="leaf" id="leaf-sources">
+  <div class="wide">
+    <div class="leaf-head">
+      <svg class="head-orn" viewBox="0 0 340 14" aria-hidden="true"><path d="M0 7h96M244 7h96" stroke="currentColor" stroke-width="1"/><path d="M108 7q7-6 14 0-7 6-14 0zM170 2l4 5-4 5-4-5zM218 7q7-6 14 0-7 6-14 0z" fill="currentColor"/><path d="M126 7h34M180 7h34" stroke="currentColor" stroke-width=".7"/></svg>
+      <h2 class="leaf-title">Colophon</h2>
+      <p class="leaf-sub">A colophon is the note a scribe left at the end saying who copied the book and from what. This is that. Everything here is fetched live from open data — nothing is hardcoded scripture, nothing is invented. These are the people whose work this is built on, and what they ask in return.</p>
+    </div>
+    <div class="sources" id="sourceList"></div>
+    <div class="footer-rule">
+      Vellum &middot; every word fetched live &middot; nothing on this page is invented
+    </div>
+  </div>
+</main>
+
+</div><!-- /.book -->
+
+<!-- ══ help ═════════════════════════════════════════════════ -->
+<div class="help" id="help">
+  <div class="help-card">
+    <button class="help-close" id="helpClose">Close</button>
+    <h3>How to work this</h3>
+    <div class="sub">Keys, and what each part is for</div>
+    <div class="help-grid">
+      <kbd>&#8592; &#8594;</kbd><span>Previous / next chapter, in the reading desk</span>
+      <kbd>1 &ndash; 7</kbd><span>Jump to a section</span>
+      <kbd>0</kbd><span>Back to the frontispiece</span>
+      <kbd>G</kbd><span>Show or hide the gloss column</span>
+      <kbd>L</kbd><span>Listen &mdash; opens the narration transport</span>
+      <kbd>?</kbd><span>This card</span>
+      <kbd>Click a verse</kbd><span>Pins a pointing hand in the margin and files it under Marginalia</span>
+      <kbd>Drag the map</kbd><span>Pan; scroll or +/&minus; to zoom; FIT to reset</span>
+      <kbd>A place name</kbd><span>Click the name on the plate, the glyph, or the index &mdash; all three open it below</span>
+      <kbd>A relative</kbd><span>In the Register, every family name is a link, so you can walk a bloodline</span>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+/* ═══════════════════════════════════════════════════════════
+   VELLUM — data
+   Nothing here is scripture. Scripture is fetched live.
+   These are pointers, coordinates, and editorial framing.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── The Chronicle: 48 leaves, six quires ─────────────────── */
+const QUIRES = [
+  { n:"I",  name:"Beginnings", note:"Genesis 1–11. Not history yet — origin stories, told to explain why the world is like this." },
+  { n:"II", name:"The Family", note:"Genesis 12–50. One household, four generations, and a great deal of lying." },
+  { n:"III",name:"Out of Egypt", note:"A slave revolt, a desert, and a set of laws that outlived everyone who wrote them." },
+  { n:"IV", name:"The Land and the Kings", note:"Settlement, warlords, then monarchy — and the monarchy going wrong almost immediately." },
+  { n:"V",  name:"Exile and Wisdom", note:"The state collapses. What survives is poetry, argument, and a hard question about suffering." },
+  { n:"VI", name:"The Gospels and After", note:"A rural teacher is executed by Rome. His followers write it down and it spreads." }
+];
+
+const CHRONICLE = [
+  // I — Beginnings
+  {q:0,b:"GEN",c:1, t:"The making", h:"Seven days, and a refrain that repeats like a drumbeat: it was good."},
+  {q:0,b:"GEN",c:3, t:"The garden", h:"A tree, a question, and the first thing anyone ever hides."},
+  {q:0,b:"GEN",c:4, t:"Brothers", h:"The first murder starts as an argument between a farmer and a herdsman about gifts."},
+  {q:0,b:"GEN",c:7, t:"The flood", h:"The world un-made on purpose, and one boat of exceptions."},
+  {q:0,b:"GEN",c:11,t:"Babel", h:"A tower, and the invention of not understanding each other."},
+  // II — The Family
+  {q:1,b:"GEN",c:12,t:"Go", h:"An old man is told to leave everything for land he will never own."},
+  {q:1,b:"GEN",c:18,t:"Bargaining", h:"Abraham haggles with God over how many decent people a city needs to be spared."},
+  {q:1,b:"GEN",c:22,t:"The knife", h:"The hardest chapter in the book. It stops at the last possible second."},
+  {q:1,b:"GEN",c:28,t:"The ladder", h:"A liar on the run sleeps on a stone and dreams a stairway."},
+  {q:1,b:"GEN",c:32,t:"The wrestle", h:"He fights a stranger all night, loses the use of his hip, and gains a new name."},
+  {q:1,b:"GEN",c:37,t:"The coat", h:"Favouritism, jealousy, and a boy sold into slavery by his own brothers."},
+  {q:1,b:"GEN",c:41,t:"The dreams", h:"A forgotten prisoner reads Pharaoh's nightmare and ends up running Egypt."},
+  {q:1,b:"GEN",c:45,t:"I am Joseph", h:"He has absolute power over the brothers who sold him. He weeps instead."},
+  // III — Out of Egypt
+  {q:2,b:"EXO",c:3, t:"The bush", h:"A fugitive shepherd, a fire that doesn't consume, and a name that's barely a name."},
+  {q:2,b:"EXO",c:12,t:"Passover", h:"The night the empire finally lets go — and the meal that still marks it."},
+  {q:2,b:"EXO",c:14,t:"The sea", h:"Water opens. Then it closes."},
+  {q:2,b:"EXO",c:20,t:"Ten sentences", h:"The most quoted list ever written, and shorter than you remember."},
+  {q:2,b:"EXO",c:32,t:"The calf", h:"Moses is gone six weeks. They melt their jewellery into a god."},
+  {q:2,b:"NUM",c:13,t:"The scouts", h:"Twelve men survey the same land. Ten of them see giants."},
+  // IV — The Land and the Kings
+  {q:3,b:"JOS",c:6, t:"Jericho", h:"A siege won by walking in circles and shouting."},
+  {q:3,b:"JDG",c:7, t:"Three hundred", h:"Gideon's army is deliberately cut down until it's too small to take the credit."},
+  {q:3,b:"JDG",c:16,t:"Samson", h:"Strength, a haircut, and a man who brings the house down on himself."},
+  {q:3,b:"RUT",c:1, t:"Where you go", h:"A foreign widow refuses to go home. The entire book is four chapters long."},
+  {q:3,b:"1SA",c:3, t:"Speak", h:"A boy hears his name in the dark three times and doesn't know who's calling."},
+  {q:3,b:"1SA",c:17,t:"The sling", h:"The most misquoted underdog story in the world. Read what he actually says."},
+  {q:3,b:"2SA",c:11,t:"The roof", h:"A king takes what he wants, then arranges for the husband to die in combat."},
+  {q:3,b:"1KI",c:3, t:"Cut the child in half", h:"Solomon identifies the real mother by threatening to kill the baby."},
+  {q:3,b:"1KI",c:18,t:"Carmel", h:"Elijah against four hundred and fifty prophets, settled with a dare and a bonfire."},
+  // V — Exile and Wisdom
+  {q:4,b:"1KI",c:19,t:"The thin silence", h:"Not the wind. Not the earthquake. Not the fire."},
+  {q:4,b:"2KI",c:5, t:"Naaman", h:"A foreign general wants a miracle with dignity. He's told to go wash in a muddy river."},
+  {q:4,b:"2KI",c:25,t:"The city falls", h:"Babylon takes Jerusalem apart piece by piece and the story nearly ends here."},
+  {q:4,b:"JOB",c:1, t:"The wager", h:"A good man loses everything, and the book spends forty chapters refusing to explain why."},
+  {q:4,b:"PSA",c:23,t:"The shepherd", h:"Six verses that turn up at almost every funeral in the English-speaking world."},
+  {q:4,b:"ISA",c:6, t:"Send me", h:"A vision so large the doorframes shake, and a volunteer who doesn't think he's fit."},
+  {q:4,b:"DAN",c:3, t:"The furnace", h:"Three men refuse to bow. Someone counts a fourth figure in the fire."},
+  {q:4,b:"JON",c:1, t:"Overboard", h:"A prophet runs from his assignment because he's afraid God will forgive his enemies."},
+  {q:4,b:"EST",c:4, t:"For such a time", h:"God is never once mentioned in this book. A queen saves her people anyway."},
+  // VI — The Gospels and After
+  {q:5,b:"LUK",c:2, t:"The birth", h:"A census, a feeding trough, and shepherds. No kings, no snow, no innkeeper."},
+  {q:5,b:"MAT",c:5, t:"On the mountain", h:"Blessed are the people nobody in the audience would have called blessed."},
+  {q:5,b:"LUK",c:10,t:"The Samaritan", h:"The hero of the story belongs to the ethnic group the listeners despised."},
+  {q:5,b:"LUK",c:15,t:"The younger son", h:"He rehearses an apology the whole way home. His father isn't listening to it."},
+  {q:5,b:"JHN",c:11,t:"Lazarus", h:"The shortest verse in the Bible sits in the middle of this chapter."},
+  {q:5,b:"LUK",c:22,t:"The last meal", h:"Bread, wine, and everyone at the table swearing they'd never run."},
+  {q:5,b:"JHN",c:19,t:"The execution", h:"Roman capital punishment, described plainly and without adjectives."},
+  {q:5,b:"LUK",c:24,t:"The road", h:"Two people walk seven miles arguing with a stranger they don't recognise."},
+  {q:5,b:"ACT",c:2, t:"Pentecost", h:"Wind, fire, and a crowd of foreigners each hearing their own language."},
+  {q:5,b:"ACT",c:9, t:"The Damascus road", h:"The movement's most effective persecutor is blinded and switches sides."},
+  {q:5,b:"REV",c:21,t:"All things new", h:"The last vision in the book, and it isn't an escape from the world — it's the world repaired."}
+];
+
+/* ── Places ───────────────────────────────────────────────────
+   lat/lon from the OpenBible.info Bible Geocoding dataset
+   (CC BY). v = number of distinct verses naming the place.
+   ─────────────────────────────────────────────────────────── */
+const PLACES = [
+  // settlements
+  {n:"Jerusalem",   la:31.7767, lo:35.2342, v:955, k:"city", b:"GEN", c:14},
+  {n:"Babylon",     la:32.5433, lo:44.4222, v:296, k:"city", b:"2KI", c:25},
+  {n:"Samaria",     la:32.2761, lo:35.1950, v:113, k:"city", b:"1KI", c:16},
+  {n:"Bethel",      la:31.9228, lo:35.2414, v:69,  k:"city", b:"GEN", c:28},
+  {n:"Tyre",        la:33.2708, lo:35.1961, v:64,  k:"city", b:"EZK", c:27},
+  {n:"Jericho",     la:31.8717, lo:35.4446, v:63,  k:"city", b:"JOS", c:6},
+  {n:"Hebron",      la:31.5251, lo:35.1022, v:62,  k:"city", b:"GEN", c:23},
+  {n:"Damascus",    la:33.5111, lo:36.3064, v:58,  k:"city", b:"ACT", c:9},
+  {n:"Bethlehem",   la:31.7043, lo:35.2076, v:52,  k:"city", b:"LUK", c:2},
+  {n:"Sodom",       la:31.2085, lo:35.4492, v:50,  k:"city", b:"GEN", c:18},
+  {n:"Shechem",     la:32.2136, lo:35.2819, v:45,  k:"city", b:"GEN", c:34},
+  {n:"Gibeon",      la:31.8475, lo:35.1834, v:39,  k:"city", b:"JOS", c:10},
+  {n:"Shiloh",      la:32.0557, lo:35.2895, v:37,  k:"city", b:"1SA", c:3},
+  {n:"Sidon",       la:33.5610, lo:35.3719, v:37,  k:"city", b:"1KI", c:17},
+  {n:"Gilgal",      la:31.8819, lo:35.4600, v:33,  k:"city", b:"JOS", c:5},
+  {n:"Nazareth",    la:32.7021, lo:35.2977, v:32,  k:"city", b:"LUK", c:4},
+  {n:"Ai",          la:31.9169, lo:35.2611, v:32,  k:"city", b:"JOS", c:8},
+  {n:"Mizpah",      la:31.8851, lo:35.2164, v:32,  k:"city", b:"1SA", c:7},
+  {n:"Nineveh",     la:36.3594, lo:43.1528, v:30,  k:"city", b:"JON", c:3},
+  {n:"Jezreel",     la:32.5579, lo:35.3280, v:29,  k:"city", b:"1KI", c:21},
+  {n:"Dan",         la:33.2490, lo:35.6520, v:25,  k:"city", b:"1KI", c:12},
+  {n:"Beersheba",   la:31.2447, lo:34.8408, v:23,  k:"city", b:"GEN", c:21},
+  {n:"Gaza",        la:31.5040, lo:34.4644, v:22,  k:"city", b:"JDG", c:16},
+  {n:"Lachish",     la:31.5653, lo:34.8492, v:22,  k:"city", b:"2KI", c:18},
+  {n:"Ephesus",     la:37.9391, lo:27.3407, v:20,  k:"city", b:"ACT", c:19},
+  {n:"Susa",        la:32.1892, lo:48.2578, v:20,  k:"city", b:"EST", c:4},
+  {n:"Caesarea",    la:32.5000, lo:34.8917, v:18,  k:"city", b:"ACT", c:10},
+  {n:"Capernaum",   la:32.8811, lo:35.5750, v:18,  k:"city", b:"MRK", c:2},
+  {n:"Antioch",     la:36.2267, lo:36.1717, v:18,  k:"city", b:"ACT", c:11},
+  {n:"Ramah",       la:31.8543, lo:35.2316, v:16,  k:"city", b:"1SA", c:8},
+  {n:"Rome",        la:41.8922, lo:12.4852, v:15,  k:"city", b:"ACT", c:28},
+  {n:"Joppa",       la:32.0545, lo:34.7530, v:14,  k:"city", b:"JON", c:1},
+  {n:"Haran",       la:36.8644, lo:39.0328, v:12,  k:"city", b:"GEN", c:12},
+  {n:"Megiddo",     la:32.5853, lo:35.1844, v:12,  k:"city", b:"2KI", c:23},
+  {n:"Bethany",     la:31.7717, lo:35.2559, v:12,  k:"city", b:"JHN", c:11},
+  {n:"Corinth",     la:37.9058, lo:22.8787, v:11,  k:"city", b:"ACT", c:18},
+  {n:"Thessalonica",la:40.6378, lo:22.9458, v:9,   k:"city", b:"ACT", c:17},
+  {n:"Athens",      la:37.9719, lo:23.7267, v:6,   k:"city", b:"ACT", c:17},
+  {n:"Tarsus",      la:36.9130, lo:34.8921, v:5,   k:"city", b:"ACT", c:9},
+  {n:"Cana",        la:32.8222, lo:35.3027, v:4,   k:"city", b:"JHN", c:2},
+  {n:"Philippi",    la:41.0121, lo:24.2846, v:4,   k:"city", b:"ACT", c:16},
+  {n:"Ur",          la:30.9622, lo:46.1044, v:4,   k:"city", b:"GEN", c:11},
+  {n:"Emmaus",      la:31.8393, lo:34.9895, v:3,   k:"city", b:"LUK", c:24},
+  {n:"Patmos",      la:37.3250, lo:26.5417, v:1,   k:"city", b:"REV", c:1},
+  {n:"Colossae",    la:37.7866, lo:29.2599, v:1,   k:"city", b:"COL", c:1},
+  // natural features
+  {n:"Jordan River",    la:31.7614, lo:35.5583, v:202, k:"nat", b:"JOS", c:3},
+  {n:"Mount Sinai",     la:28.5397, lo:33.9733, v:30,  k:"nat", b:"EXO", c:19},
+  {n:"Dead Sea",        la:31.5000, lo:35.5000, v:21,  k:"nat", b:"GEN", c:14},
+  {n:"Mount Carmel",    la:32.6725, lo:35.0233, v:18,  k:"nat", b:"1KI", c:18},
+  {n:"Mount of Olives", la:31.7779, lo:35.2457, v:18,  k:"nat", b:"LUK", c:22},
+  {n:"Mount Hermon",    la:33.4000, lo:35.8500, v:16,  k:"nat", b:"PSA", c:133},
+  {n:"Sea of Galilee",  la:32.8189, lo:35.5900, v:10,  k:"nat", b:"MRK", c:4},
+  {n:"Mount Gilboa",    la:32.4339, lo:35.4144, v:8,   k:"nat", b:"1SA", c:31},
+  {n:"Golgotha",        la:31.7784, lo:35.2298, v:4,   k:"nat", b:"JHN", c:19},
+  {n:"Mount Ararat",    la:39.7028, lo:44.3004, v:4,   k:"nat", b:"GEN", c:8},
+  {n:"Gethsemane",      la:31.7794, lo:35.2394, v:2,   k:"nat", b:"MRK", c:14}
+];
+
+/* Coastline is drawn schematically — the site coordinates above
+   are exact, the shorelines are simplified for legibility. */
+const SEA_MED = [
+  [11,33.6],[16.0,33.0],[20.0,32.9],[24.0,32.2],[27.0,31.30],[29.9,31.20],
+  [30.4,31.45],[31.0,31.50],[31.8,31.42],[32.3,31.28],[33.2,31.15],[33.8,31.25],[34.25,31.22],
+  [34.47,31.50],[34.55,31.67],[34.75,32.05],[34.89,32.50],[34.96,32.83],[35.07,32.92],
+  [35.10,33.09],[35.20,33.27],[35.37,33.56],[35.50,33.90],[35.65,34.20],[35.85,34.44],
+  [35.95,34.90],[35.78,35.53],[35.90,35.92],[35.95,36.05],[36.15,36.60],
+  [35.5,36.75],[34.6,36.79],[33.9,36.32],[32.8,36.32],[31.4,36.80],[30.6,36.87],
+  [29.7,36.72],[28.2,36.65],[27.4,37.03],[27.28,37.94],[27.10,38.43],[26.35,38.30],
+  [26.2,39.9],[26.4,40.4],[25.2,40.9],[24.3,40.9],[23.6,40.5],[22.95,40.62],
+  [22.8,39.9],[23.3,38.8],[23.9,37.9],[23.2,37.4],[22.9,37.8],[21.7,37.6],
+  [21.1,38.3],[20.7,39.0],[19.4,39.8],[19.0,40.5],[18.3,42.3],[16.2,43.5],[13.6,45.5],
+  [13.0,45.4],[13.5,44.5],[14.9,42.1],[16.0,41.0],[16.6,39.6],[17.2,38.9],
+  [16.2,38.4],[15.6,38.2],[15.9,37.9],[15.1,36.7],[14.4,37.0],[12.5,37.6],[11,37.5]
+];
+/* the Red Sea's Y — main basin plus the gulfs either side of Sinai */
+const SEA_RED_MAIN = [[33.90,27.60],[34.20,28.40],[34.70,28.10],[35.60,27.20],[36.80,25.40],[37.60,24.00],[33.00,24.00],[32.90,25.60],[33.30,26.80]];
+const SEA_SUEZ     = [[32.60,30.00],[32.25,29.20],[33.10,27.60],[33.90,27.60],[33.00,29.30],[32.90,30.00]];
+const SEA_AQABA    = [[34.98,29.58],[34.55,29.30],[34.20,28.40],[34.70,28.10],[35.00,28.90],[35.15,29.55]];
+const SEA_GULF = [
+  [48.6,30.35],[49.5,29.9],[50.6,28.9],[51.5,27.6],[49.0,26.6],[48.5,28.4],[47.9,29.9]
+];
+const LAKE_DEAD    = [[35.35,31.76],[35.53,31.72],[35.58,31.50],[35.52,31.22],[35.38,31.10],[35.34,31.35],[35.45,31.55],[35.35,31.76]];
+const LAKE_GALILEE = [[35.52,32.88],[35.64,32.86],[35.65,32.75],[35.56,32.70],[35.50,32.78],[35.52,32.88]];
+const R_JORDAN   = [[35.61,33.15],[35.57,32.92],[35.60,32.72],[35.53,32.45],[35.57,32.20],[35.51,31.95],[35.56,31.80]];
+const R_NILE     = [[31.10,30.10],[31.20,29.30],[31.80,28.20],[32.60,26.80],[32.90,25.60],[32.90,24.00]];
+const R_EUPHRATES= [[38.20,37.40],[38.60,36.80],[39.90,36.10],[40.90,35.00],[42.30,34.10],[43.40,33.30],[44.42,32.54],[45.30,31.80],[46.10,31.00],[47.30,30.60],[48.30,30.30]];
+const R_TIGRIS   = [[41.20,37.30],[42.30,37.00],[43.15,36.36],[43.80,35.00],[44.40,33.30],[45.60,32.20],[46.60,31.50],[47.60,30.80],[48.30,30.30]];
+
+const REGIONS = [
+  {n:"EGYPT",      la:28.9, lo:30.6}, {n:"SINAI",     la:29.4, lo:33.7},
+  {n:"CANAAN",     la:32.4, lo:34.6}, {n:"ARAM",      la:34.6, lo:37.4},
+  {n:"MESOPOTAMIA",la:34.4, lo:42.0}, {n:"ARABIA",    la:29.0, lo:39.5},
+  {n:"ASIA MINOR", la:38.6, lo:32.0}, {n:"GREECE",    la:39.6, lo:21.4},
+  {n:"ITALY",      la:42.6, lo:13.4}
+];
+
+/* Water names, placed by hand where they don't sit on a town.
+   `r` rotates the label to run with the body of water.       */
+const SEANAMES = [
+  {n:"THE GREAT SEA", la:32.30, lo:33.85, r:-58},
+  {n:"RED SEA",       la:26.90, lo:34.90, r:-56},
+  {n:"THE PERSIAN GULF", la:29.20, lo:49.40, r:-40}
+];
+
+/* ── Sources ──────────────────────────────────────────────── */
+const SOURCES = [
+  {t:"Free Use Bible API",    l:"MIT · no key, no limits", u:"https://bible.helloao.org/",
+   d:"AO Lab's open API. Every word of scripture, every footnote, every audio track and cross-reference in Vellum is fetched live from here. 1,250+ translations across 1,000+ languages, and it costs nothing to anyone."},
+  {t:"Berean Standard Bible", l:"Public domain", u:"https://berean.bible/",
+   d:"The default reading text. A modern, deliberately plain English translation whose team released it into the public domain outright — which is why an app like this can exist at all."},
+  {t:"Tyndale Open Study Notes", l:"CC BY-SA 4.0", u:"https://tyndaleopenresources.com/",
+   d:"The commentary in the gloss column, and the sourced explanation you get when you mark verses on the reading desk. Study notes across 69 books. Reused here under share-alike."},
+  {t:"Theographic Bible Metadata", l:"CC BY-SA 4.0", u:"https://github.com/robertrouse/theographic-bible-metadata",
+   d:"Robert Rouse's dataset of every named person, place and event in the text — 3,067 people with their families, verse counts and dates. The whole Register is this file, fetched once when you open it."},
+  {t:"Easton's Bible Dictionary", l:"Public domain, 1897", u:"https://www.biblestudytools.com/dictionaries/eastons-bible-dictionary/",
+   d:"Matthew George Easton's dictionary supplies the written entry for 1,816 of the people in the Register. It is Victorian and it shows — read it as a period reference work, not a modern one."},
+  {t:"OpenBible.info Cross References", l:"CC BY 4.0", u:"https://www.openbible.info/labs/cross-references/",
+   d:"344,799 scored links between verses, compiled largely from the public-domain Treasury of Scripture Knowledge. The Threads view is a drawing of this dataset and nothing else."},
+  {t:"OpenBible.info Bible Geocoding", l:"CC BY", u:"https://www.openbible.info/geo/",
+   d:"Latitude and longitude for every identifiable place named in the text, with sourcing and confidence for each identification. Every dot on the Atlas is a real coordinate from this file."},
+  {t:"Public-domain audio readers", l:"Free to use", u:"https://openbible.com/",
+   d:"Chapter narration by Gilbert, Hays and Souer, served alongside the text. Press Listen on any chapter."}
+];
+</script>
+<script>
+/* ═══════════════════════════════════════════════════════════
+   VELLUM — application
+   ═══════════════════════════════════════════════════════════ */
+const API = "https://bible.helloao.org/api";
+const $  = (s,r)=> (r||document).querySelector(s);
+const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
+const scrollTop = ()=>{ try{ window.scrollTo({top:0,behavior:"smooth"}); }catch(e){ try{window.scrollTo(0,0);}catch(_){} } };
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* ── fetch with a memo so we never ask twice ──────────────── */
+const memo = new Map();
+async function get(path){
+  if(memo.has(path)) return memo.get(path);
+  const p = fetch(API+path).then(r=>{
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    return r.json();
+  });
+  memo.set(path,p);
+  p.catch(()=>memo.delete(path));
+  return p;
+}
+
+/* ── progress, kept across sessions where possible ────────── */
+const MEM = {};
+const store = {
+  async get(k){
+    try{ const r = await window.storage.get(k); return r ? JSON.parse(r.value) : null; }
+    catch(e){ return MEM[k] !== undefined ? MEM[k] : null; }
+  },
+  async set(k,v){
+    MEM[k]=v;
+    try{ await window.storage.set(k, JSON.stringify(v)); }catch(e){}
+  }
+};
+
+const S = {
+  trans:"BSB", books:[], byId:{}, book:"GEN", chapter:1,
+  chapterData:null, marked:new Set(), notes:[], xrefs:null,
+  gilt:{}, leaf:"read", collation:null
+};
+
+/* ── shared helpers ──────────────────────────────────────── */
+const name = id => (S.byId[id] && S.byId[id].commonName) || id;
+const refStr = (b,c,v,ev) => name(b)+" "+c+":"+v+(ev&&ev!==v?"–"+ev:"");
+const NT = new Set(["MAT","MRK","LUK","JHN","ACT","ROM","1CO","2CO","GAL","EPH","PHP","COL","1TH","2TH","1TI","2TI","TIT","PHM","HEB","JAS","1PE","2PE","1JN","2JN","3JN","JUD","REV"]);
+
+function verseText(v){
+  let out="";
+  for(const c of (v.content||[])){
+    if(typeof c==="string") out+=(out?" ":"")+c;
+    else if(c.text) out+=(out?" ":"")+c.text;
+  }
+  return out.replace(/\s+/g," ").trim();
+}
+
+/* ═══ THE ILLUMINATED INITIAL ══════════════════════════════
+   A scribe left the first letter blank and an illuminator
+   filled it in afterwards. This one draws itself.
+   ═══════════════════════════════════════════════════════ */
+function illuminate(letter){
+  const L = (letter||"I").toUpperCase().replace(/[^A-Z]/,"I");
+  // four corner scrolls, mirrored from one acanthus curl
+  const curl = "M14,14 C46,8 60,26 50,46 C42,62 20,60 18,44 C17,33 30,28 36,35";
+  const tips = [[36,35],[64,35],[36,65],[64,65]];
+  const q = [
+    'translate(0,0)', 'translate(100,0) scale(-1,1)',
+    'translate(0,100) scale(1,-1)', 'translate(100,100) scale(-1,-1)'
+  ];
+  let vines = "", dots = "";
+  q.forEach((tr,i)=>{
+    vines += `<path class="vine vine-draw" style="--len:190;animation-delay:${i*0.11}s" transform="${tr}" d="${curl}"/>`;
+    dots  += `<circle class="leafdot" style="animation-delay:${0.9+i*0.08}s" transform="${tr}" cx="36" cy="35" r="2.6"/>`;
+  });
+  return `<svg viewBox="0 0 100 100" role="img" aria-label="Illuminated letter ${L}">
+    <rect class="initial-ground" x="20" y="20" width="60" height="60"/>
+    <rect class="initial-frame" x="20" y="20" width="60" height="60"/>
+    ${vines}${dots}
+    <text class="initial-letter" x="50" y="50" dy=".36em" font-size="42" style="transform-origin:50px 50px">${L}</text>
+  </svg>`;
+}
+
+/* ═══ READ ═════════════════════════════════════════════════ */
+async function boot(){
+  try{
+    const bk = await get(`/${S.trans}/books.json`);
+    S.books = bk.books.filter(b=>!b.isApocryphal);
+    S.byId = {}; S.books.forEach(b=> S.byId[b.id]=b);
+  }catch(e){
+    $("#scripture").innerHTML = `<div class="err"><b>Can't reach the library</b>The Free Use Bible API didn't answer. Check your connection and reload — everything in Vellum is fetched live, so there's no offline copy to fall back on.</div>`;
+    return;
+  }
+  fillBookSelect($("#selBook")); fillBookSelect($("#thBook"));
+  $("#selBook").value = S.book; $("#thBook").value = "JHN";
+  fillChapterSelect($("#selChapter"), S.book); $("#selChapter").value = S.chapter;
+  fillChapterSelect($("#thChapter"), "JHN"); $("#thChapter").value = 1;
+
+  const saved = await store.get("vellum:gilt");
+  if(saved) S.gilt = saved;
+
+  loadTranslations();
+  buildChronicle(); buildSources(); buildQuireGrid(); refreshGilt();
+  setView(EXTENTS.heartland); drawAtlas("heartland"); bindAtlasGestures();
+  loadChapter();   // the register and the threads load when you open them
+}
+
+function fillBookSelect(sel){
+  const ot = S.books.filter(b=>!NT.has(b.id)), nt = S.books.filter(b=>NT.has(b.id));
+  sel.innerHTML =
+    `<optgroup label="Hebrew Bible / Old Testament">${ot.map(b=>`<option value="${b.id}">${esc(b.commonName)}</option>`).join("")}</optgroup>`+
+    `<optgroup label="New Testament">${nt.map(b=>`<option value="${b.id}">${esc(b.commonName)}</option>`).join("")}</optgroup>`;
+}
+function fillChapterSelect(sel, bookId){
+  const b = S.byId[bookId]; if(!b) return;
+  let o=""; for(let i=1;i<=b.numberOfChapters;i++) o+=`<option value="${i}">Chapter ${i}</option>`;
+  sel.innerHTML=o;
+}
+
+async function loadTranslations(){
+  try{
+    const d = await get("/available_translations.json");
+    const seen=new Set(), eng=[];
+    for(const t of d.translations){
+      if(t.language!=="eng" || t.numberOfBooks<66) continue;
+      const k=(t.englishName||t.name).trim();
+      if(seen.has(k)) continue; seen.add(k); eng.push(t);
+    }
+    eng.sort((a,b)=> a.id==="BSB"?-1 : b.id==="BSB"?1 : (a.englishName||"").localeCompare(b.englishName||""));
+    $("#selTrans").innerHTML = eng.slice(0,16).map(t=>
+      `<option value="${t.id}">${esc(t.shortName||t.id)} — ${esc(t.englishName||t.name)}</option>`).join("");
+    $("#selTrans").value = S.trans;
+  }catch(e){ $("#selTrans").innerHTML = `<option value="BSB">BSB — Berean Standard Bible</option>`; }
+}
+
+async function loadChapter(){
+  const sc = $("#scripture"), fn = $("#footnotes");
+  sc.innerHTML = `<div class="loading">Unrolling</div>`; fn.innerHTML="";
+  S.marked.clear(); S.notes=[]; S.xrefs=null;
+  $("#paneComm").innerHTML=""; renderNotes(); renderXrefPane();
+  let d;
+  try{ d = await get(`/${S.trans}/${S.book}/${S.chapter}.json`); }
+  catch(e){
+    sc.innerHTML = `<div class="err"><b>That chapter didn't load</b>${esc(name(S.book))} ${S.chapter} isn't answering in this translation. Try another translation, or step to a neighbouring chapter.</div>`;
+    return;
+  }
+  S.chapterData = d;
+
+  // heading block
+  $("#bookTitle").textContent = d.book.commonName;
+  const audio = d.thisChapterAudioLinks && Object.keys(d.thisChapterAudioLinks)[0];
+  $("#chapterLine").innerHTML =
+    `Chapter <b>${d.chapter.number}</b> &nbsp;·&nbsp; ${d.numberOfVerses} verses &nbsp;·&nbsp; ${esc(d.translation.shortName||d.translation.id)}`
+    + (audio ? ` &nbsp;·&nbsp; narration available` : "");
+  setReaders(d.thisChapterAudioLinks||null);
+
+  // first letter of the first verse → the illuminated initial
+  const v1 = d.chapter.content.find(x=>x.type==="verse");
+  const firstWord = v1 ? verseText(v1).trim() : "I";
+  $("#initial").innerHTML = illuminate(firstWord[0]);
+
+  // body
+  const notes = {}; (d.chapter.footnotes||[]).forEach(f=> notes[f.noteId]=f);
+  let html="", vi=0;
+  for(const node of d.chapter.content){
+    if(node.type==="heading"){
+      html += `<div class="rubric">${esc((node.content||[]).join(" "))}</div>`;
+    } else if(node.type==="hebrew_subtitle"){
+      html += `<div class="rubric" style="color:var(--gall-faint)">${esc((node.content||[]).map(c=>typeof c==="string"?c:(c.text||"")).join(" "))}</div>`;
+    } else if(node.type==="line_break"){
+      html += `<br>`;
+    } else if(node.type==="verse"){
+      vi++;
+      let inner="", jesus=false, poem=false;
+      for(const c of (node.content||[])){
+        if(typeof c==="string") inner += esc(c)+" ";
+        else if(c.lineBreak) inner += "<br>";
+        else if(c.heading) inner += `<span class="rubric" style="display:block">${esc(c.heading)}</span>`;
+        else if(c.noteId!=null){
+          const f=notes[c.noteId];
+          inner += `<sup class="fnote" title="${esc(f?f.text:"")}">${c.noteId+1}</sup>`;
+        }
+        else if(c.text!=null){
+          if(c.wordsOfJesus) jesus=true;
+          if(c.poem) poem=true;
+          inner += (c.poem? `<span class="poem">${esc(c.text)}</span>` : esc(c.text)+" ");
+        }
+      }
+      html += `<span class="verse" data-v="${node.number}"${jesus?' data-jesus="true"':''}>`
+            + `<span class="vnum">${node.number}</span>${inner.trim()}</span> `;
+    }
+  }
+  sc.innerHTML = html;
+
+  if((d.chapter.footnotes||[]).length){
+    fn.innerHTML = `<h4>Footnotes — ${esc(d.translation.shortName||d.translation.id)}</h4><ol style="list-style:none;padding:0;margin:0">`
+      + d.chapter.footnotes.map(f=>`<li><b>${f.noteId+1}</b> ${esc(f.text)}</li>`).join("") + `</ol>`;
+  }
+
+  $$(".verse", sc).forEach(el=> el.addEventListener("click", ()=> toggleVerse(+el.dataset.v)));
+  ensureManLayer(); placeManicules();
+  loadCommentaryLazy();
+}
+
+/* ── manicules: the little pointing hands readers drew ───── */
+const MANICULE = `<svg viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+<path d="M2 11h6"/><path d="M8 11c0-3 1-5 3-5s2 1.6 2 3v1"/>
+<path d="M13 9.5c0-1.4.6-2.2 1.6-2.2S16 8 16 9.3v.9"/>
+<path d="M16 10c0-1.2.6-1.9 1.5-1.9s1.4.8 1.4 1.9v1"/>
+<path d="M19 11.2c0-1 .5-1.6 1.3-1.6s1.2.7 1.2 1.6v2.2c0 3-2 4.9-4.6 4.9h-2.4c-2.6 0-4.5-1.7-4.5-4.4V11"/></svg>`;
+
+function ensureManLayer(){
+  if(!$("#manLayer")){
+    const d=document.createElement("div"); d.id="manLayer"; d.className="manicule-layer";
+    d.style.cssText="position:absolute;inset:0;pointer-events:none;";
+    $("#readColumn").appendChild(d);
+  }
+}
+function placeManicules(){
+  const layer=$("#manLayer"); if(!layer) return;
+  layer.innerHTML="";
+  if(window.innerWidth<1080) return;
+  const cb = $("#readColumn").getBoundingClientRect();
+  S.marked.forEach(v=>{
+    const el = $(`.verse[data-v="${v}"]`); if(!el) return;
+    const r = el.getClientRects()[0]; if(!r) return;
+    const m=document.createElement("div");
+    m.className="manicule"; m.dataset.on="true";
+    m.style.top = (r.top - cb.top + 4)+"px"; m.style.left="14px"; m.style.right="auto";
+    m.innerHTML=MANICULE; layer.appendChild(m);
+  });
+}
+window.addEventListener("resize", ()=>{ placeManicules(); });
+
+function toggleVerse(v){
+  const el = $(`.verse[data-v="${v}"]`); if(!el) return;
+  if(S.marked.has(v)){ S.marked.delete(v); el.removeAttribute("data-marked"); }
+  else{ S.marked.add(v); el.dataset.marked="true"; }
+  placeManicules(); renderNotes(); loadXrefs(v);
+  if(window.innerWidth<1080) openGloss(true);
+}
+
+function renderNotes(){
+  const p=$("#paneNotes");
+  if(!S.marked.size){
+    p.innerHTML=`<div class="gl-head">Marginalia</div><p class="gloss-empty">Click any verse and a pointing hand goes in the margin beside it. Medieval readers drew these by hand — they called them manicules — to mark the lines worth coming back to.</p>`;
+    return;
+  }
+  const vs=[...S.marked].sort((a,b)=>a-b);
+  const byNum={}; (S.chapterData? S.chapterData.chapter.content:[]).forEach(n=>{ if(n.type==="verse") byNum[n.number]=n; });
+  p.innerHTML = `<div class="gl-head">Marginalia — ${vs.length} marked</div>` + vs.map(v=>{
+    const t = byNum[v] ? verseText(byNum[v]) : "";
+    return `<div class="gl-card pinned"><span class="gl-ref">${esc(name(S.book))} ${S.chapter}:${v}</span><p>${esc(t.slice(0,240))}${t.length>240?"…":""}</p></div>`;
+  }).join("") + `<button class="ask" id="askGloss">Explain the marked verses</button><div id="askOut"></div>`;
+  const b=$("#askGloss"); if(b) b.addEventListener("click", explainMarked);
+}
+
+/* ── cross-references: the Threads dataset, per verse ─────── */
+async function loadXrefs(v){
+  const pane=$("#paneXref");
+  pane.innerHTML=`<div class="gl-head">Threads</div><div class="loading">Tracing</div>`;
+  try{
+    if(!S.xrefs) S.xrefs = await get(`/d/open-cross-ref/${S.book}/${S.chapter}.json`);
+    renderXrefPane(v);
+  }catch(e){
+    pane.innerHTML=`<div class="gl-head">Threads</div><p class="gloss-empty">No cross-reference data for this chapter.</p>`;
+  }
+}
+function renderXrefPane(v){
+  const pane=$("#paneXref");
+  if(!S.xrefs || v==null){
+    pane.innerHTML=`<div class="gl-head">Threads</div><p class="gloss-empty">Mark a verse to see everywhere else in the book that echoes it. The links come from a 344,799-row dataset built largely from the Treasury of Scripture Knowledge.</p>`;
+    return;
+  }
+  const row=(S.xrefs.chapter.content||[]).find(r=>r.verse===v);
+  if(!row || !row.references.length){
+    pane.innerHTML=`<div class="gl-head">Threads — ${S.chapter}:${v}</div><p class="gloss-empty">Nothing links to this verse in the dataset.</p>`;
+    return;
+  }
+  const refs=row.references.slice(0,24), max=Math.max(...refs.map(r=>r.score||1));
+  pane.innerHTML=`<div class="gl-head">Threads — ${esc(name(S.book))} ${S.chapter}:${v}</div>`
+   + refs.map(r=>`<button class="xref" data-b="${r.book}" data-c="${r.chapter}">
+      <span class="r">${esc(refStr(r.book,r.chapter,r.verse,r.endVerse))}</span>
+      <span class="bar" style="width:${Math.max(6,Math.round((r.score||1)/max*46))}px"></span>
+      <span class="s">${r.score||""}</span></button>`).join("");
+  $$(".xref",pane).forEach(b=> b.addEventListener("click", ()=>{
+    S.book=b.dataset.b; S.chapter=+b.dataset.c;
+    $("#selBook").value=S.book; fillChapterSelect($("#selChapter"),S.book); $("#selChapter").value=S.chapter;
+    loadChapter(); showLeaf("read"); scrollTop();
+  }));
+}
+
+/* ── commentary ──────────────────────────────────────────── */
+let commLoaded="";
+async function loadCommentaryLazy(){ commLoaded=""; }
+async function loadCommentary(){
+  const key=S.book+S.chapter; if(commLoaded===key) return; commLoaded=key;
+  const pane=$("#paneComm");
+  pane.innerHTML=`<div class="gl-head">Commentary</div><div class="loading">Fetching</div>`;
+  try{
+    const d = await get(`/c/tyndale/${S.book}/${S.chapter}.json`);
+    const intro = d.chapter.introduction ? `<div class="gl-card"><span class="gl-ref">On this chapter</span><p>${esc(d.chapter.introduction).replace(/\n+/g,"</p><p>")}</p></div>` : "";
+    const items=(d.chapter.content||[]).slice(0,40).map(n=>{
+      const txt=(n.content||[]).filter(c=>typeof c==="string").join("\n");
+      if(!txt.trim()) return "";
+      return `<div class="gl-card"><span class="gl-ref">verse ${n.number}</span><p>${esc(txt).replace(/\n+/g,"</p><p>")}</p></div>`;
+    }).join("");
+    pane.innerHTML=`<div class="gl-head">Commentary — Tyndale</div>`
+      + `<div class="machine-note">Tyndale Open Study Notes · CC BY-SA 4.0</div>`
+      + (intro+items || `<p class="gloss-empty">No notes on this chapter.</p>`);
+  }catch(e){
+    pane.innerHTML=`<div class="gl-head">Commentary</div><p class="gloss-empty">The Tyndale notes don't cover this chapter.</p>`;
+    commLoaded="";
+  }
+}
+
+/* ── a plain-language gloss, generated ───────────────────── */
+let paraphraseDead=false;
+
+/* The dependable path first. Tyndale's own note on the verses
+   you marked — sourced, attributed, and always there.        */
+async function explainMarked(){
+  const btn=$("#askGloss"), out=$("#askOut");
+  if(!S.marked.size || !btn) return;
+  const vs=[...S.marked].sort((a,b)=>a-b);
+  btn.disabled=true; btn.textContent="Fetching…";
+  out.innerHTML=`<div class="loading">Reading the notes</div>`;
+  const found = await sourcedNote(vs, out);
+  btn.disabled=false; btn.textContent="Explain the marked verses";
+  if(!found && !paraphraseDead){         // nothing sourced exists — the model is the only option left
+    out.insertAdjacentHTML("beforeend",`<div id="askOut2"><div class="loading">Trying a plain-language gloss</div></div>`);
+    await paraphrase($("#askOut2"));
+  }else if(!paraphraseDead){
+    out.insertAdjacentHTML("beforeend",
+      `<button class="ask ghost" id="askPara">Also try a plain-language paraphrase</button><div id="askOut2"></div>`);
+    const p=$("#askPara");
+    if(p) p.addEventListener("click",async()=>{
+      p.disabled=true; p.textContent="Thinking…";
+      await paraphrase($("#askOut2"));
+      if(paraphraseDead) p.remove(); else { p.disabled=false; p.textContent="Also try a plain-language paraphrase"; }
+    });
+  }
+}
+
+/* Tyndale's note. Returns true if anything was actually found. */
+async function sourcedNote(vs, box){
+  if(!box) return false;
+  try{
+    const d = await get(`/c/tyndale/${S.book}/${S.chapter}.json`);
+    const want=new Set(vs);
+    const hit=(d.chapter.content||[]).filter(n=> want.has(n.number));
+    const cards = hit.map(n=>{
+      const t=(n.content||[]).filter(c=>typeof c==="string").join("\n").trim();
+      return t ? `<div class="gl-card"><span class="gl-ref">${esc(name(S.book))} ${S.chapter}:${n.number}</span>
+        <p>${esc(t).replace(/\n+/g,"</p><p>")}</p></div>` : "";
+    }).filter(Boolean).join("");
+    if(cards){
+      box.innerHTML=`<div class="machine-note">Tyndale Open Study Notes · CC BY-SA 4.0</div>`+cards;
+      return true;
+    }
+    box.innerHTML=`<p class="gloss-empty">Tyndale has no note on ${esc(name(S.book))} ${S.chapter}:${vs.join(", ")}.</p>`;
+    return false;
+  }catch(e){
+    box.innerHTML=`<p class="gloss-empty">The sourced notes didn't load for this chapter.</p>`;
+    return false;
+  }
+}
+
+/* The one generated thing on the page. If it can't be reached
+   it says so once, quietly, and stops offering itself.       */
+async function paraphrase(box){
+  if(!box) return;
+  const byNum={}; S.chapterData.chapter.content.forEach(n=>{ if(n.type==="verse") byNum[n.number]=n; });
+  const vs=[...S.marked].sort((a,b)=>a-b);
+  const passage=vs.map(v=>`${v}. ${byNum[v]?verseText(byNum[v]):""}`).join("\n");
+  box.innerHTML=`<div class="loading">Glossing</div>`;
+  try{
+    const r = await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:1000, messages:[{role:"user",content:
+`You are writing a marginal gloss for a reader who is not religious and is reading the Bible as literature and history. Explain what is happening in this passage from ${name(S.book)} ${S.chapter}, plainly and without preaching, in 3 short paragraphs. Note anything a modern reader would miss: cultural context, wordplay, or where this connects to the wider story. Do not quote the passage back. Do not use headers or bullet points.
+
+${passage}`}]})
+    });
+    let d=null; try{ d=await r.json(); }catch(e){}
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    if(d && d.error) throw new Error(d.error.message||"model error");
+    const text=((d&&d.content)||[]).filter(x=>x.type==="text").map(x=>x.text).join("\n").trim();
+    if(!text) throw new Error("empty answer");
+    box.innerHTML=`<div class="machine-note">Generated · not a sourced commentary</div>`
+      + `<div class="gl-card">${esc(text).split(/\n+/).map(p=>`<p>${p}</p>`).join("")}</div>`;
+  }catch(e){
+    paraphraseDead=true;
+    box.innerHTML=`<p class="quiet-note">No live model here, so the generated paraphrase is off &mdash; the sourced notes above are the real material anyway.</p>`;
+  }
+}
+
+/* ═══ CHRONICLE ════════════════════════════════════════════ */
+function buildChronicle(){
+  const out=$("#chronicleBody"); let h="";
+  QUIRES.forEach((q,qi)=>{
+    const items=CHRONICLE.map((c,i)=>({c,i})).filter(x=>x.c.q===qi);
+    const done=items.filter(x=>S.gilt[x.i]).length;
+    h+=`<section class="era"><div class="era-bar">
+        <span class="era-num">QUIRE ${q.n}</span><span class="era-name">${esc(q.name)}</span>
+        <span class="era-rule"></span><span class="era-count" data-q="${qi}">${done}/${items.length} gilded</span></div>
+      <p class="leaf-sub" style="margin:-6px 0 16px">${esc(q.note)}</p>
+      <div class="folios">`;
+    items.forEach(({c,i})=>{
+      h+=`<button class="folio" data-i="${i}" ${S.gilt[i]?'data-gilt="true"':''}>
+        <svg class="gilt-mark" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0l1.6 3.9L12 4.6 8.9 7.5l.8 4.5L6 9.9 2.3 12l.8-4.5L0 4.6l4.4-.7z"/></svg>
+        <span class="folio-ref">${esc(name(c.b))} ${c.c}</span>
+        <span class="folio-name">${esc(c.t)}</span>
+        <span class="folio-hook">${esc(c.h)}</span></button>`;
+    });
+    h+=`</div></section>`;
+  });
+  out.innerHTML=h;
+  $$(".folio",out).forEach(b=> b.addEventListener("click", ()=>{
+    const c=CHRONICLE[+b.dataset.i];
+    S.book=c.b; S.chapter=c.c;
+    $("#selBook").value=S.book; fillChapterSelect($("#selChapter"),S.book); $("#selChapter").value=S.chapter;
+    loadChapter(); showLeaf("read"); scrollTop();
+  }));
+}
+
+/* ═══ ATLAS ════════════════════════════════════════════════
+   Drawn the way a medieval cartographer drew a map: walled
+   towns for settlements, scalloped humps for hills, hatched
+   water. Sat on real survey coordinates. Pan, zoom, and an
+   index down the side, because a map you can't search is a
+   picture.
+   ═══════════════════════════════════════════════════════ */
+const EXTENTS = {
+  heartland:{lo0:33.50,lo1:36.90,la0:28.30,la1:33.80,label:"The Heartland"},
+  wider:{lo0:11.5,lo1:49.0,la0:26.9,la1:42.6,label:"The Wider World"}
+};
+let MAPW=1000, MAPH=620;
+const narrow = ()=> (typeof window!=="undefined" && window.innerWidth ? window.innerWidth : 1200) < 760;
+let atlasMode="heartland";
+let VIEW=null;              /* the live window, mutated by pan and zoom */
+let selPlace=-1, hotPlace=-1, idxQuery="";
+
+function fit(ext,vw,vh,pad){
+  const dLon=ext.lo1-ext.lo0, dLat=ext.la1-ext.la0;
+  const k=Math.cos((ext.la0+ext.la1)/2*Math.PI/180);
+  const sy=Math.min((vh-2*pad)/dLat,(vw-2*pad)/(dLon*k)), sx=sy*k;
+  const w=dLon*sx, h=dLat*sy;
+  const ox=(vw-w)/2, oy=(vh-h)/2;
+  return { p:(lo,la)=>[ox+(lo-ext.lo0)*sx, oy+(ext.la1-la)*sy],
+           inv:(x,y)=>[ext.lo0+(x-ox)/sx, ext.la1-(y-oy)/sy],
+           ox,oy,w,h,sx,sy };
+}
+const poly=(pts,P)=> pts.map(([lo,la])=>P.p(lo,la).map(n=>n.toFixed(1)).join(",")).join(" ");
+const line=(pts,P)=> "M"+pts.map(([lo,la])=>P.p(lo,la).map(n=>n.toFixed(1)).join(",")).join("L");
+
+function setView(ext){ VIEW={lo0:ext.lo0,lo1:ext.lo1,la0:ext.la0,la1:ext.la1,label:ext.label}; }
+
+/* ── the glyph repertoire ───────────────────────────────────
+   Everything is drawn from the site's anchor point upward, so
+   the base of a tower sits exactly on its coordinate.        */
+function glyphTown(x,y,tier){
+  // tier 0 hamlet · 1 town · 2 walled town · 3 city with gate
+  const s=[10,13,17,23][tier], h=s*0.80, half=s/2;
+  const b=y, t=b-h;                                   // wall band
+  let g="";
+  if(tier>=2){                                        // crenellated wall
+    const cren=tier===3?5:4, cw=s/cren;
+    let d=`M${(x-half).toFixed(1)},${b.toFixed(1)} L${(x-half).toFixed(1)},${(t+h*0.34).toFixed(1)}`;
+    for(let i=0;i<cren;i++){
+      const x0=x-half+i*cw;
+      d+=` L${(x0).toFixed(1)},${(t+h*0.16).toFixed(1)} L${(x0+cw*0.55).toFixed(1)},${(t+h*0.16).toFixed(1)} L${(x0+cw*0.55).toFixed(1)},${(t+h*0.34).toFixed(1)} L${(x0+cw).toFixed(1)},${(t+h*0.34).toFixed(1)}`;
+    }
+    d+=` L${(x+half).toFixed(1)},${b.toFixed(1)} Z`;
+    g+=`<path class="glyph" d="${d}"/>`;
+    // the gate
+    const gw=s*0.20;
+    g+=`<path class="glyph-roof" d="M${(x-gw/2).toFixed(1)},${b.toFixed(1)} L${(x-gw/2).toFixed(1)},${(b-h*0.36).toFixed(1)} A${(gw/2).toFixed(1)},${(gw/2).toFixed(1)} 0 0 1 ${(x+gw/2).toFixed(1)},${(b-h*0.36).toFixed(1)} L${(x+gw/2).toFixed(1)},${b.toFixed(1)} Z"/>`;
+  }
+  // towers: one for a hamlet, two flanking for a town, three for a city
+  const tw=s*0.26, th=h*(tier>=2?1.16:0.92);
+  const towers = tier===0 ? [0] : tier===1 ? [-s*0.24, s*0.24] : tier===2 ? [-half, half] : [-half, 0, half];
+  towers.forEach(dx=>{
+    const cx=x+dx, x0=cx-tw/2, ty=b-th;
+    g+=`<path class="glyph" d="M${x0.toFixed(1)},${b.toFixed(1)} L${x0.toFixed(1)},${(ty+tw*0.5).toFixed(1)} L${cx.toFixed(1)},${ty.toFixed(1)} L${(x0+tw).toFixed(1)},${(ty+tw*0.5).toFixed(1)} L${(x0+tw).toFixed(1)},${b.toFixed(1)} Z"/>`;
+    if(tier>=1) g+=`<circle class="glyph-roof" cx="${cx.toFixed(1)}" cy="${(ty-tw*0.22).toFixed(1)}" r="${(tw*0.20).toFixed(1)}"/>`;
+  });
+  return g;
+}
+function glyphHill(x,y,big){
+  const w=big?30:21, h=big?15:11, half=w/2;
+  const d=`M${(x-half).toFixed(1)},${y.toFixed(1)}`
+        + ` Q${(x-half*0.60).toFixed(1)},${(y-h).toFixed(1)} ${(x-half*0.14).toFixed(1)},${y.toFixed(1)}`
+        + ` Q${(x+half*0.16).toFixed(1)},${(y-h*1.34).toFixed(1)} ${(x+half*0.52).toFixed(1)},${y.toFixed(1)}`
+        + ` Q${(x+half*0.78).toFixed(1)},${(y-h*0.62).toFixed(1)} ${(x+half).toFixed(1)},${y.toFixed(1)} Z`;
+  let g=`<path class="glyph-mtn" d="${d}"/>`;
+  for(let i=0;i<3;i++){
+    const hx=x+half*0.10+i*3.0;
+    g+=`<path class="glyph-hatch" d="M${hx.toFixed(1)},${(y-1).toFixed(1)} L${(hx+2.4).toFixed(1)},${(y-h*0.50+i*2).toFixed(1)}"/>`;
+  }
+  return g;
+}
+const tierOf = v => v>=200?3 : v>=45?2 : v>=12?1 : 0;
+const glyphH = pl => pl.k==="nat" ? (pl.v>=25?15:11) : [10,13,17,23][tierOf(pl.v)]*(tierOf(pl.v)>=2?1.16:0.92);
+
+/* a tiny inline icon for the index list */
+function idxIcon(pl){
+  return pl.k==="nat"
+    ? `<svg class="ico" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.1"><path d="M1 9.5 4 4l2.2 3.4L7.8 5.2 11 9.5z"/></svg>`
+    : `<svg class="ico" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.1"><path d="M2 10.5V5l2-1.6V10.5M8 10.5V5l-2-1.6M2 10.5h8V6.4L8 5"/></svg>`;
+}
+
+function drawAtlas(mode){
+  if(mode){ atlasMode=mode; setView(EXTENTS[mode]); }
+  if(!VIEW) setView(EXTENTS[atlasMode]);
+  /* Fit the plate to the shape of the country. The Levant is a
+     tall strip; giving it a 1000-wide frame just buys empty
+     desert on the right. */
+  MAPH = narrow() ? 430 : 620;      // fewer user units on a phone = bigger type
+  const kk=Math.cos((VIEW.la0+VIEW.la1)/2*Math.PI/180);
+  const ratio=((VIEW.lo1-VIEW.lo0)*kk)/(VIEW.la1-VIEW.la0);
+  MAPW=Math.round(Math.min(narrow()?430:1000, Math.max(narrow()?330:560, MAPH*ratio*1.35)));
+  const P=fit(VIEW,MAPW,MAPH,16);
+  const svg=$("#atlasSvg"); if(!svg) return;
+  svg.setAttribute("viewBox",`0 0 ${MAPW} ${MAPH}`);
+
+  let h=`<defs>
+    <clipPath id="plate"><rect x="0" y="0" width="${MAPW}" height="${MAPH}"/></clipPath>
+    <pattern id="wave" width="15" height="10" patternUnits="userSpaceOnUse">
+      <path class="sea-hatch" d="M0 6.5 Q3.75 2.5 7.5 6.5 T15 6.5"/></pattern>
+  </defs><g clip-path="url(#plate)">
+  <rect x="0" y="0" width="${MAPW}" height="${MAPH}" fill="var(--vellum-lit)"/>`;
+
+  // the land is the plate itself; water is laid over it
+  [SEA_MED,SEA_RED_MAIN,SEA_SUEZ,SEA_AQABA,SEA_GULF].forEach(s=>{
+    h+=`<polygon class="sea" points="${poly(s,P)}"/><polygon points="${poly(s,P)}" fill="url(#wave)"/>`;
+  });
+  [LAKE_DEAD,LAKE_GALILEE].forEach(s=>{
+    h+=`<polygon class="sea" points="${poly(s,P)}" stroke="var(--lapis)" stroke-opacity=".4" stroke-width="1"/>`;
+  });
+  [R_JORDAN,R_NILE,R_EUPHRATES,R_TIGRIS].forEach(r=> h+=`<path class="river" d="${line(r,P)}"/>`);
+
+  // region names, ghosted across the land
+  REGIONS.forEach(r=>{
+    const [x,y]=P.p(r.lo,r.la);
+    if(x<-60||x>MAPW+60||y<0||y>MAPH) return;
+    h+=`<text class="mapregion" x="${x.toFixed(0)}" y="${y.toFixed(0)}">${r.n}</text>`;
+  });
+  // sea names, in lapis italic
+  SEANAMES.forEach(s=>{
+    const [x,y]=P.p(s.lo,s.la);
+    if(x<40||x>MAPW-40||y<20||y>MAPH-20) return;
+    h+=`<text class="mapname sea" x="${x.toFixed(0)}" y="${y.toFixed(0)}" text-anchor="middle" transform="rotate(${s.r||0} ${x.toFixed(0)} ${y.toFixed(0)})">${s.n}</text>`;
+  });
+
+  // which sites are on the plate
+  const vis=[];
+  PLACES.forEach((pl,i)=>{
+    const [x,y]=P.p(pl.lo,pl.la);
+    if(x<14||x>MAPW-14||y<20||y>MAPH-8) return;
+    vis.push({pl,i,x,y});
+  });
+  ATLAS_VIS = vis.map(v=>v.i);
+
+  // glyphs, biggest first so small towns sit on top of big hills
+  vis.slice().sort((a,b)=> glyphH(b.pl)-glyphH(a.pl)).forEach(v=>{
+    const sel = v.i===selPlace;
+    const g = v.pl.k==="nat" ? glyphHill(v.x,v.y,v.pl.v>=25) : glyphTown(v.x,v.y,tierOf(v.pl.v));
+    h+=`<g class="gsite" data-i="${v.i}" data-sel="${sel}" tabindex="0" role="button"
+         aria-label="${esc(v.pl.n)}, named in ${v.pl.v} verses">
+        <title>${esc(v.pl.n)} — ${v.pl.v} verse${v.pl.v===1?"":"s"}</title>
+        <rect x="${(v.x-16).toFixed(1)}" y="${(v.y-glyphH(v.pl)-6).toFixed(1)}" width="32" height="${(glyphH(v.pl)+12).toFixed(1)}" fill="transparent"/>
+        ${sel?`<circle class="selring" cx="${v.x.toFixed(1)}" cy="${(v.y-glyphH(v.pl)/2).toFixed(1)}" r="${(glyphH(v.pl)*0.9+11).toFixed(1)}" stroke-dasharray="3 4"/>`:""}
+        ${g}</g>`;
+  });
+
+  /* Labels are the thing that ruins a map. Only name what fits:
+     work down by prominence and drop any label whose box would
+     collide with one already placed. Everything else lives in
+     the index, and hovering always shows the name.            */
+  const boxes=[];
+  const hits=(b)=> boxes.some(o=> !(b.x1<o.x0||b.x0>o.x1||b.y1<o.y0||b.y0>o.y1));
+  const order=vis.slice().sort((a,b)=>{
+    if(a.i===selPlace) return -1; if(b.i===selPlace) return 1;
+    return b.pl.v-a.pl.v;
+  });
+  let labelled=0;
+  order.forEach(v=>{
+    const w=v.pl.n.length*6.5+8, above=glyphH(v.pl)+7;
+    /* Round first, then test. The coordinates are emitted rounded,
+       so testing the float would let two labels touch by a hairline. */
+    const R=n=>Math.round(n);
+    const cand=[
+      {x:R(v.x), y:R(v.y-above), anchor:"middle"},
+      {x:R(v.x+glyphW(v.pl)/2+6), y:R(v.y-2), anchor:"start"},
+      {x:R(v.x-glyphW(v.pl)/2-6), y:R(v.y-2), anchor:"end"},
+      {x:R(v.x), y:R(v.y+13), anchor:"middle"}
+    ];
+    const PAD=1.5;                       // a little air between names
+    for(const c of cand){
+      const x0 = c.anchor==="middle"? c.x-w/2 : c.anchor==="start"? c.x : c.x-w;
+      const b={x0:x0-PAD, x1:x0+w+PAD, y0:c.y-11-PAD, y1:c.y+4+PAD};
+      if(b.x0<6||b.x1>MAPW-6||b.y0<6||b.y1>MAPH-6) continue;
+      if(hits(b)) continue;
+      boxes.push(b); labelled++;
+      h+=`<text class="mapname ${v.pl.k==="nat"?"nat":""}" data-i="${v.i}" x="${c.x}" y="${c.y}" text-anchor="${c.anchor}">${esc(v.pl.n)}</text>`;
+      return;
+    }
+  });
+
+  h+=`</g>`;
+  // a ruled border, so the map reads as a plate on the page
+  h+=`<rect x="5" y="5" width="${MAPW-10}" height="${MAPH-10}" fill="none" stroke="var(--gall)" stroke-width="1.1" opacity=".55"/>
+      <rect x="10" y="10" width="${MAPW-20}" height="${MAPH-20}" fill="none" stroke="var(--gall-soft)" stroke-width=".6" opacity=".4"/>`;
+  svg.innerHTML=h;
+
+  // the name on the plate is a hit target too — reading a map
+  // means pointing at the word, not hunting the dot
+  $$(".mapname[data-i]",svg).forEach(el=>
+    el.addEventListener("click",ev=>{ ev.stopPropagation(); pickPlace(+el.dataset.i); }));
+  $$(".gsite",svg).forEach(el=>{
+    const i=+el.dataset.i;
+    el.addEventListener("click",ev=>{ ev.stopPropagation(); pickPlace(i); });
+    el.addEventListener("keydown",ev=>{ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); pickPlace(i); } });
+  });
+
+  // scale bar, computed from the live projection
+  const kmPerDegLon = 111.32*Math.cos((VIEW.la0+VIEW.la1)/2*Math.PI/180);
+  const targets=[10,25,50,100,250,500,1000];
+  const want = 150/P.sx*kmPerDegLon;
+  const km = targets.reduce((a,b)=> Math.abs(b-want)<Math.abs(a-want)?b:a, targets[0]);
+  const px = km/kmPerDegLon*P.sx;
+  $("#mapScale").innerHTML=`<span class="bar" style="width:${px.toFixed(0)}px"></span>${km} km`;
+  const cap=$("#idxCap");
+  if(cap) cap.textContent=`${vis.length} places in view · ${labelled} named on the plate`;
+  renderIndex();
+}
+const glyphW = pl => pl.k==="nat" ? (pl.v>=25?30:21) : [10,13,17,23][tierOf(pl.v)];
+let ATLAS_VIS=[];
+
+/* ── the index: every place in view, findable ─────────────── */
+function renderIndex(){
+  const box=$("#idxList"); if(!box) return;
+  const q=idxQuery.trim().toLowerCase();
+  let list = q
+    ? PLACES.map((pl,i)=>({pl,i})).filter(o=>o.pl.n.toLowerCase().includes(q))
+    : ATLAS_VIS.map(i=>({pl:PLACES[i],i}));
+  list.sort((a,b)=> b.pl.v-a.pl.v);
+  if(!list.length){
+    box.innerHTML=`<p class="gloss-empty" style="padding:16px">Nothing by that name. Try the wider frame.</p>`;
+    return;
+  }
+  box.innerHTML=list.map(o=>`<button class="idx" data-i="${o.i}" data-sel="${o.i===selPlace}">
+      ${idxIcon(o.pl)}<span class="nm">${esc(o.pl.n)}</span><span class="ct">${o.pl.v}</span>
+    </button>`).join("");
+  $$(".idx",box).forEach(b=> b.addEventListener("click",()=> pickPlace(+b.dataset.i,true)));
+}
+
+/* ── choosing a place ─────────────────────────────────────── */
+function pickPlace(i, fly){
+  selPlace=i;
+  const p=PLACES[i];
+  if(fly){
+    // if it isn't on the plate, bring the plate to it
+    if(!ATLAS_VIS.includes(i)){
+      const spanLo=(VIEW.lo1-VIEW.lo0), spanLa=(VIEW.la1-VIEW.la0);
+      VIEW.lo0=p.lo-spanLo/2; VIEW.lo1=p.lo+spanLo/2;
+      VIEW.la0=p.la-spanLa/2; VIEW.la1=p.la+spanLa/2;
+    }
+  }
+  drawAtlas();
+  showPlace(i);
+}
+
+async function showPlace(i){
+  const p=PLACES[i];
+  const tier=tierOf(p.v);
+  const kind = p.k==="nat" ? "A natural feature"
+    : tier===3 ? "A major city" : tier===2 ? "A walled town" : tier===1 ? "A town" : "A small settlement";
+  $("#placeInfo").innerHTML=`
+    <div class="gl-head">${esc(p.n)}</div>
+    <p style="font-size:16.5px;line-height:27px;margin:0 0 14px">
+      ${kind}, named in <b>${p.v}</b> distinct verse${p.v===1?"":"s"}, at
+      <span class="mono" style="text-transform:none;letter-spacing:0">${p.la.toFixed(4)}°N, ${p.lo.toFixed(4)}°E</span>.</p>
+    <p style="font-size:14.5px;line-height:24px;color:var(--gall-soft);margin:0 0 16px">
+      Coordinates from the OpenBible.info geocoding dataset, which records a source and a confidence for every identification. The glyph size is set by that verse count, so the map is really a frequency chart wearing a costume.</p>
+    <button class="tool" id="goPlace"><span class="dot"></span>Read ${esc(name(p.b))} ${p.c}</button>`;
+  const gp=$("#goPlace");
+  if(gp) gp.addEventListener("click",()=>{
+    S.book=p.b; S.chapter=p.c;
+    $("#selBook").value=S.book; fillChapterSelect($("#selChapter"),S.book); $("#selChapter").value=S.chapter;
+    loadChapter(); showLeaf("read"); scrollTop();
+  });
+  const box=$("#placeVerses");
+  box.innerHTML=`<div class="gl-head">A passage set here</div><div class="loading">Fetching</div>`;
+  try{
+    const d=await get(`/${S.trans}/${p.b}/${p.c}.json`);
+    const vs=d.chapter.content.filter(n=>n.type==="verse").slice(0,6);
+    box.innerHTML=`<div class="gl-head">${esc(name(p.b))} ${p.c} — opening</div>`
+      + `<div style="font-size:17px;line-height:29px">`
+      + vs.map(v=>`<span class="vnum">${v.number}</span>${esc(verseText(v))} `).join("")
+      + `</div>`;
+  }catch(e){ box.innerHTML=`<p class="gloss-empty">Couldn't fetch that passage.</p>`; }
+}
+
+/* ── pan and zoom ─────────────────────────────────────────── */
+function zoomAt(f, ax, ay){
+  if(!VIEW) return;
+  const P=fit(VIEW,MAPW,MAPH,16);
+  const [alo,ala] = (ax==null) ? [(VIEW.lo0+VIEW.lo1)/2,(VIEW.la0+VIEW.la1)/2] : P.inv(ax,ay);
+  const spanLo=(VIEW.lo1-VIEW.lo0)*f, spanLa=(VIEW.la1-VIEW.la0)*f;
+  if(spanLo<0.22 || spanLo>150) return;
+  const rx=(alo-VIEW.lo0)/(VIEW.lo1-VIEW.lo0), ry=(ala-VIEW.la0)/(VIEW.la1-VIEW.la0);
+  VIEW.lo0=alo-spanLo*rx; VIEW.lo1=VIEW.lo0+spanLo;
+  VIEW.la0=ala-spanLa*ry; VIEW.la1=VIEW.la0+spanLa;
+  drawAtlas();
+}
+function bindAtlasGestures(){
+  const svg=$("#atlasSvg"); if(!svg) return;
+  let drag=null;
+  const toLocal=ev=>{
+    const r=svg.getBoundingClientRect();
+    return [ (ev.clientX-r.left)/r.width*MAPW, (ev.clientY-r.top)/r.height*MAPH ];
+  };
+  svg.addEventListener("pointerdown",ev=>{
+    if(ev.button!==0) return;
+    drag={x:ev.clientX,y:ev.clientY,lo0:VIEW.lo0,lo1:VIEW.lo1,la0:VIEW.la0,la1:VIEW.la1,moved:false};
+    try{ svg.setPointerCapture(ev.pointerId); }catch(e){}
+  });
+  svg.addEventListener("pointermove",ev=>{
+    if(!drag) return;
+    const r=svg.getBoundingClientRect();
+    const dx=(ev.clientX-drag.x)/r.width*MAPW, dy=(ev.clientY-drag.y)/r.height*MAPH;
+    if(Math.abs(dx)+Math.abs(dy)>3) drag.moved=true;
+    const P=fit({lo0:drag.lo0,lo1:drag.lo1,la0:drag.la0,la1:drag.la1},MAPW,MAPH,16);
+    const dLo=-dx/P.sx, dLa=dy/P.sy;
+    VIEW.lo0=drag.lo0+dLo; VIEW.lo1=drag.lo1+dLo;
+    VIEW.la0=drag.la0+dLa; VIEW.la1=drag.la1+dLa;
+    drawAtlas();
+  });
+  const end=ev=>{ if(drag){ try{ svg.releasePointerCapture(ev.pointerId); }catch(e){} } drag=null; };
+  svg.addEventListener("pointerup",end);
+  svg.addEventListener("pointercancel",end);
+  svg.addEventListener("wheel",ev=>{
+    ev.preventDefault();
+    const [x,y]=toLocal(ev);
+    zoomAt(ev.deltaY>0?1.16:0.86, x, y);
+  },{passive:false});
+  svg.addEventListener("dblclick",ev=>{ const [x,y]=toLocal(ev); zoomAt(0.6,x,y); });
+}
+
+/* ═══ THE REGISTER ═════════════════════════════════════════
+   Every named person in the Bible — 3,067 of them — from the
+   Theographic Bible Metadata project (CC BY-SA 4.0), which
+   carries family links, verse counts, and Easton's 1897
+   dictionary entry where one exists. Fetched once, lazily,
+   the first time you open the section.
+   ═══════════════════════════════════════════════════════ */
+const ROLL_URL="https://raw.githubusercontent.com/robertrouse/theographic-bible-metadata/master/json/people.json";
+const EASTON_BOOK={Gen:"GEN",Exod:"EXO",Lev:"LEV",Num:"NUM",Deut:"DEU",Josh:"JOS",Judg:"JDG",Ruth:"RUT",
+ "1Sam":"1SA","2Sam":"2SA","1Kgs":"1KI","2Kgs":"2KI","1Chr":"1CH","2Chr":"2CH",Ezra:"EZR",Neh:"NEH",Esth:"EST",
+ Job:"JOB",Ps:"PSA",Prov:"PRO",Eccl:"ECC",Song:"SNG",Isa:"ISA",Jer:"JER",Lam:"LAM",Ezek:"EZK",Dan:"DAN",
+ Hos:"HOS",Joel:"JOL",Amos:"AMO",Obad:"OBA",Jonah:"JON",Mic:"MIC",Nah:"NAM",Hab:"HAB",Zeph:"ZEP",Hag:"HAG",
+ Zech:"ZEC",Mal:"MAL",Matt:"MAT",Mark:"MRK",Luke:"LUK",John:"JHN",Acts:"ACT",Rom:"ROM","1Cor":"1CO","2Cor":"2CO",
+ Gal:"GAL",Eph:"EPH",Phil:"PHP",Col:"COL","1Thess":"1TH","2Thess":"2TH","1Tim":"1TI","2Tim":"2TI",Titus:"TIT",
+ Phlm:"PHM",Heb:"HEB",Jas:"JAS","1Pet":"1PE","2Pet":"2PE","1John":"1JN","2John":"2JN","3John":"3JN",Jude:"JUD",Rev:"REV"};
+
+let ROLL=[], ROLL_BY={}, rollState="idle", rollSort="fame", rollLetter="", rollQuery="";
+const ROW_CAP=280;
+
+const yr = n => { n=+n; return isNaN(n)?"" : (n<0 ? Math.abs(n)+" BC" : "AD "+n); };
+const rollText = f => { const t=f.dictText||f.dictionaryText; return t ? (Array.isArray(t)?t.join("\n\n"):String(t)) : ""; };
+
+async function loadRoll(force){
+  if(rollState==="loading") return;
+  if(rollState==="ok" && !force) return;
+  const r=$("#roster"); if(!r) return;
+  rollState="loading";
+  r.innerHTML=`<div class="rollwait">
+      <div class="loading">Unrolling the register</div>
+      <p>Three thousand and sixty-seven people, with their families and their dictionary entries. About a megabyte, fetched once — your browser keeps it after that.</p>
+    </div>`;
+  try{
+    const res=await fetch(ROLL_URL);
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    const raw=await res.json();
+    if(!Array.isArray(raw) || !raw.length) throw new Error("the roll came back empty");
+    ROLL=raw.map(rec=>({ id:rec.id, f:rec.fields||{} })).filter(p=>p.f.name);
+    ROLL_BY={}; ROLL.forEach(p=> ROLL_BY[p.id]=p);
+    rollState="ok";
+    buildAlphaRail();
+    renderRoll();
+  }catch(e){
+    rollState="fail"; ROLL=[];
+    r.innerHTML=`<div class="err"><b>Register unavailable</b>
+      The people dataset didn't load &mdash; ${esc(e&&e.message?e.message:"no reason given")}.
+      Everything else on the page is unaffected.
+      <button class="tool" id="rollRetry" style="margin-top:12px"><span class="dot"></span>Try again</button></div>`;
+    const b=$("#rollRetry"); if(b) b.addEventListener("click",()=>loadRoll(true));
+  }
+}
+
+function buildAlphaRail(){
+  const rail=$("#alphaRail"); if(!rail) return;
+  const have=new Set(ROLL.map(p=>(p.f.alphaGroup||p.f.name[0]||"").toUpperCase()));
+  const letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").filter(l=>have.has(l));
+  rail.innerHTML=`<button class="alpha" data-l="" data-on="true">All</button>`
+    + letters.map(l=>`<button class="alpha" data-l="${l}">${l}</button>`).join("");
+  $$(".alpha",rail).forEach(b=> b.addEventListener("click",()=>{
+    rollLetter=b.dataset.l;
+    $$(".alpha",rail).forEach(x=> x.dataset.on = x===b ? "true":"false");
+    renderRoll();
+  }));
+}
+
+function rollList(){
+  const q=rollQuery.trim().toLowerCase();
+  let list=ROLL;
+  if(q) list=list.filter(p=> String(p.f.name).toLowerCase().includes(q)
+                          || String(p.f.displayTitle||"").toLowerCase().includes(q));
+  else if(rollLetter) list=list.filter(p=> (p.f.alphaGroup||p.f.name[0]||"").toUpperCase()===rollLetter);
+  list=list.slice();
+  if(rollSort==="fame") list.sort((a,b)=> (b.f.verseCount||0)-(a.f.verseCount||0) || String(a.f.name).localeCompare(b.f.name));
+  else list.sort((a,b)=> String(a.f.displayTitle||a.f.name).localeCompare(String(b.f.displayTitle||b.f.name)));
+  return list;
+}
+
+function renderRoll(){
+  const r=$("#roster"); if(!r) return;
+  if(rollState!=="ok"){ if(rollState==="idle") loadRoll(); return; }
+  const list=rollList(), shown=list.slice(0,ROW_CAP);
+  const cap=$("#rollCount");
+  if(cap) cap.textContent = list.length
+    ? `${list.length.toLocaleString()} of ${ROLL.length.toLocaleString()} people${list.length>ROW_CAP?` · showing the first ${ROW_CAP}`:""}`
+    : `nothing matches`;
+  if(!shown.length){
+    r.innerHTML=`<p class="gloss-empty" style="padding:18px;grid-column:1/-1">No one of that name. The roll holds every person the text names, so try a shorter fragment &mdash; or a variant spelling.</p>`;
+    return;
+  }
+  r.innerHTML=shown.map(p=>{
+    const f=p.f, has=rollText(f);
+    return `<button class="person" data-id="${esc(p.id)}">
+      <div class="person-name">${esc(f.displayTitle||f.name)}</div>
+      <div class="person-ref">${f.verseCount||0} verse${f.verseCount===1?"":"s"}${has?" · entry":""}</div>
+    </button>`;
+  }).join("");
+  $$(".person",r).forEach(b=> b.addEventListener("click",()=>{
+    $$(".person",r).forEach(x=>x.setAttribute("aria-current","false"));
+    b.setAttribute("aria-current","true"); openPerson(b.dataset.id);
+  }));
+}
+
+/* Easton wrote in scripture citations. Turn them into buttons
+   that actually open the passage.                             */
+function eastonHTML(txt){
+  const parts=[]; let last=0;
+  const re=/\[([^\]]{1,60})\]\(\/[a-z0-9]+#([A-Za-z0-9]+)\.(\d+)\.(\d+)\)/g;
+  let m;
+  while((m=re.exec(txt))!==null){
+    parts.push(esc(txt.slice(last,m.index)));
+    const b=EASTON_BOOK[m[2]];
+    parts.push(b
+      ? `<button class="refjump" data-b="${b}" data-c="${m[3]}">${esc(m[1])}</button>`
+      : esc(m[1]));
+    last=m.index+m[0].length;
+  }
+  parts.push(esc(txt.slice(last)));
+  return parts.join("").split(/\n{2,}/).map(p=>`<p>${p.replace(/\n/g,"<br>")}</p>`).join("");
+}
+
+function chips(label, ids){
+  ids=(ids||[]).map(i=>ROLL_BY[i]).filter(Boolean);
+  if(!ids.length) return "";
+  return `<div class="kinrow"><span class="kinlab">${label}</span><span class="kinset">`
+    + ids.map(p=>`<button class="chip" data-id="${esc(p.id)}">${esc(p.f.displayTitle||p.f.name)}</button>`).join("")
+    + `</span></div>`;
+}
+
+function openPerson(id){
+  const p=ROLL_BY[id]; if(!p) return;
+  const f=p.f, out=$("#profileOut");
+  const txt=rollText(f);
+  const born=f.birthYear!=null?yr(f.birthYear):"", died=f.deathYear!=null?yr(f.deathYear):"";
+  const life = born||died ? `${born||"?"} – ${died||"?"}` : "";
+  const span = (f.minYear!=null&&f.maxYear!=null&&f.minYear!==f.maxYear)
+    ? `named in passages set between ${yr(f.minYear)} and ${yr(f.maxYear)}` : "";
+  const kin = chips("Father",f.father)+chips("Mother",f.mother)+chips("Siblings",f.siblings)
+            + chips("Partners",f.partners)+chips("Children",f.children);
+  out.innerHTML=`<div class="profile">
+    <h3>${esc(f.displayTitle||f.name)}</h3>
+    <div class="src">${[f.gender,`named in ${f.verseCount||0} verse${f.verseCount===1?"":"s"}`,life,span].filter(Boolean).map(esc).join(" · ")}</div>
+    ${f.alsoCalled&&f.alsoCalled.length?`<p class="alsocalled">Also called ${esc([].concat(f.alsoCalled).join(", "))}</p>`:""}
+    ${kin?`<div class="kin">${kin}</div>`:""}
+    ${txt
+      ? `<div class="easton">${eastonHTML(txt)}</div>
+         <p class="study">Entry from Easton's Bible Dictionary, 1897 &mdash; public domain. Blue text opens the passage.</p>`
+      : `<p class="gloss-empty" style="margin-top:18px">No dictionary entry exists for this person &mdash; about four in ten of the named people are mentioned once and never described. The family links above are all the text gives us.</p>`}
+    <p class="study">Person record from the Theographic Bible Metadata project · CC BY-SA 4.0</p>
+  </div>`;
+  $$(".chip",out).forEach(b=> b.addEventListener("click",()=>{ openPerson(b.dataset.id); }));
+  $$(".refjump",out).forEach(b=> b.addEventListener("click",()=>{
+    const bk=b.dataset.b, ch=+b.dataset.c;
+    if(!S.byId[bk]) return;
+    S.book=bk; S.chapter=Math.min(ch, S.byId[bk].numberOfChapters||ch);
+    $("#selBook").value=S.book; fillChapterSelect($("#selChapter"),S.book); $("#selChapter").value=S.chapter;
+    loadChapter(); showLeaf("read");
+  }));
+  if(typeof out.scrollIntoView==="function") out.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+/* ═══ THREADS ══════════════════════════════════════════════ */
+let thData=null;
+async function loadThreads(){
+  const b=$("#thBook").value, c=+$("#thChapter").value;
+  const sv=$("#threadSvg"), side=$("#threadSide");
+  side.innerHTML=`<div class="loading">Tracing</div>`;
+  try{
+    thData=await get(`/d/open-cross-ref/${b}/${c}.json`);
+    const verses=thData.chapter.content.map(r=>r.verse);
+    $("#thVerse").innerHTML=verses.map(v=>`<option value="${v}">Verse ${v}</option>`).join("");
+    if(verses.length) drawThreads(verses[0]);
+    else { sv.innerHTML=""; side.innerHTML=`<p class="gloss-empty">No cross-references in this chapter.</p>`; }
+  }catch(e){
+    sv.innerHTML=""; side.innerHTML=`<p class="gloss-empty">No cross-reference data for that chapter.</p>`;
+  }
+}
+function drawThreads(v){
+  if(!thData) return;
+  const row=thData.chapter.content.find(r=>r.verse===+v); if(!row) return;
+  const b=$("#thBook").value, c=+$("#thChapter").value;
+  const W=760,H=620,cx=W/2,cy=H/2,R=232;
+  const refs=row.references.slice(0, narrow()?8:14);
+  const max=Math.max(...refs.map(r=>r.score||1),1);
+  let h=`<circle class="thub-ring" cx="${cx}" cy="${cy}" r="${R}" stroke-dasharray="2 6"/>
+         <circle class="thub-ring" cx="${cx}" cy="${cy}" r="${R*0.62}" stroke-dasharray="2 6"/>`;
+  const nodes=refs.map((r,i)=>{
+    const a=(i/refs.length)*Math.PI*2 - Math.PI/2;
+    const rr=R*(0.60+0.40*((r.score||1)/max));
+    return {r, x:cx+Math.cos(a)*rr, y:cy+Math.sin(a)*rr, a};
+  });
+  nodes.forEach((n,i)=>{
+    const w=1+((n.r.score||1)/max)*4.2;
+    const mx=cx+(n.x-cx)*0.45+(n.y-cy)*0.16, my=cy+(n.y-cy)*0.45-(n.x-cx)*0.16;
+    h+=`<path class="tlink" data-i="${i}" d="M${cx},${cy} Q${mx.toFixed(1)},${my.toFixed(1)} ${n.x.toFixed(1)},${n.y.toFixed(1)}" stroke-width="${w.toFixed(2)}"/>`;
+  });
+  nodes.forEach((n,i)=>{
+    const isNT=NT.has(n.r.book);
+    const rad=3.5+((n.r.score||1)/max)*3.5;
+    const right=Math.cos(n.a)>-0.15;
+    h+=`<g class="tnode" data-i="${i}" data-b="${n.r.book}" data-c="${n.r.chapter}">
+      <circle cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${rad.toFixed(1)}"
+        fill="${isNT?"var(--lapis)":"var(--verdigris)"}"/>
+      <text class="tlabel" x="${(n.x+(right?rad+7:-rad-7)).toFixed(1)}" y="${(n.y+3.5).toFixed(1)}"
+        text-anchor="${right?"start":"end"}">${esc(refStr(n.r.book,n.r.chapter,n.r.verse,n.r.endVerse))}</text></g>`;
+  });
+  h+=`<circle class="thub" cx="${cx}" cy="${cy}" r="9"/>
+      <text class="tlabel" x="${cx}" y="${cy+30}" text-anchor="middle" style="font-size:12px;fill:var(--vermilion)">${esc(name(b))} ${c}:${v}</text>`;
+  $("#threadSvg").innerHTML=h;
+
+  $$(".tnode",$("#threadSvg")).forEach(g=>{
+    const i=g.dataset.i;
+    g.addEventListener("mouseenter",()=> $(`.tlink[data-i="${i}"]`)?.classList.add("hot"));
+    g.addEventListener("mouseleave",()=> $(`.tlink[data-i="${i}"]`)?.classList.remove("hot"));
+    g.addEventListener("click",()=>{
+      S.book=g.dataset.b; S.chapter=+g.dataset.c;
+      $("#selBook").value=S.book; fillChapterSelect($("#selChapter"),S.book); $("#selChapter").value=S.chapter;
+      loadChapter(); showLeaf("read"); scrollTop();
+    });
+  });
+
+  const ot=refs.filter(r=>!NT.has(r.book)).length;
+  $("#threadSide").innerHTML=`<div class="gl-head">${esc(name(b))} ${c}:${v}</div>
+    <p style="font-size:15px;line-height:25px;color:var(--gall-soft)">
+      ${row.references.length} link${row.references.length===1?"":"s"} in the dataset; the strongest ${refs.length} are drawn.
+      ${ot} point back into the Hebrew Bible, ${refs.length-ot} into the New Testament.</p>
+    <p style="font-size:14px;line-height:23px;color:var(--gall-faint)">
+      Distance from the centre and line weight both track the relevance score. Click a node to read it.</p>
+    <div style="margin-top:16px">
+      <div class="mono" style="color:var(--verdigris);margin-bottom:5px">&#9679; Hebrew Bible</div>
+      <div class="mono" style="color:var(--lapis)">&#9679; New Testament</div></div>`;
+}
+
+/* ═══ SCRIPTORIUM ══════════════════════════════════════════ */
+function buildQuireGrid(){
+  const g=$("#quireGrid");
+  g.innerHTML=CHRONICLE.map((c,i)=>
+    `<button class="leafcell" data-i="${i}" ${S.gilt[i]?'data-gilt="true"':''}
+       title="${esc(c.t)} — ${esc(name(c.b))} ${c.c}"><span>${i+1}</span></button>`).join("");
+  $$(".leafcell",g).forEach(b=> b.addEventListener("click",()=> startCollation(+b.dataset.i)));
+  $("#quireCount").textContent=`${Object.keys(S.gilt).length} of ${CHRONICLE.length} gilded`;
+}
+
+const STOP=new Set("about above after again against because before being below between both cannot could during eachother every from further having hereby herself himself itself myself other ought ourselves should than that their theirs them themselves then there these they this those through under until very were what when where which while whom will with would your yours".split(" "));
+
+function pickWords(text,n,exclude){
+  const seen=new Set(exclude||[]);
+  const w=text.split(/[^A-Za-z’']+/).filter(x=>x.length>=5 && !STOP.has(x.toLowerCase()));
+  const out=[];
+  for(let i=w.length-1;i>=0 && out.length<n;i--){
+    const j=Math.floor(Math.random()*w.length), x=w[j];
+    if(!x || seen.has(x.toLowerCase())) continue;
+    seen.add(x.toLowerCase()); out.push(x);
+  }
+  return out;
+}
+const shuffle=a=>{ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+
+async function startCollation(idx){
+  const c=CHRONICLE[idx], box=$("#collation");
+  box.innerHTML=`<div class="q-kind">Collation</div><div class="loading">Setting the exemplar</div>`;
+  showLeaf("scriptorium");
+  let d;
+  try{ d=await get(`/${S.trans}/${c.b}/${c.c}.json`); }
+  catch(e){ box.innerHTML=`<div class="err"><b>Can't set the exemplar</b>${esc(name(c.b))} ${c.c} didn't load. Try another leaf.</div>`; return; }
+
+  const verses=d.chapter.content.filter(n=>n.type==="verse").map(v=>({n:v.number,t:verseText(v)})).filter(v=>v.t.split(" ").length>=9);
+  const wholeChapter=verses.map(v=>v.t).join(" ");
+  const Q=[];
+
+  // 1–4 · supply the missing word, taken from the real text
+  shuffle(verses.slice()).slice(0,4).forEach(v=>{
+    const words=v.t.split(/\s+/);
+    const cands=words.map((w,i)=>({w,i})).filter(x=>/^[A-Za-z’']{5,}$/.test(x.w) && !STOP.has(x.w.toLowerCase()));
+    if(!cands.length) return;
+    const pick=cands[Math.floor(Math.random()*cands.length)];
+    const answer=pick.w.replace(/[^A-Za-z’']/g,"");
+    const decoys=pickWords(wholeChapter,3,[answer.toLowerCase()]);
+    if(decoys.length<3) return;
+    const shown=words.map(esc); shown[pick.i]="<em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</em>";
+    Q.push({ kind:`Supply the word — ${name(c.b)} ${c.c}:${v.n}`,
+      text:shown.join(" "), opts:shuffle([answer,...decoys]), ans:answer });
+  });
+
+  // 5–6 · which book is this from
+  shuffle(verses.slice()).slice(0,2).forEach(v=>{
+    const others=shuffle(CHRONICLE.filter(x=>x.b!==c.b).map(x=>x.b));
+    const decoys=[...new Set(others)].slice(0,3).map(name);
+    Q.push({ kind:"Locate the passage", text:`Which book does this line come from?<br><br>“${esc(v.t.slice(0,190))}${v.t.length>190?"…":""}”`,
+      opts:shuffle([name(c.b),...decoys]), ans:name(c.b) });
+  });
+
+  // 7–8 · put it in order
+  for(let k=0;k<2;k++){
+    const pool=shuffle(CHRONICLE.map((x,i)=>({x,i})).filter(o=>o.i!==idx)).slice(0,3);
+    const set=[...pool,{x:c,i:idx}];
+    const earliest=set.reduce((a,b)=> a.i<b.i?a:b);
+    Q.push({ kind:"Put it in order", text:"Which of these comes <em>earliest</em> in the book?",
+      opts:shuffle(set.map(o=>`${o.x.t} — ${name(o.x.b)} ${o.x.c}`)),
+      ans:`${earliest.x.t} — ${name(earliest.x.b)} ${earliest.x.c}` });
+  }
+
+  if(Q.length<4){ box.innerHTML=`<div class="err"><b>This leaf is too short to collate</b>Not enough long verses in ${esc(name(c.b))} ${c.c} to build a fair check. Try another leaf.</div>`; return; }
+  S.collation={idx,Q:shuffle(Q).slice(0,8),i:0,marks:[]};
+  renderQ();
+}
+
+function renderQ(){
+  const C=S.collation, box=$("#collation");
+  if(C.i>=C.Q.length) return finishCollation();
+  const q=C.Q[C.i];
+  const pips=Array.from({length:C.Q.length},(_,i)=>
+    `<span class="pip" ${C.marks[i]!==undefined?`data-p="${C.marks[i]?1:0}"`:""}></span>`).join("");
+  box.innerHTML=`<div class="tally">${pips}</div>
+    <div class="q-kind">${esc(q.kind)} &nbsp;·&nbsp; ${C.i+1} of ${C.Q.length}</div>
+    <p class="q-text">${q.text}</p>
+    <div class="opts">${q.opts.map((o,i)=>
+      `<button class="opt" data-o="${esc(o)}"><span class="k">${"ABCD"[i]}</span><span>${esc(o)}</span></button>`).join("")}</div>
+    <div class="verdict" id="verdict"></div>`;
+  $$(".opt",box).forEach(b=> b.addEventListener("click",()=> answer(b)));
+}
+
+function answer(btn){
+  const C=S.collation, q=C.Q[C.i], chosen=btn.dataset.o, ok=chosen===q.ans;
+  C.marks[C.i]=ok;
+  $$(".opt").forEach(b=>{
+    b.disabled=true;
+    if(b.dataset.o===q.ans) b.dataset.state="right";
+    else if(b===btn) b.dataset.state="wrong";
+  });
+  $("#verdict").innerHTML = ok
+    ? `<b>Clean copy.</b> ${C.i+1===C.Q.length?"":"Next line."}`
+    : `<b>The exemplar reads “${esc(q.ans)}”.</b> Mark it and carry on.`;
+  setTimeout(()=>{ C.i++; renderQ(); }, ok?750:1900);
+}
+
+async function finishCollation(){
+  const C=S.collation, right=C.marks.filter(Boolean).length, total=C.Q.length;
+  const pass = right >= Math.ceil(total*0.75);
+  const c=CHRONICLE[C.idx];
+  if(pass && !S.gilt[C.idx]){
+    S.gilt[C.idx]=true; await store.set("vellum:gilt",S.gilt);
+    buildQuireGrid(); buildChronicle(); refreshGilt();
+  }
+  $("#collation").innerHTML=`
+    <div class="q-kind">${pass?"Leaf gilded":"Sent back to the desk"}</div>
+    <p class="q-text" style="margin-bottom:14px">${right} of ${total} lines clean.</p>
+    <p style="font-size:16px;line-height:27px;color:var(--gall-soft);margin:0 0 22px">
+      ${pass
+        ? `<b>${esc(c.t)}</b> is now gilded in the quire. ${Object.keys(S.gilt).length} of ${CHRONICLE.length} leaves finished.`
+        : `A scribe needed ${Math.ceil(total*0.75)} of ${total} to pass a leaf. Read <b>${esc(name(c.b))} ${c.c}</b> again and come back — the questions are drawn fresh from the text each time.`}</p>
+    <button class="tool" id="againBtn"><span class="dot"></span>${pass?"Collate another leaf":"Try this leaf again"}</button>
+    <button class="tool" id="readBtn" style="margin-left:8px"><span class="dot"></span>Read the passage</button>`;
+  $("#againBtn").addEventListener("click",()=>{
+    if(pass) $("#collation").innerHTML=`<div class="q-kind">Collation</div><p class="q-text">Pick a leaf from the quire to begin. Eight questions, drawn from the passage itself.</p>`;
+    else startCollation(C.idx);
+  });
+  $("#readBtn").addEventListener("click",()=>{
+    S.book=c.b; S.chapter=c.c;
+    $("#selBook").value=S.book; fillChapterSelect($("#selChapter"),S.book); $("#selChapter").value=S.chapter;
+    loadChapter(); showLeaf("read"); scrollTop();
+  });
+}
+
+function refreshGilt(){
+  const n=Object.keys(S.gilt).length, t=CHRONICLE.length;
+  $("#giltFill").style.width=(n/t*100)+"%";
+  $("#giltNum").textContent=`${n}/${t}`;
+  const gm=$("#giltNumM"); if(gm) gm.textContent=`${n}/${t}`;
+  const qc=$("#quireCount"); if(qc) qc.textContent=`${n} of ${t} gilded`;
+}
+
+/* ═══ SOURCES ══════════════════════════════════════════════ */
+function buildSources(){
+  $("#sourceList").innerHTML=SOURCES.map(s=>
+    `<div class="source"><h4>${esc(s.t)}</h4><div class="lic">${esc(s.l)}</div>
+     <p>${esc(s.d)}</p><a class="mono" href="${esc(s.u)}" target="_blank" rel="noopener">${esc(s.u.replace(/^https?:\/\//,""))}</a></div>`).join("");
+}
+
+/* ═══ NAVIGATION ═══════════════════════════════════════════ */
+function showLeaf(id){
+  if(!$("#leaf-"+id)) id="frontispiece";
+  const changed = S.leaf!==id;
+  S.leaf=id;
+  $$(".leaf").forEach(l=> l.dataset.open = (l.id==="leaf-"+id) ? "true":"false");
+  $$(".quire").forEach(q=> q.setAttribute("aria-current", q.dataset.leaf===id ? "true":"false"));
+  document.body.dataset.spine="closed";
+  if(id==="atlas") requestAnimationFrame(()=>{ drawAtlas(); });
+  if(id==="read") requestAnimationFrame(placeManicules);
+  if(id==="cast") loadRoll();
+  if(id==="threads") loadThreads();
+  if(changed) scrollTop();
+}
+
+function openGloss(on){
+  const g=$("#glossPanel");
+  g.dataset.open = on ? "true":"false";
+  $("#btnGloss").dataset.on = on ? "true":"false";
+}
+
+/* ═══ WIRING ═══════════════════════════════════════════════ */
+$$(".quire").forEach(q=> q.addEventListener("click",()=> showLeaf(q.dataset.leaf)));
+$("#selBook").addEventListener("change",e=>{
+  S.book=e.target.value; S.chapter=1;
+  fillChapterSelect($("#selChapter"),S.book); $("#selChapter").value=1; loadChapter();
+});
+$("#selChapter").addEventListener("change",e=>{ S.chapter=+e.target.value; loadChapter(); });
+$("#selTrans").addEventListener("change",async e=>{
+  S.trans=e.target.value; memo.clear();
+  try{
+    const bk=await get(`/${S.trans}/books.json`);
+    S.books=bk.books.filter(b=>!b.isApocryphal); S.byId={}; S.books.forEach(b=>S.byId[b.id]=b);
+  }catch(err){}
+  loadChapter();
+});
+$("#prevCh").addEventListener("click",()=>{
+  if(S.chapter>1){ S.chapter--; }
+  else{ const i=S.books.findIndex(b=>b.id===S.book); if(i>0){ S.book=S.books[i-1].id; S.chapter=S.books[i-1].numberOfChapters;
+        $("#selBook").value=S.book; fillChapterSelect($("#selChapter"),S.book);} }
+  $("#selChapter").value=S.chapter; loadChapter();
+});
+$("#nextCh").addEventListener("click",()=>{
+  const b=S.byId[S.book];
+  if(b && S.chapter<b.numberOfChapters){ S.chapter++; }
+  else{ const i=S.books.findIndex(x=>x.id===S.book); if(i>-1&&i<S.books.length-1){ S.book=S.books[i+1].id; S.chapter=1;
+        $("#selBook").value=S.book; fillChapterSelect($("#selChapter"),S.book);} }
+  $("#selChapter").value=S.chapter; loadChapter();
+});
+$("#btnRule").addEventListener("click",e=>{
+  const on=$("#readColumn").dataset.ruled!=="true";
+  $("#readColumn").dataset.ruled=on?"true":"false"; e.currentTarget.dataset.on=on?"true":"false";
+});
+$("#btnGloss").addEventListener("click",()=> openGloss($("#glossPanel").dataset.open!=="true"));
+$("#glossClose").addEventListener("click",()=> openGloss(false));
+$$(".gloss-tab").forEach(t=> t.addEventListener("click",()=>{
+  $$(".gloss-tab").forEach(x=>x.setAttribute("aria-selected","false"));
+  t.setAttribute("aria-selected","true");
+  $$(".gloss-pane").forEach(p=> p.dataset.open = p.dataset.pane===t.dataset.pane ? "true":"false");
+  if(t.dataset.pane==="comm") loadCommentary();
+}));
+$("#extHeart").addEventListener("click",()=>{
+  $("#extHeart").dataset.on="true"; $("#extWide").dataset.on="false"; drawAtlas("heartland");
+});
+$("#extWide").addEventListener("click",()=>{
+  $("#extWide").dataset.on="true"; $("#extHeart").dataset.on="false"; drawAtlas("wider");
+});
+$("#castSeek").addEventListener("input",e=>{ rollQuery=e.target.value; renderRoll(); });
+$("#sortFame").addEventListener("click",()=>{
+  rollSort="fame"; $("#sortFame").dataset.on="true"; $("#sortAZ").dataset.on="false"; renderRoll();
+});
+$("#sortAZ").addEventListener("click",()=>{
+  rollSort="az"; $("#sortAZ").dataset.on="true"; $("#sortFame").dataset.on="false"; renderRoll();
+});
+$("#idxSeek").addEventListener("input",e=>{ idxQuery=e.target.value; renderIndex(); });
+$("#thBook").addEventListener("change",e=>{ fillChapterSelect($("#thChapter"),e.target.value); loadThreads(); });
+$("#thChapter").addEventListener("change",loadThreads);
+$("#thVerse").addEventListener("change",e=> drawThreads(e.target.value));
+/* ═══════════════════════════════════════════════════════════
+   VELLUM — the working parts of the interface: the spine,
+   the narration transport, the help card, and the drawn
+   frontispiece.
+   ═══════════════════════════════════════════════════════ */
+
+/* ── a short confirmation, bottom of the page ─────────────── */
+let toastT=null;
+function toast(msg){
+  const t=$("#toast"); if(!t) return;
+  t.textContent=msg; t.dataset.on="true";
+  clearTimeout(toastT); toastT=setTimeout(()=>{ t.dataset.on="false"; }, 2400);
+}
+
+/* ── navigation: anything carrying data-leaf ─────────────── */
+document.addEventListener("click",e=>{
+  const el=e.target.closest("[data-leaf]");
+  if(!el) return;
+  showLeaf(el.dataset.leaf);
+});
+$("#burger").addEventListener("click",()=>{
+  document.body.dataset.spine = document.body.dataset.spine==="open" ? "closed" : "open";
+});
+$("#scrim").addEventListener("click",()=> document.body.dataset.spine="closed");
+
+/* ── help ─────────────────────────────────────────────────── */
+const openHelp = on => $("#help").dataset.open = on ? "true" : "false";
+$("#btnHelp").addEventListener("click",()=>openHelp(true));
+$("#helpClose").addEventListener("click",()=>openHelp(false));
+$("#help").addEventListener("click",e=>{ if(e.target.id==="help") openHelp(false); });
+
+/* ── keys ─────────────────────────────────────────────────── */
+const LEAVES=["read","chronicle","atlas","cast","threads","scriptorium","sources"];
+document.addEventListener("keydown",e=>{
+  if(e.metaKey||e.ctrlKey||e.altKey) return;
+  if(/input|select|textarea/i.test(e.target.tagName)) return;
+  if(e.key==="Escape"){ openHelp(false); document.body.dataset.spine="closed"; return; }
+  if(e.key==="?"||(e.key==="/"&&e.shiftKey)){ e.preventDefault(); openHelp(true); return; }
+  if(e.key==="0"){ showLeaf("frontispiece"); return; }
+  if(/^[1-7]$/.test(e.key)){ showLeaf(LEAVES[+e.key-1]); return; }
+  if(S.leaf==="read"){
+    if(e.key==="ArrowLeft"){ $("#prevCh").click(); return; }
+    if(e.key==="ArrowRight"){ $("#nextCh").click(); return; }
+    if(e.key==="g"||e.key==="G"){ $("#btnGloss").click(); return; }
+    if(e.key==="l"||e.key==="L"){ $("#btnAudio").click(); return; }
+  }
+});
+
+/* ═══ NARRATION TRANSPORT ══════════════════════════════════
+   Public-domain readings, served by openbible.com alongside
+   the text. Rate, seek, and a choice of reader.
+   ═══════════════════════════════════════════════════════ */
+const PLAY_D="M2 1l9 5-9 5z", PAUSE_D="M2 1h3v10H2zM7 1h3v10H7z";
+let READERS=null, rate=1;
+
+function setReaders(links){
+  READERS=links;
+  const names=links?Object.keys(links):[];
+  const has=names.length>0;
+  $("#btnAudio").style.display = has ? "" : "none";
+  const sel=$("#tpReader");
+  sel.innerHTML=names.map(n=>`<option value="${esc(n)}">${esc(n[0].toUpperCase()+n.slice(1))}</option>`).join("");
+  const p=$("#player");
+  p.pause(); p.currentTime=0;
+  p.src = has ? links[names[0]] : "";
+  p.playbackRate = rate;
+  $("#btnAudio").dataset.on="false";
+  $("#tpIcon").firstElementChild.setAttribute("d",PLAY_D);
+  $("#tpDone").style.width="0%";
+  $("#tpTime").textContent="0:00 / 0:00";
+  if(!has) $("#transport").dataset.open="false";
+}
+const clock = t => (!isFinite(t)||t<0) ? "0:00" : Math.floor(t/60)+":"+String(Math.floor(t%60)).padStart(2,"0");
+
+function togglePlay(){
+  const p=$("#player");
+  if(!p.src) return;
+  if(p.paused){
+    p.playbackRate=rate;
+    const go=p.play();
+    if(go && go.catch) go.catch(()=> toast("The narration wouldn't start"));
+    $("#tpIcon").firstElementChild.setAttribute("d",PAUSE_D);
+  }else{
+    p.pause();
+    $("#tpIcon").firstElementChild.setAttribute("d",PLAY_D);
+  }
+}
+$("#btnAudio").addEventListener("click",e=>{
+  const t=$("#transport"), on = t.dataset.open!=="true";
+  t.dataset.open = on ? "true":"false";
+  e.currentTarget.dataset.on = on ? "true":"false";
+  if(on && $("#player").paused) togglePlay();
+  if(!on) { $("#player").pause(); $("#tpIcon").firstElementChild.setAttribute("d",PLAY_D); }
+});
+$("#tpPlay").addEventListener("click",togglePlay);
+$("#player").addEventListener("timeupdate",()=>{
+  const p=$("#player");
+  const pct = p.duration ? (p.currentTime/p.duration*100) : 0;
+  $("#tpDone").style.width=pct.toFixed(2)+"%";
+  $("#tpTime").textContent=`${clock(p.currentTime)} / ${clock(p.duration)}`;
+});
+$("#player").addEventListener("ended",()=>{
+  $("#btnAudio").dataset.on="false";
+  $("#tpIcon").firstElementChild.setAttribute("d",PLAY_D);
+});
+$("#player").addEventListener("error",()=>{
+  if($("#player").src) toast("That narration file didn't load");
+});
+$$(".rate").forEach(b=> b.addEventListener("click",()=>{
+  rate=parseFloat(b.dataset.r);
+  $$(".rate").forEach(x=> x.dataset.on = x===b ? "true":"false");
+  $("#player").playbackRate=rate;
+  toast(`Narration at ${rate}×`);
+}));
+function seekTo(ev){
+  const p=$("#player"); if(!p.duration) return;
+  const r=$("#tpScrub").getBoundingClientRect();
+  const f=Math.min(1,Math.max(0,(ev.clientX-r.left)/r.width));
+  p.currentTime = f*p.duration;
+}
+$("#tpScrub").addEventListener("click",seekTo);
+$("#tpScrub").addEventListener("keydown",e=>{
+  const p=$("#player"); if(!p.duration) return;
+  if(e.key==="ArrowRight"){ e.preventDefault(); p.currentTime=Math.min(p.duration,p.currentTime+10); }
+  if(e.key==="ArrowLeft"){ e.preventDefault(); p.currentTime=Math.max(0,p.currentTime-10); }
+});
+$("#tpReader").addEventListener("change",e=>{
+  const p=$("#player"), was=!p.paused, at=p.currentTime;
+  if(!READERS||!READERS[e.target.value]) return;
+  p.src=READERS[e.target.value];
+  p.addEventListener("loadedmetadata",function once(){
+    p.removeEventListener("loadedmetadata",once);
+    p.currentTime=Math.min(at,p.duration||at); p.playbackRate=rate;
+    if(was) p.play().catch(()=>{});
+  });
+});
+
+/* ── the two SVG views are unit-scaled, so a rotation or a
+      resize has to redraw them ─────────────────────────────── */
+let reflowT=null;
+window.addEventListener("resize",()=>{
+  clearTimeout(reflowT);
+  reflowT=setTimeout(()=>{
+    if(S.leaf==="atlas" && VIEW) drawAtlas();
+    if(S.leaf==="threads" && thData){ const v=$("#thVerse").value; if(v) drawThreads(v); }
+    if(S.leaf==="read") placeManicules();
+  },180);
+});
+
+/* ── map controls ─────────────────────────────────────────── */
+$("#mapIn").addEventListener("click",()=>zoomAt(0.72));
+$("#mapOut").addEventListener("click",()=>zoomAt(1.38));
+$("#mapReset").addEventListener("click",()=>{ selPlace=-1; drawAtlas(atlasMode); });
+
+/* ═══ THE FRONTISPIECE ═════════════════════════════════════
+   A drawn opening page: vine work down both margins, then a
+   plain account of what each part of the book does, each with
+   a little diagram of the thing itself.
+   ═══════════════════════════════════════════════════════ */
+function drawVine(){
+  const sv=$("#frontVine"); if(!sv) return;
+  const stem = (x,dir)=>{
+    let d=`M${x},460 C${x+dir*34},400 ${x-dir*30},344 ${x+dir*6},288
+            C${x+dir*40},228 ${x-dir*26},172 ${x+dir*10},108
+            C${x+dir*30},64 ${x+dir*4},30 ${x+dir*2},0`;
+    return d;
+  };
+  const leaf=(x,y,dir,s)=>`<path d="M${x},${y} q${dir*s*1.5},${-s*0.5} ${dir*s*1.8},${-s*1.5}
+      q${-dir*s*1.4},${s*0.2} ${-dir*s*1.8},${s*1.5} z" fill="currentColor" opacity=".55"/>`;
+  const bud=(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".8"/>
+      <circle cx="${x}" cy="${y}" r="${r*0.34}" fill="var(--vermilion)" opacity=".85"/>`;
+  let h="";
+  [[62,1],[1138,-1]].forEach(([x,dir])=>{
+    h+=`<path class="vine-draw" d="${stem(x,dir)}" fill="none" stroke="currentColor" stroke-width="1.6"
+          stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100">
+          <animate attributeName="stroke-dashoffset" from="100" to="0" dur="2.4s" fill="freeze"/></path>`;
+    [[404,9],[330,7],[250,10],[176,8],[96,9],[42,7]].forEach(([y,s],k)=>{
+      h+=leaf(x+dir*(k%2?10:-8), y, k%2?dir:-dir, s);
+    });
+    [[368,5.5],[212,6.5],[64,5]].forEach(([y,r])=> h+=bud(x+dir*4,y,r));
+  });
+  sv.innerHTML=h;
+}
+
+/* small diagrams — each one is a picture of the actual thing */
+const FIGS={
+  read:`<svg viewBox="0 0 150 100" aria-hidden="true">
+    <rect x="8" y="8" width="134" height="84" fill="none" stroke="var(--rule-hard)"/>
+    <line x1="38" y1="8" x2="38" y2="92" stroke="var(--rule)"/>
+    <line x1="104" y1="8" x2="104" y2="92" stroke="var(--rule)"/>
+    ${[0,1,2,3,4,5,6].map(i=>`<line x1="46" y1="${22+i*9}" x2="96" y2="${22+i*9}" stroke="var(--gall-faint)" stroke-width="1.6" opacity=".55"/>`).join("")}
+    <line x1="46" y1="49" x2="96" y2="49" stroke="var(--vermilion)" stroke-width="2.2"/>
+    <path d="M24 44c4-2 7 0 8 3 1-4 4-5 6-2s-1 8-7 9c-4 1-8-2-8-5z" fill="var(--vermilion)"/>
+    ${[0,1,2,3].map(i=>`<line x1="112" y1="${24+i*15}" x2="134" y2="${24+i*15}" stroke="var(--gall-faint)" stroke-width="1.4" opacity=".45"/>`).join("")}
+  </svg>`,
+  chronicle:`<svg viewBox="0 0 150 100" aria-hidden="true">
+    ${Array.from({length:18},(_,i)=>{const c=i%6,r=(i/6)|0;const g=[0,1,6,7,12].includes(i);
+      return `<rect x="${14+c*21}" y="${18+r*24}" width="16" height="19" fill="${g?"var(--gold-lt)":"var(--vellum-deep)"}" stroke="${g?"var(--gold)":"var(--rule-hard)"}"/>`}).join("")}
+    <text x="14" y="12" font-family="IBM Plex Mono" font-size="7" fill="var(--gall-faint)" letter-spacing="1.4">QUIRE I</text>
+  </svg>`,
+  atlas:`<svg viewBox="0 0 150 100" aria-hidden="true">
+    <path d="M0 6 Q30 26 26 52 T44 96 L0 96Z" fill="var(--lapis)" opacity=".18"/>
+    <path d="M0 6 Q30 26 26 52 T44 96" fill="none" stroke="var(--lapis)" stroke-width="1"/>
+    <path d="M96 74 q6-9 12 0-6 5-12 0z" fill="var(--verdigris)" opacity=".4" stroke="var(--verdigris)"/>
+    <path d="M58 62v-10l4-3v13M70 62V52l-4-3M58 62h12v-8l-4-2" fill="none" stroke="var(--gall)" stroke-width="1.2"/>
+    <path d="M96 44v-8l3-2v10M105 44v-8l-3-2M96 44h9v-6l-3-2" fill="none" stroke="var(--gall)" stroke-width="1.2"/>
+    <path d="M118 88v-7l3-2v9M126 88v-7l-3-2M118 88h8v-5l-3-2" fill="none" stroke="var(--gall)" stroke-width="1.2"/>
+    <text x="64" y="30" font-family="Cardo" font-size="9" fill="var(--gall)">Jerusalem</text>
+    <line x1="64" y1="34" x2="64" y2="48" stroke="var(--gall-faint)" stroke-width=".7"/>
+  </svg>`,
+  cast:`<svg viewBox="0 0 150 100" aria-hidden="true">
+    ${[0,1,2,3].map(i=>`<rect x="10" y="${10+i*21}" width="60" height="17" fill="none" stroke="var(--rule-hard)"/>
+      <line x1="16" y1="${19+i*21}" x2="${44+i*6}" y2="${19+i*21}" stroke="var(--gall-faint)" stroke-width="1.6" opacity=".5"/>`).join("")}
+    <rect x="10" y="31" width="60" height="17" fill="var(--vellum-deep)" stroke="var(--vermilion)"/>
+    <rect x="80" y="10" width="60" height="80" fill="var(--vellum-lit)" stroke="var(--rule-hard)"/>
+    <circle cx="110" cy="32" r="9" fill="none" stroke="var(--gall)" stroke-width="1.2"/>
+    <path d="M99 52c2-7 20-7 22 0z" fill="none" stroke="var(--gall)" stroke-width="1.2"/>
+    ${[0,1,2,3].map(i=>`<line x1="88" y1="${64+i*7}" x2="${132-i*9}" y2="${64+i*7}" stroke="var(--gall-faint)" stroke-width="1.3" opacity=".45"/>`).join("")}
+  </svg>`,
+  threads:`<svg viewBox="0 0 150 100" aria-hidden="true">
+    ${Array.from({length:9},(_,i)=>{const a=i/9*Math.PI*2-Math.PI/2;const r=26+(i%3)*11;
+      const x=(75+Math.cos(a)*r).toFixed(1),y=(50+Math.sin(a)*r*0.82).toFixed(1);
+      const nt=i%3===0;
+      return `<path d="M75,50 Q${(75+Math.cos(a+0.5)*r*0.6).toFixed(1)},${(50+Math.sin(a+0.5)*r*0.5).toFixed(1)} ${x},${y}" fill="none" stroke="var(--lapis)" stroke-width="${(0.7+(i%4)*0.5).toFixed(1)}" opacity=".45"/>
+      <circle cx="${x}" cy="${y}" r="${3+(i%3)}" fill="${nt?"var(--lapis)":"var(--verdigris)"}"/>`}).join("")}
+    <circle cx="75" cy="50" r="6" fill="var(--vermilion)"/>
+  </svg>`,
+  scriptorium:`<svg viewBox="0 0 150 100" aria-hidden="true">
+    <rect x="22" y="20" width="46" height="58" fill="var(--vellum-lit)" stroke="var(--rule-hard)"/>
+    ${[0,1,2,3,4].map(i=>`<line x1="29" y1="${32+i*10}" x2="61" y2="${32+i*10}" stroke="var(--gall-faint)" stroke-width="1.5" opacity=".45"/>`).join("")}
+    <rect x="82" y="20" width="46" height="58" fill="url(#gg)" stroke="var(--gold)"/>
+    <defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="var(--gold-lt)"/><stop offset="1" stop-color="var(--gold)"/></linearGradient></defs>
+    <path d="M105 36l3.4 7 7.6 1-5.5 5.2 1.4 7.8-6.9-3.8-6.9 3.8 1.4-7.8-5.5-5.2 7.6-1z" fill="rgba(43,36,27,.55)"/>
+    <path d="M70 49h10M76 45l4 4-4 4" fill="none" stroke="var(--vermilion)" stroke-width="1.4"/>
+  </svg>`
+};
+
+const HOW=[
+  {n:"I", id:"read", name:"Reading Desk", fig:"read",
+   body:"The whole Bible, in <b>any of sixteen English translations</b>, on a page ruled the way a scribe ruled one. <b>Click a verse</b> and a pointing hand — a manicule, which is what medieval readers actually drew — pins it in the margin. The column on the right then carries three things for it: your marked verses, its cross-references, and Tyndale's sourced note.",
+   go:"Open the reading desk"},
+  {n:"II", id:"chronicle", name:"Chronicle", fig:"chronicle",
+   body:"The book is long and most of it isn't plot. These are <b>48 passages in canonical order</b> that carry the story, gathered into six quires. Each one has a hook written for someone who isn't religious. Read them all and you know the shape of the thing.",
+   go:"See the 48"},
+  {n:"III", id:"atlas", name:"Atlas", fig:"atlas",
+   body:"Fifty-six places on <b>real survey coordinates</b>, drawn as walled towns and scalloped hills the way a medieval mapmaker would have. The size of a town is set by <b>how many verses name it</b> — so Jerusalem is a fortress and Emmaus is a hut. Drag, zoom, or find anywhere by name in the index.",
+   go:"Open the atlas"},
+  {n:"IV", id:"cast", name:"Register", fig:"cast",
+   body:"<b>Every named person in the Bible — all 3,067</b>, from Adam to the ones mentioned once in a genealogy and never again. Each carries their family links and, for 1,816 of them, Easton's 1897 dictionary entry. Scripture citations inside an entry are clickable, and so is every relative, so you can walk a bloodline.",
+   go:"Open the register"},
+  {n:"V", id:"threads", name:"Threads", fig:"threads",
+   body:"The Bible argues with itself constantly. This draws the <b>344,799-link cross-reference web</b> outward from any verse you choose: thicker and closer means a stronger link, green is the Hebrew Bible, blue is the New Testament. It is the fastest way to see the book as a conversation rather than a monologue.",
+   go:"Pull a thread"},
+  {n:"VI", id:"scriptorium", name:"Scriptorium", fig:"scriptorium",
+   body:"The game. You are an apprentice scribe, and a finished copy had to be checked against its exemplar line by line — a <b>collation</b>. Sit for a leaf's collation, answer eight questions built from that passage's real text, and get six right: the leaf is <b>gilded</b> and stays gold. Forty-eight to go.",
+   go:"Enter the workshop"}
+];
+
+function buildFront(){
+  const box=$("#howRows"); if(!box) return;
+  box.innerHTML=HOW.map(r=>`<div class="how-row">
+      <div class="how-n">${r.n}</div>
+      <div>
+        <h3 class="how-name">${r.name}</h3>
+        <p class="how-body">${r.body}</p>
+        <button class="how-jump" data-leaf="${r.id}">${r.go} &#8594;</button>
+      </div>
+      <div class="how-fig">${FIGS[r.fig]}</div>
+    </div>`).join("");
+}
+
+/* ── go ───────────────────────────────────────────────────── */
+buildFront(); drawVine();
+showLeaf("frontispiece");
+boot();
+
+</script>
+</body>
+</html>
