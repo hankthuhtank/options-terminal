@@ -59,7 +59,7 @@ const CHIPS=[['chip_square','Square (NES pulse)'],['chip_pulse','Narrow pulse (1
   ['chip_tri','Triangle (NES bass)'],['chip_saw','Saw lead']];
 
 const A={
-  ctx:null, master:null, comp:null, mode:'sampled',
+  ctx:null, master:null, comp:null, mode:'sampled', sustain:false, hold:false, active:[],
   inst:store.get('inst','acoustic_grand_piano'),
   chip:store.get('chip','chip_square'),
   buf:{}, state:{}, muted:false, waves:{},
@@ -113,8 +113,26 @@ const A={
   },
 
   /* --- the one entry point everything else calls --- */
+  /* register a voice so the sustain pedal can actually release it */
+  reg(g,stop){ const v={g,stop}; A.active.push(v);
+    if(A.active.length>120) A.active.splice(0,40); return v; },
+  releaseAll(hard){
+    if(!A.ctx) return;
+    const t=A.ctx.currentTime, r=hard?.03:.2;
+    A.active.forEach(v=>{ try{
+      v.g.gain.cancelScheduledValues(t);
+      v.g.gain.setValueAtTime(Math.max(v.g.gain.value||0.0001,0.0001),t);
+      v.g.gain.exponentialRampToValueAtTime(.0001,t+r);
+      if(v.stop) v.stop(t+r+.03);
+    }catch(e){} });
+    A.active=[];
+    if(hard){ A.hold=false; A.sustain=false; if(typeof KB!=='undefined') KB.syncBtns&&KB.syncBtns(); }
+  },
   note(midi,dur=1.1,vel=.75,when=0){
     A.init();
+    /* the damper pedal: notes ring until the pedal lifts */
+    if(A.hold) dur=Math.max(dur,40);
+    else if(A.sustain) dur=Math.max(dur,3.4);
     const t=A.ctx.currentTime+when;
     if(A.mode==='sampled' && A.state[A.inst]==='ok') A.sampleVoice(midi,dur,vel,t);
     else if(A.mode==='sampled') A.fallbackVoice(midi,dur,vel,t);
@@ -132,6 +150,7 @@ const A={
     g.gain.exponentialRampToValueAtTime(.0001,t+dur+.18);
     src.connect(g); g.connect(A.master);
     src.start(t); src.stop(t+dur+.25);
+    A.reg(g,()=>{try{src.stop()}catch(e){}});
   },
   /* a warm additive voice used when the sample set cannot load */
   fallbackVoice(midi,dur,vel,t){
@@ -146,6 +165,7 @@ const A={
       g.gain.exponentialRampToValueAtTime(peak*.28,t+.22);
       g.gain.exponentialRampToValueAtTime(.0001,t+dur+.3);
       o.connect(g); g.connect(A.master); o.start(t); o.stop(t+dur+.35);
+      A.reg(g,()=>{try{o.stop()}catch(e){}});
     });
   },
   pulseWave(duty){
@@ -170,6 +190,7 @@ const A={
     g.gain.setValueAtTime(peak*.7,t+Math.max(.06,dur-.05));
     g.gain.linearRampToValueAtTime(.0001,t+dur);          /* and a hard gate off */
     o.connect(g); g.connect(A.master); o.start(t); o.stop(t+dur+.02);
+    A.reg(g,()=>{try{o.stop()}catch(e){}});
   },
 
   chord(midis,dur=1.5,vel=.6,when=0,arp=false){
@@ -315,9 +336,19 @@ const Strings={
    4 · THE KEYBED — a playable piano docked on every view
    ============================================================ */
 const KB={
-  oct:3, labels:true, held:new Set(), scale:null, root:0, spans:3,
+  oct:3, labels:store.get('kblab','names'), held:new Set(), scale:null, root:0, spans:3,
+  vel:.78, chordMode:false, snap:false, down:false, latched:new Set(),
   WHITE:[0,2,4,5,7,9,11], BLACKAFTER:[0,1,3,4,5],
-  octaves(){ return innerWidth<620?2:innerWidth<900?3:3; },
+  octaves(){ return innerWidth<620?2:3; },
+  lbl(midi){
+    if(KB.labels==='off') return '';
+    if(KB.labels==='deg'){
+      const sc=KB.scale?scaleById(KB.scale):null; if(!sc) return '';
+      const k=sc.iv.indexOf((((midi%12)-KB.root)%12+12)%12);
+      return k>-1?sc.deg[k]:'';
+    }
+    return midiName(midi);
+  },
   render(){
     const k=$('#keys'); if(!k) return;
     KB.spans=KB.octaves();
@@ -327,10 +358,9 @@ const KB={
     for(let o=0;o<KB.spans;o++){
       for(let w=0;w<7;w++){
         const midi=midiOf(KB.WHITE[w],KB.oct+o);
-        html+=`<div class="wk" data-m="${midi}"><span class="lbl">${KB.labels?esc(midiName(midi)):''}</span></div>`;
+        html+=`<div class="wk" data-m="${midi}"><span class="lbl">${esc(KB.lbl(midi))}</span></div>`;
       }
     }
-    /* black keys positioned over the white row */
     let blacks='';
     for(let o=0;o<KB.spans;o++){
       KB.BLACKAFTER.forEach(bi=>{
@@ -338,12 +368,12 @@ const KB={
         const midi=midiOf(KB.WHITE[bi]+1,KB.oct+o);
         const left=((wIndex+1)*(100/whiteCount));
         blacks+=`<div class="bk" data-m="${midi}" style="left:calc(${left}% - (100%/${whiteCount}*0.31))">
-          <span class="lbl">${KB.labels?esc(pcName(midi)):''}</span></div>`;
+          <span class="lbl">${esc(KB.labels==='names'?pcName(midi):KB.lbl(midi))}</span></div>`;
       });
     }
     k.innerHTML=html+blacks;
     $('#octLbl').textContent='C'+KB.oct;
-    KB.paint();
+    KB.paint(); KB.syncBtns();
   },
   paint(){
     const sc=KB.scale?scaleById(KB.scale):null;
@@ -352,37 +382,93 @@ const KB={
       const m=+el.dataset.m, pc=m%12;
       el.classList.toggle('lit', !!(pcs&&pcs.includes(pc)));
       el.classList.toggle('rt', !!(pcs&&pc===KB.root%12));
+      el.classList.toggle('sus', KB.latched.has(m));
     });
   },
+  syncBtns(){
+    const set=(id,on)=>{ const b=$('#'+id); if(b) b.classList.toggle('on',!!on); };
+    set('susBtn',A.sustain); set('holdBtn',A.hold);
+    set('chordBtn',KB.chordMode); set('snapBtn',KB.snap);
+    const lb=$('#labBtn');
+    if(lb){ lb.textContent={names:'names',deg:'degrees',off:'no labels'}[KB.labels];
+      lb.classList.toggle('on',KB.labels!=='off'); }
+  },
+  /* snap a pressed key to the nearest note of the current scale */
+  fit(m){
+    if(!KB.snap||!KB.scale) return m;
+    const sc=scaleById(KB.scale), pcs=sc.iv.map(i=>(KB.root+i)%12);
+    for(let d=0;d<=6;d++){
+      if(pcs.includes(((m-d)%12+12)%12)) return m-d;
+      if(pcs.includes(((m+d)%12+12)%12)) return m+d;
+    }
+    return m;
+  },
+  /* in chord mode a single key sounds the chord that degree carries in the key */
+  chordFor(m){
+    const sc=KB.scale?scaleById(KB.scale):null;
+    if(!sc||sc.iv.length!==7) return [m,m+4,m+7];
+    const k=sc.iv.indexOf((((m%12)-KB.root)%12+12)%12);
+    if(k<0) return [m,m+4,m+7];
+    return diatonic(sc.iv,k,3).map(r=>m+r);
+  },
   hit(m,el){
-    A.resume(); A.note(m,1.2,.8);
-    $('#nowNote').textContent=midiName(m);
+    A.resume();
+    m=KB.fit(m);
+    if(A.hold&&KB.latched.has(m)){ KB.latched.delete(m); A.releaseAll(); KB.paint(); return; }
+    if(KB.chordMode) A.chord(KB.chordFor(m),1.4,KB.vel*.8);
+    else A.note(m,1.3,KB.vel);
+    if(A.hold) KB.latched.add(m);
+    $('#nowNote').textContent=midiName(m)+(KB.chordMode?' chord':'');
     const t=el||$(`#keys [data-m="${m}"]`);
     if(t){ t.classList.add('down'); setTimeout(()=>t.classList.remove('down'),160); }
+    if(A.hold) KB.paint();
   },
   bind(){
     const k=$('#keys');
-    const from=e=>{ const t=e.target.closest('[data-m]'); return t?+t.dataset.m:null; };
-    k.addEventListener('pointerdown',e=>{ const m=from(e); if(m!=null){e.preventDefault();KB.hit(m,e.target.closest('[data-m]'));} });
-    k.addEventListener('pointerenter',e=>{},{capture:true});
-    /* computer keyboard: the standard two-octave DAW layout */
+    const from=e=>{ const t=e.target.closest&&e.target.closest('[data-m]'); return t?+t.dataset.m:null; };
+    k.addEventListener('pointerdown',e=>{ const m=from(e);
+      if(m!=null){ e.preventDefault(); KB.down=true; KB.hit(m,e.target.closest('[data-m]')); } });
+    /* drag across the keys to glissando */
+    k.addEventListener('pointerover',e=>{ if(!KB.down) return;
+      const m=from(e); if(m!=null) KB.hit(m,e.target.closest('[data-m]')); });
+    addEventListener('pointerup',()=>{ KB.down=false; });
+    addEventListener('pointercancel',()=>{ KB.down=false; });
+
     const MAP={a:0,w:1,s:2,e:3,d:4,f:5,t:6,g:7,y:8,h:9,u:10,j:11,k:12,o:13,l:14,p:15,';':16};
     addEventListener('keydown',e=>{
-      if(e.repeat||e.metaKey||e.ctrlKey||e.altKey) return;
+      if(e.metaKey||e.ctrlKey||e.altKey) return;
       if(/^(input|select|textarea)$/i.test(e.target.tagName)) return;
+      if(e.code==='Space'){ e.preventDefault();
+        if(!A.sustain){ A.sustain=true; KB.syncBtns(); } return; }
+      if(e.repeat) return;
+      if(e.key==='z'){ octShift(-1); return; }
+      if(e.key==='x'){ octShift(1); return; }
       const off=MAP[e.key.toLowerCase()];
       if(off==null) return;
       e.preventDefault();
       const m=midiOf(0,KB.oct+1)+off;
       if(KB.held.has(m)) return; KB.held.add(m); KB.hit(m);
     });
-    addEventListener('keyup',e=>{ const off=MAP[e.key.toLowerCase()];
-      if(off!=null) KB.held.delete(midiOf(0,KB.oct+1)+off); });
+    addEventListener('keyup',e=>{
+      if(e.code==='Space'){ A.sustain=false; A.releaseAll(); KB.syncBtns(); return; }
+      const off=MAP[e.key.toLowerCase()];
+      if(off!=null) KB.held.delete(midiOf(0,KB.oct+1)+off);
+    });
   },
   setScale(rootPc,scaleId){ KB.root=rootPc; KB.scale=scaleId; KB.paint(); }
 };
+function toggleSustain(){ A.sustain=!A.sustain; if(!A.sustain) A.releaseAll(); KB.syncBtns();
+  toast(A.sustain?'Sustain on — or just hold the space bar':'Sustain off'); }
+function toggleHold(){ A.hold=!A.hold;
+  if(!A.hold){ A.releaseAll(); KB.latched.clear(); KB.paint(); }
+  KB.syncBtns(); toast(A.hold?'Hold on — keys latch until pressed again':'Hold off'); }
+function toggleChordMode(){ KB.chordMode=!KB.chordMode; KB.syncBtns();
+  toast(KB.chordMode?'Chord mode — each key plays its chord in the current scale':'Single notes'); }
+function toggleSnap(){ KB.snap=!KB.snap; KB.syncBtns();
+  toast(KB.snap?'Snap on — every key bends to the nearest scale tone':'Snap off'); }
+function cycleLabels(){ KB.labels={names:'deg',deg:'off',off:'names'}[KB.labels];
+  store.set('kblab',KB.labels); KB.render(); }
 function octShift(d){ KB.oct=clamp(KB.oct+d,1,6); KB.render(); }
-function toggleLabels(){ KB.labels=!KB.labels; $('#labBtn').classList.toggle('on',KB.labels); KB.render(); }
 function toggleKeybed(){
   const k=$('#keybed'); const hidden=k.classList.toggle('hide');
   $('#hideBtn').textContent=hidden?'show':'hide';
@@ -428,21 +514,40 @@ function toggleMute(){
 /* ============================================================
    6 · ROUTER
    ============================================================ */
-const VIEWS=[['home','Home'],['lab','The Bench'],['fret','Fretboard'],['ear','Ear Training'],
-  ['rhythm','Rhythm'],['codex','Game Codex'],['enc','Encyclopedia'],['path','The Path']];
+const VIEWS=[
+  ['home','Home','Start here','M3 11l9-8 9 8v9a2 2 0 0 1-2 2h-4v-6H9v6H5a2 2 0 0 1-2-2z'],
+  ['lab','The Bench','Scales · chords · progressions','M4 20V10M10 20V4M16 20v-8M22 20v-4'],
+  ['chords','Chord Book','Finger positions','M3 5v14M8 5v14M13 5v14M18 5v14M3 9h15M3 14h15'],
+  ['ear','Ear Training','Seven drills','M12 3a7 7 0 0 0-7 7v5a3 3 0 0 0 3 3h1v-8H5M19 18a3 3 0 0 0 3-3v-5a7 7 0 0 0-7-7M19 10v8h-1'],
+  ['rhythm','Rhythm Room','Metronome · sequencer','M12 2 6 22h12L12 2zM9 15h6M12 8v7'],
+  ['perc','Practice Room','Rudiments · gap click','M4 14a8 8 0 0 1 16 0v3H4zM4 17v2M20 17v2M8 6l2 4M16 6l-2 4'],
+  ['world','Around the World','Twelve traditions','M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20M2 12h20M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20'],
+  ['codex','Game Codex','62 tracks, taken apart','M6 3h12a1 1 0 0 1 1 1v16l-7-4-7 4V4a1 1 0 0 1 1-1z'],
+  ['enc','Encyclopedia','62 terms','M4 4h11a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4zM4 4v14'],
+  ['path','The Path','10 stages, in order','M12 4 2 9l10 5 10-5zM6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5']
+];
 function go(v){ location.hash=v; }
 function route(){
   const v=(location.hash||'#home').slice(1).split('/')[0];
   const id=VIEWS.some(x=>x[0]===v)?v:'home';
   $$('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+id));
-  $$('#tabs .tab').forEach(t=>t.classList.toggle('on',t.dataset.v===id));
+  $$('#railNav .rnav').forEach(t=>t.classList.toggle('on',t.dataset.v===id));
   scrollTo({top:0,behavior:'auto'});
+  closeNav();
   if(id==='rhythm'&&!Rhythm.mounted){ Rhythm.mount(); Rhythm.mounted=true; }
+  if(id==='chords'&&typeof Chords!=='undefined'&&!Chords.mounted){ Chords.mount(); Chords.mounted=true; }
+  if(id==='perc'&&typeof Perc!=='undefined'&&!Perc.mounted){ Perc.mount(); Perc.mounted=true; }
+  if(id!=='perc'&&typeof Perc!=='undefined') Perc.stopAll();
 }
 function buildTabs(){
-  $('#tabs').innerHTML=VIEWS.map(([v,n])=>
-    `<a class="tab" data-v="${v}" href="#${v}">${esc(n)}</a>`).join('');
+  $('#railNav').innerHTML=VIEWS.map(([v,n,sub,path],i)=>
+    `${i===6?'<div class="rail-sep"></div>':''}<a class="rnav" data-v="${v}" href="#${v}" onclick="closeNav()">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+        stroke-linecap="round" stroke-linejoin="round"><path d="${path}"/></svg>
+      <span><b>${esc(n)}</b><small>${esc(sub)}</small></span></a>`).join('');
 }
+function openNav(){ document.body.classList.add('nav'); }
+function closeNav(){ document.body.classList.remove('nav'); }
 
 /* ============================================================
    7 · HOME
@@ -450,12 +555,12 @@ function buildTabs(){
 const GATES=[
   ['lab','The Bench','Scales, chords and progressions in any key — played, mapped and explained.','var(--brass)',
    'M4 20V10M10 20V4M16 20v-8M22 20v-4'],
-  ['ear','Ear Training','Five drills that turn listening into understanding. The skill everything else rests on.','var(--patina)',
+  ['ear','Ear Training','Seven drills that turn listening into understanding. The skill everything else rests on.','var(--patina)',
    'M12 3a7 7 0 0 0-7 7v5a3 3 0 0 0 3 3h1v-8H5M19 18a3 3 0 0 0 3-3v-5a7 7 0 0 0-7-7M19 10v8h-1'],
   ['codex','Game Codex','Forty-two tracks from the NES to now, with the theory device behind each one.','var(--wine)',
    'M6 3h12a1 1 0 0 1 1 1v16l-7-4-7 4V4a1 1 0 0 1 1-1z'],
-  ['rhythm','Rhythm Room','A metronome that subdivides properly, and an editable step sequencer.','var(--brass)',
-   'M12 2 6 22h12L12 2zM9 15h6M12 8v7']
+  ['perc','Practice Room','Rudiments, a gap click, polyrhythms and a subdivision ladder. For drummers.','var(--brass)',
+   'M4 14a8 8 0 0 1 16 0v3H4zM4 17v2M20 17v2M8 6l2 4M16 6l-2 4']
 ];
 function buildHome(){
   $('#gates').innerHTML=GATES.map(([v,t,d,acc,path])=>
@@ -522,6 +627,8 @@ const Lab={
               <h3>${esc(pcName(Lab.root))} ${esc(sc.n)}</h3>
               <button class="btn btn-brass" onclick="Lab.playScale()">Hear it</button>
               <button class="btn btn-ghost" onclick="Lab.playScale(true)">Down</button>
+              <button class="chip ${Lab.ext?'on':''}" onclick="Lab.toggleExt()"
+                title="Carry the run past the octave into the 9th, 10th and 11th">through the 9th</button>
             </div>
             <div class="degs">${sc.iv.map((iv,i)=>{
               const pc=(Lab.root+iv)%12;
@@ -529,8 +636,16 @@ const Lab={
                 <b>${esc(pcName(pc))}</b><i>${esc(sc.deg[i])}</i></button>`;}).join('')}
               <button class="deg root" onclick="A.resume();A.note(${midiOf(Lab.root,5)},1,.8)">
                 <b>${esc(pcName(Lab.root))}</b><i>8</i></button>
+              ${Lab.ext?sc.iv.slice(1).filter(i=>i<=5).map((iv,k)=>{
+                const pc=(Lab.root+iv)%12;
+                return `<button class="deg" style="opacity:.72" onclick="A.resume();A.note(${midiOf(Lab.root,5)+iv},1,.8)">
+                  <b>${esc(pcName(pc))}</b><i>${[9,10,11][k]||''}</i></button>`;}).join(''):''}
             </div>
-            <p class="hint" style="margin-top:14px">Highlighted on the keyboard below. Tap a degree to hear it alone.</p>
+            <div class="staffbox">${typeof Staff!=='undefined'?Staff.render(
+                sc.iv.map(i=>midiOf(Lab.root,4)+i).concat([midiOf(Lab.root,5)]),
+                {clef:'treble',alt:esc(pcName(Lab.root)+' '+sc.n)+' on the staff'}):''}</div>
+            <p class="hint" style="margin-top:10px">Highlighted on the keyboard below, and written on the staff above.
+               Tap a degree to hear it alone.</p>
           </div>
           ${!heptatonic?`<div class="panel">
             <div class="panel-h"><span class="plabel">Chords</span></div>
@@ -558,12 +673,22 @@ const Lab={
   },
   setRoot(pc){ Lab.root=pc; useFlats=OT.FLAT_KEYS.includes(pc); Lab.mount(); Lab.playScale(); },
   setScale(id){ Lab.scale=id; Lab.mount(); Lab.playScale(); },
+  ext:store.get('ext9',true),
+  scaleRun(root,id,oct){
+    const sc=scaleById(id); const base=midiOf(root,oct||4);
+    let m=sc.iv.map(i=>base+i);
+    m.push(base+12);                                  /* the octave */
+    if(Lab.ext){                                      /* keep climbing into the next one */
+      sc.iv.slice(1).forEach(i=>{ if(i<=5) m.push(base+12+i); });
+    }
+    return m;
+  },
+  toggleExt(){ Lab.ext=!Lab.ext; store.set('ext9',Lab.ext); Lab.mount(); Lab.playScale(); },
   playScale(down){
     A.resume();
-    const sc=scaleById(Lab.scale);
-    let m=sc.iv.map(i=>midiOf(Lab.root,4)+i); m.push(midiOf(Lab.root,5));
-    if(down) m=m.reverse();
-    A.seq(m,.2,.42,.72);
+    let m=Lab.scaleRun(Lab.root,Lab.scale);
+    if(down) m=m.slice().reverse();
+    A.seq(m,.2,.44,.72);
   },
   playDiatonic(i){
     A.resume();
@@ -616,6 +741,8 @@ const Lab={
             <div class="degs">${notes.map((m,i)=>
               `<button class="deg ${i===0?'root':''}" onclick="A.resume();A.note(${m},1.1,.8)">
                 <b>${esc(pcName(m))}</b><i>${esc(midiName(m))}</i></button>`).join('')}</div>
+            <div class="staffbox">${typeof Staff!=='undefined'?Staff.render(notes,
+              {clef:Staff.auto(notes),alt:esc(Chords?'':'')+'chord on the staff'}):''}</div>
           </div>
         </div>
         <div class="panel">
@@ -786,76 +913,13 @@ const Lab={
 /* ============================================================
    9 · FRETBOARD
    ============================================================ */
-const Fret={
-  tuning:'gtr-std', root:0, scale:'minpent', show:'deg',
-  mount(){
-    const t=OT.TUNINGS.find(x=>x.id===Fret.tuning), sc=scaleById(Fret.scale);
-    const pcs=sc.iv.map(i=>(Fret.root+i)%12);
-    const strings=[...t.notes].reverse(), octs=[...t.oct].reverse();
-    let rows='';
-    strings.forEach((openPc,si)=>{
-      let tds='';
-      for(let f=0;f<=t.frets;f++){
-        const pc=(openPc+f)%12;
-        const midi=midiOf(openPc,octs[si])+f;
-        const inScale=pcs.includes(pc);
-        const isRoot=pc===Fret.root%12;
-        const deg=inScale?sc.deg[sc.iv.indexOf(((pc-Fret.root)%12+12)%12)]:'';
-        tds+=`<td onclick="Fret.hit(${midi})">${inScale?
-          `<span class="dot ${isRoot?'root':''}">${esc(Fret.show==='deg'?deg:pcName(pc))}</span>`:''}</td>`;
-      }
-      rows+=`<tr>${tds}</tr>`;
-    });
-    let marks='<td></td>';
-    for(let f=1;f<=t.frets;f++) marks+=`<td class="fmark">${[3,5,7,9,15,17,19,21].includes(f)?'•':f===12?'••':f}</td>`;
-    $('#fretBody').innerHTML=`
-      <div class="panel" style="margin-bottom:14px">
-        <div class="row">
-          <span class="plabel">Instrument</span>
-          ${OT.TUNINGS.map(x=>`<button class="chip ${x.id===Fret.tuning?'on':''}"
-            onclick="Fret.set('tuning','${x.id}')">${esc(x.n)}</button>`).join('')}
-        </div>
-        <div class="row" style="margin-top:14px"><span class="plabel">Root</span>
-          ${OT.SHARP.map((n,pc)=>`<button class="chip ${pc===Fret.root?'on':''}"
-            onclick="Fret.set('root',${pc})">${esc(pcName(pc))}</button>`).join('')}</div>
-        <div class="row" style="margin-top:14px"><span class="plabel">Scale</span>
-          ${OT.SCALES.map(s=>`<button class="chip ${s.id===Fret.scale?'on':''}"
-            onclick="Fret.set('scale','${s.id}')">${esc(s.n)}</button>`).join('')}</div>
-        <div class="row" style="margin-top:14px"><span class="plabel">Show</span>
-          <button class="chip pat ${Fret.show==='deg'?'on':''}" onclick="Fret.set('show','deg')">Scale degrees</button>
-          <button class="chip pat ${Fret.show==='name'?'on':''}" onclick="Fret.set('show','name')">Note names</button>
-          <button class="btn btn-brass" style="margin-left:auto" onclick="Fret.run()">Run the scale</button>
-        </div>
-      </div>
-      <div class="panel">
-        <div class="panel-h"><h3>${esc(pcName(Fret.root))} ${esc(sc.n)}</h3>
-          <span class="plabel">${esc(t.note)}</span></div>
-        <div class="fret-wrap">
-          <table class="fb">${rows}</table>
-          <table style="width:100%;min-width:760px;border-collapse:collapse"><tr>${marks}</tr></table>
-        </div>
-        <p class="note-txt" style="margin-top:16px"><span class="kv">The point</span>
-          The shape never changes — only where you start. Move the whole pattern up two frets and you are in a
-          new key with identical fingering. That portability is the entire advantage of a fretted instrument.</p>
-      </div>`;
-    KB.setScale(Fret.root,Fret.scale);
-  },
-  set(k,v){ Fret[k]=v; if(k==='root') useFlats=OT.FLAT_KEYS.includes(v); Fret.mount(); if(k!=='show') Fret.run(); },
-  hit(m){ A.resume(); A.note(m,1.1,.8); $('#nowNote').textContent=midiName(m); },
-  run(){
-    A.resume();
-    const sc=scaleById(Fret.scale);
-    A.seq(sc.iv.map(i=>midiOf(Fret.root,3)+i).concat([midiOf(Fret.root,4)]),.19,.42,.7);
-  }
-};
-
 /* ============================================================
    10 · EAR TRAINING
    ============================================================ */
 const Ear={
   game:'interval', q:null, score:0, streak:0, locked:false,
   games:[['interval','Intervals'],['chord','Chord quality'],['scale','Scales & modes'],
-    ['prog','Progressions'],['pitch','Name the note']],
+    ['prog','Progressions'],['meter','Time signatures'],['read','Read the staff'],['pitch','Name the note']],
   mount(g){
     if(g){ Ear.game=g; Ear.score=0; Ear.streak=0; }
     const best=store.get('best.'+Ear.game,0);
@@ -868,8 +932,9 @@ const Ear={
           <span>Streak <b class="st">${Ear.streak}</b></span>
           <span>Best <b>${best}</b></span>
         </div>
+        <div class="staffbox" id="earStaff" style="display:${Ear.game==='read'?'block':'none'}"></div>
         <div style="text-align:center;margin:20px 0">
-          <button class="btn btn-brass" onclick="Ear.play()" id="earPlay">Play it</button>
+          <button class="btn btn-brass" onclick="Ear.play()" id="earPlay">${Ear.game==='read'?'Hear it':'Play it'}</button>
           <button class="btn btn-ghost" onclick="Ear.next()">Skip</button>
         </div>
         <div class="answers" id="earAns"></div>
@@ -884,6 +949,8 @@ const Ear={
       chord:'Listen for the third first — it decides major or minor before anything else.',
       scale:'Find the degree that sounds unusual. One altered note is usually the whole identity of a mode.',
       prog:'Track the bass line. Root motion identifies a progression faster than the chords on top.',
+      read:'Every Good Boy Deserves Fudge for the lines, FACE for the spaces. Say the landmark note nearest it, then step.',
+      meter:'Count along out loud. Find the beat that feels strongest \u2014 that is beat one, and the gap between them is your answer.',
       pitch:'This one rewards absolute pitch, which most people do not have. Treat a lucky streak as luck.'
     })[Ear.game];
   },
@@ -914,12 +981,24 @@ const Ear={
       const opts=Ear.pick(pool,5), ans=opts[Math.floor(Math.random()*opts.length)];
       Ear.q={ans,opts,root:55+Math.floor(Math.random()*8)};
       Ear.paint(opts.map(o=>[o.n,o.id===ans.id]));
+    } else if(g==='read'){
+      const clef=Math.random()<.5?'treble':'bass';
+      const lo=clef==='bass'?41:57, midi=lo+Math.floor(Math.random()*17);
+      Ear.q={ans:midi,clef};
+      Ear.paint(OT.SHARP.filter((n,i)=>!Staff.ALTER[i]).map(n=>[n,n===pcName(midi)]));
+    } else if(g==='meter'){
+      const opts=Ear.pick(OT.METERS,5), ans=opts[Math.floor(Math.random()*opts.length)];
+      Ear.q={ans,opts};
+      Ear.paint(opts.map(o=>[o.n,o.n===ans.n]));
     } else {
       const pc=Math.floor(Math.random()*12);
       Ear.q={ans:pc,root:midiOf(pc,4)};
       Ear.paint(OT.SHARP.map((n,i)=>[n,i===pc]));
     }
     $('#earMsg').textContent='';
+    const st=$('#earStaff');
+    if(st) st.innerHTML = Ear.game==='read'
+      ? Staff.render([Ear.q.ans],{clef:Ear.q.clef,alt:'Name this note'}) : '';
     setTimeout(Ear.play,220);
   },
   paint(opts){
@@ -934,13 +1013,31 @@ const Ear={
     else if(g==='scale'){ A.seq(q.ans.iv.map(i=>q.root+i).concat([q.root+12]),.2,.4,.7); }
     else if(g==='prog'){ q.ans.steps.forEach(([d,c],i)=>{
         const ch=chordById(c); A.chord(ch.iv.map(x=>q.root+d+x),1.3,.5,i*.75); }); }
+    else if(g==='meter'){ Ear.playMeter(q.ans); }
+    else if(g==='read'){ A.note(q.ans,1.4,.8); }
     else { A.note(q.root,1.4,.8); }
+  },
+  /* two bars of the meter: accent on one, a lighter tick on each group boundary */
+  playMeter(m){
+    const spb=.44, bars=2;
+    for(let b=0;b<bars;b++){
+      let beat=0;
+      m.group.forEach(g=>{
+        for(let i=0;i<g;i++){
+          const when=(b*m.beats+beat)*spb;
+          const first=(beat===0), groupStart=(i===0);
+          A.drum(first?'k':groupStart?'s':'h',when,first?1:groupStart?.55:.4);
+          beat++;
+        }
+      });
+    }
   },
   answer(btn){
     if(Ear.locked) return; Ear.locked=true;
     const ok=btn.dataset.ok==='1';
     $$('#earAns button').forEach(b=>{ if(b.dataset.ok==='1') b.classList.add('right'); });
     if(!ok) btn.classList.add('wrong');
+    if(ok&&Ear.game==='meter'&&Ear.q.ans.hint) $('#earMsg').textContent=Ear.q.ans.hint;
     if(ok){ Ear.score++; Ear.streak++;
       const best=store.get('best.'+Ear.game,0);
       if(Ear.streak>best) store.set('best.'+Ear.game,Ear.streak);
@@ -961,8 +1058,9 @@ const Ear={
    ============================================================ */
 const Rhythm={
   bpm:100, sig:4, sub:1, running:false, timer:null, step:0, accent:true,
-  seqOn:false, seqTimer:null, seqStep:0, swing:0,
+  seqOn:false, seqTimer:null, seqStep:0, swing:0, beats:4, cat:'all',
   pattern:{k:[],s:[],h:[]}, steps:16, mounted:false,
+  res(){ return Math.max(1,Math.round(Rhythm.steps/Rhythm.beats)); },
   mount(){
     if(!Rhythm.pattern.k.length) Rhythm.loadPreset('rock');
     Rhythm.render();
@@ -984,7 +1082,7 @@ const Rhythm={
             </div>
           </div>
           <div class="row" style="margin-top:20px"><span class="plabel">Time</span>
-            ${[2,3,4,5,6,7].map(n=>`<button class="chip ${n===Rhythm.sig?'on':''}"
+            ${[2,3,4,5,6,7,9,11,12].map(n=>`<button class="chip ${n===Rhythm.sig?'on':''}"
               onclick="Rhythm.setSig(${n})">${n}/4</button>`).join('')}</div>
           <div class="row" style="margin-top:12px"><span class="plabel">Subdivide</span>
             ${[[1,'Quarter'],[2,'Eighth'],[3,'Triplet'],[4,'Sixteenth']].map(([v,n])=>
@@ -1007,8 +1105,13 @@ const Rhythm={
       <div class="panel" style="margin-top:14px">
         <div class="panel-h"><h3>Step sequencer</h3>
           <button class="btn btn-brass" id="seqBtn" onclick="Rhythm.toggleSeq()">Play pattern</button></div>
+        <div class="row" style="margin-bottom:10px"><span class="plabel">Family</span>
+          ${Rhythm.cats().map(c=>`<button class="chip pat ${c===Rhythm.cat?'on':''}"
+            onclick="Rhythm.setCat('${c}')">${esc(c==='all'?'All '+OT.RHYTHMS.length:c)}</button>`).join('')}
+        </div>
         <div class="row" style="margin-bottom:16px"><span class="plabel">Grooves</span>
-          ${OT.RHYTHMS.map(r=>`<button class="chip" onclick="Rhythm.loadPreset('${r.id}')">${esc(r.n)}</button>`).join('')}
+          ${OT.RHYTHMS.filter(r=>Rhythm.cat==='all'||r.cat===Rhythm.cat)
+            .map(r=>`<button class="chip" onclick="Rhythm.loadPreset('${r.id}')" title="${esc(r.sig)}">${esc(r.n)}</button>`).join('')}
           <button class="chip pat" onclick="Rhythm.clear()">Clear</button>
         </div>
         <div class="seq" id="seq"></div>
@@ -1037,10 +1140,13 @@ const Rhythm={
             onclick="Rhythm.tog('${id}',${i})" aria-label="${n} step ${i+1}"></button>`).join('')}
       </div>`).join('');
   },
+  cats(){ return ['all',...new Set(OT.RHYTHMS.map(r=>r.cat))]; },
+  setCat(c){ Rhythm.cat=c; Rhythm.render(); },
   loadPreset(id){
     const r=OT.RHYTHMS.find(x=>x.id===id); if(!r) return;
     Rhythm.pattern={k:[...r.k],s:[...r.s],h:[...r.h]};
-    Rhythm.steps=r.k.length; Rhythm.bpm=r.bpm;
+    Rhythm.steps=r.k.length; Rhythm.bpm=r.bpm; Rhythm.beats=r.beats||4;
+    const sigTop=parseInt(r.sig,10); if(sigTop>=2&&sigTop<=12) Rhythm.sig=sigTop;
     Rhythm.render();
     const n=$('#rhythmNote');
     if(n) n.innerHTML=`<span class="kv">${esc(r.n)} · ${esc(r.sig)}</span>${esc(r.read)}
@@ -1082,10 +1188,10 @@ const Rhythm={
   toggleSeq(){ Rhythm.seqOn?Rhythm.stopSeq():Rhythm.startSeq(); },
   startSeq(){
     A.resume(); Rhythm.seqOn=true; Rhythm.seqStep=0;
-    const iv=(60/Rhythm.bpm)*1000/4;
+    const iv=(60/Rhythm.bpm)*1000/Rhythm.res();
     const tick=()=>{
       const i=Rhythm.seqStep%Rhythm.steps;
-      const late=(i%2===1)?(Rhythm.swing/100)*(iv/1000)*.6:0;
+      const late=(Rhythm.res()%2===0&&i%2===1)?(Rhythm.swing/100)*(iv/1000)*.6:0;
       if(Rhythm.pattern.k[i]) A.drum('k',late);
       if(Rhythm.pattern.s[i]) A.drum('s',late);
       if(Rhythm.pattern.h[i]) A.drum('h',late,.7);
@@ -1275,7 +1381,7 @@ addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
 function boot(){
   buildTabs(); buildHome(); buildInstSel();
   Strings.init(); KB.render(); KB.bind();
-  Lab.mount(); Fret.mount(); Ear.mount(); Rhythm.mount(); Codex.mount(); Enc.mount(); Path.mount();
+  Lab.mount(); Ear.mount(); Rhythm.mount(); Codex.mount(); Enc.mount(); Path.mount();
   addEventListener('hashchange',route); route();
   /* the audio context can only start from a gesture */
   const wake=()=>{ A.resume(); if(A.mode==='sampled') A.load(A.inst);

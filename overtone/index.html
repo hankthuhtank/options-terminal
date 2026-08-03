@@ -175,6 +175,12 @@ nav#tabs::-webkit-scrollbar{display:none}
 .fb .dot{display:inline-grid;place-items:center;width:27px;height:27px;border-radius:50%;
   font-family:var(--mono);font-size:.62rem;background:var(--patina);color:var(--void);font-weight:500}
 .fb .dot.root{background:var(--brass);box-shadow:0 0 0 2px rgba(217,164,65,.35)}
+.fb .dot.vox{box-shadow:0 0 0 2px var(--ivory),0 0 12px rgba(243,236,221,.5)}
+.fb td.opn{background:rgba(0,0,0,.4)}
+.fb td.opn .onm{font-family:var(--mono);font-size:.62rem;color:var(--ivory)}
+.fb td:hover{background:rgba(243,236,221,.07);cursor:pointer}
+.fmarks{width:100%;min-width:760px;border-collapse:collapse}
+.fmarks td:first-child{width:52px}
 .fmark{font-family:var(--mono);font-size:.56rem;color:var(--faint);text-align:center;padding-top:6px}
 
 /* ---------- circle of fifths ---------- */
@@ -320,6 +326,77 @@ footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(-
 .hint{font-family:var(--mono);font-size:.62rem;color:var(--faint);letter-spacing:.06em}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
+
+/* ---------- side rail ---------- */
+#rail{position:fixed;left:0;top:0;bottom:0;width:222px;z-index:90;background:linear-gradient(180deg,#100d0c,#0b0908);
+  border-right:1px solid var(--line);display:flex;flex-direction:column;transition:transform .28s cubic-bezier(.2,.8,.3,1)}
+.rail-top{display:flex;align-items:center;gap:11px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.rail-nav{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+.rnav{display:flex;align-items:center;gap:13px;padding:11px 12px;border-radius:9px;color:var(--dim);
+  transition:.16s;position:relative}
+.rnav:hover{background:var(--panel);color:var(--ivory)}
+.rnav.on{background:var(--brass-glow);color:var(--brass)}
+.rnav.on::before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:2px;background:var(--brass);border-radius:2px}
+.rnav svg{flex:0 0 auto}
+.rnav b{font-family:var(--ui);font-weight:500;font-size:.86rem}
+.rnav small{display:block;font-family:var(--mono);font-size:.5rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--faint);margin-top:2px}
+.rail-sep{height:1px;background:var(--line);margin:10px 12px}
+.rail-foot{padding:14px 18px;border-top:1px solid var(--line);font-family:var(--mono);font-size:.5rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--faint);line-height:1.8}
+#scrim{position:fixed;inset:0;background:rgba(5,4,3,.7);z-index:85;opacity:0;pointer-events:none;transition:opacity .25s}
+#menuBtn{display:none}
+@media(min-width:1000px){ body{padding-left:222px} }
+@media(max-width:999px){
+  #rail{transform:translateX(-100%);box-shadow:16px 0 50px rgba(0,0,0,.7)}
+  body.nav #rail{transform:none}
+  body.nav #scrim{opacity:1;pointer-events:auto}
+  #menuBtn{display:grid}
+}
+
+/* ---------- world ---------- */
+.wcard{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);padding:22px;
+  display:flex;flex-direction:column;gap:11px;text-align:left;transition:.2s}
+.wcard:hover{border-color:var(--brass);background:var(--wood)}
+.wcard .cont{font-family:var(--mono);font-size:.54rem;letter-spacing:.18em;text-transform:uppercase;color:var(--patina)}
+.wcard h4{font-size:1.18rem}
+.wcard p{color:var(--dim);font-size:.86rem}
+.wbig{border-left:2px solid var(--brass);padding:6px 0 6px 14px;margin:4px 0}
+.wbig .kv{margin-bottom:4px}
+
+/* ---------- motif player ---------- */
+.motif{border:1px solid var(--line2);border-radius:12px;background:var(--ebony);padding:18px;margin-top:14px}
+.motif-h{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.motif-h h4{font-size:1.06rem;flex:1;min-width:150px}
+.roll{display:flex;gap:2px;align-items:flex-end;height:74px;overflow-x:auto;padding:6px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.roll i{display:block;background:var(--brass-dim);border-radius:2px;min-width:7px;flex:0 0 auto;
+  transition:background .1s,transform .1s;position:relative}
+.roll i.rest{background:transparent;border-bottom:1px dashed var(--line2)}
+.roll i.on{background:var(--brass);transform:scaleY(1.06);box-shadow:0 0 10px var(--brass-glow)}
+.badge{font-family:var(--mono);font-size:.52rem;letter-spacing:.13em;text-transform:uppercase;
+  border:1px solid var(--patina);color:var(--patina);border-radius:5px;padding:4px 8px}
+.badge.orig{border-color:var(--brass);color:var(--brass)}
+
+/* ---------- keybed extras ---------- */
+.kb-bar{flex-wrap:wrap}
+.kb-bar .grp{display:flex;align-items:center;gap:4px;border-left:1px solid var(--line);padding-left:10px;margin-left:2px}
+.kb-bar input[type=range]{width:74px;height:3px}
+.wk.sus,.bk.sus{box-shadow:inset 0 -4px 0 var(--patina)}
+
+/* ---------- sticking + polyrhythm ---------- */
+.sticking{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;padding:14px 0}
+.sk{width:34px;height:34px;display:grid;place-items:center;border-radius:8px;border:1px solid var(--line);
+  font-family:var(--mono);font-size:.82rem;color:var(--dim);background:var(--panel);transition:.08s}
+.sk.grace{width:24px;height:24px;font-size:.6rem;opacity:.65;align-self:center}
+.sk.acc{border-color:var(--brass);color:var(--brass)}
+.sk.now{background:var(--brass);color:var(--void);border-color:var(--brass);transform:translateY(-3px)}
+.polyrow{display:flex;gap:6px;justify-content:center;margin:8px 0}
+.polyrow i{width:20px;height:20px;border-radius:50%;background:var(--line);display:block;transition:.08s}
+.polyrow .pa.on{background:var(--brass);box-shadow:0 0 14px var(--brass);transform:scale(1.2)}
+.polyrow .pb.on{background:var(--patina);box-shadow:0 0 14px var(--patina);transform:scale(1.2)}
+.staffbox{background:var(--ebony);border:1px solid var(--line);border-radius:11px;padding:8px 4px;
+  overflow-x:auto;margin-top:12px}
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
   #strings{opacity:.35}
@@ -338,16 +415,31 @@ footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(-
 <canvas id="strings" aria-hidden="true"></canvas>
 <div id="grain" aria-hidden="true"></div>
 
+<aside id="rail" aria-label="Sections">
+  <a class="rail-top" href="#home">
+    <svg width="24" height="24" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+      <path d="M1 13c3-9 5 9 8 0s5 9 8 0 5 4 8 0" stroke="#d9a441" stroke-width="1.7" stroke-linecap="round"/></svg>
+    <span><b style="font-family:var(--disp);font-weight:900;letter-spacing:.11em;font-size:1.02rem">OVERTONE</b>
+    <i style="font-family:var(--mono);font-size:.46rem;letter-spacing:.2em;color:var(--faint);font-style:normal;display:block">hear how it works</i></span>
+  </a>
+  <nav class="rail-nav" id="railNav"></nav>
+  <div class="rail-foot">Play anything<br>Everything makes sound</div>
+</aside>
+<div id="scrim" onclick="closeNav()"></div>
+
 <div id="app">
 <header id="bar">
   <div class="wrap bar-in">
+    <button class="icon-btn" id="menuBtn" onclick="openNav()" aria-label="Menu">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
     <a class="brand" href="#home" aria-label="Overtone home">
       <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
         <path d="M1 13c3-9 5 9 8 0s5 9 8 0 5 4 8 0" stroke="#d9a441" stroke-width="1.7" stroke-linecap="round"/>
       </svg>
       <span><b>OVERTONE</b><i>hear how it works</i></span>
     </a>
-    <nav id="tabs" aria-label="Sections"></nav>
+    <span style="flex:1"></span>
     <div class="rig">
       <select class="sel" id="instSel" aria-label="Instrument"></select>
       <div class="tog" role="group" aria-label="Sound engine">
@@ -390,14 +482,25 @@ footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(-
   <div id="labBody"></div>
 </section>
 
-<!-- FRETBOARD -->
-<section class="view" id="v-fret">
+<!-- CHORDS -->
+<section class="view" id="v-chords">
   <div class="vhead">
-    <div class="eyebrow">Fretboard</div>
-    <h2>The same shape, <em>anywhere on the neck.</em></h2>
-    <p>Guitar, bass, ukulele and mandolin in standard and alternate tunings. Tap any fret to hear it.</p>
+    <div class="eyebrow">Chord Book</div>
+    <h2>Where to put <em>your fingers.</em></h2>
+    <p>Guitar, ukulele, mandolin and bass. Pick a chord, read the diagram, hear it strummed.</p>
   </div>
-  <div id="fretBody"></div>
+  <div id="chordBody"></div>
+</section>
+
+<!-- PERCUSSION -->
+<section class="view" id="v-perc">
+  <div class="vhead">
+    <div class="eyebrow">The Practice Room</div>
+    <h2>Time, <em>taken seriously.</em></h2>
+    <p>Rudiments with sticking, a gap click that tests whether your time is actually internal,
+       polyrhythms, and a subdivision ladder. Built for someone who practises every day.</p>
+  </div>
+  <div id="percBody"></div>
 </section>
 
 <!-- EAR -->
@@ -433,6 +536,17 @@ footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(-
   <div id="codexBody"></div>
 </section>
 
+<!-- WORLD -->
+<section class="view" id="v-world">
+  <div class="vhead">
+    <div class="eyebrow">Around the World</div>
+    <h2>Twelve traditions, <em>and what each one solved.</em></h2>
+    <p>Every region below worked out its own answer to the same questions — how to organise pitch, how to
+       organise time. Open one to hear its scales, its grooves and a real melody from it.</p>
+  </div>
+  <div id="worldBody"></div>
+</section>
+
 <!-- ENCYCLOPEDIA -->
 <section class="view" id="v-enc">
   <div class="vhead">
@@ -464,11 +578,28 @@ footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(-
 <div id="keybed">
   <div class="kb-bar">
     <span class="now" id="nowNote">—</span>
+    <span class="grp">
+      <button onclick="octShift(-1)" aria-label="Octave down">◀</button>
+      <span id="octLbl" style="color:var(--dim)">C3</span>
+      <button onclick="octShift(1)" aria-label="Octave up">▶</button>
+    </span>
+    <span class="grp">
+      <button id="susBtn" onclick="toggleSustain()" title="Sustain pedal — or hold the space bar">sustain</button>
+      <button id="holdBtn" onclick="toggleHold()" title="Latch notes on until pressed again">hold</button>
+    </span>
+    <span class="grp">
+      <button id="chordBtn" onclick="toggleChordMode()" title="Play the diatonic chord for each key">chords</button>
+      <button id="snapBtn" onclick="toggleSnap()" title="Snap every key to the current scale">snap</button>
+    </span>
+    <span class="grp">
+      <button id="labBtn" class="on" onclick="cycleLabels()">names</button>
+    </span>
+    <span class="grp" title="Velocity">
+      <span style="color:var(--faint)">vel</span>
+      <input type="range" min="20" max="100" value="78" oninput="KB.vel=+this.value/100">
+    </span>
     <span class="sp"></span>
-    <button onclick="octShift(-1)" aria-label="Octave down">◀ oct</button>
-    <span id="octLbl" style="color:var(--dim)">C3</span>
-    <button onclick="octShift(1)" aria-label="Octave up">oct ▶</button>
-    <button id="labBtn" class="on" onclick="toggleLabels()">names</button>
+    <button id="panicBtn" onclick="A.releaseAll(true)" title="Stop all sound">stop</button>
     <button id="hideBtn" onclick="toggleKeybed()">hide</button>
   </div>
   <div class="keys" id="keys"></div>
@@ -484,6 +615,10 @@ footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(-
 <script src="theory.js"></script>
 <script src="encyclopedia.js"></script>
 <script src="vgm.js"></script>
+<script src="world.js"></script>
 <script src="app.js"></script>
+<script src="chords.js"></script>
+<script src="extra.js"></script>
+<script src="tools.js"></script>
 </body>
 </html>
