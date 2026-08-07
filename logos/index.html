@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOGOS · A field guide to working with language models</title>
+<meta name="description" content="A working library of detailed prompts, plus the techniques, agent patterns, and failure modes behind them. Built on current research, not 2023 folklore.">
+<meta name="color-scheme" content="dark">
+
+<link rel="preload" href="assets/fonts/fraunces-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/hanken-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/logos.css">
+</head>
+<body>
+
+<!-- ══════════════════ MASTHEAD ══════════════════ -->
+<header class="masthead">
+  <div class="masthead__grid">
+    <div>
+      <p class="eyebrow">A field guide to working with language models</p>
+      <h1 class="wordmark" aria-label="LOGOS">
+        <span>L</span><span>O</span><span>G</span><span>O</span><span>S</span>
+      </h1>
+      <p class="masthead__sub">
+        The word, and the reason behind it. A compositor's case of prompts you can actually use,
+        set alongside what the craft has learned about which techniques still earn their space.
+      </p>
+    </div>
+
+    <aside class="slip">
+      <dl>
+        <dt>Contents</dt><dd><b id="promptCount">0</b> prompts across <b id="boxCount">0</b> compartments</dd>
+        <dt>Also</dt><dd>techniques, agent patterns, failure modes, routing</dd>
+        <dt>Method</dt><dd>primary sources and current research, cited at the foot</dd>
+        <dt>Standing</dt><dd>Aug 2026. Model rankings change monthly, so this teaches the decision rather than the leaderboard.</dd>
+        <dt>Cost</dt><dd>free, no account, nothing leaves your browser</dd>
+      </dl>
+    </aside>
+  </div>
+</header>
+
+<!-- ══════════════════ RAIL ══════════════════ -->
+<nav class="rail" aria-label="Sections">
+  <div class="rail__in">
+    <a class="rail__mark" href="#top">LOGOS</a>
+    <a href="#case-sec">The case</a>
+    <a href="#stick-sec">Composing stick</a>
+    <a href="#setting-sec">Setting</a>
+    <a href="#thennow-sec">Then / now</a>
+    <a href="#press-sec">The press</a>
+    <a href="#lockup-sec">Lockup</a>
+    <a href="#routing-sec">Routing</a>
+    <a href="#gloss-sec">Glossary</a>
+  </div>
+</nav>
+
+<main id="top">
+
+<!-- ══════════════════ THE CASE ══════════════════ -->
+<section class="sec" id="case-sec">
+  <div class="sec__in">
+    <div class="sec__head">
+      <p class="eyebrow">The case</p>
+      <h2 class="sec-title">Every prompt has a compartment</h2>
+      <p class="lede">
+        A compositor's job case gives the letters you reach for most the biggest bins. These do the same:
+        the wider the compartment, the more it holds. Pull one to fill the galley below, or search across
+        everything. Prompts with dashed slots can be filled in place before you copy.
+      </p>
+    </div>
+
+    <div class="case-tools">
+      <label class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path>
+        </svg>
+        <input id="q" type="search" placeholder="Search by task, technique, or word…" aria-label="Search prompts" autocomplete="off">
+        <kbd>/</kbd>
+      </label>
+      <div class="case-count" id="count" aria-live="polite"></div>
+    </div>
+
+    <div class="case" id="case" role="group" aria-label="Prompt compartments"></div>
+    <p class="case-hint">Bin width tracks how many prompts sit inside. Click to pull, click again to put back.</p>
+
+    <div class="galley" id="galley">
+      <div class="galley__bar" id="galleyBar"></div>
+      <div class="sorts" id="sorts"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ COMPOSING STICK ══════════════════ -->
+<section class="sec" id="stick-sec">
+  <div class="sec__in">
+    <div class="sec__head">
+      <p class="eyebrow">Composing stick</p>
+      <h2 class="sec-title">Set your own, one piece at a time</h2>
+      <p class="lede">
+        A compositor sets a line into a stick with a fixed measure, so every piece has to earn its width.
+        Tick only the pieces your task needs. The assembly order is deliberate: supplied material first,
+        then the task, then how to handle it.
+      </p>
+    </div>
+
+    <div class="stick">
+      <div class="stick__col">
+        <h3>Pieces</h3>
+        <div id="pieces"></div>
+      </div>
+
+      <div class="stick__col stick__out">
+        <h3>The line</h3>
+        <div class="measure">
+          <span>Measure</span>
+          <span class="measure__bar"><span class="measure__fill" id="measureFill"></span></span>
+          <span id="measureLabel">empty stick</span>
+        </div>
+        <div class="sheet" id="stickOut" style="max-height:26rem"></div>
+        <div class="sort__acts">
+          <button class="btn btn--ink" type="button" id="stickCopy">Copy prompt</button>
+          <button class="btn" type="button" id="stickClear">Empty the stick</button>
+        </div>
+        <p class="slot-note">
+          If you go over the measure, that is usually a sign the task should be split into two prompts
+          rather than one longer one.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ SETTING ══════════════════ -->
+<section class="sec" id="setting-sec">
+  <div class="sec__in">
+    <div class="sec__head">
+      <p class="eyebrow">Setting</p>
+      <h2 class="sec-title">The techniques that still pay</h2>
+      <p class="lede">
+        Ranked by how much they return rather than by how clever they are. The foundational four fix most
+        problems and cost almost nothing. Everything below them is situational, and reaching for all of it
+        at once is its own failure mode.
+      </p>
+    </div>
+    <div class="techs" id="techs"></div>
+  </div>
+</section>
+
+<!-- ══════════════════ THEN / NOW ══════════════════ -->
+<section class="sec" id="thennow-sec">
+  <div class="sec__in">
+    <div class="sec__head">
+      <p class="eyebrow">Then / now</p>
+      <h2 class="sec-title">Advice that quietly expired</h2>
+      <p class="lede">
+        Most prompt guides on the internet were written for models two generations back, and some of the
+        best-known advice now costs you more than it gives. The clearest signal in the field: Anthropic
+        removed over 80% of Claude Code's system prompt for the newest models with no measurable loss on
+        their coding evaluations. Less scaffolding, more judgement.
+      </p>
+    </div>
+    <div class="tn" id="thennow"></div>
+  </div>
+</section>
+
+<!-- ══════════════════ THE PRESS ══════════════════ -->
+<section class="sec" id="press-sec">
+  <div class="sec__in">
+    <div class="sec__head">
+      <p class="eyebrow">The press</p>
+      <h2 class="sec-title">Connecting a model to real work</h2>
+      <p class="lede">
+        A prompt on its own is a proof pull. Everything here is the machinery that turns it into a run:
+        how a model reaches your tools, how it learns your procedures, how multiple steps become one
+        workflow, and how you know any of it is working.
+      </p>
+    </div>
+    <div class="stack" id="stack"></div>
+  </div>
+</section>
+
+<!-- ══════════════════ LOCKUP ══════════════════ -->
+<section class="sec" id="lockup-sec">
+  <div class="sec__in">
+    <div class="sec__head">
+      <p class="eyebrow">Lockup</p>
+      <h2 class="sec-title">What holds, and what gives</h2>
+      <p class="lede">
+        A forme that is not locked tight throws type across the pressroom at speed. These are the failure
+        modes worth understanding before you give an agent access to anything that matters. The first two
+        are architectural, which means no amount of careful instruction fixes them.
+      </p>
+    </div>
+    <div class="fails" id="fails"></div>
+  </div>
+</section>
+
+<!-- ══════════════════ ROUTING ══════════════════ -->
+<section class="sec" id="routing-sec">
+  <div class="sec__in">
+    <div class="sec__head">
+      <p class="eyebrow">Routing</p>
+      <h2 class="sec-title">Choosing a model without a leaderboard</h2>
+    </div>
+    <p class="lede" id="routePre" style="white-space:pre-line"></p>
+    <div class="axes" id="axes"></div>
+    <ul class="rules" id="routeRules"></ul>
+  </div>
+</section>
+
+<!-- ══════════════════ GLOSSARY ══════════════════ -->
+<section class="sec" id="gloss-sec">
+  <div class="sec__in">
+    <div class="sec__head">
+      <p class="eyebrow">Glossary</p>
+      <h2 class="sec-title">Why the pressroom words</h2>
+      <p class="lede">
+        Movable type was the first technology for setting language into a fixed frame, where every piece
+        took real space and the craft was in what you left out. The vocabulary already fit, so this guide
+        borrowed it rather than inventing worse words.
+      </p>
+    </div>
+    <div class="gloss" id="gloss"></div>
+  </div>
+</section>
+
+</main>
+
+<!-- ══════════════════ FOOT ══════════════════ -->
+<footer class="foot">
+  <div class="foot__in">
+    <div>
+      <p class="foot__mark">LOGOS</p>
+      <p class="foot__line">Set the words. Lock the frame. Pull a proof before the run.</p>
+    </div>
+    <div class="foot__src">
+      Built on primary sources, August 2026<br>
+      <a href="https://claude.com/blog/best-practices-for-prompt-engineering" target="_blank" rel="noopener">Anthropic · prompt engineering best practices</a><br>
+      <a href="https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models" target="_blank" rel="noopener">Anthropic · new rules of context engineering</a><br>
+      <a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener">Anthropic · effective context engineering</a><br>
+      <a href="https://owasp.org/www-project-agentic-skills-top-10/" target="_blank" rel="noopener">OWASP · agentic skills top 10</a><br>
+      <a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener">OWASP · top 10 for LLM applications</a><br>
+      <a href="https://arxiv.org/pdf/2412.01690" target="_blank" rel="noopener">Economical Prompting Index (arXiv 2412.01690)</a><br>
+      <a href="https://metr.org/blog/2026-02-24-uplift-update/" target="_blank" rel="noopener">METR · productivity study update</a><br>
+      <a href="https://www.promptingguide.ai/techniques/cot" target="_blank" rel="noopener">Prompt Engineering Guide · techniques</a>
+    </div>
+  </div>
+</footer>
+
+<script src="data/prompts.js"></script>
+<script src="data/prompts2.js"></script>
+<script src="data/prompts3.js"></script>
+<script src="data/codex.js"></script>
+<script src="assets/logos.js"></script>
+</body>
+</html>
