@@ -59,7 +59,7 @@
             top: 0;
             width: 100%;
             z-index: 1000;
-            padding: 1.5rem 4vw;
+            padding: 1.2rem 4vw;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -69,23 +69,26 @@
         nav.scrolled {
             background: rgba(247, 243, 237, 0.92);
             backdrop-filter: blur(20px);
-            padding: 1rem 4vw;
+            padding: 0.8rem 4vw;
             box-shadow: 0 1px 20px rgba(0,0,0,0.05);
         }
 
         .nav-logo {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.4rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--cream);
+            display: flex;
+            align-items: center;
             text-decoration: none;
-            transition: color 0.4s ease;
+            transition: all 0.4s ease;
         }
 
-        nav.scrolled .nav-logo {
-            color: var(--charcoal);
+        .nav-logo img {
+            height: 42px;
+            width: auto;
+            filter: drop-shadow(0 1px 3px rgba(0,0,0,0.4));
+            transition: all 0.4s ease;
+        }
+
+        nav.scrolled .nav-logo img {
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
         }
 
         .nav-links {
@@ -267,6 +270,7 @@
 
         .hero-visual {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
@@ -1026,6 +1030,13 @@
             .logo-container {
                 max-width: 300px;
             }
+            .hero-badge {
+                position: relative;
+                bottom: auto;
+                right: auto;
+                margin-top: 2rem;
+                align-self: center;
+            }
             .about-grid,
             .contact-grid {
                 grid-template-columns: 1fr;
@@ -1046,8 +1057,21 @@
             .mobile-menu-btn {
                 display: flex;
             }
+            .nav-logo img {
+                height: 36px;
+            }
             .hero-content {
                 padding: 6rem 2rem 4rem;
+            }
+            .hero-visual {
+                padding: 5rem 2rem 1rem;
+            }
+            .hero-badge {
+                margin-top: 1.5rem;
+                padding: 1rem 1.4rem;
+            }
+            .hero-badge strong {
+                font-size: 1.1rem;
             }
             .about,
             .facts,
@@ -1108,12 +1132,15 @@
             border-bottom: 1px solid rgba(247, 243, 237, 0.1);
         }
     </style>
+<base target="_blank">
 </head>
 <body>
 
     <!-- Navigation -->
     <nav id="navbar">
-        <a href="#" class="nav-logo">Baker Precision</a>
+        <a href="#" class="nav-logo">
+            <img src="logo.png" alt="Baker Precision Inspections">
+        </a>
         <ul class="nav-links">
             <li><a href="#about">About</a></li>
             <li><a href="#facts">Why Inspect</a></li>
