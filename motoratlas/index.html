@@ -1,4 +1,150 @@
----
----
-{% capture motor_page %}{% include_relative site.html %}{% endcapture %}
-{{ motor_page | replace: '</head>', '<link rel="stylesheet" href="education.css?v=1"><link rel="stylesheet" href="reorg.css?v=1"></head>' | replace: '</body>', '<script src="education.js?v=1"></script><script src="visuals.js?v=1"></script><script src="reorg.js?v=1"></script></body>' }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MotorAtlas — Understand the Machine</title>
+<meta name="description" content="A visual, parts-first guide to how cars work: components, systems, failure signs, diagnostics, gasoline, hybrid and electric vehicle architecture.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Saira+Condensed:wght@500;600;700;800&family=Chivo:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="atlas.css?v=3">
+</head>
+<body>
+<div class="ambient-grid" aria-hidden="true"></div>
+<nav class="topbar" id="topbar">
+  <div class="shell nav-inner">
+    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span><span>MOTOR//ATLAS<small>visual vehicle reference</small></span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="#explorer">Parts</a>
+      <a href="#architecture">Vehicle architecture</a>
+      <a href="#diagnostics">Diagnostics</a>
+      <a href="#sources">Sources</a>
+    </div>
+    <button class="menu" id="menuBtn" type="button" aria-expanded="false">MENU</button>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-noise" aria-hidden="true"></div>
+  <div class="shell hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow"><span></span>PARTS-FIRST AUTOMOTIVE EDUCATION</div>
+      <h1>Know the part.<br><em>Understand the machine.</em></h1>
+      <p>Search a component, open its system, see what it does, where it lives, what it works with, what failure feels like, and how the whole system moves around it.</p>
+      <label class="hero-search">
+        <span>SEARCH THE VEHICLE</span>
+        <input id="globalSearch" type="search" autocomplete="off" placeholder="Try: thermostat, crankshaft, ABS, alternator, CV axle…">
+        <kbd>/</kbd>
+      </label>
+      <div class="hero-meta"><span id="heroCount">Loading component index…</span><span>Gas · diesel · hybrid · EV</span><span>No car/truck mode</span></div>
+    </div>
+    <div class="hero-plate" aria-hidden="true">
+      <div class="plate-top"><span>REFERENCE PLATE 01</span><span>POWERTRAIN / CUTAWAY</span></div>
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Engine%20and%20Gearbox%20cutaway-001.jpg?width=1200" alt="" loading="eager">
+      <div class="plate-scan"></div>
+      <div class="plate-caption">Actual cutaway · James Hall Museum of Transport</div>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="system-entry" id="explorer">
+  <div class="shell">
+    <div class="section-heading">
+      <div class="index">01 / PARTS LIBRARY</div>
+      <div><span class="eyebrow-text">START HERE</span><h2>Pick a system.<br>Open the hardware.</h2><p>The library is the site. Everything else supports it. Choose a system below or search directly for a part.</p></div>
+    </div>
+    <div class="system-strip" id="systemStrip" aria-label="Vehicle systems"></div>
+
+    <div class="workbench" id="workbench">
+      <aside class="part-index">
+        <div class="part-index-head">
+          <div><span id="partSystemLabel">SYSTEM</span><b id="partCountLabel">0 PARTS</b></div>
+          <label><input id="partSearch" type="search" placeholder="Filter this system…"></label>
+        </div>
+        <div class="part-list" id="partList"></div>
+      </aside>
+
+      <section class="manual-page">
+        <header class="manual-head">
+          <div><span class="manual-code" id="manualCode">01.01</span><h3 id="partTitle">Select a part</h3></div>
+          <div class="manual-tags" id="partTags"></div>
+        </header>
+        <div class="detail-tabs" id="detailTabs">
+          <button class="active" data-tab="quick">Quick</button>
+          <button data-tab="learn">Learn</button>
+          <button data-tab="failure">Failure</button>
+          <button data-tab="inspect">Inspect</button>
+        </div>
+        <div class="detail-view" id="detailView"></div>
+        <div class="related-row"><span>RELATED</span><div id="relatedParts"></div></div>
+      </section>
+
+      <aside class="system-visual">
+        <div class="visual-head"><span>REFERENCE / REAL HARDWARE</span><a id="visualSource" target="_blank" rel="noopener">SOURCE ↗</a></div>
+        <figure class="visual-frame"><img id="systemImage" alt=""><figcaption id="visualCaption"></figcaption></figure>
+        <div class="system-copy"><span class="system-code" id="systemCode"></span><h3 id="systemTitle"></h3><p id="systemSummary"></p></div>
+      </aside>
+    </div>
+
+    <section class="flow-bench" id="flowBench">
+      <div class="flow-copy"><span class="eyebrow-text">SYSTEM VIEW</span><h3 id="flowTitle">Follow what moves.</h3><p id="flowSummary"></p><div class="flow-legend"><span><i class="energy"></i> energy / force</span><span><i class="fluid"></i> fluid / air</span><span><i class="signal"></i> electrical / control</span></div></div>
+      <div class="flow-stage" id="flowStage"></div>
+    </section>
+  </div>
+</section>
+
+<section class="architecture" id="architecture">
+  <div class="shell">
+    <div class="section-heading compact">
+      <div class="index">02 / VEHICLE ARCHITECTURE</div>
+      <div><span class="eyebrow-text">DIFFERENCES THAT ACTUALLY MATTER</span><h2>Gasoline. Hybrid. Electric.</h2><p>Instead of pretending cars and trucks use entirely different fundamentals, compare powertrain architectures where the component set really changes.</p></div>
+    </div>
+    <div class="arch-tabs" id="archTabs">
+      <button class="active" data-arch="gas">Gasoline</button><button data-arch="hybrid">Hybrid</button><button data-arch="ev">Electric</button>
+    </div>
+    <div class="arch-stage">
+      <figure><img id="archImage" src="https://afdc.energy.gov/files/vehicles/gas-high-res.jpg" alt="U.S. Department of Energy labeled gasoline vehicle component diagram"></figure>
+      <div class="arch-copy"><span class="arch-source" id="archSource">U.S. DEPARTMENT OF ENERGY / AFDC</span><h3 id="archTitle">Gasoline vehicle</h3><p id="archText"></p><div class="arch-parts" id="archParts"></div><a id="archLink" target="_blank" rel="noopener">Open official DOE reference ↗</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="diagnostics" id="diagnostics">
+  <div class="shell">
+    <div class="section-heading compact">
+      <div class="index">03 / DIAGNOSTIC THINKING</div>
+      <div><span class="eyebrow-text">SYMPTOM → SYSTEM → TEST</span><h2>Learn why.<br>Not just what to replace.</h2><p>Real diagnosis narrows possibilities. Pick a complaint and follow the evidence instead of jumping straight to a part.</p></div>
+    </div>
+    <div class="diag-shell">
+      <aside class="case-list" id="caseList"></aside>
+      <section class="case-workspace">
+        <div class="case-ticket"><span id="caseCode"></span><span id="caseStatus">OPEN CASE</span></div>
+        <h3 id="caseTitle"></h3><p class="case-complaint" id="caseComplaint"></p>
+        <div class="case-steps" id="caseSteps"></div>
+        <div class="case-result" id="caseResult"><b>Start with the symptom.</b><span>Select a test to reveal evidence.</span></div>
+        <button class="case-reset" id="caseReset" type="button">RESET CASE</button>
+      </section>
+    </div>
+  </div>
+</section>
+
+<section class="sources" id="sources">
+  <div class="shell">
+    <div class="section-heading compact">
+      <div class="index">04 / SOURCE DESK</div>
+      <div><span class="eyebrow-text">ACCURACY + VISUAL CREDITS</span><h2>Built from real references.</h2><p>MotorAtlas uses government references, open educational material, museum cutaways, technical manuals, and openly licensed component photography. Visual credits stay attached to their source.</p></div>
+    </div>
+    <div class="source-grid" id="sourceGrid"></div>
+    <div class="safety-note"><b>Important:</b> This is educational material, not a substitute for model-specific service information. High-voltage EV systems, pressurized fuel, hot cooling systems, airbags, lifted vehicles and braking systems can cause serious injury. Use manufacturer procedures and qualified service information before hands-on work.</div>
+  </div>
+</section>
+</main>
+
+<footer><div class="shell footer-inner"><span>MOTOR//ATLAS</span><span>PARTS · SYSTEMS · FAILURE · DIAGNOSIS</span><span>SAFI SOLUTIONS / CONCEPT BUILD</span></div></footer>
+
+<script src="atlas-data.js?v=3"></script>
+<script src="atlas.js?v=3"></script>
+</body>
+</html>
