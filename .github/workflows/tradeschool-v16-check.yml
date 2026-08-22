@@ -7,6 +7,8 @@ on:
       - 'thetradeschool/js/core/beginner-v16.js'
       - 'thetradeschool/css/v16-beginner.css'
       - '.github/workflows/tradeschool-v16-check.yml'
+permissions:
+  contents: write
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -21,3 +23,11 @@ jobs:
           grep -q 'v16-beginner.css' thetradeschool/index.html
           grep -q 'v16-beginner.js' thetradeschool/index.html
           grep -q 'beginner-v16.js' thetradeschool/index.html
+      - name: Mark successful validation
+        run: |
+          printf 'TradeSchool V16 beginner checks passed.\n' > thetradeschool/.v16-ok
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add thetradeschool/.v16-ok
+          git commit -m 'Verify TradeSchool V16 beginner build'
+          git push
