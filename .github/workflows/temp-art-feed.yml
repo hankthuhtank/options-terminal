@@ -1,0 +1,198 @@
+name: Temporary Safi art feed update
+
+on:
+  push:
+    paths:
+      - '.github/workflows/temp-art-feed.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-site:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Add random art feed and expand about copy
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('index.html')
+          text = p.read_text(encoding='utf-8')
+
+          old_css = ".hero{position:relative;z-index:2;max-width:1000px}"
+          new_css = '''.hero{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.18fr) minmax(290px,.52fr);gap:clamp(38px,6vw,86px);align-items:center;max-width:none}
+.hero-copy{min-width:0;max-width:790px}
+.art-feed{width:100%;max-width:360px;justify-self:end;border:1px solid rgba(156,169,196,.16);border-radius:20px;overflow:hidden;background:rgba(14,26,46,.68);backdrop-filter:blur(14px);box-shadow:0 24px 70px rgba(2,8,18,.28);opacity:0;animation:fadein .9s ease .75s forwards}
+.art-feed-head{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ghost-dim)}
+.art-feed-head b{color:var(--cyan);font-weight:500}
+.art-frame{position:relative;aspect-ratio:4/5;background:rgba(5,10,18,.62);display:grid;place-items:center;overflow:hidden}
+.art-frame img{width:100%;height:100%;object-fit:contain;display:block;opacity:0;transition:opacity .45s ease,transform .5s ease}
+.art-frame img.ready{opacity:1}
+.art-feed:hover .art-frame img.ready{transform:scale(1.018)}
+.art-loading{position:absolute;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ghost-dim)}
+.art-meta{padding:17px 18px 18px}
+.art-title{font-family:var(--disp);font-size:1.08rem;line-height:1.2;font-weight:600;margin-bottom:7px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.art-by{color:var(--ghost);font-size:.82rem;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.art-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:15px;padding-top:13px;border-top:1px solid var(--line)}
+.art-link,.art-next{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);background:none;border:0;text-decoration:none;cursor:pointer;padding:0}
+.art-next:hover,.art-link:hover{color:var(--white)}
+@media (max-width:980px){.hero{grid-template-columns:1fr}.art-feed{justify-self:start;max-width:420px;margin-top:16px}}
+@media (max-width:560px){.art-feed{max-width:100%}.hero h1{font-size:clamp(2.55rem,12vw,4rem)}}'''
+          if old_css not in text:
+              raise SystemExit('hero css anchor not found')
+          text = text.replace(old_css, new_css, 1)
+
+          old_hero = '''  <div class="wrap hero">
+<div style="margin-bottom:54px;">
+  <img src="assets/images/logo-lockup.png" alt="Safi Solutions" style="height:clamp(92px,14vw,160px);width:auto;display:block;filter:drop-shadow(0 8px 34px rgba(91,155,213,.28));">
+</div>
+
+    <div class="badge"><span class="live"></span>Open for new work · Nationwide</div>
+    <h1>
+      <span class="line"><span>Products. Websites.</span></span>
+      <span class="line"><span>Business tools.</span></span>
+      <span class="line rot"><span class="grad" id="rotword">Built to be useful.</span><span class="rot-ghost" aria-hidden="true">Made to solve.</span></span>
+    </h1>
+    <p class="thesis">I build <span class="hl">digital products, SaaS concepts, business tools and custom websites.</span> Some are mine, some are for clients — all start with a real problem worth solving.</p>
+    <p class="micro">// products · SaaS · tools · custom web</p>
+    <div class="cta-row">
+      <a class="btn btn-grad magnetic" href="#services">See what I build</a>
+      <a class="btn btn-glass magnetic" href="#contact">Start a project →</a>
+    </div>
+  </div>'''
+          new_hero = '''  <div class="wrap hero">
+    <div class="hero-copy">
+      <div style="margin-bottom:54px;">
+        <img src="assets/images/logo-lockup.png" alt="Safi Solutions" style="height:clamp(92px,14vw,160px);width:auto;display:block;filter:drop-shadow(0 8px 34px rgba(91,155,213,.28));">
+      </div>
+      <div class="badge"><span class="live"></span>Open for new work · Nationwide</div>
+      <h1>
+        <span class="line"><span>Products. Websites.</span></span>
+        <span class="line"><span>Business tools.</span></span>
+        <span class="line rot"><span class="grad" id="rotword">Built to be useful.</span><span class="rot-ghost" aria-hidden="true">Made to solve.</span></span>
+      </h1>
+      <p class="thesis">I build <span class="hl">digital products, SaaS concepts, business tools and custom websites.</span> Some are mine, some are for clients — all start with a real problem worth solving.</p>
+      <p class="micro">// products · SaaS · tools · custom web</p>
+      <div class="cta-row">
+        <a class="btn btn-grad magnetic" href="#services">See what I build</a>
+        <a class="btn btn-glass magnetic" href="#contact">Start a project →</a>
+      </div>
+    </div>
+
+    <aside class="art-feed" id="artFeed" aria-live="polite">
+      <div class="art-feed-head"><b>Random art</b><span>Art Institute of Chicago</span></div>
+      <div class="art-frame">
+        <span class="art-loading" id="artLoading">Finding something good…</span>
+        <img id="artImage" alt="" loading="eager">
+      </div>
+      <div class="art-meta">
+        <div class="art-title" id="artTitle">Open-access collection</div>
+        <div class="art-by" id="artBy">A different piece every visit.</div>
+        <div class="art-actions">
+          <a class="art-link" id="artLink" href="https://www.artic.edu" target="_blank" rel="noopener">View artwork ↗</a>
+          <button class="art-next" id="artNext" type="button">Another ↻</button>
+        </div>
+      </div>
+    </aside>
+  </div>'''
+          if old_hero not in text:
+              raise SystemExit('hero html anchor not found')
+          text = text.replace(old_hero, new_hero, 1)
+
+          old_about = '''      <p>I'm a first-generation Lebanese-American based in <strong>Paris, Texas</strong>. My background is in customer-facing work and operations, so I tend to look at things from both the business and user side.</p>
+      <p><strong>Safi Solutions</strong> started with websites. It grew into the home for whatever I'm building — SaaS concepts, educational tools, business systems, and custom web work.</p>
+      <p>The common thread is simple: <strong>find a problem and make the solution easier to use.</strong></p>'''
+          new_about = '''      <p>I'm a first-generation Lebanese-American based in <strong>Paris, Texas</strong>. My background is in customer-facing work and operations, so I naturally look at problems from both sides: what the business needs and what the person using it actually experiences.</p>
+      <p><strong>Safi Solutions</strong> started with websites. The more I built, the more it expanded into SaaS concepts, educational tools, business systems, and custom web work.</p>
+      <p>I like learning unfamiliar spaces and turning messy ideas into something visual, useful, and easier to understand. That's the common thread behind everything here.</p>
+      <p>Some projects are mine, some are for clients. Safi Solutions is simply the place they all live.</p>'''
+          if old_about not in text:
+              raise SystemExit('about anchor not found')
+          text = text.replace(old_about, new_about, 1)
+
+          marker = '/* ===== nav / reveal ===== */'
+          art_js = r'''/* ===== random open-access art ===== */
+(function(){
+  const img=document.getElementById('artImage'), title=document.getElementById('artTitle'), by=document.getElementById('artBy'), link=document.getElementById('artLink'), next=document.getElementById('artNext'), loading=document.getElementById('artLoading');
+  if(!img||!title||!by||!link||!next||!loading) return;
+  const endpoint='https://api.artic.edu/api/v1/artworks/search';
+  const fields='id,title,artist_display,date_display,image_id';
+  let total=null, busy=false;
+
+  async function request(params){
+    const q=new URLSearchParams(params);
+    const r=await fetch(endpoint+'?'+q.toString(),{mode:'cors'});
+    if(!r.ok) throw new Error('Art API '+r.status);
+    return r.json();
+  }
+
+  function cleanArtist(s){
+    if(!s) return 'Artist unknown';
+    return s.split('\n')[0].replace(/\s+/g,' ').trim();
+  }
+
+  async function loadArt(){
+    if(busy) return; busy=true;
+    next.textContent='Loading…';
+    loading.style.display='block'; img.classList.remove('ready');
+    try{
+      if(total===null){
+        const first=await request({'query[term][is_public_domain]':'true',fields,size:'1'});
+        total=Math.max(1,first.pagination?.total||5000);
+      }
+      let piece=null, data=null;
+      for(let tries=0;tries<3 && !piece;tries++){
+        const from=Math.floor(Math.random()*Math.max(1,total-12));
+        data=await request({'query[term][is_public_domain]':'true',fields,from:String(from),size:'12'});
+        const pool=(data.data||[]).filter(x=>x.image_id);
+        if(pool.length) piece=pool[Math.floor(Math.random()*pool.length)];
+      }
+      if(!piece) throw new Error('No image returned');
+      const base=data.config?.iiif_url||'https://www.artic.edu/iiif/2';
+      const src=base+'/'+piece.image_id+'/full/600,/0/default.jpg';
+      img.onload=()=>{loading.style.display='none';img.classList.add('ready');};
+      img.onerror=()=>{loading.textContent='Image unavailable — try another';};
+      img.src=src;
+      img.alt=piece.title||'Artwork from the Art Institute of Chicago';
+      title.textContent=piece.title||'Untitled';
+      const artist=cleanArtist(piece.artist_display);
+      by.textContent=piece.date_display?artist+' · '+piece.date_display:artist;
+      link.href='https://www.artic.edu/artworks/'+piece.id;
+    }catch(err){
+      loading.textContent='Art feed taking a break.';
+      title.textContent='Open-access collection';
+      by.textContent='Try another piece.';
+    }finally{
+      busy=false; next.textContent='Another ↻';
+    }
+  }
+  next.addEventListener('click',loadArt);
+  loadArt();
+})();
+
+'''
+          if marker not in text:
+              raise SystemExit('js marker not found')
+          text = text.replace(marker, art_js + marker, 1)
+          p.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit site update
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Add random art feed and expand about copy"
+          git push origin main
