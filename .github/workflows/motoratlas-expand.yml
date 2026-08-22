@@ -1,0 +1,61 @@
+name: Wire MotorAtlas education and flatten Safi homepage
+
+on:
+  push:
+    paths:
+      - '.github/workflows/motoratlas-expand.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Apply site updates
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          # Flatten the Safi homepage back to a normal standalone index.html.
+          inc = Path('_includes/site.html')
+          if inc.exists():
+              text = inc.read_text(encoding='utf-8')
+              old = '''      <p>I'm a first-generation Lebanese-American based in <strong>Paris, Texas</strong>. My background is in customer-facing work and operations, so I tend to look at things from both the business and user side.</p>
+      <p><strong>Safi Solutions</strong> started with websites. It grew into the home for whatever I'm building — SaaS concepts, educational tools, business systems, and custom web work.</p>
+      <p>The common thread is simple: <strong>find a problem and make the solution easier to use.</strong></p>'''
+              new = '''      <p>I'm a first-generation Lebanese-American based in <strong>Paris, Texas</strong>. Most of my background is in customer-facing work and operations, so I tend to look at a project from both sides — what makes sense for the business and what actually feels good for the person using it.</p>
+      <p><strong>Safi Solutions</strong> started with websites, but I realized pretty quickly that I enjoy the problem-solving part more than any one service. That has grown into custom websites, SaaS concepts, educational platforms, business tools, and whatever else seems worth building.</p>
+      <p>A lot of my work starts the same way: I find something confusing, clunky, or overlooked and start picking it apart until I can make it simpler, more visual, or more useful. Some of those ideas become my own projects; others are things I build for clients.</p>
+      <p>I'm always learning new industries and new tools, and that's honestly part of what I like most about it. The common thread is still simple: <strong>find the friction and build something better around it.</strong></p>'''
+              if old not in text:
+                  raise SystemExit('Safi about anchor not found while flattening homepage')
+              Path('index.html').write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          # Wire the MotorAtlas expansion into the existing layout.
+          motor = Path('motoratlas/index.html')
+          m = motor.read_text(encoding='utf-8')
+          css = '<link rel="stylesheet" href="education.css?v=1">'
+          js = '<script src="education.js?v=1"></script>'
+          if css not in m:
+              m = m.replace('</head>', css + '\n</head>', 1)
+          if js not in m:
+              m = m.replace('</body>', js + '\n</body>', 1)
+          motor.write_text(m, encoding='utf-8')
+          PY
+
+      - name: Clean workaround files and commit
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -f _includes/site.html ]; then git rm _includes/site.html; fi
+          git rm .github/workflows/motoratlas-expand.yml
+          git add index.html motoratlas/index.html motoratlas/education.css motoratlas/education.js
+          git commit -m "Expand MotorAtlas parts education and clean homepage structure"
+          git push origin main
