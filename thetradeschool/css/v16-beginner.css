@@ -24,6 +24,8 @@
 .v16-unit-intro>p{font-size:16px!important;line-height:1.65!important;color:#c6d1ca!important;max-width:850px}
 
 .inline-topic.v16-applied,.inline-topic[data-v16="1"]{scroll-margin-top:92px}
+.inline-topic[data-v16="1"] .inline-topic-body{grid-template-columns:minmax(0,1fr)!important}
+.inline-topic[data-v16="1"] .topic-photo,.inline-topic[data-v16="1"] .topic-context-card{max-width:none;width:100%}
 .v16-inline-simple{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:0 0 16px;border:1px solid rgba(215,255,100,.14);border-radius:15px;overflow:hidden;background:rgba(215,255,100,.025)}
 .v16-inline-simple>div:not(.v16-words){padding:18px 20px}
 .v16-inline-simple>div:nth-child(2){border-left:1px solid var(--line)}
