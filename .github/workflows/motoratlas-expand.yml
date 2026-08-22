@@ -59,3 +59,5 @@ jobs:
           git add index.html motoratlas/index.html motoratlas/education.css motoratlas/education.js
           git commit -m "Expand MotorAtlas parts education and clean homepage structure"
           git push origin main
+
+# trigger: 2
