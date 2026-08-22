@@ -4,7 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>VELLUM — the book, taken apart</title>
-<meta name="description" content="An interactive way into the Bible as literature and history. Every word fetched live from open data.">
+<meta name="description" content="VELLUM is an interactive reading desk for exploring the Bible as literature and history through text, places, people, cross-references, sourced notes, audio, and guided practice.">
+<meta name="theme-color" content="#E4DAC4">
+<meta name="color-scheme" content="light dark">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
@@ -23,7 +25,7 @@
 
   --gall:        #2B241B;
   --gall-soft:   #5A4E3E;
-  --gall-faint:  #8A7C66;
+  --gall-faint:  #746754;
 
   --vermilion:   #B32B17;
   --vermilion-lt:#D4573C;
@@ -45,6 +47,7 @@
   --rail: 54px;
   --gloss: 320px;
   --topbar: 0px;
+  --text-scale: 1;
 }
 
 /* Dark theme — warm iron-gall night, not pure black */
@@ -77,7 +80,7 @@ body{
   background:var(--vellum);
   color:var(--gall);
   font-family:var(--serif);
-  font-size:17.5px;
+  font-size:calc(17.5px * var(--text-scale));
   line-height:var(--lead);
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
@@ -105,7 +108,7 @@ button{background:none;border:none;cursor:pointer;padding:0;}
 a{color:var(--lapis);text-decoration-thickness:1px;text-underline-offset:3px;}
 :focus-visible{outline:2px solid var(--vermilion);outline-offset:3px;}
 
-.mono{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;}
+.mono{font-family:var(--mono);font-size:calc(11px * var(--text-scale));letter-spacing:.1em;text-transform:uppercase;}
 .caps{font-family:var(--caps);letter-spacing:.14em;text-transform:uppercase;}
 
 /* ══ THE SPINE — left binding rail ═════════════════════════ */
@@ -133,13 +136,13 @@ a{color:var(--lapis);text-decoration-thickness:1px;text-underline-offset:3px;}
 }
 .wordmark{
   display:block;
-  font-family:var(--caps);font-weight:700;font-size:25px;
+  font-family:var(--caps);font-weight:700;font-size:calc(25px * var(--text-scale));
   letter-spacing:.30em;color:var(--gall);line-height:1.1;
 }
 .wordmark b{color:var(--vermilion);font-weight:700;}
 .tagline{
   display:block;margin-top:8px;
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;
+  font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));letter-spacing:.18em;
   text-transform:uppercase;color:var(--gall-faint);
 }
 
@@ -155,16 +158,16 @@ a{color:var(--lapis);text-decoration-thickness:1px;text-underline-offset:3px;}
   transition:background .16s, border-color .16s;
 }
 .quire .qn{
-  font-family:var(--mono);font-size:10px;letter-spacing:.04em;
+  font-family:var(--mono);font-size:calc(10px * var(--text-scale));letter-spacing:.04em;
   color:var(--gall-faint);text-align:right;transition:color .16s;
 }
 .quire .qname{
-  font-family:var(--caps);font-size:13px;letter-spacing:.13em;text-transform:uppercase;
+  font-family:var(--caps);font-size:calc(13px * var(--text-scale));letter-spacing:.13em;text-transform:uppercase;
   color:var(--gall);transition:color .16s;
 }
 .quire .qsub{
   grid-column:2;font-family:var(--serif);font-style:italic;
-  font-size:14px;line-height:19px;color:var(--gall-faint);margin-top:1px;
+  font-size:calc(14px * var(--text-scale));line-height:19px;color:var(--gall-faint);margin-top:1px;
 }
 .quire:hover{background:rgba(198,182,146,.32);}
 .quire:hover .qn{color:var(--vermilion-lt);}
@@ -178,8 +181,8 @@ a{color:var(--lapis);text-decoration-thickness:1px;text-underline-offset:3px;}
 }
 .gilt-meter{display:block;}
 .gilt-line{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
-.gilt-cap{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gall-faint);}
-.gilt-num{font-family:var(--mono);font-size:10px;color:var(--gall-soft);letter-spacing:.05em;}
+.gilt-cap{font-family:var(--mono);font-size:calc(9px * var(--text-scale));letter-spacing:.16em;text-transform:uppercase;color:var(--gall-faint);}
+.gilt-num{font-family:var(--mono);font-size:calc(10px * var(--text-scale));color:var(--gall-soft);letter-spacing:.05em;}
 .gilt-track{display:block;width:100%;height:6px;background:var(--vellum-sink);position:relative;overflow:hidden;border-radius:1px;}
 .gilt-fill{
   position:absolute;inset:0 auto 0 0;width:0%;
@@ -189,7 +192,7 @@ a{color:var(--lapis);text-decoration-thickness:1px;text-underline-offset:3px;}
 }
 .spine-links{display:flex;gap:14px;margin-top:12px;}
 .spine-links button{
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));letter-spacing:.13em;text-transform:uppercase;
   color:var(--gall-faint);border-bottom:1px solid transparent;padding-bottom:2px;
 }
 .spine-links button:hover{color:var(--vermilion);border-bottom-color:var(--vermilion);}
@@ -200,11 +203,11 @@ a{color:var(--lapis);text-decoration-thickness:1px;text-underline-offset:3px;}
   align-items:center;gap:10px;padding:0 12px;
   background:var(--vellum);border-bottom:1px solid var(--rule-hard);
 }
-.bindbar .gilt-num{font-family:var(--mono);font-size:10px;color:var(--gall-soft);letter-spacing:.04em; flex-shrink:0;}
-.bindbar .wordmark{font-size:18px;letter-spacing:.26em; flex:1; text-align:center;}
+.bindbar .gilt-num{font-family:var(--mono);font-size:calc(10px * var(--text-scale));color:var(--gall-soft);letter-spacing:.04em; flex-shrink:0;}
+.bindbar .wordmark{font-size:calc(18px * var(--text-scale));letter-spacing:.26em; flex:1; text-align:center;}
 .theme-m{
   width:34px; height:34px; flex-shrink:0;
-  font-size:16px; color:var(--gall-soft);
+  font-size:calc(16px * var(--text-scale)); color:var(--gall-soft);
   display:grid; place-items:center;
   border-radius:50%;
   transition: color .2s, background .2s;
@@ -244,7 +247,7 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 }
 .rail-label{
   writing-mode:vertical-rl;transform:rotate(180deg);
-  font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+  font-family:var(--mono);font-size:calc(9px * var(--text-scale));letter-spacing:.22em;text-transform:uppercase;
   color:var(--gall-faint);margin:0 auto;
   position:absolute;bottom:20px;left:0;right:0;text-align:center;
 }
@@ -258,10 +261,6 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 
 /* text column */
 .column{padding:36px 56px 150px;max-width:780px;margin:0 auto;width:100%;position:relative;}
-/* Ruling removed — mixed headings, verse numbers and inline runs made
-   perfect registration unreliable on every viewport. Clean text is better. */
-.column[data-ruled="true"] .scripture{ background-image: none; }
-#btnRule{ display: none !important; }
 .scripture{ margin-top: 0; padding-top: 0; }
 
 /* gloss column */
@@ -273,7 +272,7 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 }
 .gloss-tabs{display:flex;border-bottom:1px solid var(--rule);flex-shrink:0;}
 .gloss-tab{
-  flex:1;padding:12px 4px;font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;
+  flex:1;padding:12px 4px;font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));letter-spacing:.11em;
   text-transform:uppercase;color:var(--gall-faint);border-right:1px solid var(--rule);
   transition:color .18s,background .18s; text-align:center;
 }
@@ -281,15 +280,18 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 .gloss-tab[aria-selected="true"]{color:var(--vermilion);background:var(--vellum-lit);}
 .gloss-body{flex:1;overflow-y:auto;padding:16px 14px 50px; -webkit-overflow-scrolling:touch;}
 @media(max-width:1080px){
-  .gloss-tab{ padding: 13px 4px; font-size: 10px; letter-spacing: .12em; }
+  .gloss-tab{ padding: 13px 4px; font-size:calc(10px * var(--text-scale)); letter-spacing: .12em; }
 }
 .gloss-pane{display:none;}
 .gloss-pane[data-open="true"]{display:block;}
 .gloss-empty{
-  font-family:var(--mono);font-size:11px;line-height:1.9;color:var(--gall-faint);
+  font-family:var(--mono);font-size:calc(11px * var(--text-scale));line-height:1.9;color:var(--gall-faint);
   letter-spacing:.03em;text-transform:none;
 }
 </style>
+
+
+
 </head>
 <style>
 /* ── reading apparatus ───────────────────────────────────── */
@@ -304,7 +306,7 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 }
 .pick select{
   appearance:none;background:none;border:none;
-  font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  font-family:var(--mono);font-size:calc(11px * var(--text-scale));letter-spacing:.06em;
   color:var(--gall);padding:0 26px 0 11px;height:100%;cursor:pointer;
 }
 .pick::after{
@@ -322,7 +324,7 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 .stepper button:disabled{opacity:.3;cursor:default;}
 .tool{
   height:34px;padding:0 14px;border:1px solid var(--rule-hard);background:var(--vellum-lit);
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  font-family:var(--mono);font-size:calc(10.5px * var(--text-scale));letter-spacing:.11em;text-transform:uppercase;
   color:var(--gall-soft);display:inline-flex;align-items:center;gap:8px;
   transition:background .18s,color .18s,border-color .18s,transform .15s;
 }
@@ -351,17 +353,17 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 
 .opening-meta{padding-top:6px;min-width:0;}
 .book-title{
-  font-family:var(--caps);font-weight:700;font-size:44px;letter-spacing:.06em;
+  font-family:var(--caps);font-weight:700;font-size:calc(44px * var(--text-scale));letter-spacing:.06em;
   line-height:1.08;margin:0 0 10px;color:var(--gall);
 }
-.chapter-line{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gall-faint);}
+.chapter-line{font-family:var(--mono);font-size:calc(11.5px * var(--text-scale));letter-spacing:.14em;text-transform:uppercase;color:var(--gall-faint);}
 .chapter-line b{color:var(--vermilion);font-weight:500;}
 
 /* ── scripture ───────────────────────────────────────────── */
 .scripture{margin-top:20px;}
 .verse{font-size: inherit; line-height: inherit;}
 .rubric{
-  font-family:var(--caps);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+  font-family:var(--caps);font-size:calc(11.5px * var(--text-scale));letter-spacing:.16em;text-transform:uppercase;
   color:var(--vermilion);margin:calc(var(--lead) * 1.15) 0 0;line-height:var(--lead);
   page-break-after:avoid;
   /* keep rubric on the grid but give it a clear background so the ruling doesn't fight it */
@@ -378,43 +380,43 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 .verse:hover{background:rgba(31,74,135,.07);}
 .verse[data-marked="true"]{background:rgba(179,43,23,.11);border-bottom:1px solid var(--vermilion);}
 .vnum{
-  font-family:var(--mono);font-size:10px;color:var(--vermilion);
+  font-family:var(--mono);font-size:calc(10px * var(--text-scale));color:var(--vermilion);
   vertical-align:.42em;margin-right:5px;letter-spacing:0;user-select:none;
 }
 .verse[data-jesus="true"]{color:#7A2317;}
 .poem{display:block;padding-left:2.2em;}
 .fnote{
-  font-family:var(--mono);font-size:9px;color:var(--lapis);vertical-align:.5em;
+  font-family:var(--mono);font-size:calc(9px * var(--text-scale));color:var(--lapis);vertical-align:.5em;
   margin:0 2px;cursor:help;border-bottom:1px dotted var(--lapis);
 }
 .footnotes{
   margin-top:calc(var(--lead)*1.4);padding-top:16px;border-top:1px solid var(--rule);
-  font-size:14px;line-height:26px;color:var(--gall-soft);
+  font-size:calc(14px * var(--text-scale));line-height:26px;color:var(--gall-soft);
 }
-.footnotes h4{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gall-faint);margin:0 0 10px;font-weight:400;}
+.footnotes h4{font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));letter-spacing:.16em;text-transform:uppercase;color:var(--gall-faint);margin:0 0 10px;font-weight:400;}
 .footnotes li{margin-bottom:6px;}
-.footnotes b{font-family:var(--mono);font-size:10px;color:var(--vermilion);font-weight:400;}
+.footnotes b{font-family:var(--mono);font-size:calc(10px * var(--text-scale));color:var(--vermilion);font-weight:400;}
 
-.loading{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gall-faint);padding:40px 0;}
+.loading{font-family:var(--mono);font-size:calc(10.5px * var(--text-scale));letter-spacing:.16em;text-transform:uppercase;color:var(--gall-faint);padding:40px 0;}
 .loading::after{content:"";animation:ell 1.4s steps(4,end) infinite;}
 @keyframes ell{0%{content:"";}25%{content:"·";}50%{content:"··";}75%{content:"···";}}
 .err{
   border-left:2px solid var(--vermilion);padding:12px 16px;background:rgba(179,43,23,.06);
-  font-family:var(--mono);font-size:11.5px;line-height:1.75;color:var(--gall-soft);letter-spacing:.02em;
+  font-family:var(--mono);font-size:calc(11.5px * var(--text-scale));line-height:1.75;color:var(--gall-soft);letter-spacing:.02em;
 }
-.err b{color:var(--vermilion);font-weight:500;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.12em;font-size:10px;}
+.err b{color:var(--vermilion);font-weight:500;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.12em;font-size:calc(10px * var(--text-scale));}
 
 /* ── gloss contents ──────────────────────────────────────── */
 .gl-head{
-  font-family:var(--caps);font-size:13px;letter-spacing:.20em;text-transform:uppercase;
+  font-family:var(--caps);font-size:calc(13px * var(--text-scale));letter-spacing:.20em;text-transform:uppercase;
   color:var(--vermilion);margin:0 0 14px;padding-bottom:10px;border-bottom:1px solid var(--rule);
 }
 .gl-card{
   border-left:2px solid var(--rule-hard);padding:2px 0 2px 12px;margin-bottom:18px;
-  font-size:15px;line-height:25px;color:var(--gall-soft);
+  font-size:calc(15px * var(--text-scale));line-height:25px;color:var(--gall-soft);
 }
 .gl-card.pinned{border-left-color:var(--vermilion);}
-.gl-ref{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--vermilion);text-transform:uppercase;display:block;margin-bottom:5px;}
+.gl-ref{font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));letter-spacing:.1em;color:var(--vermilion);text-transform:uppercase;display:block;margin-bottom:5px;}
 .gl-card p{margin:0 0 9px;}
 .xref{
   display:flex;align-items:baseline;gap:9px;padding:7px 0;
@@ -422,20 +424,20 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
   transition:background .15s;
 }
 .xref:hover{background:rgba(31,74,135,.07);}
-.xref .r{font-family:var(--mono);font-size:11px;color:var(--lapis);flex-shrink:0;letter-spacing:.02em;}
-.xref .s{font-family:var(--mono);font-size:9px;color:var(--gall-faint);margin-left:auto;flex-shrink:0;}
+.xref .r{font-family:var(--mono);font-size:calc(11px * var(--text-scale));color:var(--lapis);flex-shrink:0;letter-spacing:.02em;}
+.xref .s{font-family:var(--mono);font-size:calc(9px * var(--text-scale));color:var(--gall-faint);margin-left:auto;flex-shrink:0;}
 .xref .bar{height:2px;background:var(--lapis);opacity:.5;flex-shrink:0;}
 
 .ask{
   width:100%;border:1px solid var(--rule-hard);background:var(--vellum-lit);
-  padding:10px 12px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+  padding:10px 12px;font-family:var(--mono);font-size:calc(10px * var(--text-scale));letter-spacing:.1em;
   text-transform:uppercase;color:var(--gall-soft);margin-bottom:14px;
   transition:background .15s,color .15s;
 }
 .ask:hover:not(:disabled){background:var(--vellum-deep);color:var(--vermilion);}
 .ask:disabled{opacity:.45;cursor:default;}
 .machine-note{
-  font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;
+  font-family:var(--mono);font-size:calc(8.5px * var(--text-scale));letter-spacing:.1em;text-transform:uppercase;
   color:var(--gall-faint);border:1px dashed var(--rule-hard);padding:5px 8px;margin-bottom:12px;
 }
 
@@ -443,18 +445,18 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 .wide{max-width:1180px;margin:0 auto;padding:40px 44px 120px;}
 .leaf-head{margin-bottom:48px;padding-bottom:28px;border-bottom:1px solid var(--rule-hard);}
 .leaf-title{
-  font-family:var(--caps);font-weight:700;font-size:42px;letter-spacing:.14em;
+  font-family:var(--caps);font-weight:700;font-size:calc(42px * var(--text-scale));letter-spacing:.14em;
   text-transform:uppercase;margin:0 0 14px;line-height:1.05;color:var(--gall);
   position:relative;
 }
-.leaf-sub{font-size:17.5px;line-height:29px;color:var(--gall-soft);max-width:640px;margin:0;}
+.leaf-sub{font-size:calc(17.5px * var(--text-scale));line-height:29px;color:var(--gall-soft);max-width:640px;margin:0;}
 
 .era{margin-bottom:44px;}
 .era-bar{display:flex;align-items:baseline;gap:14px;margin-bottom:16px;}
-.era-num{font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:.14em;}
-.era-name{font-family:var(--caps);font-size:17px;letter-spacing:.20em;text-transform:uppercase;color:var(--gall);}
+.era-num{font-family:var(--mono);font-size:calc(10px * var(--text-scale));color:var(--gold);letter-spacing:.14em;}
+.era-name{font-family:var(--caps);font-size:calc(17px * var(--text-scale));letter-spacing:.20em;text-transform:uppercase;color:var(--gall);}
 .era-rule{flex:1;height:1px;background:var(--rule);}
-.era-count{font-family:var(--mono);font-size:9.5px;color:var(--gall-faint);letter-spacing:.1em;}
+.era-count{font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));color:var(--gall-faint);letter-spacing:.1em;}
 
 .folios{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);}
 .folio{
@@ -463,9 +465,9 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
   display:flex;flex-direction:column;
 }
 .folio:hover{background:var(--vellum-lit);}
-.folio-ref{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--vermilion);margin-bottom:6px;}
-.folio-name{font-family:var(--serif);font-size:18px;line-height:24px;color:var(--gall);margin-bottom:6px;}
-.folio-hook{font-size:13.5px;line-height:20px;color:var(--gall-faint);margin-top:auto;}
+.folio-ref{font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));letter-spacing:.1em;color:var(--vermilion);margin-bottom:6px;}
+.folio-name{font-family:var(--serif);font-size:calc(18px * var(--text-scale));line-height:24px;color:var(--gall);margin-bottom:6px;}
+.folio-hook{font-size:calc(13.5px * var(--text-scale));line-height:20px;color:var(--gall-faint);margin-top:auto;}
 .folio[data-gilt="true"]{background:linear-gradient(155deg,rgba(212,172,73,.28),rgba(168,131,44,.10));border:1px solid rgba(168,131,44,.25);}
 .folio[data-gilt="true"] .folio-name{color:#5C4814;}
 .gilt-mark{position:absolute;top:12px;right:13px;width:14px;height:14px;color:var(--gold);opacity:0;transition:opacity .35s, transform .35s;}
@@ -482,10 +484,10 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 /* ── cast ────────────────────────────────────────────────── */
 .seek{
   width:100%;max-width:420px;border:1px solid var(--rule-hard);background:var(--vellum-lit);
-  padding:10px 13px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--gall);
+  padding:10px 13px;font-family:var(--mono);font-size:calc(12px * var(--text-scale));letter-spacing:.04em;color:var(--gall);
   margin-bottom:24px;
 }
-.seek::placeholder{color:var(--gall-faint);text-transform:uppercase;font-size:10px;letter-spacing:.12em;}
+.seek::placeholder{color:var(--gall-faint);text-transform:uppercase;font-size:calc(10px * var(--text-scale));letter-spacing:.12em;}
 .roster{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);}
 .person{
   background:var(--vellum);padding:12px 13px;text-align:left;transition:background .15s;
@@ -494,18 +496,18 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 .person:hover{background:var(--vellum-lit);}
 .person[aria-current="true"]{background:var(--vellum-deep);}
 .person-name{
-  font-family:var(--serif);font-size:15.5px;color:var(--gall);line-height:1.35;
+  font-family:var(--serif);font-size:calc(15.5px * var(--text-scale));color:var(--gall);line-height:1.35;
   overflow-wrap:anywhere; word-break:break-word; hyphens:auto;
 }
-.person-ref{font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--gall-faint);margin-top:4px;}
+.person-ref{font-family:var(--mono);font-size:calc(9px * var(--text-scale));letter-spacing:.08em;color:var(--gall-faint);margin-top:4px;}
 .profile{
   margin-top:28px;padding:22px 20px;border:1px solid var(--rule-hard);background:var(--vellum-lit);
   max-width:720px; overflow-wrap:anywhere; word-break:break-word;
 }
-.profile h3{font-family:var(--caps);font-weight:700;font-size:28px;letter-spacing:.12em;text-transform:uppercase;margin:0 0 6px;line-height:1.1;}
-.profile .src{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gall-faint);margin-bottom:22px;}
-.profile p{font-size:17.5px;line-height:30px;margin:0 0 16px;color:var(--gall);}
-.profile p.study{font-family:var(--mono);font-size:11px;line-height:22px;color:var(--gall-soft);letter-spacing:.02em;border-top:1px solid var(--rule);padding-top:14px;}
+.profile h3{font-family:var(--caps);font-weight:700;font-size:calc(28px * var(--text-scale));letter-spacing:.12em;text-transform:uppercase;margin:0 0 6px;line-height:1.1;}
+.profile .src{font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));letter-spacing:.12em;text-transform:uppercase;color:var(--gall-faint);margin-bottom:22px;}
+.profile p{font-size:calc(17.5px * var(--text-scale));line-height:30px;margin:0 0 16px;color:var(--gall);}
+.profile p.study{font-family:var(--mono);font-size:calc(11px * var(--text-scale));line-height:22px;color:var(--gall-soft);letter-spacing:.02em;border-top:1px solid var(--rule);padding-top:14px;}
 
 /* ── threads ─────────────────────────────────────────────── */
 .thread-stage{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:0;border:1px solid var(--rule-hard);}
@@ -517,7 +519,7 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 .tnode:hover circle{fill:var(--vermilion);}
 .tlink{fill:none;stroke:var(--lapis);opacity:.32;transition:opacity .2s,stroke .2s;}
 .tlink.hot{opacity:.95;stroke:var(--vermilion);}
-.tlabel{font-family:var(--mono);font-size:9.5px;fill:var(--gall-soft);letter-spacing:.02em;}
+.tlabel{font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));fill:var(--gall-soft);letter-spacing:.02em;}
 .thub{fill:var(--vermilion);}
 .thub-ring{fill:none;stroke:var(--vermilion);opacity:.3;}
 
@@ -538,27 +540,27 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 }
 .leafcell span{
   position:absolute;inset:0;display:grid;place-items:center;
-  font-family:var(--mono);font-size:8.5px;color:var(--gall-faint);
+  font-family:var(--mono);font-size:calc(8.5px * var(--text-scale));color:var(--gall-faint);
 }
 .leafcell[data-gilt="true"] span{color:rgba(43,36,27,.55);font-weight:500;}
 
 .collation{border:1px solid var(--rule-hard);background:var(--vellum-lit);padding:26px 28px;min-height:320px;}
-.q-kind{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
-.q-text{font-size:20px;line-height:32px;margin:0 0 22px;}
+.q-kind{font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.q-text{font-size:calc(20px * var(--text-scale));line-height:32px;margin:0 0 22px;}
 .q-text em{font-style:normal;background:rgba(179,43,23,.12);padding:0 6px;border-bottom:1px solid var(--vermilion);}
 .opts{display:flex;flex-direction:column;gap:1px;background:var(--rule);border:1px solid var(--rule);}
 .opt{
-  background:var(--vellum);padding:12px 15px;text-align:left;font-size:16.5px;line-height:24px;
+  background:var(--vellum);padding:12px 15px;text-align:left;font-size:calc(16.5px * var(--text-scale));line-height:24px;
   transition:background .15s;display:flex;align-items:baseline;gap:11px;
 }
 .opt:hover:not(:disabled){background:var(--vellum-lit);}
-.opt .k{font-family:var(--mono);font-size:9.5px;color:var(--gall-faint);flex-shrink:0;}
+.opt .k{font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));color:var(--gall-faint);flex-shrink:0;}
 .opt[data-state="right"]{background:rgba(76,107,79,.20);}
 .opt[data-state="right"] .k{color:var(--verdigris);}
 .opt[data-state="wrong"]{background:rgba(179,43,23,.13);}
 .opt[data-state="wrong"] .k{color:var(--vermilion);}
 .opt:disabled{cursor:default;}
-.verdict{margin-top:20px;font-size:15.5px;line-height:26px;color:var(--gall-soft);}
+.verdict{margin-top:20px;font-size:calc(15.5px * var(--text-scale));line-height:26px;color:var(--gall-soft);}
 .verdict b{color:var(--gall);font-weight:700;}
 .tally{display:flex;gap:6px;margin-bottom:20px;}
 .pip{width:22px;height:4px;background:var(--vellum-sink);}
@@ -568,13 +570,13 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 /* ── sources ─────────────────────────────────────────────── */
 .sources{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);}
 .source{background:var(--vellum);padding:20px 22px;}
-.source h4{font-family:var(--caps);font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;margin:0 0 4px;color:var(--gall);}
-.source .lic{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--verdigris);margin-bottom:10px;}
-.source p{font-size:14.5px;line-height:24px;color:var(--gall-soft);margin:0 0 8px;}
+.source h4{font-family:var(--caps);font-size:calc(12.5px * var(--text-scale));letter-spacing:.13em;text-transform:uppercase;margin:0 0 4px;color:var(--gall);}
+.source .lic{font-family:var(--mono);font-size:calc(9px * var(--text-scale));letter-spacing:.1em;text-transform:uppercase;color:var(--verdigris);margin-bottom:10px;}
+.source p{font-size:calc(14.5px * var(--text-scale));line-height:24px;color:var(--gall-soft);margin:0 0 8px;}
 
 .footer-rule{
   margin-top:70px;padding-top:20px;border-top:1px solid var(--rule-hard);
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));letter-spacing:.14em;text-transform:uppercase;
   color:var(--gall-faint);text-align:center;line-height:2;
 }
 
@@ -632,7 +634,7 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
   background: var(--vellum);
   color: var(--gall-soft);
   font-family: var(--mono);
-  font-size: 10px;
+  font-size:calc(10px * var(--text-scale));
   letter-spacing: .14em;
   text-transform: uppercase;
   writing-mode: horizontal-tb;
@@ -650,7 +652,7 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 .gloss-drag::after{
   content: "← Close";
   color: var(--gall-soft);
-  font-size: 10px;
+  font-size:calc(10px * var(--text-scale));
   letter-spacing: .12em;
 }
 .gloss-toggle{ display: none; }
@@ -670,22 +672,22 @@ body[data-gloss="open"]::after{
 @media(max-width:760px){
   .wide{padding:20px 12px 80px;}
   .tagline{display:none;}
-  .book-title{font-size:24px;letter-spacing:.04em;}
+  .book-title{font-size:calc(24px * var(--text-scale));letter-spacing:.04em;}
   .initial{width:68px;height:68px;}
   .opening{gap:12px; margin-bottom:4px;}
   .desk{gap:18px;}
-  body{font-size:15.5px;}
+  body{font-size:calc(15.5px * var(--text-scale));}
   :root{--lead:26px;}
   .column{padding:14px 12px 70px;}
   .gloss{ width: min(290px, 88vw) !important; }
   .apparatus{gap:5px; padding-bottom:10px; margin-bottom:14px;}
-  .tool{height:28px; padding:0 9px; font-size:9px;}
+  .tool{height:28px; padding:0 9px; font-size:calc(9px * var(--text-scale));}
   .pick{height:28px;}
-  .pick select{font-size:9.5px; padding:0 20px 0 7px;}
+  .pick select{font-size:calc(9.5px * var(--text-scale)); padding:0 20px 0 7px;}
   .stepper{height:28px;}
   .stepper button{width:26px;}
-  .rubric{font-size:10.5px; letter-spacing:.13em;}
-  .vnum{font-size:8.5px;}
+  .rubric{font-size:calc(10.5px * var(--text-scale)); letter-spacing:.13em;}
+  .vnum{font-size:calc(8.5px * var(--text-scale));}
 }
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.001ms !important;transition-duration:.001ms !important;}
@@ -714,7 +716,7 @@ body[data-gloss="open"]::after{
 .front-vine{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;color:var(--gold);opacity:.55;}
 .front-inner{position:relative;max-width:760px;margin:0 auto;text-align:center;}
 .front-kicker{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.32em;text-transform:uppercase;
+  font-family:var(--mono);font-size:calc(10.5px * var(--text-scale));letter-spacing:.32em;text-transform:uppercase;
   color:var(--vermilion);margin-bottom:22px;
 }
 .front-title{
@@ -730,14 +732,14 @@ body[data-gloss="open"]::after{
   transform:translateX(-50%) rotate(45deg);background:var(--vermilion);
 }
 .front-lede{
-  font-size:22.5px;line-height:37px;color:var(--gall-soft);margin:0 auto 36px;max-width:640px;
+  font-size:calc(22.5px * var(--text-scale));line-height:37px;color:var(--gall-soft);margin:0 auto 36px;max-width:640px;
 }
 .front-lede em{font-style:italic;color:var(--gall);}
 .front-go{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
 .big-btn{
   display:inline-flex;align-items:center;gap:11px;
   border:1px solid var(--gall);background:var(--gall);color:var(--vellum-lit);
-  padding:15px 28px;font-family:var(--caps);font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+  padding:15px 28px;font-family:var(--caps);font-size:calc(13px * var(--text-scale));letter-spacing:.18em;text-transform:uppercase;
   transition:background .22s,color .22s,transform .22s,box-shadow .22s;
 }
 .big-btn:hover{background:var(--vermilion);border-color:var(--vermilion);transform:translateY(-2px);box-shadow:0 4px 14px rgba(179,43,23,.22);}
@@ -755,18 +757,18 @@ body[data-gloss="open"]::after{
 .how-row.solo{grid-template-columns:112px minmax(0,1fr);grid-template-areas:"num txt";border-bottom:none;}
 .how-row:last-child{border-bottom:none;}
 .how-n{
-  font-family:var(--caps);font-size:38px;letter-spacing:.06em;color:var(--vellum-sink);
+  font-family:var(--caps);font-size:calc(38px * var(--text-scale));letter-spacing:.06em;color:var(--vellum-sink);
   line-height:1;text-align:right;padding-top:2px;transition:color .25s;
 }
 .how-row:hover .how-n{color:var(--vermilion);}
 .how-name{
-  font-family:var(--caps);font-size:19px;letter-spacing:.16em;text-transform:uppercase;
+  font-family:var(--caps);font-size:calc(19px * var(--text-scale));letter-spacing:.16em;text-transform:uppercase;
   color:var(--gall);margin:0 0 10px;
 }
-.how-body{font-size:17.5px;line-height:30px;color:var(--gall-soft);margin:0 0 14px;}
+.how-body{font-size:calc(17.5px * var(--text-scale));line-height:30px;color:var(--gall-soft);margin:0 0 14px;}
 .how-body b{color:var(--gall);font-weight:400;border-bottom:1px solid var(--vermilion);}
 .how-jump{
-  font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  font-family:var(--mono);font-size:calc(10px * var(--text-scale));letter-spacing:.14em;text-transform:uppercase;
   color:var(--vermilion);border-bottom:1px solid transparent;padding-bottom:2px;
 }
 .how-jump:hover{border-bottom-color:var(--vermilion);}
@@ -789,9 +791,9 @@ body[data-gloss="open"]::after{
   }
   .how-row.solo{grid-template-columns:40px minmax(0,1fr);grid-template-areas:"num txt";}
   .how-fig{width:110px; max-width:110px; aspect-ratio:1.35; margin:0; align-self:start;}
-  .how-n{font-size:24px;line-height:1;text-align:right;padding-top:2px;}
-  .how-name{font-size:18px; letter-spacing:.14em;}
-  .how-body{font-size:15.5px; line-height:26px;}
+  .how-n{font-size:calc(24px * var(--text-scale));line-height:1;text-align:right;padding-top:2px;}
+  .how-name{font-size:calc(18px * var(--text-scale)); letter-spacing:.14em;}
+  .how-body{font-size:calc(15.5px * var(--text-scale)); line-height:26px;}
   .front-plate{padding:36px 18px 32px;}
 }
 @media(max-width:640px){
@@ -801,18 +803,18 @@ body[data-gloss="open"]::after{
     gap:8px 10px; padding:18px 0 22px;
   }
   .how-row.solo{grid-template-columns:32px minmax(0,1fr);}
-  .how-n{font-size:20px;padding-top:1px;}
-  .how-name{font-size:16px;}
-  .how-body{font-size:15px;line-height:25px;}
+  .how-n{font-size:calc(20px * var(--text-scale));padding-top:1px;}
+  .how-name{font-size:calc(16px * var(--text-scale));}
+  .how-body{font-size:calc(15px * var(--text-scale));line-height:25px;}
   .how-fig{width:88px; max-width:88px; aspect-ratio:1.3;}
   /* the vine is drawn for a wide plate; stretched into a phone
      it distorts, so the page keeps the diamond rule instead */
   .front-vine{display:none;}
   .front-plate{padding:28px 14px 26px;}
-  .front-kicker{font-size:8.5px;letter-spacing:.22em;line-height:1.7;}
-  .front-lede{font-size:16.5px;line-height:27px;}
+  .front-kicker{font-size:calc(8.5px * var(--text-scale));letter-spacing:.22em;line-height:1.7;}
+  .front-lede{font-size:calc(16.5px * var(--text-scale));line-height:27px;}
   .front-go{flex-direction:column;align-items:stretch; gap:10px;}
-  .big-btn{justify-content:center;padding:13px 16px; font-size:12px;}
+  .big-btn{justify-content:center;padding:13px 16px; font-size:calc(12px * var(--text-scale));}
 }
 
 /* ══ ATLAS v2 ══════════════════════════════════════════════ */
@@ -846,17 +848,17 @@ body[data-gloss="open"]::after{
 }
 .atlas-ctl button{
   width:38px;height:38px;background:var(--vellum);color:var(--gall);
-  font-family:var(--mono);font-size:17px;line-height:1;display:grid;place-items:center;
+  font-family:var(--mono);font-size:calc(17px * var(--text-scale));line-height:1;display:grid;place-items:center;
   transition:background .15s,color .15s;
   border:none;
 }
 .atlas-ctl button:hover,
 .atlas-ctl button:active{background:var(--vermilion);color:var(--vellum-lit);}
-.atlas-ctl button.sm{font-size:10px;letter-spacing:.06em; height:32px;}
+.atlas-ctl button.sm{font-size:calc(10px * var(--text-scale));letter-spacing:.06em; height:32px;}
 
 .atlas-scale{
   position:absolute;left:16px;bottom:14px;
-  font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;
+  font-family:var(--mono);font-size:calc(9px * var(--text-scale));letter-spacing:.13em;text-transform:uppercase;
   color:var(--gall-faint);display:flex;align-items:center;gap:8px;
 }
 .atlas-scale .bar{display:block;height:5px;border:1px solid var(--gall-faint);border-top:none;}
@@ -875,20 +877,20 @@ body[data-gloss="open"]::after{
 .glyph-hatch{stroke:var(--verdigris);stroke-width:.6;opacity:.7;fill:none;}
 
 .mapname{
-  font-family:var(--serif);font-size:12.5px;fill:var(--gall);
+  font-family:var(--serif);font-size:calc(12.5px * var(--text-scale));fill:var(--gall);
   paint-order:stroke;stroke:var(--vellum-lit);stroke-width:3.4px;stroke-linejoin:round;
   pointer-events:none;
 }
 .mapname[data-i]{pointer-events:auto;cursor:pointer;}
 .mapname[data-i]:hover{fill:var(--vermilion);}
 .mapname.nat{font-style:italic;fill:var(--verdigris);}
-.mapname.sea{font-style:italic;fill:var(--lapis);opacity:.8;letter-spacing:.16em;font-size:11.5px;}
+.mapname.sea{font-style:italic;fill:var(--lapis);opacity:.8;letter-spacing:.16em;font-size:calc(11.5px * var(--text-scale));}
 .mapregion{
-  font-family:var(--caps);font-size:13px;letter-spacing:.36em;fill:var(--gall-faint);
+  font-family:var(--caps);font-size:calc(13px * var(--text-scale));letter-spacing:.36em;fill:var(--gall-faint);
   opacity:.5;text-anchor:middle;pointer-events:none;text-transform:uppercase;
 }
 .cartouche-box{fill:var(--gall);stroke:none;}
-.cartouche-tx{font-family:var(--mono);font-size:10px;fill:var(--vellum-lit);letter-spacing:.07em;}
+.cartouche-tx{font-family:var(--mono);font-size:calc(10px * var(--text-scale));fill:var(--vellum-lit);letter-spacing:.07em;}
 .selring{fill:none;stroke:var(--gold);stroke-width:1.6;opacity:.9;}
 
 /* the index beside the map — the real way to find a place */
@@ -904,12 +906,12 @@ body[data-gloss="open"]::after{
   }
 }
 .idx-head{padding:16px 16px 12px;border-bottom:1px solid var(--rule);flex-shrink:0;}
-.idx-cap{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gall-faint);}
+.idx-cap{font-family:var(--mono);font-size:calc(9px * var(--text-scale));letter-spacing:.16em;text-transform:uppercase;color:var(--gall-faint);}
 .idx-seek{
   width:100%;margin-top:10px;border:1px solid var(--rule-hard);background:var(--vellum-lit);
-  padding:9px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--gall);
+  padding:9px 12px;font-family:var(--mono);font-size:calc(11px * var(--text-scale));letter-spacing:.04em;color:var(--gall);
 }
-.idx-seek::placeholder{color:var(--gall-faint);text-transform:uppercase;font-size:9.5px;letter-spacing:.12em;}
+.idx-seek::placeholder{color:var(--gall-faint);text-transform:uppercase;font-size:calc(9.5px * var(--text-scale));letter-spacing:.12em;}
 .idx-list{overflow-y:auto;max-height:440px;scrollbar-width:thin; flex:1;}
 @media(max-width:940px){.idx-list{max-height:220px;}}
 .idx{
@@ -920,9 +922,9 @@ body[data-gloss="open"]::after{
 .idx[data-sel="true"]{background:var(--vellum-deep);}
 .idx .ico{width:12px;height:12px;color:var(--gall-soft);align-self:center;}
 .idx[data-sel="true"] .ico{color:var(--vermilion);}
-.idx .nm{font-size:15px;line-height:1.35;color:var(--gall);}
-.idx .ct{font-family:var(--mono);font-size:9.5px;color:var(--gall-faint);letter-spacing:.04em;}
-.idx-foot{padding:12px 16px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gall-faint);line-height:1.8;}
+.idx .nm{font-size:calc(15px * var(--text-scale));line-height:1.35;color:var(--gall);}
+.idx .ct{font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));color:var(--gall-faint);letter-spacing:.04em;}
+.idx-foot{padding:12px 16px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:calc(9px * var(--text-scale));letter-spacing:.1em;text-transform:uppercase;color:var(--gall-faint);line-height:1.8;}
 
 /* ══ AUDIO TRANSPORT ═══════════════════════════════════════ */
 .transport{
@@ -941,18 +943,18 @@ body[data-gloss="open"]::after{
 .tp-scrub{flex:1;position:relative;height:22px;display:flex;align-items:center;cursor:pointer;}
 .tp-track{width:100%;height:4px;background:var(--vellum-sink);position:relative;}
 .tp-done{position:absolute;inset:0 auto 0 0;width:0;background:var(--vermilion);}
-.tp-time{font-family:var(--mono);font-size:10px;color:var(--gall-faint);letter-spacing:.04em;flex-shrink:0;min-width:82px;text-align:right;}
-.tp-lab{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--gall-faint);flex-shrink:0;}
+.tp-time{font-family:var(--mono);font-size:calc(10px * var(--text-scale));color:var(--gall-faint);letter-spacing:.04em;flex-shrink:0;min-width:82px;text-align:right;}
+.tp-lab{font-family:var(--mono);font-size:calc(9px * var(--text-scale));letter-spacing:.15em;text-transform:uppercase;color:var(--gall-faint);flex-shrink:0;}
 .rates{display:flex;gap:1px;background:var(--rule);border:1px solid var(--rule);}
 .rate{
-  padding:5px 10px;background:var(--vellum);font-family:var(--mono);font-size:10px;
+  padding:5px 10px;background:var(--vellum);font-family:var(--mono);font-size:calc(10px * var(--text-scale));
   letter-spacing:.03em;color:var(--gall-soft);transition:background .14s,color .14s;
 }
 .rate:hover{background:var(--vellum-lit);}
 .rate[data-on="true"]{background:var(--gall);color:var(--vellum-lit);}
 .tp-reader{
   border:1px solid var(--rule-hard);background:var(--vellum);padding:5px 8px;
-  font-family:var(--mono);font-size:10px;color:var(--gall-soft);
+  font-family:var(--mono);font-size:calc(10px * var(--text-scale));color:var(--gall-soft);
 }
 @media(max-width:700px){
   .tp-row{flex-wrap:wrap;gap:9px;}
@@ -970,15 +972,15 @@ body[data-gloss="open"]::after{
   max-width:640px;margin:0 auto;background:var(--vellum);border:1px solid var(--gall);
   padding:34px 38px 30px;position:relative;
 }
-.help-card h3{font-family:var(--caps);font-weight:700;font-size:22px;letter-spacing:.18em;text-transform:uppercase;margin:0 0 6px;}
-.help-card .sub{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gall-faint);margin-bottom:22px;}
+.help-card h3{font-family:var(--caps);font-weight:700;font-size:calc(22px * var(--text-scale));letter-spacing:.18em;text-transform:uppercase;margin:0 0 6px;}
+.help-card .sub{font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));letter-spacing:.14em;text-transform:uppercase;color:var(--gall-faint);margin-bottom:22px;}
 .help-grid{display:grid;grid-template-columns:auto 1fr;gap:9px 18px;align-items:baseline;}
 .help-grid kbd{
-  font-family:var(--mono);font-size:10px;border:1px solid var(--rule-hard);
+  font-family:var(--mono);font-size:calc(10px * var(--text-scale));border:1px solid var(--rule-hard);
   background:var(--vellum-lit);padding:3px 8px;white-space:nowrap;
 }
-.help-grid span{font-size:16px;line-height:24px;color:var(--gall-soft);}
-.help-close{position:absolute;top:12px;right:14px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gall-faint);}
+.help-grid span{font-size:calc(16px * var(--text-scale));line-height:24px;color:var(--gall-soft);}
+.help-close{position:absolute;top:12px;right:14px;font-family:var(--mono);font-size:calc(10px * var(--text-scale));letter-spacing:.12em;text-transform:uppercase;color:var(--gall-faint);}
 .help-close:hover{color:var(--vermilion);}
 
 /* ══ ORNAMENT + FEEDBACK ═══════════════════════════════════ */
@@ -996,14 +998,14 @@ body[data-gloss="open"]::after{
 .toast{
   position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);z-index:95;
   background:var(--gall);color:var(--vellum-lit);padding:11px 20px;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+  font-family:var(--mono);font-size:calc(10.5px * var(--text-scale));letter-spacing:.13em;text-transform:uppercase;
   opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;
 }
 .toast[data-on="true"]{opacity:1;transform:translate(-50%,0);}
 
 /* the quiet failure note — a remark, not an alarm */
 .quiet-note{
-  font-family:var(--mono);font-size:10px;line-height:1.9;letter-spacing:.03em;
+  font-family:var(--mono);font-size:calc(10px * var(--text-scale));line-height:1.9;letter-spacing:.03em;
   color:var(--gall-faint);border-left:1px solid var(--rule-hard);padding:2px 0 2px 12px;margin:14px 0 0;
 }
 .ask.ghost{
@@ -1016,35 +1018,35 @@ body[data-gloss="open"]::after{
 .rollbar .seek{margin-bottom:0;max-width:300px;flex:1 1 220px;}
 .sortset{display:flex;gap:1px;background:var(--rule);border:1px solid var(--rule);}
 .sortb{
-  padding:8px 14px;background:var(--vellum);font-family:var(--mono);font-size:10px;
+  padding:8px 14px;background:var(--vellum);font-family:var(--mono);font-size:calc(10px * var(--text-scale));
   letter-spacing:.11em;text-transform:uppercase;color:var(--gall-soft);transition:background .14s,color .14s;
 }
 .sortb:hover{background:var(--vellum-lit);}
 .sortb[data-on="true"]{background:var(--gall);color:var(--vellum-lit);}
-.rollcount{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gall-faint);}
+.rollcount{font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));letter-spacing:.1em;text-transform:uppercase;color:var(--gall-faint);}
 
 .alpharail{display:flex;flex-wrap:wrap;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:22px;}
 .alpha{
-  min-width:32px;padding:7px 8px;background:var(--vellum);font-family:var(--caps);font-size:11.5px;
+  min-width:32px;padding:7px 8px;background:var(--vellum);font-family:var(--caps);font-size:calc(11.5px * var(--text-scale));
   letter-spacing:.08em;color:var(--gall-soft);flex:1 0 auto;transition:background .14s,color .14s;
 }
 .alpha:hover{background:var(--vellum-lit);color:var(--vermilion);}
 .alpha[data-on="true"]{background:var(--vermilion);color:var(--vellum-lit);}
 
 .rollwait{grid-column:1/-1;padding:34px 26px;background:var(--vellum-lit);}
-.rollwait p{font-family:var(--mono);font-size:11px;line-height:1.95;color:var(--gall-faint);max-width:520px;margin:10px 0 0;letter-spacing:.02em;}
+.rollwait p{font-family:var(--mono);font-size:calc(11px * var(--text-scale));line-height:1.95;color:var(--gall-faint);max-width:520px;margin:10px 0 0;letter-spacing:.02em;}
 
-.alsocalled{font-style:italic;color:var(--gall-soft);font-size:16px;margin:-8px 0 18px;}
+.alsocalled{font-style:italic;color:var(--gall-soft);font-size:calc(16px * var(--text-scale));margin:-8px 0 18px;}
 .kin{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:14px 0 4px;margin:0 0 22px;}
 .kinrow{display:grid;grid-template-columns:88px 1fr;gap:10px;align-items:baseline;margin-bottom:10px;}
-.kinlab{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gall-faint);}
+.kinlab{font-family:var(--mono);font-size:calc(9px * var(--text-scale));letter-spacing:.14em;text-transform:uppercase;color:var(--gall-faint);}
 .kinset{display:flex;flex-wrap:wrap;gap:6px;}
 .chip{
   border:1px solid var(--rule-hard);background:var(--vellum);padding:3px 10px;
-  font-size:15px;line-height:22px;color:var(--gall);transition:background .14s,border-color .14s;
+  font-size:calc(15px * var(--text-scale));line-height:22px;color:var(--gall);transition:background .14s,border-color .14s;
 }
 .chip:hover{background:var(--vermilion);border-color:var(--vermilion);color:var(--vellum-lit);}
-.easton p{font-size:17px;line-height:29px;margin:0 0 16px;color:var(--gall);}
+.easton p{font-size:calc(17px * var(--text-scale));line-height:29px;margin:0 0 16px;color:var(--gall);}
 .refjump{
   color:var(--lapis);border-bottom:1px solid rgba(31,74,135,.4);font:inherit;
   padding:0;transition:color .14s,border-color .14s;
@@ -1053,7 +1055,7 @@ body[data-gloss="open"]::after{
 @media(max-width:640px){
   .kinrow{grid-template-columns:1fr;gap:4px;}
   .rollbar .seek{max-width:none;}
-  .alpha{min-width:28px;padding:6px 5px;font-size:11px;}
+  .alpha{min-width:28px;padding:6px 5px;font-size:calc(11px * var(--text-scale));}
 }
 
 /* ══ LAYOUT OVERRIDES FOR THE SPINE ════════════════════════ */
@@ -1072,8 +1074,8 @@ body[data-gloss="open"]::after{
   .spread{grid-template-columns:var(--rail) minmax(0,1fr) var(--gloss);}
 }
 @media(max-width:760px){
-  .front-lede{font-size:16.5px;line-height:27px;}
-  .atlas-ctl button{width:42px;height:42px; font-size:18px;}
+  .front-lede{font-size:calc(16.5px * var(--text-scale));line-height:27px;}
+  .atlas-ctl button{width:42px;height:42px; font-size:calc(18px * var(--text-scale));}
   .help-card{padding:22px 18px 18px;}
 }
 
@@ -1083,16 +1085,16 @@ body[data-gloss="open"]::after{
    ═══════════════════════════════════════════════════════ */
 @media(max-width:940px){
   .atlas-svg{touch-action: none;}
-  .atlas-ctl button{width:44px;height:44px;font-size:18px;}
-  .atlas-ctl button.sm{font-size:11px;}
-  .tlabel{font-size:13px;}
+  .atlas-ctl button{width:44px;height:44px;font-size:calc(18px * var(--text-scale));}
+  .atlas-ctl button.sm{font-size:calc(11px * var(--text-scale));}
+  .tlabel{font-size:calc(13px * var(--text-scale));}
   .thub-ring{stroke-dasharray:3 8;}
   .atlas-ctl{ top: 10px; right: 10px; }
 }
 @media(max-width:760px){
   .wide{padding:26px 16px 90px;}
-  .leaf-title{font-size:28px;letter-spacing:.10em; margin-bottom:10px;}
-  .leaf-sub{font-size:15.5px;line-height:25px;}
+  .leaf-title{font-size:calc(28px * var(--text-scale));letter-spacing:.10em; margin-bottom:10px;}
+  .leaf-sub{font-size:calc(15.5px * var(--text-scale));line-height:25px;}
   .leaf-head{margin-bottom:28px; padding-bottom:18px;}
   .head-orn{max-width:220px;}
 
@@ -1103,27 +1105,27 @@ body[data-gloss="open"]::after{
   .opening{gap:16px;}
   .transport .tp-row{padding:10px 11px;}
   .rates{flex-wrap:wrap;}
-  .rate{padding:7px 9px;font-size:10.5px;min-height:32px;}
+  .rate{padding:7px 9px;font-size:calc(10.5px * var(--text-scale));min-height:32px;}
   .tp-reader{min-height:32px;}
   .tp-play{width:42px;height:42px;}
 
   /* register */
   .roster{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
   .person{padding:10px 11px;}
-  .person-name{font-size:14.5px;line-height:1.3;}
+  .person-name{font-size:calc(14.5px * var(--text-scale));line-height:1.3;}
   .profile{padding:20px 18px;margin-top:22px;}
-  .profile h3{font-size:24px;}
-  .easton p,.profile p{font-size:16.5px;line-height:28px;}
-  .chip{font-size:14.5px;padding:4px 9px;}
+  .profile h3{font-size:calc(24px * var(--text-scale));}
+  .easton p,.profile p{font-size:calc(16.5px * var(--text-scale));line-height:28px;}
+  .chip{font-size:calc(14.5px * var(--text-scale));padding:4px 9px;}
 
   /* chronicle + scriptorium */
   .folios{grid-template-columns:1fr 1fr;}
   .folio{min-height:100px; padding:12px 11px 14px;}
-  .folio-name{font-size:15.5px; line-height:20px;}
-  .folio-hook{font-size:12.5px; line-height:18px;}
+  .folio-name{font-size:calc(15.5px * var(--text-scale)); line-height:20px;}
+  .folio-hook{font-size:calc(12.5px * var(--text-scale)); line-height:18px;}
   .collation{padding:20px 18px;}
-  .q-text{font-size:18px;line-height:29px;}
-  .opt{padding:11px 12px;font-size:15.5px;min-height:44px;}
+  .q-text{font-size:calc(18px * var(--text-scale));line-height:29px;}
+  .opt{padding:11px 12px;font-size:calc(15.5px * var(--text-scale));min-height:44px;}
   .era-bar{flex-wrap:wrap;gap:8px;}
 
   /* threads */
@@ -1131,21 +1133,21 @@ body[data-gloss="open"]::after{
 
   /* colophon */
   .source{padding:17px 16px;}
-  .footer-rule{font-size:8.5px;letter-spacing:.1em;}
+  .footer-rule{font-size:calc(8.5px * var(--text-scale));letter-spacing:.1em;}
 
   /* help */
   .help{padding:20px 12px;}
   .help-grid{grid-template-columns:1fr;gap:3px 0;}
   .help-grid kbd{justify-self:start;margin-top:9px;}
-  .help-grid span{font-size:15.5px;line-height:23px;}
+  .help-grid span{font-size:calc(15.5px * var(--text-scale));line-height:23px;}
 }
 @media(max-width:420px){
   .quire-grid{grid-template-columns:repeat(6,1fr);}
   .front-title{letter-spacing:.14em; font-size:clamp(32px,9vw,48px);}
   .roster{grid-template-columns:1fr 1fr;}
   .folios{grid-template-columns:1fr 1fr;}
-  .folio-name{font-size:14.5px;}
-  .tp-time{font-size:9.5px;}
+  .folio-name{font-size:calc(14.5px * var(--text-scale));}
+  .tp-time{font-size:calc(9.5px * var(--text-scale));}
 }
 /* thumbs, not cursors */
 @media(hover:none){
@@ -1161,13 +1163,149 @@ body[data-gloss="open"]::after{
   .leafcell[data-gilt="true"].fresh{animation:none;}
 }
 </style>
+
+<style id="vellum-upgrade-css">
+/* Product pass: resilience, readability, notebook, focus and accessible controls */
+.resume-strip{margin:34px auto 0;max-width:650px;border-top:1px solid var(--rule-hard);border-bottom:1px solid var(--rule);padding:14px 2px;display:flex;align-items:center;justify-content:space-between;gap:18px;text-align:left}
+.resume-strip>div{display:grid;gap:2px}.resume-cap{font-family:var(--mono);font-size:calc(9px * var(--text-scale));letter-spacing:.16em;text-transform:uppercase;color:var(--vermilion)}
+.resume-strip strong{font-family:var(--caps);font-size:calc(15px * var(--text-scale));letter-spacing:.09em;color:var(--gall)}.resume-strip #resumeMeta{font-size:calc(13.5px * var(--text-scale));line-height:20px;color:var(--gall-faint)}
+.resume-go{font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));letter-spacing:.1em;text-transform:uppercase;color:var(--vermilion);flex-shrink:0}.resume-go:hover{text-decoration:underline;text-underline-offset:4px}
+.read-size{display:inline-flex;height:34px;border:1px solid var(--rule-hard);background:var(--vellum-lit)}.mini-tool{width:36px;border-right:1px solid var(--rule);font-family:var(--mono);font-size:calc(10px * var(--text-scale));color:var(--gall-soft)}.mini-tool:last-child{border-right:none}.mini-tool:hover{background:var(--vellum-deep);color:var(--vermilion)}
+#readColumn{--reader-size:1em}.scripture{font-size:1em;line-height:1.78}.footnotes{font-size:.82em;line-height:1.7}
+.saved-tools{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 18px}.saved-tools .ask{width:auto;margin:0;padding:8px 10px}.saved-section{margin-top:20px;padding-top:14px;border-top:1px solid var(--rule)}
+.savedjump{width:100%;text-align:left;padding:9px 0;border-bottom:1px dotted var(--rule);display:grid;grid-template-columns:auto 1fr;gap:4px 10px}.savedjump .ref{font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));color:var(--lapis);grid-column:1/-1}.savedjump .snippet{font-size:calc(14px * var(--text-scale));line-height:21px;color:var(--gall-soft)}.savedjump:hover .ref{color:var(--vermilion)}
+.margin-note{width:100%;min-height:58px;resize:vertical;margin-top:7px;padding:7px 8px;border:1px solid var(--rule);background:rgba(255,255,255,.12);font-family:var(--serif);font-size:calc(14px * var(--text-scale));line-height:20px;color:var(--gall)}.margin-note::placeholder{color:var(--gall-faint)}
+.source-link{display:inline-block;margin-top:4px}.source-link:hover{color:var(--vermilion)}
+body[data-focus="true"] .rail,body[data-focus="true"] .gloss{display:none!important}body[data-focus="true"] .spread{grid-template-columns:minmax(0,1fr)!important}body[data-focus="true"] .column{max-width:860px}
+@media(min-width:1181px){body[data-focus="true"] .spine{transform:translateX(-100%)}body[data-focus="true"] .book{margin-left:0}}
+body[data-focus="true"] #btnFocus{border-color:var(--vermilion);color:var(--vermilion);background:rgba(179,43,23,.06)}body[data-focus="true"] #btnFocus .dot{background:var(--vermilion)}
+.verse[tabindex="0"]{border-radius:2px}.verse[tabindex="0"]:focus-visible{outline:2px solid var(--lapis);outline-offset:2px;background:rgba(31,74,135,.07)}.thread-svg .tnode[tabindex="0"]:focus circle{stroke:var(--vermilion);stroke-width:3}#tpScrub:focus-visible{outline:2px solid var(--lapis);outline-offset:3px}
+.tool[disabled],.mini-tool[disabled]{opacity:.4;cursor:default;transform:none}.rollmore{grid-column:1/-1;padding:14px;text-align:center;border-top:1px solid var(--rule);font-family:var(--mono);font-size:calc(10px * var(--text-scale));letter-spacing:.1em;text-transform:uppercase;color:var(--vermilion);background:var(--vellum-lit)}
+@media(max-width:760px){.resume-strip{margin-top:24px;align-items:stretch;flex-direction:column;gap:8px}.resume-go{text-align:left;padding:3px 0}.read-size{height:28px}.mini-tool{width:32px}.margin-note{font-size:calc(16px * var(--text-scale))}body[data-focus="true"] .bindbar{display:flex}}
+</style>
+<style id="vellum-readability-v4">
+/* V4 readability + display controls */
+html{color-scheme:light;}
+html[data-theme="dark"]{color-scheme:dark;}
+
+/* Native menu surfaces: Windows/Chrome otherwise may open a white popup in dark mode. */
+select,select option,select optgroup{
+  background:var(--vellum-lit);
+  color:var(--gall);
+}
+select{color-scheme:light;}
+html[data-theme="dark"] select{color-scheme:dark;}
+html[data-theme="dark"] select,
+html[data-theme="dark"] select option,
+html[data-theme="dark"] select optgroup{
+  background:#25211B !important;
+  color:#E8DFC8 !important;
+}
+html[data-theme="dark"] select option:checked{background:#365F91 !important;color:#FFF7E4 !important;}
+html:not([data-theme="dark"]) select option:checked{background:#B9D5F2;color:#241E17;}
+.pick select,.tp-reader,.idx-seek,.seek,input,textarea{caret-color:var(--vermilion);}
+
+/* Small mono text remains secondary, but no longer fades into the page. */
+.person-ref,.rollcount,.era-count,.folio-ref,.idx-cap,.idx-foot,.source .lic,
+.footer-rule,.machine-note,.gl-ref,.tp-time,.tp-lab,.chapter-line,.gilt-cap,
+.gilt-num,.quire .qn,.resume-cap,.resume-go,.savedjump .ref,.kinlab,.mapregion,
+.atlas-scale,.q-kind,.source .lic,.front-kicker{
+  color:var(--gall-faint);
+}
+.person-ref{
+  font-size:calc(10.5px * var(--text-scale));
+  line-height:1.45;
+  letter-spacing:.055em;
+}
+.rollcount,.era-count,.idx-foot,.gilt-cap,.gilt-num{
+  font-size:calc(10px * var(--text-scale));
+}
+.chapter-line{font-size:calc(11.5px * var(--text-scale));}
+.footer-rule{font-size:calc(10px * var(--text-scale));}
+html[data-theme="dark"] .person-ref,
+html[data-theme="dark"] .rollcount,
+html[data-theme="dark"] .era-count,
+html[data-theme="dark"] .idx-foot,
+html[data-theme="dark"] .footer-rule{
+  color:#B8AC94;
+}
+
+/* Display controls */
+.bind-utils{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.bind-size,.theme-pill{
+  min-height:34px;border:1px solid var(--rule-hard);background:var(--vellum-lit);
+  color:var(--gall-soft);font-family:var(--mono);font-size:calc(10px * var(--text-scale));
+  letter-spacing:.03em;display:inline-flex;align-items:center;justify-content:center;
+}
+.bind-size{width:34px;}
+.bind-size:hover,.theme-pill:hover{background:var(--vellum-deep);color:var(--vermilion);}
+.bind-size:disabled{opacity:.35;cursor:default;}
+.theme-pill{width:auto;padding:0 9px;gap:6px;border-radius:0;}
+.theme-pill b{font-weight:500;font-size:calc(9.5px * var(--text-scale));letter-spacing:.08em;text-transform:uppercase;}
+.bindbar .theme-m{height:34px;border-radius:0;}
+
+.display-settings{margin-top:12px;padding-top:11px;border-top:1px solid var(--rule);}
+.display-cap{
+  display:block;margin-bottom:7px;font-family:var(--mono);
+  font-size:calc(9px * var(--text-scale));letter-spacing:.15em;text-transform:uppercase;color:var(--gall-faint);
+}
+.display-row{display:grid;grid-template-columns:34px 34px 1fr;gap:4px;}
+.display-btn{
+  min-height:32px;border:1px solid var(--rule-hard);background:var(--vellum);
+  color:var(--gall-soft);font-family:var(--mono);font-size:calc(10px * var(--text-scale));
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.display-btn:hover{background:var(--vellum-deep);color:var(--vermilion);}
+.display-btn:disabled{opacity:.35;cursor:default;}
+.display-btn.theme-wide{padding:0 8px;text-transform:uppercase;letter-spacing:.08em;font-size:calc(9px * var(--text-scale));}
+.theme-dot{font-size:1.15em;line-height:1;}
+
+.read-size::before{
+  content:"TEXT";display:flex;align-items:center;padding:0 7px;border-right:1px solid var(--rule);
+  font-family:var(--mono);font-size:calc(8.5px * var(--text-scale));letter-spacing:.12em;color:var(--gall-faint);
+}
+
+/* Dark surfaces and form boundaries get just enough separation. */
+html[data-theme="dark"] .pick,
+html[data-theme="dark"] .stepper,
+html[data-theme="dark"] .tool,
+html[data-theme="dark"] .read-size,
+html[data-theme="dark"] .transport,
+html[data-theme="dark"] .profile,
+html[data-theme="dark"] .collation{
+  border-color:rgba(232,223,200,.30);
+}
+html[data-theme="dark"] .tp-track,
+html[data-theme="dark"] .gilt-track{background:#4A4236;}
+
+/* Keep global scaling usable on narrow phones. */
+@media(max-width:640px){
+  .bindbar{gap:7px;padding:0 8px;}
+  .bindbar .wordmark{font-size:calc(15px * var(--text-scale));letter-spacing:.20em;}
+  .bind-utils{gap:3px;}
+  .bind-size{width:30px;min-height:32px;}
+  .theme-pill{padding:0 7px;min-height:32px;}
+  .theme-pill b{display:none;}
+  .bindbar .gilt-num{display:none;}
+  .read-size::before{display:none;}
+}
+@media(max-width:390px){
+  .bindbar .wordmark{letter-spacing:.14em;}
+  .bind-size{width:28px;}
+  .theme-pill{padding:0 6px;}
+}
+</style>
 <body>
 
 <!-- ══ mobile binding bar ═══════════════════════════════════ -->
 <div class="bindbar">
   <button class="burger" id="burger" aria-label="Open the contents"><i></i><i></i><i></i></button>
   <span class="wordmark">VELL<b>V</b>M</span>
-  <button id="btnThemeM" class="theme-m" title="Toggle light / dark" aria-label="Toggle theme">◐</button>
+  <div class="bind-utils" aria-label="Display settings">
+    <button class="bind-size" id="textDownM" aria-label="Decrease site text size">A−</button>
+    <button class="bind-size" id="textUpM" aria-label="Increase site text size">A+</button>
+    <button id="btnThemeM" class="theme-m theme-pill" title="Toggle light / dark" aria-label="Toggle theme"><span aria-hidden="true">☾</span><b>Dark</b></button>
+  </div>
   <span class="gilt-num" id="giltNumM">0/48</span>
 </div>
 <div class="scrim" id="scrim"></div>
@@ -1198,7 +1336,7 @@ body[data-gloss="open"]::after{
     </button>
     <button class="quire" data-leaf="cast">
       <span class="qn">IV</span><span class="qname">Register</span>
-      <span class="qsub">Who's who — 125 sourced profiles</span>
+      <span class="qsub">Who's who — 3,067 sourced records</span>
     </button>
     <button class="quire" data-leaf="threads">
       <span class="qn">V</span><span class="qname">Threads</span>
@@ -1206,7 +1344,7 @@ body[data-gloss="open"]::after{
     </button>
     <button class="quire" data-leaf="scriptorium">
       <span class="qn">VI</span><span class="qname">Scriptorium</span>
-      <span class="qsub">The game. Earn your gold leaf.</span>
+      <span class="qsub">Practice recall. Gild what you master.</span>
     </button>
     <button class="quire" data-leaf="sources">
       <span class="qn">VII</span><span class="qname">Colophon</span>
@@ -1221,8 +1359,15 @@ body[data-gloss="open"]::after{
       </span>
       <span class="gilt-track"><span class="gilt-fill" id="giltFill"></span></span>
     </div>
+    <div class="display-settings" aria-label="Display settings">
+      <span class="display-cap">Display</span>
+      <div class="display-row">
+        <button class="display-btn" id="textDownS" aria-label="Decrease site text size">A−</button>
+        <button class="display-btn" id="textUpS" aria-label="Increase site text size">A+</button>
+        <button class="display-btn theme-wide" id="btnTheme" title="Toggle light / dark"><span class="theme-dot" aria-hidden="true">☾</span><span id="themeLabel">Dark</span></button>
+      </div>
+    </div>
     <div class="spine-links">
-      <button id="btnTheme" title="Toggle light / dark">Theme</button>
       <button id="btnHelp">Keys &amp; help</button>
       <button data-leaf="sources">Sources</button>
     </div>
@@ -1239,10 +1384,14 @@ body[data-gloss="open"]::after{
       <div class="front-kicker">An apparatus for reading the Bible as literature</div>
       <h1 class="front-title">VELL<b>V</b>M</h1>
       <div class="front-rule"></div>
-      <p class="front-lede">Before it was doctrine it was an <em>object</em> — copied by hand onto animal skin, for a thousand years, by people who left notes in the margins. This is that book taken apart into the pieces you'd actually want: the text, the map, the people, the links between verses, and an easier way to understand it all.</p>
+      <p class="front-lede">Long before modern printed editions, biblical texts circulated as scrolls and codices, copied by hand on papyrus and parchment, with readers and scribes leaving notes around the text. Vellum turns that same instinct into an interactive desk: text, places, people, cross-references, sourced notes, and a guided path through the larger story.</p>
       <div class="front-go">
-        <button class="big-btn" data-leaf="chronicle">Begin with the stories</button>
+        <button class="big-btn" data-leaf="chronicle">Begin with the story</button>
         <button class="big-btn ghost" data-leaf="read">Open the reading desk</button>
+      </div>
+      <div class="resume-strip" id="resumeStrip" aria-live="polite">
+        <div><span class="resume-cap">Continue</span><strong id="resumeRef">Genesis 1</strong><span id="resumeMeta">Your place is remembered on this device.</span></div>
+        <button class="resume-go" id="resumeGo">Return to the desk →</button>
       </div>
     </div>
   </div>
@@ -1253,8 +1402,8 @@ body[data-gloss="open"]::after{
     <div class="how-row solo">
       <div class="how-n">&#10022;</div>
       <div class="how-txt">
-        <h3 class="how-name">Nothing here is invented</h3>
-        <p class="how-body">Everything on this page was copied from somewhere, and every somewhere is named. The verses, the notes, the people, the coordinates on the map — all of it comes from open scholarly collections whose compilers are credited at the end. If something couldn't be traced to a source, it didn't go in.</p>
+        <h3 class="how-name">Sources stay visible</h3>
+        <p class="how-body">Scripture, commentary, people data, cross-references, and geographic coordinates are tied to named open sources. Vellum's Chronicle hooks, interface copy, diagrams, and study questions are editorial layers built on top of those sources, and the Colophon tells you which is which.</p>
         <button class="how-jump" data-leaf="sources">See the colophon &#8594;</button>
       </div>
     </div>
@@ -1269,7 +1418,7 @@ body[data-gloss="open"]::after{
       <div class="rail-label">margin</div>
     </aside>
 
-    <div class="column" id="readColumn" data-ruled="true">
+    <div class="column" id="readColumn">
       <div class="apparatus">
         <span class="pick"><select id="selBook" aria-label="Book"></select></span>
         <span class="stepper">
@@ -1278,9 +1427,14 @@ body[data-gloss="open"]::after{
         </span>
         <span class="pick"><select id="selChapter" aria-label="Chapter"></select></span>
         <span class="pick"><select id="selTrans" aria-label="Translation"></select></span>
-        <button class="tool" id="btnRule" data-on="true"><span class="dot"></span>Ruling</button>
         <button class="tool" id="btnAudio"><span class="dot"></span>Listen</button>
-        <button class="tool gloss-toggle" id="btnGloss"><span class="dot"></span>Gloss</button>
+        <button class="tool gloss-toggle" id="btnGloss" aria-expanded="false"><span class="dot"></span>Notebook</button>
+        <span class="read-size" role="group" aria-label="Site text size">
+          <button class="mini-tool" id="textDown" aria-label="Decrease site text size">A−</button>
+          <button class="mini-tool" id="textUp" aria-label="Increase site text size">A+</button>
+        </span>
+        <button class="tool" id="btnFocus" aria-pressed="false"><span class="dot"></span>Focus</button>
+        <button class="tool" id="btnLink" title="Copy a link to this chapter"><span class="dot"></span>Copy link</button>
       </div>
 
       <div class="transport" id="transport">
@@ -1288,7 +1442,7 @@ body[data-gloss="open"]::after{
           <button class="tp-play" id="tpPlay" aria-label="Play or pause">
             <svg viewBox="0 0 12 12" id="tpIcon"><path d="M2 1l9 5-9 5z"/></svg>
           </button>
-          <span class="tp-scrub" id="tpScrub" role="slider" tabindex="0" aria-label="Seek">
+          <span class="tp-scrub" id="tpScrub" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
             <span class="tp-track"><span class="tp-done" id="tpDone"></span></span>
           </span>
           <span class="tp-time" id="tpTime">0:00 / 0:00</span>
@@ -1324,7 +1478,7 @@ body[data-gloss="open"]::after{
     <aside class="gloss" id="glossPanel">
       <button class="gloss-drag" id="glossClose" aria-label="Close panel"></button>
       <div class="gloss-tabs" role="tablist">
-        <button class="gloss-tab" data-pane="notes" role="tab" aria-selected="true">Marks</button>
+        <button class="gloss-tab" data-pane="notes" role="tab" aria-selected="true">Notebook</button>
         <button class="gloss-tab" data-pane="xref" role="tab" aria-selected="false">Threads</button>
         <button class="gloss-tab" data-pane="comm" role="tab" aria-selected="false">Commentary</button>
       </div>
@@ -1343,7 +1497,7 @@ body[data-gloss="open"]::after{
     <div class="leaf-head">
       <svg class="head-orn" viewBox="0 0 340 14" aria-hidden="true"><path d="M0 7h96M244 7h96" stroke="currentColor" stroke-width="1"/><path d="M108 7q7-6 14 0-7 6-14 0zM170 2l4 5-4 5-4-5zM218 7q7-6 14 0-7 6-14 0z" fill="currentColor"/><path d="M126 7h34M180 7h34" stroke="currentColor" stroke-width=".7"/></svg>
       <h2 class="leaf-title">Chronicle</h2>
-      <p class="leaf-sub">Forty-eight stories in the order the book tells them, gathered into six quires. This is the spine of the whole thing — read only these and you'd know the plot. <b>Click a folio to open that passage in the reading desk.</b> Pass its collation in the Scriptorium and the folio turns gold.</p>
+      <p class="leaf-sub">Forty-eight selected passages in canonical order, gathered into six quires. This is a guided narrative spine rather than a substitute for the full text — read these first and the larger sequence becomes easier to follow. <b>Click a folio to open that passage in the reading desk.</b> Pass its collation in the Scriptorium and the folio turns gold.</p>
     </div>
     <div id="chronicleBody"></div>
   </div>
@@ -1376,7 +1530,7 @@ body[data-gloss="open"]::after{
       <div class="atlas-index">
         <div class="idx-head">
           <div class="idx-cap" id="idxCap">Index of places</div>
-          <input class="idx-seek" id="idxSeek" placeholder="Find a place" autocomplete="off">
+          <input class="idx-seek" id="idxSeek" placeholder="Find a place" autocomplete="off" aria-label="Find a place">
         </div>
         <div class="idx-list" id="idxList"></div>
         <div class="idx-foot">Coastlines simplified &middot; site coordinates exact</div>
@@ -1400,7 +1554,7 @@ body[data-gloss="open"]::after{
     </div>
 
     <div class="rollbar">
-      <input class="seek" id="castSeek" placeholder="Find a person" autocomplete="off">
+      <input class="seek" id="castSeek" placeholder="Find a person" autocomplete="off" aria-label="Find a person">
       <span class="sortset">
         <button class="sortb" id="sortFame" data-on="true">Most named</button>
         <button class="sortb" id="sortAZ">A&ndash;Z</button>
@@ -1439,7 +1593,7 @@ body[data-gloss="open"]::after{
     <div class="leaf-head">
       <svg class="head-orn" viewBox="0 0 340 14" aria-hidden="true"><path d="M0 7h96M244 7h96" stroke="currentColor" stroke-width="1"/><path d="M108 7q7-6 14 0-7 6-14 0zM170 2l4 5-4 5-4-5zM218 7q7-6 14 0-7 6-14 0z" fill="currentColor"/><path d="M126 7h34M180 7h34" stroke="currentColor" stroke-width=".7"/></svg>
       <h2 class="leaf-title">Scriptorium</h2>
-      <p class="leaf-sub">You're an apprentice. Before a copy left the workshop a second scribe read it against the exemplar line by line — that check was called a <em>collation</em>. <b>Click any cell in the Great Quire to sit for its collation:</b> eight questions built from the real text of that passage. Six right out of eight and the leaf is gilded for good.</p>
+      <p class="leaf-sub">Use the Scriptorium as retrieval practice. Manuscript collation meant checking a copy against an exemplar; here the metaphor becomes an eight-question review built from the passage itself. <b>Choose any leaf in the Great Quire:</b> six correct answers out of eight gilds that passage for future sessions.</p>
     </div>
     <div class="desk">
       <div>
@@ -1461,11 +1615,11 @@ body[data-gloss="open"]::after{
     <div class="leaf-head">
       <svg class="head-orn" viewBox="0 0 340 14" aria-hidden="true"><path d="M0 7h96M244 7h96" stroke="currentColor" stroke-width="1"/><path d="M108 7q7-6 14 0-7 6-14 0zM170 2l4 5-4 5-4-5zM218 7q7-6 14 0-7 6-14 0z" fill="currentColor"/><path d="M126 7h34M180 7h34" stroke="currentColor" stroke-width=".7"/></svg>
       <h2 class="leaf-title">Colophon</h2>
-      <p class="leaf-sub">A colophon is the note a scribe left at the end saying who copied the book and from what. This is that. Everything here is fetched live from open data — nothing is hardcoded scripture, nothing is invented. These are the people whose work this is built on, and what they ask in return.</p>
+      <p class="leaf-sub">A colophon is the note a scribe left at the end saying who copied the book and from what. This is Vellum's source ledger: scripture and linked study datasets come from the projects below; the Chronicle framing, interface text, diagrams, and practice layer are Vellum's own editorial work.</p>
     </div>
     <div class="sources" id="sourceList"></div>
     <div class="footer-rule">
-      Vellum &middot; every word fetched live &middot; nothing on this page is invented
+      Vellum &middot; source-led reading &middot; editorial layers are labeled &middot; open-data credits below
     </div>
   </div>
 </main>
@@ -1473,19 +1627,19 @@ body[data-gloss="open"]::after{
 </div><!-- /.book -->
 
 <!-- ══ help ═════════════════════════════════════════════════ -->
-<div class="help" id="help">
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
   <div class="help-card">
     <button class="help-close" id="helpClose">Close</button>
-    <h3>How to work this</h3>
+    <h3 id="helpTitle">How to work this</h3>
     <div class="sub">Keys, and what each part is for</div>
     <div class="help-grid">
       <kbd>&#8592; &#8594;</kbd><span>Previous / next chapter, in the reading desk</span>
       <kbd>1 &ndash; 7</kbd><span>Jump to a section</span>
       <kbd>0</kbd><span>Back to the frontispiece</span>
-      <kbd>G</kbd><span>Show or hide the gloss column</span>
+      <kbd>G</kbd><span>Show or hide the Notebook panel</span>
       <kbd>L</kbd><span>Listen &mdash; opens the narration transport</span>
       <kbd>?</kbd><span>This card</span>
-      <kbd>Click a verse</kbd><span>Marks the verse and opens Marks / Threads / Commentary</span>
+      <kbd>Click a verse</kbd><span>Saves or removes that verse in your Notebook and opens Threads / Commentary</span>
       <kbd>Drag the map</kbd><span>Pan; scroll or +/&minus; to zoom; FIT to reset</span>
       <kbd>A place name</kbd><span>Click the name on the plate, the glyph, or the index &mdash; all three open it below</span>
       <kbd>A relative</kbd><span>In the Register, every family name is a link, so you can walk a bloodline</span>
@@ -1493,7 +1647,7 @@ body[data-gloss="open"]::after{
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 /* ═══════════════════════════════════════════════════════════
    VELLUM — data
@@ -1681,20 +1835,20 @@ const SEANAMES = [
 
 /* ── Sources ──────────────────────────────────────────────── */
 const SOURCES = [
-  {t:"Free Use Bible API",    l:"MIT · no key, no limits", u:"https://bible.helloao.org/",
-   d:"AO Lab's open API. Every word of scripture, every footnote, every audio track and cross-reference in Vellum is fetched live from here. 1,250+ translations across 1,000+ languages, and it costs nothing to anyone."},
+  {t:"Free Use Bible API",    l:"Open API · no app key required", u:"https://bible.helloao.org/",
+   d:"AO Lab's open API supplies the scripture text, translation metadata, footnotes, audio links, Tyndale notes, and cross-reference endpoints used by the Reading Desk. Recently opened API responses are cached locally by Vellum for resilience."},
   {t:"Berean Standard Bible", l:"Public domain", u:"https://berean.bible/",
    d:"The default reading text. A modern, deliberately plain English translation whose team released it into the public domain outright — which is why an app like this can exist at all."},
   {t:"Tyndale Open Study Notes", l:"CC BY-SA 4.0", u:"https://tyndaleopenresources.com/",
    d:"The commentary in the gloss column, and the sourced explanation you get when you mark verses on the reading desk. Study notes across 69 books. Reused here under share-alike."},
   {t:"Theographic Bible Metadata", l:"CC BY-SA 4.0", u:"https://github.com/robertrouse/theographic-bible-metadata",
-   d:"Robert Rouse's dataset of every named person, place and event in the text — 3,067 people with their families, verse counts and dates. The whole Register is this file, fetched once when you open it."},
+   d:"Robert Rouse's person dataset powers the Register: 3,067 named records with family links, verse counts and dates. It is loaded only when the Register is opened."},
   {t:"Easton's Bible Dictionary", l:"Public domain, 1897", u:"https://www.biblestudytools.com/dictionaries/eastons-bible-dictionary/",
    d:"Matthew George Easton's dictionary supplies the written entry for 1,816 of the people in the Register. It is Victorian and it shows — read it as a period reference work, not a modern one."},
   {t:"OpenBible.info Cross References", l:"CC BY 4.0", u:"https://www.openbible.info/labs/cross-references/",
    d:"344,799 scored links between verses, compiled largely from the public-domain Treasury of Scripture Knowledge. The Threads view is a drawing of this dataset and nothing else."},
   {t:"OpenBible.info Bible Geocoding", l:"CC BY", u:"https://www.openbible.info/geo/",
-   d:"Latitude and longitude for every identifiable place named in the text, with sourcing and confidence for each identification. Every dot on the Atlas is a real coordinate from this file."},
+   d:"OpenBible.info geocoding is the basis for the place coordinates used in the Atlas. Vellum draws a deliberately schematic medieval-style coastline and glyph layer around those coordinates."},
   {t:"Public-domain audio readers", l:"Free to use", u:"https://openbible.com/",
    d:"Chapter narration by Gilbert, Hays and Souer, served alongside the text. Press Listen on any chapter."}
 ];
@@ -1709,54 +1863,89 @@ const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
 const scrollTop = ()=>{ try{ window.scrollTo({top:0,behavior:"smooth"}); }catch(e){ try{window.scrollTo(0,0);}catch(_){} } };
 const esc = s => String(s==null?"":s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
-/* ── fetch with a memo so we never ask twice ──────────────── */
+/* ── resilient fetch + compact local cache ───────────────── */
 const memo = new Map();
+const CACHE_PREFIX="vellum:http:", CACHE_INDEX="vellum:http:index", CACHE_TTL=7*24*60*60*1000, CACHE_LIMIT=20, CACHE_MAX=260000;
+function readLocal(k){ try{ const v=localStorage.getItem(k); return v==null?null:JSON.parse(v); }catch(_){ return null; } }
+function writeLocal(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); return true; }catch(_){ return false; } }
+function removeLocal(k){ try{ localStorage.removeItem(k); }catch(_){} }
+function touchCache(path){
+  let a=readLocal(CACHE_INDEX)||[]; a=a.filter(x=>x!==path); a.unshift(path);
+  while(a.length>CACHE_LIMIT){ const old=a.pop(); removeLocal(CACHE_PREFIX+old); }
+  writeLocal(CACHE_INDEX,a);
+}
 async function get(path){
   if(memo.has(path)) return memo.get(path);
-  const p = fetch(API+path).then(r=>{
-    if(!r.ok) throw new Error("HTTP "+r.status);
-    return r.json();
-  });
-  memo.set(path,p);
-  p.catch(()=>memo.delete(path));
-  return p;
+  const cached=readLocal(CACHE_PREFIX+path), fresh=cached&&Date.now()-cached.at<CACHE_TTL;
+  if(fresh){ touchCache(path); return cached.data; }
+  const p=(async()=>{
+    const ctl=new AbortController(), timer=setTimeout(()=>ctl.abort(),12000);
+    try{
+      const r=await fetch(API+path,{signal:ctl.signal});
+      if(!r.ok) throw new Error("HTTP "+r.status);
+      const data=await r.json();
+      try{ const raw=JSON.stringify(data); if(raw.length<=CACHE_MAX){ writeLocal(CACHE_PREFIX+path,{at:Date.now(),data}); touchCache(path); } }catch(_){}
+      return data;
+    }catch(err){
+      if(cached&&cached.data) return cached.data;
+      throw err;
+    }finally{ clearTimeout(timer); }
+  })();
+  memo.set(path,p); p.catch(()=>memo.delete(path)); return p;
 }
 
-/* ── progress, kept across sessions where possible ────────── */
+/* ── durable local state with safe fallbacks ──────────────── */
 const MEM = {};
 const store = {
   async get(k){
-    try{ const r = await window.storage.get(k); return r ? JSON.parse(r.value) : null; }
-    catch(e){ return MEM[k] !== undefined ? MEM[k] : null; }
+    try{ const v=localStorage.getItem(k); if(v!=null) return JSON.parse(v); }catch(_){}
+    try{ if(window.storage&&window.storage.get){ const r=await window.storage.get(k); if(r) return JSON.parse(r.value); } }catch(_){}
+    return MEM[k]!==undefined?MEM[k]:null;
   },
   async set(k,v){
-    MEM[k]=v;
-    try{ await window.storage.set(k, JSON.stringify(v)); }catch(e){}
-  }
+    MEM[k]=v; try{ localStorage.setItem(k,JSON.stringify(v)); return; }catch(_){}
+    try{ if(window.storage&&window.storage.set) await window.storage.set(k,JSON.stringify(v)); }catch(_){}
+  },
+  async remove(k){ delete MEM[k]; try{ localStorage.removeItem(k); }catch(_){} try{ if(window.storage&&window.storage.delete) await window.storage.delete(k); }catch(_){} }
 };
 
 const S = {
-  trans:"BSB", books:[], byId:{}, book:"GEN", chapter:1,
-  chapterData:null, marked:new Set(), notes:[], xrefs:null,
-  gilt:{}, leaf:"read", collation:null
+  trans:"BSB", books:[], byId:{}, book:"GEN", chapter:1, targetVerse:null,
+  chapterData:null, marked:new Set(), saved:{}, notes:[], xrefs:null,
+  gilt:{}, leaf:"frontispiece", collation:null, readerSize:1, focus:false
 };
 
 /* ── theme (light / dark) ─────────────────────────────────── */
 async function applyTheme(theme){
-  const t = theme === "dark" ? "dark" : "light";
-  document.documentElement.dataset.theme = t === "dark" ? "dark" : "";
-  await store.set("vellum:theme", t);
-  const label = t === "dark" ? "Light" : "Dark";
-  const btn = $("#btnTheme"); if(btn) btn.textContent = label;
+  const t=theme==="dark"?"dark":"light";
+  document.documentElement.dataset.theme=t==="dark"?"dark":"";
+  document.documentElement.style.colorScheme=t;
+  await store.set("vellum:theme",t);
+  const next=t==="dark"?"light":"dark";
+  const label=t==="dark"?"Dark":"Light";
+  const icon=t==="dark"?"☾":"☀";
+  const btn=$("#btnTheme");
+  if(btn){
+    btn.innerHTML=`<span class="theme-dot" aria-hidden="true">${icon}</span><span id="themeLabel">${label}</span>`;
+    btn.setAttribute("aria-label",`Current theme: ${label}. Switch to ${next}.`);
+    btn.title=`Switch to ${next} mode`;
+  }
+  const bm=$("#btnThemeM");
+  if(bm){
+    bm.innerHTML=`<span aria-hidden="true">${icon}</span><b>${label}</b>`;
+    bm.setAttribute("aria-label",`Current theme: ${label}. Switch to ${next}.`);
+    bm.title=`Switch to ${next} mode`;
+  }
+  const mc=$("meta[name=theme-color]"); if(mc) mc.content=t==="dark"?"#1C1914":"#E4DAC4";
 }
-async function toggleTheme(){
-  const cur = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
-  await applyTheme(cur === "dark" ? "light" : "dark");
-}
+async function toggleTheme(){ const cur=document.documentElement.dataset.theme==="dark"?"dark":"light"; await applyTheme(cur==="dark"?"light":"dark"); }
 
 /* ── shared helpers ──────────────────────────────────────── */
-const name = id => (S.byId[id] && S.byId[id].commonName) || id;
-const refStr = (b,c,v,ev) => name(b)+" "+c+":"+v+(ev&&ev!==v?"–"+ev:"");
+const BOOK_FALLBACK={
+  GEN:"Genesis",EXO:"Exodus",LEV:"Leviticus",NUM:"Numbers",DEU:"Deuteronomy",JOS:"Joshua",JDG:"Judges",RUT:"Ruth",'1SA':"1 Samuel",'2SA':"2 Samuel",'1KI':"1 Kings",'2KI':"2 Kings",'1CH':"1 Chronicles",'2CH':"2 Chronicles",EZR:"Ezra",NEH:"Nehemiah",EST:"Esther",JOB:"Job",PSA:"Psalms",PRO:"Proverbs",ECC:"Ecclesiastes",SNG:"Song of Songs",ISA:"Isaiah",JER:"Jeremiah",LAM:"Lamentations",EZK:"Ezekiel",DAN:"Daniel",HOS:"Hosea",JOL:"Joel",AMO:"Amos",OBA:"Obadiah",JON:"Jonah",MIC:"Micah",NAM:"Nahum",HAB:"Habakkuk",ZEP:"Zephaniah",HAG:"Haggai",ZEC:"Zechariah",MAL:"Malachi",MAT:"Matthew",MRK:"Mark",LUK:"Luke",JHN:"John",ACT:"Acts",ROM:"Romans",'1CO':"1 Corinthians",'2CO':"2 Corinthians",GAL:"Galatians",EPH:"Ephesians",PHP:"Philippians",COL:"Colossians",'1TH':"1 Thessalonians",'2TH':"2 Thessalonians",'1TI':"1 Timothy",'2TI':"2 Timothy",TIT:"Titus",PHM:"Philemon",HEB:"Hebrews",JAS:"James",'1PE':"1 Peter",'2PE':"2 Peter",'1JN':"1 John",'2JN':"2 John",'3JN':"3 John",JUD:"Jude",REV:"Revelation"
+};
+const name=id=>(S.byId[id]&&S.byId[id].commonName)||BOOK_FALLBACK[id]||id;
+const refStr=(b,c,v,ev)=>name(b)+" "+c+":"+v+(ev&&ev!==v?"–"+ev:"");
 const NT = new Set(["MAT","MRK","LUK","JHN","ACT","ROM","1CO","2CO","GAL","EPH","PHP","COL","1TH","2TH","1TI","2TI","TIT","PHM","HEB","JAS","1PE","2PE","1JN","2JN","3JN","JUD","REV"]);
 
 function verseText(v){
@@ -1795,126 +1984,111 @@ function illuminate(letter){
 }
 
 /* ═══ READ ═════════════════════════════════════════════════ */
+function applyReaderSize(v,save=true){
+  S.readerSize=Math.max(.88,Math.min(1.26,Number(v)||1));
+  document.documentElement.style.setProperty("--text-scale",S.readerSize.toFixed(2));
+  const col=$("#readColumn"); if(col) col.style.setProperty("--reader-size","1em");
+  if(save) store.set("vellum:readerSize",S.readerSize);
+  const lows=["textDown","textDownM","textDownS"], highs=["textUp","textUpM","textUpS"];
+  lows.forEach(id=>{ const b=$("#"+id); if(b) b.disabled=S.readerSize<=.89; });
+  highs.forEach(id=>{ const b=$("#"+id); if(b) b.disabled=S.readerSize>=1.25; });
+  document.documentElement.dataset.textSize=S.readerSize<.96?"small":S.readerSize>1.08?"large":"normal";
+}
+function applyFocus(on,save=true){
+  S.focus=!!on; document.body.dataset.focus=S.focus?"true":"false";
+  const b=$("#btnFocus"); if(b){ b.setAttribute("aria-pressed",S.focus?"true":"false"); b.dataset.on=S.focus?"true":"false"; }
+  if(S.focus) openGloss(false);
+  if(save) store.set("vellum:focus",S.focus);
+}
+function savedKey(b,c,v){ return `${b}:${c}:${v}`; }
+async function saveLast(){ await store.set("vellum:last",{book:S.book,chapter:S.chapter,trans:S.trans}); updateResume(); }
+function updateResume(){
+  const box=$("#resumeStrip"), ref=$("#resumeRef"), meta=$("#resumeMeta"); if(!box||!ref||!meta) return;
+  ref.textContent=`${name(S.book)} ${S.chapter}`;
+  const n=Object.keys(S.saved||{}).length; meta.textContent=n?`${n} saved passage${n===1?"":"s"} in your Notebook · your place is remembered.`:"Your place, translation, theme and reading settings are remembered on this device.";
+}
+
+/* ═══ READ ═════════════════════════════════════════════════ */
 async function boot(){
-  try{
-    const bk = await get(`/${S.trans}/books.json`);
-    S.books = bk.books.filter(b=>!b.isApocryphal);
-    S.byId = {}; S.books.forEach(b=> S.byId[b.id]=b);
-  }catch(e){
-    $("#scripture").innerHTML = `<div class="err"><b>Can't reach the library</b>The Free Use Bible API didn't answer. Check your connection and reload — everything in Vellum is fetched live, so there's no offline copy to fall back on.</div>`;
-    return;
-  }
-  fillBookSelect($("#selBook")); fillBookSelect($("#thBook"));
-  $("#selBook").value = S.book; $("#thBook").value = "JHN";
-  fillChapterSelect($("#selChapter"), S.book); $("#selChapter").value = S.chapter;
-  fillChapterSelect($("#thChapter"), "JHN"); $("#thChapter").value = 1;
+  const [gilt,last,theme,saved,size,focus]=await Promise.all([
+    store.get("vellum:gilt"),store.get("vellum:last"),store.get("vellum:theme"),store.get("vellum:marks"),store.get("vellum:readerSize"),store.get("vellum:focus")
+  ]);
+  if(gilt) S.gilt=gilt; if(saved&&typeof saved==="object") S.saved=saved;
+  if(last){ S.book=last.book||S.book; S.chapter=Math.max(1,+last.chapter||1); S.trans=last.trans||S.trans; }
+  if(theme) await applyTheme(theme); else await applyTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+  applyReaderSize(size||1,false); applyFocus(!!focus,false);
 
-  const saved = await store.get("vellum:gilt");
-  if(saved) S.gilt = saved;
-  const savedTheme = await store.get("vellum:theme");
-  if(savedTheme) await applyTheme(savedTheme);
-
-  loadTranslations();
-  buildChronicle(); buildSources(); buildQuireGrid(); refreshGilt();
+  /* Build all editorial/static areas first so one API outage never blanks the product. */
+  buildSources(); buildQuireGrid(); refreshGilt(); buildChronicle(); updateResume();
   setView(EXTENTS.heartland); drawAtlas("heartland"); bindAtlasGestures();
-  loadChapter();   // the register and the threads load when you open them
-}
 
+  let bk=null;
+  try{ bk=await get(`/${S.trans}/books.json`); }
+  catch(_){ if(S.trans!=="BSB"){ S.trans="BSB"; try{ bk=await get(`/BSB/books.json`); }catch(__){} } }
+  if(!bk){
+    $("#scripture").innerHTML=`<div class="err"><b>The reading library is offline</b>Vellum can still open the Chronicle, Atlas, Register, Colophon, and your saved progress. The Reading Desk needs the source API or a chapter you previously opened on this device.<br><button class="tool" id="retryLibrary" style="margin-top:12px"><span class="dot"></span>Retry library</button></div>`;
+    const rb=$("#retryLibrary"); if(rb) rb.addEventListener("click",()=>location.reload());
+    return false;
+  }
+  S.books=bk.books.filter(b=>!b.isApocryphal); S.byId={}; S.books.forEach(b=>S.byId[b.id]=b);
+  if(!S.byId[S.book]){ S.book="GEN"; S.chapter=1; }
+  S.chapter=Math.min(S.chapter,S.byId[S.book]?.numberOfChapters||S.chapter);
+  fillBookSelect($("#selBook")); fillBookSelect($("#thBook"));
+  $("#selBook").value=S.book; $("#thBook").value="JHN";
+  fillChapterSelect($("#selChapter"),S.book); $("#selChapter").value=S.chapter;
+  fillChapterSelect($("#thChapter"),"JHN"); $("#thChapter").value=1;
+  buildChronicle(); buildQuireGrid(); loadTranslations();
+  if(!location.hash.startsWith("#read/")) await loadChapter();
+  return true;
+}
 function fillBookSelect(sel){
-  const ot = S.books.filter(b=>!NT.has(b.id)), nt = S.books.filter(b=>NT.has(b.id));
-  sel.innerHTML =
-    `<optgroup label="Hebrew Bible / Old Testament">${ot.map(b=>`<option value="${b.id}">${esc(b.commonName)}</option>`).join("")}</optgroup>`+
-    `<optgroup label="New Testament">${nt.map(b=>`<option value="${b.id}">${esc(b.commonName)}</option>`).join("")}</optgroup>`;
+  const ot=S.books.filter(b=>!NT.has(b.id)), nt=S.books.filter(b=>NT.has(b.id));
+  sel.innerHTML=`<optgroup label="Hebrew Bible / Old Testament">${ot.map(b=>`<option value="${b.id}">${esc(b.commonName)}</option>`).join("")}</optgroup>`+`<optgroup label="New Testament">${nt.map(b=>`<option value="${b.id}">${esc(b.commonName)}</option>`).join("")}</optgroup>`;
 }
-function fillChapterSelect(sel, bookId){
-  const b = S.byId[bookId]; if(!b) return;
-  let o=""; for(let i=1;i<=b.numberOfChapters;i++) o+=`<option value="${i}">Chapter ${i}</option>`;
-  sel.innerHTML=o;
-}
-
+function fillChapterSelect(sel,bookId){ const b=S.byId[bookId]; if(!b) return; let o=""; for(let i=1;i<=b.numberOfChapters;i++) o+=`<option value="${i}">Chapter ${i}</option>`; sel.innerHTML=o; }
 async function loadTranslations(){
   try{
-    const d = await get("/available_translations.json");
-    const seen=new Set(), eng=[];
-    for(const t of d.translations){
-      if(t.language!=="eng" || t.numberOfBooks<66) continue;
-      const k=(t.englishName||t.name).trim();
-      if(seen.has(k)) continue; seen.add(k); eng.push(t);
-    }
-    eng.sort((a,b)=> a.id==="BSB"?-1 : b.id==="BSB"?1 : (a.englishName||"").localeCompare(b.englishName||""));
-    $("#selTrans").innerHTML = eng.slice(0,16).map(t=>
-      `<option value="${t.id}">${esc(t.shortName||t.id)} — ${esc(t.englishName||t.name)}</option>`).join("");
-    $("#selTrans").value = S.trans;
-  }catch(e){ $("#selTrans").innerHTML = `<option value="BSB">BSB — Berean Standard Bible</option>`; }
+    const d=await get("/available_translations.json"),seen=new Set(),eng=[];
+    for(const t of d.translations){ if(t.language!=="eng"||t.numberOfBooks<66) continue; const k=(t.englishName||t.name).trim(); if(seen.has(k)) continue; seen.add(k); eng.push(t); }
+    eng.sort((a,b)=>a.id==="BSB"?-1:b.id==="BSB"?1:(a.englishName||"").localeCompare(b.englishName||""));
+    $("#selTrans").innerHTML=eng.map(t=>`<option value="${t.id}">${esc(t.shortName||t.id)} — ${esc(t.englishName||t.name)}</option>`).join("");
+    $("#selTrans").value=S.trans;
+  }catch(_){ $("#selTrans").innerHTML=`<option value="${esc(S.trans)}">${esc(S.trans)} — current translation</option>`; }
 }
-
 async function loadChapter(){
-  const sc = $("#scripture"), fn = $("#footnotes");
-  sc.innerHTML = `<div class="loading">Unrolling</div>`; fn.innerHTML="";
-  S.marked.clear(); S.notes=[]; S.xrefs=null;
-  $("#paneComm").innerHTML=""; renderNotes(); renderXrefPane();
-  let d;
-  try{ d = await get(`/${S.trans}/${S.book}/${S.chapter}.json`); }
-  catch(e){
-    sc.innerHTML = `<div class="err"><b>That chapter didn't load</b>${esc(name(S.book))} ${S.chapter} isn't answering in this translation. Try another translation, or step to a neighbouring chapter.</div>`;
-    return;
-  }
-  S.chapterData = d;
-
-  // heading block
-  $("#bookTitle").textContent = d.book.commonName;
-  const audio = d.thisChapterAudioLinks && Object.keys(d.thisChapterAudioLinks)[0];
-  $("#chapterLine").innerHTML =
-    `Chapter <b>${d.chapter.number}</b> &nbsp;·&nbsp; ${d.numberOfVerses} verses &nbsp;·&nbsp; ${esc(d.translation.shortName||d.translation.id)}`
-    + (audio ? ` &nbsp;·&nbsp; narration available` : "");
+  const sc=$("#scripture"),fn=$("#footnotes"); sc.innerHTML=`<div class="loading">Unrolling</div>`; fn.innerHTML="";
+  S.chapterData=null; S.notes=[]; S.xrefs=null; S.marked.clear(); $("#paneComm").innerHTML=""; renderNotes(); renderXrefPane();
+  let d; try{ d=await get(`/${S.trans}/${S.book}/${S.chapter}.json`); }
+  catch(_){ sc.innerHTML=`<div class="err"><b>That chapter didn't load</b>${esc(name(S.book))} ${S.chapter} isn't available right now in this translation. Try another translation, retry later, or open a chapter you've already visited on this device.</div>`; return; }
+  S.chapterData=d;
+  $("#bookTitle").textContent=d.book.commonName;
+  const audio=d.thisChapterAudioLinks&&Object.keys(d.thisChapterAudioLinks)[0];
+  $("#chapterLine").innerHTML=`Chapter <b>${d.chapter.number}</b> &nbsp;·&nbsp; ${d.numberOfVerses} verses &nbsp;·&nbsp; ${esc(d.translation.shortName||d.translation.id)}`+(audio?` &nbsp;·&nbsp; narration available`:"");
   setReaders(d.thisChapterAudioLinks||null);
-
-  // first letter of the first verse → the illuminated initial
-  const v1 = d.chapter.content.find(x=>x.type==="verse");
-  const firstWord = v1 ? verseText(v1).trim() : "I";
-  $("#initial").innerHTML = illuminate(firstWord[0]);
-
-  // body
-  const notes = {}; (d.chapter.footnotes||[]).forEach(f=> notes[f.noteId]=f);
-  let html="", vi=0;
+  const v1=d.chapter.content.find(x=>x.type==="verse"),firstWord=v1?verseText(v1).trim():"I"; $("#initial").innerHTML=illuminate(firstWord[0]);
+  const notes={}; (d.chapter.footnotes||[]).forEach(f=>notes[f.noteId]=f); let html="";
   for(const node of d.chapter.content){
-    if(node.type==="heading"){
-      html += `<div class="rubric">${esc((node.content||[]).join(" "))}</div>`;
-    } else if(node.type==="hebrew_subtitle"){
-      html += `<div class="rubric" style="color:var(--gall-faint)">${esc((node.content||[]).map(c=>typeof c==="string"?c:(c.text||"")).join(" "))}</div>`;
-    } else if(node.type==="line_break"){
-      html += `<br>`;
-    } else if(node.type==="verse"){
-      vi++;
-      let inner="", jesus=false, poem=false;
-      for(const c of (node.content||[])){
-        if(typeof c==="string") inner += esc(c)+" ";
-        else if(c.lineBreak) inner += "<br>";
-        else if(c.heading) inner += `<span class="rubric" style="display:block">${esc(c.heading)}</span>`;
-        else if(c.noteId!=null){
-          const f=notes[c.noteId];
-          inner += `<sup class="fnote" title="${esc(f?f.text:"")}">${c.noteId+1}</sup>`;
-        }
-        else if(c.text!=null){
-          if(c.wordsOfJesus) jesus=true;
-          if(c.poem) poem=true;
-          inner += (c.poem? `<span class="poem">${esc(c.text)}</span>` : esc(c.text)+" ");
-        }
+    if(node.type==="heading") html+=`<div class="rubric">${esc((node.content||[]).join(" "))}</div>`;
+    else if(node.type==="hebrew_subtitle") html+=`<div class="rubric" style="color:var(--gall-faint)">${esc((node.content||[]).map(c=>typeof c==="string"?c:(c.text||"")).join(" "))}</div>`;
+    else if(node.type==="line_break") html+="<br>";
+    else if(node.type==="verse"){
+      let inner="",jesus=false;
+      for(const c of(node.content||[])){
+        if(typeof c==="string") inner+=esc(c)+" "; else if(c.lineBreak) inner+="<br>"; else if(c.heading) inner+=`<span class="rubric" style="display:block">${esc(c.heading)}</span>`;
+        else if(c.noteId!=null){ const f=notes[c.noteId]; inner+=`<sup class="fnote" title="${esc(f?f.text:"")}">${c.noteId+1}</sup>`; }
+        else if(c.text!=null){ if(c.wordsOfJesus) jesus=true; inner+=(c.poem?`<span class="poem">${esc(c.text)}</span>`:esc(c.text)+" "); }
       }
-      html += `<span class="verse" data-v="${node.number}"${jesus?' data-jesus="true"':''}>`
-            + `<span class="vnum">${node.number}</span>${inner.trim()}</span> `;
+      html+=`<span class="verse" tabindex="0" role="button" aria-pressed="false" aria-label="Save verse ${node.number}" data-v="${node.number}"${jesus?' data-jesus="true"':''}><span class="vnum">${node.number}</span>${inner.trim()}</span> `;
     }
   }
-  sc.innerHTML = html;
-
-  if((d.chapter.footnotes||[]).length){
-    fn.innerHTML = `<h4>Footnotes — ${esc(d.translation.shortName||d.translation.id)}</h4><ol style="list-style:none;padding:0;margin:0">`
-      + d.chapter.footnotes.map(f=>`<li><b>${f.noteId+1}</b> ${esc(f.text)}</li>`).join("") + `</ol>`;
-  }
-
-  $$(".verse", sc).forEach(el=> el.addEventListener("click", ()=> toggleVerse(+el.dataset.v)));
-  ensureManLayer(); placeManicules();
-  loadCommentaryLazy();
+  sc.innerHTML=html;
+  if((d.chapter.footnotes||[]).length) fn.innerHTML=`<h4>Footnotes — ${esc(d.translation.shortName||d.translation.id)}</h4><ol style="list-style:none;padding:0;margin:0">`+d.chapter.footnotes.map(f=>`<li><b>${f.noteId+1}</b> ${esc(f.text)}</li>`).join("")+`</ol>`;
+  $$(".verse",sc).forEach(el=>{
+    const v=+el.dataset.v,key=savedKey(S.book,S.chapter,v); if(S.saved[key]){ S.marked.add(v); el.dataset.marked="true"; el.setAttribute("aria-pressed","true"); }
+    el.addEventListener("click",()=>toggleVerse(v)); el.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggleVerse(v); } });
+  });
+  ensureManLayer(); placeManicules(); renderNotes(); loadCommentaryLazy(); await saveLast();
+  if(S.targetVerse){ const el=$(`.verse[data-v="${S.targetVerse}"]`); if(el){ requestAnimationFrame(()=>{ el.scrollIntoView({behavior:"smooth",block:"center"}); el.focus({preventScroll:true}); }); } S.targetVerse=null; }
 }
 
 /* ── manicules: the little pointing hands readers drew ───── */
@@ -1948,26 +2122,46 @@ function placeManicules(){
 window.addEventListener("resize", ()=>{ placeManicules(); });
 
 function toggleVerse(v){
-  const el = $(`.verse[data-v="${v}"]`); if(!el) return;
-  if(S.marked.has(v)){ S.marked.delete(v); el.removeAttribute("data-marked"); }
-  else{ S.marked.add(v); el.dataset.marked="true"; }
-  placeManicules(); renderNotes(); loadXrefs(v);
-  if(window.innerWidth<1080) openGloss(true);
-}
-
-function renderNotes(){
-  const p=$("#paneNotes");
-  if(!S.marked.size){
-    p.innerHTML=`<div class="gl-head">Marks</div><p class="gloss-empty">Tap any verse to mark it. On larger screens a pointing hand appears in the margin (medieval readers called these manicules). Your marked verses collect here so you can come back to them.</p>`;
-    return;
+  const el=$(`.verse[data-v="${v}"]`); if(!el) return; const key=savedKey(S.book,S.chapter,v);
+  if(S.marked.has(v)){ S.marked.delete(v); delete S.saved[key]; el.removeAttribute("data-marked"); el.setAttribute("aria-pressed","false"); }
+  else{
+    S.marked.add(v); el.dataset.marked="true"; el.setAttribute("aria-pressed","true");
+    const node=(S.chapterData?.chapter?.content||[]).find(n=>n.type==="verse"&&n.number===v), old=S.saved[key]||{};
+    S.saved[key]={b:S.book,c:S.chapter,v,text:node?verseText(node):old.text||"",note:old.note||"",at:Date.now()};
   }
-  const vs=[...S.marked].sort((a,b)=>a-b);
-  const byNum={}; (S.chapterData? S.chapterData.chapter.content:[]).forEach(n=>{ if(n.type==="verse") byNum[n.number]=n; });
-  p.innerHTML = `<div class="gl-head">Marks — ${vs.length}</div>` + vs.map(v=>{
-    const t = byNum[v] ? verseText(byNum[v]) : "";
-    return `<div class="gl-card pinned"><span class="gl-ref">${esc(name(S.book))} ${S.chapter}:${v}</span><p>${esc(t.slice(0,240))}${t.length>240?"…":""}</p></div>`;
-  }).join("") + `<button class="ask" id="askGloss">Explain the marked verses</button><div id="askOut"></div>`;
-  const b=$("#askGloss"); if(b) b.addEventListener("click", explainMarked);
+  store.set("vellum:marks",S.saved); placeManicules(); renderNotes(); updateResume(); loadXrefs(v); if(window.innerWidth<1080) openGloss(true);
+}
+function exportNotebook(){
+  const rows=Object.values(S.saved||{}).sort((a,b)=>(a.b||"").localeCompare(b.b||"")||a.c-b.c||a.v-b.v);
+  if(!rows.length){ toast("Your Notebook is empty"); return; }
+  const text=["VELLUM — Notebook",new Date().toLocaleDateString(),"",...rows.flatMap(x=>[`${name(x.b)} ${x.c}:${x.v}`,x.text||"",x.note?`Note: ${x.note}`:"",""])].join("\n");
+  const blob=new Blob([text],{type:"text/plain;charset=utf-8"}),a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="vellum-notebook.txt"; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),500); toast("Notebook exported");
+}
+async function clearNotebook(){
+  if(!Object.keys(S.saved||{}).length) return; if(!confirm("Clear every saved passage and margin note from this device?")) return;
+  S.saved={}; S.marked.clear(); await store.remove("vellum:marks"); $$(".verse[data-marked=true]").forEach(el=>{el.removeAttribute("data-marked");el.setAttribute("aria-pressed","false")}); placeManicules(); renderNotes(); updateResume(); toast("Notebook cleared");
+}
+function renderNotes(){
+  const p=$("#paneNotes"); if(!p) return; const all=Object.values(S.saved||{}),vs=[...S.marked].sort((a,b)=>a-b),byNum={};
+  (S.chapterData?.chapter?.content||[]).forEach(n=>{ if(n.type==="verse") byNum[n.number]=n; });
+  let h=`<div class="gl-head">Notebook${all.length?` — ${all.length}`:""}</div>`;
+  if(all.length) h+=`<div class="saved-tools"><button class="ask" id="exportNotes">Export</button><button class="ask" id="clearNotes">Clear all</button></div>`;
+  if(!vs.length) h+=`<p class="gloss-empty">Tap or press Enter on any verse to save it. Saved passages and your own margin notes persist on this device, and a pointing hand marks saved verses on larger screens.</p>`;
+  else{
+    h+=vs.map(v=>{ const key=savedKey(S.book,S.chapter,v),item=S.saved[key]||{},t=byNum[v]?verseText(byNum[v]):item.text||""; return `<div class="gl-card pinned"><span class="gl-ref">${esc(name(S.book))} ${S.chapter}:${v}</span><p>${esc(t.slice(0,240))}${t.length>240?"…":""}</p><textarea class="margin-note" data-key="${esc(key)}" placeholder="Add a margin note…">${esc(item.note||"")}</textarea></div>`; }).join("");
+    h+=`<button class="ask" id="askGloss">Open sourced notes for these verses</button><div id="askOut"></div>`;
+  }
+  const recent=all.filter(x=>x.b!==S.book||x.c!==S.chapter).sort((a,b)=>(b.at||0)-(a.at||0)).slice(0,12);
+  if(recent.length) h+=`<div class="saved-section"><div class="mono" style="color:var(--gall-faint);margin-bottom:8px">Recently saved elsewhere</div>`+recent.map(x=>`<button class="savedjump" data-b="${esc(x.b)}" data-c="${x.c}" data-v="${x.v}"><span class="ref">${esc(name(x.b))} ${x.c}:${x.v}</span><span class="snippet">${esc((x.note||x.text||"").slice(0,110))}${(x.note||x.text||"").length>110?"…":""}</span></button>`).join("")+`</div>`;
+  p.innerHTML=h;
+  $("#askGloss")?.addEventListener("click",explainMarked); $("#exportNotes")?.addEventListener("click",exportNotebook); $("#clearNotes")?.addEventListener("click",clearNotebook);
+  $$(".savedjump",p).forEach(b=>b.addEventListener("click",()=>openReference(b.dataset.b,+b.dataset.c,+b.dataset.v)));
+  $$(".margin-note",p).forEach(t=>t.addEventListener("input",()=>{ const item=S.saved[t.dataset.key]; if(!item) return; item.note=t.value; item.at=Date.now(); store.set("vellum:marks",S.saved); updateResume(); }));
+}
+function openReference(b,c,v){
+  S.book=b; S.chapter=+c; S.targetVerse=v?+v:null;
+  if(S.books.length&&S.byId[b]){ $("#selBook").value=b; fillChapterSelect($("#selChapter"),b); $("#selChapter").value=S.chapter; }
+  showLeaf("read"); loadChapter();
 }
 
 /* ── cross-references: the Threads dataset, per verse ─────── */
@@ -1983,26 +2177,12 @@ async function loadXrefs(v){
 }
 function renderXrefPane(v){
   const pane=$("#paneXref");
-  if(!S.xrefs || v==null){
-    pane.innerHTML=`<div class="gl-head">Threads</div><p class="gloss-empty">Mark a verse to see everywhere else in the book that echoes it. The links come from a 344,799-row dataset built largely from the Treasury of Scripture Knowledge.</p>`;
-    return;
-  }
+  if(!S.xrefs||v==null){ pane.innerHTML=`<div class="gl-head">Threads</div><p class="gloss-empty">Save a verse to see where else the cross-reference dataset connects it.</p>`; return; }
   const row=(S.xrefs.chapter.content||[]).find(r=>r.verse===v);
-  if(!row || !row.references.length){
-    pane.innerHTML=`<div class="gl-head">Threads — ${S.chapter}:${v}</div><p class="gloss-empty">Nothing links to this verse in the dataset.</p>`;
-    return;
-  }
-  const refs=row.references.slice(0,24), max=Math.max(...refs.map(r=>r.score||1));
-  pane.innerHTML=`<div class="gl-head">Threads — ${esc(name(S.book))} ${S.chapter}:${v}</div>`
-   + refs.map(r=>`<button class="xref" data-b="${r.book}" data-c="${r.chapter}">
-      <span class="r">${esc(refStr(r.book,r.chapter,r.verse,r.endVerse))}</span>
-      <span class="bar" style="width:${Math.max(6,Math.round((r.score||1)/max*46))}px"></span>
-      <span class="s">${r.score||""}</span></button>`).join("");
-  $$(".xref",pane).forEach(b=> b.addEventListener("click", ()=>{
-    S.book=b.dataset.b; S.chapter=+b.dataset.c;
-    $("#selBook").value=S.book; fillChapterSelect($("#selChapter"),S.book); $("#selChapter").value=S.chapter;
-    loadChapter(); showLeaf("read"); scrollTop();
-  }));
+  if(!row||!row.references.length){ pane.innerHTML=`<div class="gl-head">Threads — ${S.chapter}:${v}</div><p class="gloss-empty">Nothing links to this verse in the dataset.</p>`; return; }
+  const refs=row.references.slice(0,24),max=Math.max(...refs.map(r=>r.score||1));
+  pane.innerHTML=`<div class="gl-head">Threads — ${esc(name(S.book))} ${S.chapter}:${v}</div>`+refs.map(r=>`<button class="xref" data-b="${r.book}" data-c="${r.chapter}" data-v="${r.verse}"><span class="r">${esc(refStr(r.book,r.chapter,r.verse,r.endVerse))}</span><span class="bar" style="width:${Math.max(6,Math.round((r.score||1)/max*46))}px"></span><span class="s">${r.score||""}</span></button>`).join("");
+  $$(".xref",pane).forEach(b=>b.addEventListener("click",()=>openReference(b.dataset.b,+b.dataset.c,+b.dataset.v)));
 }
 
 /* ── commentary ──────────────────────────────────────────── */
@@ -2029,85 +2209,20 @@ async function loadCommentary(){
   }
 }
 
-/* ── a plain-language gloss, generated ───────────────────── */
-let paraphraseDead=false;
-
-/* The dependable path first. Tyndale's own note on the verses
-   you marked — sourced, attributed, and always there.        */
+/* ── sourced notes for selected verses ───────────────────── */
 async function explainMarked(){
-  const btn=$("#askGloss"), out=$("#askOut");
-  if(!S.marked.size || !btn) return;
-  const vs=[...S.marked].sort((a,b)=>a-b);
-  btn.disabled=true; btn.textContent="Fetching…";
-  out.innerHTML=`<div class="loading">Reading the notes</div>`;
-  const found = await sourcedNote(vs, out);
-  btn.disabled=false; btn.textContent="Explain the marked verses";
-  if(!found && !paraphraseDead){         // nothing sourced exists — the model is the only option left
-    out.insertAdjacentHTML("beforeend",`<div id="askOut2"><div class="loading">Trying a plain-language gloss</div></div>`);
-    await paraphrase($("#askOut2"));
-  }else if(!paraphraseDead){
-    out.insertAdjacentHTML("beforeend",
-      `<button class="ask ghost" id="askPara">Also try a plain-language paraphrase</button><div id="askOut2"></div>`);
-    const p=$("#askPara");
-    if(p) p.addEventListener("click",async()=>{
-      p.disabled=true; p.textContent="Thinking…";
-      await paraphrase($("#askOut2"));
-      if(paraphraseDead) p.remove(); else { p.disabled=false; p.textContent="Also try a plain-language paraphrase"; }
-    });
-  }
+  const btn=$("#askGloss"),out=$("#askOut"); if(!S.marked.size||!btn||!out) return;
+  const vs=[...S.marked].sort((a,b)=>a-b); btn.disabled=true; btn.textContent="Fetching…"; out.innerHTML=`<div class="loading">Reading the notes</div>`;
+  await sourcedNote(vs,out); btn.disabled=false; btn.textContent="Open sourced notes for these verses";
 }
-
-/* Tyndale's note. Returns true if anything was actually found. */
-async function sourcedNote(vs, box){
+async function sourcedNote(vs,box){
   if(!box) return false;
   try{
-    const d = await get(`/c/tyndale/${S.book}/${S.chapter}.json`);
-    const want=new Set(vs);
-    const hit=(d.chapter.content||[]).filter(n=> want.has(n.number));
-    const cards = hit.map(n=>{
-      const t=(n.content||[]).filter(c=>typeof c==="string").join("\n").trim();
-      return t ? `<div class="gl-card"><span class="gl-ref">${esc(name(S.book))} ${S.chapter}:${n.number}</span>
-        <p>${esc(t).replace(/\n+/g,"</p><p>")}</p></div>` : "";
-    }).filter(Boolean).join("");
-    if(cards){
-      box.innerHTML=`<div class="machine-note">Tyndale Open Study Notes · CC BY-SA 4.0</div>`+cards;
-      return true;
-    }
-    box.innerHTML=`<p class="gloss-empty">Tyndale has no note on ${esc(name(S.book))} ${S.chapter}:${vs.join(", ")}.</p>`;
-    return false;
-  }catch(e){
-    box.innerHTML=`<p class="gloss-empty">The sourced notes didn't load for this chapter.</p>`;
-    return false;
-  }
-}
-
-/* The one generated thing on the page. If it can't be reached
-   it says so once, quietly, and stops offering itself.       */
-async function paraphrase(box){
-  if(!box) return;
-  const byNum={}; S.chapterData.chapter.content.forEach(n=>{ if(n.type==="verse") byNum[n.number]=n; });
-  const vs=[...S.marked].sort((a,b)=>a-b);
-  const passage=vs.map(v=>`${v}. ${byNum[v]?verseText(byNum[v]):""}`).join("\n");
-  box.innerHTML=`<div class="loading">Glossing</div>`;
-  try{
-    const r = await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST", headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:1000, messages:[{role:"user",content:
-`You are writing a marginal gloss for a reader who is not religious and is reading the Bible as literature and history. Explain what is happening in this passage from ${name(S.book)} ${S.chapter}, plainly and without preaching, in 3 short paragraphs. Note anything a modern reader would miss: cultural context, wordplay, or where this connects to the wider story. Do not quote the passage back. Do not use headers or bullet points.
-
-${passage}`}]})
-    });
-    let d=null; try{ d=await r.json(); }catch(e){}
-    if(!r.ok) throw new Error("HTTP "+r.status);
-    if(d && d.error) throw new Error(d.error.message||"model error");
-    const text=((d&&d.content)||[]).filter(x=>x.type==="text").map(x=>x.text).join("\n").trim();
-    if(!text) throw new Error("empty answer");
-    box.innerHTML=`<div class="machine-note">Generated · not a sourced commentary</div>`
-      + `<div class="gl-card">${esc(text).split(/\n+/).map(p=>`<p>${p}</p>`).join("")}</div>`;
-  }catch(e){
-    paraphraseDead=true;
-    box.innerHTML=`<p class="quiet-note">No live model here, so the generated paraphrase is off &mdash; the sourced notes above are the real material anyway.</p>`;
-  }
+    const d=await get(`/c/tyndale/${S.book}/${S.chapter}.json`),want=new Set(vs),hit=(d.chapter.content||[]).filter(n=>want.has(n.number));
+    const cards=hit.map(n=>{ const t=(n.content||[]).filter(c=>typeof c==="string").join("\n").trim(); return t?`<div class="gl-card"><span class="gl-ref">${esc(name(S.book))} ${S.chapter}:${n.number}</span><p>${esc(t).replace(/\n+/g,"</p><p>")}</p></div>`:""; }).filter(Boolean).join("");
+    if(cards){ box.innerHTML=`<div class="machine-note">Tyndale Open Study Notes · CC BY-SA 4.0</div>`+cards; return true; }
+    box.innerHTML=`<p class="gloss-empty">Tyndale has no note on ${esc(name(S.book))} ${S.chapter}:${vs.join(", ")}.</p>`; return false;
+  }catch(_){ box.innerHTML=`<p class="gloss-empty">The sourced notes didn't load for this chapter.</p>`; return false; }
 }
 
 /* ═══ CHRONICLE ════════════════════════════════════════════ */
@@ -2133,9 +2248,7 @@ function buildChronicle(){
   out.innerHTML=h;
   $$(".folio",out).forEach(b=> b.addEventListener("click", ()=>{
     const c=CHRONICLE[+b.dataset.i];
-    S.book=c.b; S.chapter=c.c;
-    $("#selBook").value=S.book; fillChapterSelect($("#selChapter"),S.book); $("#selChapter").value=S.chapter;
-    loadChapter(); showLeaf("read"); scrollTop();
+    openReference(c.b,c.c);
   }));
 }
 
@@ -2394,10 +2507,10 @@ async function showPlace(i){
     : tier===3 ? "A major city" : tier===2 ? "A walled town" : tier===1 ? "A town" : "A small settlement";
   $("#placeInfo").innerHTML=`
     <div class="gl-head">${esc(p.n)}</div>
-    <p style="font-size:16.5px;line-height:27px;margin:0 0 14px">
+    <p style="font-size:calc(16.5px * var(--text-scale));line-height:27px;margin:0 0 14px">
       ${kind}, named in <b>${p.v}</b> distinct verse${p.v===1?"":"s"}, at
       <span class="mono" style="text-transform:none;letter-spacing:0">${p.la.toFixed(4)}°N, ${p.lo.toFixed(4)}°E</span>.</p>
-    <p style="font-size:14.5px;line-height:24px;color:var(--gall-soft);margin:0 0 16px">
+    <p style="font-size:calc(14.5px * var(--text-scale));line-height:24px;color:var(--gall-soft);margin:0 0 16px">
       Coordinates from the OpenBible.info geocoding dataset, which records a source and a confidence for every identification. The glyph size is set by that verse count, so the map is really a frequency chart wearing a costume.</p>
     <button class="tool" id="goPlace"><span class="dot"></span>Read ${esc(name(p.b))} ${p.c}</button>`;
   const gp=$("#goPlace");
@@ -2412,7 +2525,7 @@ async function showPlace(i){
     const d=await get(`/${S.trans}/${p.b}/${p.c}.json`);
     const vs=d.chapter.content.filter(n=>n.type==="verse").slice(0,6);
     box.innerHTML=`<div class="gl-head">${esc(name(p.b))} ${p.c} — opening</div>`
-      + `<div style="font-size:17px;line-height:29px">`
+      + `<div style="font-size:calc(17px * var(--text-scale));line-height:29px">`
       + vs.map(v=>`<span class="vnum">${v.number}</span>${esc(verseText(v))} `).join("")
       + `</div>`;
   }catch(e){ box.innerHTML=`<p class="gloss-empty">Couldn't fetch that passage.</p>`; }
@@ -2529,8 +2642,7 @@ const EASTON_BOOK={Gen:"GEN",Exod:"EXO",Lev:"LEV",Num:"NUM",Deut:"DEU",Josh:"JOS
  Gal:"GAL",Eph:"EPH",Phil:"PHP",Col:"COL","1Thess":"1TH","2Thess":"2TH","1Tim":"1TI","2Tim":"2TI",Titus:"TIT",
  Phlm:"PHM",Heb:"HEB",Jas:"JAS","1Pet":"1PE","2Pet":"2PE","1John":"1JN","2John":"2JN","3John":"3JN",Jude:"JUD",Rev:"REV"};
 
-let ROLL=[], ROLL_BY={}, rollState="idle", rollSort="fame", rollLetter="", rollQuery="";
-const ROW_CAP=280;
+let ROLL=[], ROLL_BY={}, rollState="idle", rollSort="fame", rollLetter="", rollQuery="", rollLimit=280;
 
 const yr = n => { n=+n; return isNaN(n)?"" : (n<0 ? Math.abs(n)+" BC" : "AD "+n); };
 const rollText = f => { const t=f.dictText||f.dictionaryText; return t ? (Array.isArray(t)?t.join("\n\n"):String(t)) : ""; };
@@ -2542,10 +2654,11 @@ async function loadRoll(force){
   rollState="loading";
   r.innerHTML=`<div class="rollwait">
       <div class="loading">Unrolling the register</div>
-      <p>Three thousand and sixty-seven people, with their families and their dictionary entries. About a megabyte, fetched once — your browser keeps it after that.</p>
+      <p>Three thousand and sixty-seven people, with their families and their dictionary entries. About a megabyte, loaded only when you open this section.</p>
     </div>`;
   try{
-    const res=await fetch(ROLL_URL);
+    const ctl=new AbortController(), timer=setTimeout(()=>ctl.abort(),15000);
+    let res; try{ res=await fetch(ROLL_URL,{signal:ctl.signal}); }finally{ clearTimeout(timer); }
     if(!res.ok) throw new Error("HTTP "+res.status);
     const raw=await res.json();
     if(!Array.isArray(raw) || !raw.length) throw new Error("the roll came back empty");
@@ -2571,7 +2684,7 @@ function buildAlphaRail(){
   rail.innerHTML=`<button class="alpha" data-l="" data-on="true">All</button>`
     + letters.map(l=>`<button class="alpha" data-l="${l}">${l}</button>`).join("");
   $$(".alpha",rail).forEach(b=> b.addEventListener("click",()=>{
-    rollLetter=b.dataset.l;
+    rollLetter=b.dataset.l; rollLimit=280;
     $$(".alpha",rail).forEach(x=> x.dataset.on = x===b ? "true":"false");
     renderRoll();
   }));
@@ -2590,28 +2703,13 @@ function rollList(){
 }
 
 function renderRoll(){
-  const r=$("#roster"); if(!r) return;
-  if(rollState!=="ok"){ if(rollState==="idle") loadRoll(); return; }
-  const list=rollList(), shown=list.slice(0,ROW_CAP);
-  const cap=$("#rollCount");
-  if(cap) cap.textContent = list.length
-    ? `${list.length.toLocaleString()} of ${ROLL.length.toLocaleString()} people${list.length>ROW_CAP?` · showing the first ${ROW_CAP}`:""}`
-    : `nothing matches`;
-  if(!shown.length){
-    r.innerHTML=`<p class="gloss-empty" style="padding:18px;grid-column:1/-1">No one of that name. The roll holds every person the text names, so try a shorter fragment &mdash; or a variant spelling.</p>`;
-    return;
-  }
-  r.innerHTML=shown.map(p=>{
-    const f=p.f, has=rollText(f);
-    return `<button class="person" data-id="${esc(p.id)}">
-      <div class="person-name">${esc(f.displayTitle||f.name)}</div>
-      <div class="person-ref">${f.verseCount||0} verse${f.verseCount===1?"":"s"}${has?" · entry":""}</div>
-    </button>`;
-  }).join("");
-  $$(".person",r).forEach(b=> b.addEventListener("click",()=>{
-    $$(".person",r).forEach(x=>x.setAttribute("aria-current","false"));
-    b.setAttribute("aria-current","true"); openPerson(b.dataset.id);
-  }));
+  const r=$("#roster"); if(!r) return; if(rollState!=="ok"){ if(rollState==="idle") loadRoll(); return; }
+  const list=rollList(),shown=list.slice(0,rollLimit),cap=$("#rollCount");
+  if(cap) cap.textContent=list.length?`${list.length.toLocaleString()} of ${ROLL.length.toLocaleString()} people${list.length>shown.length?` · showing ${shown.length.toLocaleString()}`:""}`:`nothing matches`;
+  if(!shown.length){ r.innerHTML=`<p class="gloss-empty" style="padding:18px;grid-column:1/-1">No one of that name. Try a shorter fragment or a variant spelling.</p>`; return; }
+  r.innerHTML=shown.map(p=>{ const f=p.f,has=rollText(f); return `<button class="person" data-id="${esc(p.id)}"><div class="person-name">${esc(f.displayTitle||f.name)}</div><div class="person-ref">${f.verseCount||0} verse${f.verseCount===1?"":"s"}${has?" · entry":""}</div></button>`; }).join("")+(list.length>shown.length?`<button class="rollmore" id="rollMore">Show ${Math.min(280,list.length-shown.length).toLocaleString()} more</button>`:"");
+  $$(".person",r).forEach(b=>b.addEventListener("click",()=>{ $$(".person",r).forEach(x=>x.setAttribute("aria-current","false")); b.setAttribute("aria-current","true"); openPerson(b.dataset.id); }));
+  $("#rollMore")?.addEventListener("click",()=>{ rollLimit+=280; renderRoll(); });
 }
 
 /* Easton wrote in scripture citations. Turn them into buttons
@@ -2663,11 +2761,7 @@ function openPerson(id){
   </div>`;
   $$(".chip",out).forEach(b=> b.addEventListener("click",()=>{ openPerson(b.dataset.id); }));
   $$(".refjump",out).forEach(b=> b.addEventListener("click",()=>{
-    const bk=b.dataset.b, ch=+b.dataset.c;
-    if(!S.byId[bk]) return;
-    S.book=bk; S.chapter=Math.min(ch, S.byId[bk].numberOfChapters||ch);
-    $("#selBook").value=S.book; fillChapterSelect($("#selChapter"),S.book); $("#selChapter").value=S.chapter;
-    loadChapter(); showLeaf("read");
+    const bk=b.dataset.b,ch=+b.dataset.c; if(S.books.length&&!S.byId[bk]) return; openReference(bk,ch);
   }));
   if(typeof out.scrollIntoView==="function") out.scrollIntoView({behavior:"smooth",block:"start"});
 }
@@ -2689,59 +2783,15 @@ async function loadThreads(){
   }
 }
 function drawThreads(v){
-  if(!thData) return;
-  const row=thData.chapter.content.find(r=>r.verse===+v); if(!row) return;
-  const b=$("#thBook").value, c=+$("#thChapter").value;
-  const W=760,H=620,cx=W/2,cy=H/2,R=232;
-  const refs=row.references.slice(0, narrow()?8:14);
-  const max=Math.max(...refs.map(r=>r.score||1),1);
-  let h=`<circle class="thub-ring" cx="${cx}" cy="${cy}" r="${R}" stroke-dasharray="2 6"/>
-         <circle class="thub-ring" cx="${cx}" cy="${cy}" r="${R*0.62}" stroke-dasharray="2 6"/>`;
-  const nodes=refs.map((r,i)=>{
-    const a=(i/refs.length)*Math.PI*2 - Math.PI/2;
-    const rr=R*(0.60+0.40*((r.score||1)/max));
-    return {r, x:cx+Math.cos(a)*rr, y:cy+Math.sin(a)*rr, a};
-  });
-  nodes.forEach((n,i)=>{
-    const w=1+((n.r.score||1)/max)*4.2;
-    const mx=cx+(n.x-cx)*0.45+(n.y-cy)*0.16, my=cy+(n.y-cy)*0.45-(n.x-cx)*0.16;
-    h+=`<path class="tlink" data-i="${i}" d="M${cx},${cy} Q${mx.toFixed(1)},${my.toFixed(1)} ${n.x.toFixed(1)},${n.y.toFixed(1)}" stroke-width="${w.toFixed(2)}"/>`;
-  });
-  nodes.forEach((n,i)=>{
-    const isNT=NT.has(n.r.book);
-    const rad=3.5+((n.r.score||1)/max)*3.5;
-    const right=Math.cos(n.a)>-0.15;
-    h+=`<g class="tnode" data-i="${i}" data-b="${n.r.book}" data-c="${n.r.chapter}">
-      <circle cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${rad.toFixed(1)}"
-        fill="${isNT?"var(--lapis)":"var(--verdigris)"}"/>
-      <text class="tlabel" x="${(n.x+(right?rad+7:-rad-7)).toFixed(1)}" y="${(n.y+3.5).toFixed(1)}"
-        text-anchor="${right?"start":"end"}">${esc(refStr(n.r.book,n.r.chapter,n.r.verse,n.r.endVerse))}</text></g>`;
-  });
-  h+=`<circle class="thub" cx="${cx}" cy="${cy}" r="9"/>
-      <text class="tlabel" x="${cx}" y="${cy+30}" text-anchor="middle" style="font-size:12px;fill:var(--vermilion)">${esc(name(b))} ${c}:${v}</text>`;
-  $("#threadSvg").innerHTML=h;
-
-  $$(".tnode",$("#threadSvg")).forEach(g=>{
-    const i=g.dataset.i;
-    g.addEventListener("mouseenter",()=> $(`.tlink[data-i="${i}"]`)?.classList.add("hot"));
-    g.addEventListener("mouseleave",()=> $(`.tlink[data-i="${i}"]`)?.classList.remove("hot"));
-    g.addEventListener("click",()=>{
-      S.book=g.dataset.b; S.chapter=+g.dataset.c;
-      $("#selBook").value=S.book; fillChapterSelect($("#selChapter"),S.book); $("#selChapter").value=S.chapter;
-      loadChapter(); showLeaf("read"); scrollTop();
-    });
-  });
-
-  const ot=refs.filter(r=>!NT.has(r.book)).length;
-  $("#threadSide").innerHTML=`<div class="gl-head">${esc(name(b))} ${c}:${v}</div>
-    <p style="font-size:15px;line-height:25px;color:var(--gall-soft)">
-      ${row.references.length} link${row.references.length===1?"":"s"} in the dataset; the strongest ${refs.length} are drawn.
-      ${ot} point back into the Hebrew Bible, ${refs.length-ot} into the New Testament.</p>
-    <p style="font-size:14px;line-height:23px;color:var(--gall-faint)">
-      Distance from the centre and line weight both track the relevance score. Click a node to read it.</p>
-    <div style="margin-top:16px">
-      <div class="mono" style="color:var(--verdigris);margin-bottom:5px">&#9679; Hebrew Bible</div>
-      <div class="mono" style="color:var(--lapis)">&#9679; New Testament</div></div>`;
+  if(!thData) return; const row=thData.chapter.content.find(r=>r.verse===+v); if(!row) return;
+  const b=$("#thBook").value,c=+$("#thChapter").value,W=760,H=620,cx=W/2,cy=H/2,R=232,refs=row.references.slice(0,narrow()?8:14),max=Math.max(...refs.map(r=>r.score||1),1);
+  let h=`<circle class="thub-ring" cx="${cx}" cy="${cy}" r="${R}" stroke-dasharray="2 6"/><circle class="thub-ring" cx="${cx}" cy="${cy}" r="${R*.62}" stroke-dasharray="2 6"/>`;
+  const nodes=refs.map((r,i)=>{ const a=i/refs.length*Math.PI*2-Math.PI/2,rr=R*(.60+.40*((r.score||1)/max)); return {r,x:cx+Math.cos(a)*rr,y:cy+Math.sin(a)*rr,a}; });
+  nodes.forEach((n,i)=>{ const w=1+((n.r.score||1)/max)*4.2,mx=cx+(n.x-cx)*.45+(n.y-cy)*.16,my=cy+(n.y-cy)*.45-(n.x-cx)*.16; h+=`<path class="tlink" data-i="${i}" d="M${cx},${cy} Q${mx.toFixed(1)},${my.toFixed(1)} ${n.x.toFixed(1)},${n.y.toFixed(1)}" stroke-width="${w.toFixed(2)}"/>`; });
+  nodes.forEach((n,i)=>{ const isNT=NT.has(n.r.book),rad=3.5+((n.r.score||1)/max)*3.5,right=Math.cos(n.a)>-.15,label=refStr(n.r.book,n.r.chapter,n.r.verse,n.r.endVerse); h+=`<g class="tnode" tabindex="0" role="button" aria-label="Open ${esc(label)}" data-i="${i}" data-b="${n.r.book}" data-c="${n.r.chapter}" data-v="${n.r.verse}"><circle cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${rad.toFixed(1)}" fill="${isNT?"var(--lapis)":"var(--verdigris)"}"/><text class="tlabel" x="${(n.x+(right?rad+7:-rad-7)).toFixed(1)}" y="${(n.y+3.5).toFixed(1)}" text-anchor="${right?"start":"end"}">${esc(label)}</text></g>`; });
+  h+=`<circle class="thub" cx="${cx}" cy="${cy}" r="9"/><text class="tlabel" x="${cx}" y="${cy+30}" text-anchor="middle" style="font-size:calc(12px * var(--text-scale));fill:var(--vermilion)">${esc(name(b))} ${c}:${v}</text>`; $("#threadSvg").innerHTML=h;
+  $$(".tnode",$("#threadSvg")).forEach(g=>{ const i=g.dataset.i,go=()=>openReference(g.dataset.b,+g.dataset.c,+g.dataset.v); g.addEventListener("mouseenter",()=>$(`.tlink[data-i="${i}"]`)?.classList.add("hot")); g.addEventListener("mouseleave",()=>$(`.tlink[data-i="${i}"]`)?.classList.remove("hot")); g.addEventListener("click",go); g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go();}}); });
+  const ot=refs.filter(r=>!NT.has(r.book)).length; $("#threadSide").innerHTML=`<div class="gl-head">${esc(name(b))} ${c}:${v}</div><p style="font-size:calc(15px * var(--text-scale));line-height:25px;color:var(--gall-soft)">${row.references.length} link${row.references.length===1?"":"s"} in the dataset; the strongest ${refs.length} are drawn. ${ot} point into the Hebrew Bible, ${refs.length-ot} into the New Testament.</p><p style="font-size:calc(14px * var(--text-scale));line-height:23px;color:var(--gall-faint)">Distance from the centre and line weight track the relevance score. Click or press Enter on a node to read it.</p><div style="margin-top:16px"><div class="mono" style="color:var(--verdigris);margin-bottom:5px">● Hebrew Bible</div><div class="mono" style="color:var(--lapis)">● New Testament</div></div>`;
 }
 
 /* ═══ SCRIPTORIUM ══════════════════════════════════════════ */
@@ -2858,7 +2908,7 @@ async function finishCollation(){
   $("#collation").innerHTML=`
     <div class="q-kind">${pass?"Leaf gilded":"Sent back to the desk"}</div>
     <p class="q-text" style="margin-bottom:14px">${right} of ${total} lines clean.</p>
-    <p style="font-size:16px;line-height:27px;color:var(--gall-soft);margin:0 0 22px">
+    <p style="font-size:calc(16px * var(--text-scale));line-height:27px;color:var(--gall-soft);margin:0 0 22px">
       ${pass
         ? `<b>${esc(c.t)}</b> is now gilded in the quire. ${Object.keys(S.gilt).length} of ${CHRONICLE.length} leaves finished.`
         : `A scribe needed ${Math.ceil(total*0.75)} of ${total} to pass a leaf. Read <b>${esc(name(c.b))} ${c.c}</b> again and come back — the questions are drawn fresh from the text each time.`}</p>
@@ -2869,9 +2919,7 @@ async function finishCollation(){
     else startCollation(C.idx);
   });
   $("#readBtn").addEventListener("click",()=>{
-    S.book=c.b; S.chapter=c.c;
-    $("#selBook").value=S.book; fillChapterSelect($("#selChapter"),S.book); $("#selChapter").value=S.chapter;
-    loadChapter(); showLeaf("read"); scrollTop();
+    openReference(c.b,c.c);
   });
 }
 
@@ -2885,30 +2933,18 @@ function refreshGilt(){
 
 /* ═══ SOURCES ══════════════════════════════════════════════ */
 function buildSources(){
-  $("#sourceList").innerHTML=SOURCES.map(s=>
-    `<div class="source"><h4>${esc(s.t)}</h4><div class="lic">${esc(s.l)}</div>
-     <p>${esc(s.d)}</p><a class="mono" href="${esc(s.u)}" target="_blank" rel="noopener">${esc(s.u.replace(/^https?:\/\//,""))}</a></div>`).join("");
+  $("#sourceList").innerHTML=SOURCES.map(s=>`<div class="source"><h4>${esc(s.t)}</h4><div class="lic">${esc(s.l)}</div><p>${esc(s.d)}</p><a class="mono source-link" href="${esc(s.u)}" target="_blank" rel="noopener noreferrer">Open source ↗</a></div>`).join("");
 }
 
 /* ═══ NAVIGATION ═══════════════════════════════════════════ */
-function showLeaf(id, push){
-  if(!$("#leaf-"+id)) id="frontispiece";
-  const changed = S.leaf!==id;
-  S.leaf=id;
-  $$(".leaf").forEach(l=> l.dataset.open = (l.id==="leaf-"+id) ? "true":"false");
-  $$(".quire").forEach(q=> q.setAttribute("aria-current", q.dataset.leaf===id ? "true":"false"));
-  document.body.dataset.spine="closed";
-  if(id==="atlas") requestAnimationFrame(()=>{ drawAtlas(); });
-  if(id==="read") requestAnimationFrame(placeManicules);
-  if(id==="cast") loadRoll();
-  if(id==="threads") loadThreads();
-  if(changed) scrollTop();
-  // deep link support
-  if(push !== false){
-    let hash = "#"+id;
-    if(id==="read") hash = `#read/${S.book}/${S.chapter}`;
-    if(location.hash !== hash) history.replaceState(null,"",hash);
-  }
+function showLeaf(id,push){
+  if(!$("#leaf-"+id)) id="frontispiece"; const changed=S.leaf!==id; S.leaf=id;
+  $$(".leaf").forEach(l=>l.dataset.open=l.id==="leaf-"+id?"true":"false"); $$(".quire").forEach(q=>q.setAttribute("aria-current",q.dataset.leaf===id?"true":"false"));
+  document.body.dataset.spine="closed"; $("#burger")?.setAttribute("aria-expanded","false");
+  if(id==="atlas") requestAnimationFrame(()=>drawAtlas()); if(id==="read") requestAnimationFrame(placeManicules); if(id==="cast") loadRoll(); if(id==="threads"&&S.books.length) loadThreads(); if(changed) scrollTop();
+  document.title=id==="frontispiece"?"VELLUM — the book, taken apart":`VELLUM — ${id==="cast"?"Register":id[0].toUpperCase()+id.slice(1)}`;
+  if(push!==false){ let hash="#"+id; if(id==="read") hash=`#read/${S.book}/${S.chapter}${S.targetVerse?`/${S.targetVerse}`:""}`; if(location.hash!==hash) history.pushState(null,"",hash); }
+  updateResume();
 }
 
 /* Keep a reference so we can put the panel back where it belongs on desktop */
@@ -2932,23 +2968,22 @@ function openGloss(on){
 
   g.dataset.open = on ? "true" : "false";
   const btn = $("#btnGloss");
-  if(btn) btn.dataset.on = on ? "true" : "false";
+  if(btn){ btn.dataset.on = on ? "true" : "false"; btn.setAttribute("aria-expanded",on?"true":"false"); }
   document.body.dataset.gloss = (on && mobile) ? "open" : "closed";
 }
 
 /* ═══ WIRING ═══════════════════════════════════════════════ */
-$$(".quire").forEach(q=> q.addEventListener("click",()=> showLeaf(q.dataset.leaf)));
 $("#selBook").addEventListener("change",e=>{
-  S.book=e.target.value; S.chapter=1;
+  S.book=e.target.value; S.chapter=1; S.targetVerse=null;
   fillChapterSelect($("#selChapter"),S.book); $("#selChapter").value=1; loadChapter();
   if(S.leaf==="read") history.replaceState(null,"",`#read/${S.book}/${S.chapter}`);
 });
 $("#selChapter").addEventListener("change",e=>{
-  S.chapter=+e.target.value; loadChapter();
+  S.chapter=+e.target.value; S.targetVerse=null; loadChapter();
   if(S.leaf==="read") history.replaceState(null,"",`#read/${S.book}/${S.chapter}`);
 });
 $("#selTrans").addEventListener("change",async e=>{
-  S.trans=e.target.value; memo.clear();
+  S.trans=e.target.value; memo.clear(); saveLast();
   try{
     const bk=await get(`/${S.trans}/books.json`);
     S.books=bk.books.filter(b=>!b.isApocryphal); S.byId={}; S.books.forEach(b=>S.byId[b.id]=b);
@@ -2956,6 +2991,7 @@ $("#selTrans").addEventListener("change",async e=>{
   loadChapter();
 });
 $("#prevCh").addEventListener("click",()=>{
+  S.targetVerse=null;
   if(S.chapter>1){ S.chapter--; }
   else{ const i=S.books.findIndex(b=>b.id===S.book); if(i>0){ S.book=S.books[i-1].id; S.chapter=S.books[i-1].numberOfChapters;
         $("#selBook").value=S.book; fillChapterSelect($("#selChapter"),S.book);} }
@@ -2963,6 +2999,7 @@ $("#prevCh").addEventListener("click",()=>{
   if(S.leaf==="read") history.replaceState(null,"",`#read/${S.book}/${S.chapter}`);
 });
 $("#nextCh").addEventListener("click",()=>{
+  S.targetVerse=null;
   const b=S.byId[S.book];
   if(b && S.chapter<b.numberOfChapters){ S.chapter++; }
   else{ const i=S.books.findIndex(x=>x.id===S.book); if(i>-1&&i<S.books.length-1){ S.book=S.books[i+1].id; S.chapter=1;
@@ -2970,10 +3007,15 @@ $("#nextCh").addEventListener("click",()=>{
   $("#selChapter").value=S.chapter; loadChapter();
   if(S.leaf==="read") history.replaceState(null,"",`#read/${S.book}/${S.chapter}`);
 });
-$("#btnRule").addEventListener("click",e=>{
-  const on=$("#readColumn").dataset.ruled!=="true";
-  $("#readColumn").dataset.ruled=on?"true":"false"; e.currentTarget.dataset.on=on?"true":"false";
-});
+$("#textDown").addEventListener("click",()=>applyReaderSize(S.readerSize-.07));
+$("#textUp").addEventListener("click",()=>applyReaderSize(S.readerSize+.07));
+$("#textDownM")?.addEventListener("click",()=>applyReaderSize(S.readerSize-.07));
+$("#textUpM")?.addEventListener("click",()=>applyReaderSize(S.readerSize+.07));
+$("#textDownS")?.addEventListener("click",()=>applyReaderSize(S.readerSize-.07));
+$("#textUpS")?.addEventListener("click",()=>applyReaderSize(S.readerSize+.07));
+$("#btnFocus").addEventListener("click",()=>applyFocus(!S.focus));
+$("#btnLink").addEventListener("click",async()=>{ const url=location.origin+location.pathname+`#read/${S.book}/${S.chapter}`; try{ await navigator.clipboard.writeText(url); toast("Chapter link copied"); }catch(_){ prompt("Copy this link",url); } });
+$("#resumeGo")?.addEventListener("click",()=>{ showLeaf("read"); loadChapter(); });
 $("#btnGloss").addEventListener("click",()=> openGloss($("#glossPanel").dataset.open!=="true"));
 $("#glossClose").addEventListener("click",()=> openGloss(false));
 document.addEventListener("click", e=>{
@@ -2987,18 +3029,19 @@ $$(".gloss-tab").forEach(t=> t.addEventListener("click",()=>{
   $$(".gloss-pane").forEach(p=> p.dataset.open = p.dataset.pane===t.dataset.pane ? "true":"false");
   if(t.dataset.pane==="comm") loadCommentary();
 }));
+$$(".gloss-tab").forEach((t,i,all)=>t.addEventListener("keydown",e=>{ if(e.key!=="ArrowLeft"&&e.key!=="ArrowRight") return; e.preventDefault(); const n=(i+(e.key==="ArrowRight"?1:-1)+all.length)%all.length; all[n].focus(); all[n].click(); }));
 $("#extHeart").addEventListener("click",()=>{
   $("#extHeart").dataset.on="true"; $("#extWide").dataset.on="false"; drawAtlas("heartland");
 });
 $("#extWide").addEventListener("click",()=>{
   $("#extWide").dataset.on="true"; $("#extHeart").dataset.on="false"; drawAtlas("wider");
 });
-$("#castSeek").addEventListener("input",e=>{ rollQuery=e.target.value; renderRoll(); });
+$("#castSeek").addEventListener("input",e=>{ rollQuery=e.target.value; rollLimit=280; renderRoll(); });
 $("#sortFame").addEventListener("click",()=>{
-  rollSort="fame"; $("#sortFame").dataset.on="true"; $("#sortAZ").dataset.on="false"; renderRoll();
+  rollSort="fame"; rollLimit=280; $("#sortFame").dataset.on="true"; $("#sortAZ").dataset.on="false"; renderRoll();
 });
 $("#sortAZ").addEventListener("click",()=>{
-  rollSort="az"; $("#sortAZ").dataset.on="true"; $("#sortFame").dataset.on="false"; renderRoll();
+  rollSort="az"; rollLimit=280; $("#sortAZ").dataset.on="true"; $("#sortFame").dataset.on="false"; renderRoll();
 });
 $("#idxSeek").addEventListener("input",e=>{ idxQuery=e.target.value; renderIndex(); });
 $("#thBook").addEventListener("change",e=>{ fillChapterSelect($("#thChapter"),e.target.value); loadThreads(); });
@@ -3024,13 +3067,15 @@ document.addEventListener("click",e=>{
   if(!el) return;
   showLeaf(el.dataset.leaf);
 });
-$("#burger").addEventListener("click",()=>{
-  document.body.dataset.spine = document.body.dataset.spine==="open" ? "closed" : "open";
+$("#burger").setAttribute("aria-expanded","false");
+$("#burger").addEventListener("click",e=>{
+  const open=document.body.dataset.spine!=="open"; document.body.dataset.spine=open?"open":"closed"; e.currentTarget.setAttribute("aria-expanded",open?"true":"false");
 });
 $("#scrim").addEventListener("click",()=> document.body.dataset.spine="closed");
 
 /* ── help ─────────────────────────────────────────────────── */
-const openHelp = on => $("#help").dataset.open = on ? "true" : "false";
+let helpReturn=null;
+const openHelp=on=>{ const h=$("#help"); if(on){ helpReturn=document.activeElement; h.dataset.open="true"; setTimeout(()=>$("#helpClose")?.focus(),0); }else{ h.dataset.open="false"; if(helpReturn&&helpReturn.focus) helpReturn.focus(); } };
 $("#btnHelp").addEventListener("click",()=>openHelp(true));
 $("#btnTheme")?.addEventListener("click", toggleTheme);
 $("#btnThemeM")?.addEventListener("click", toggleTheme);
@@ -3106,6 +3151,7 @@ $("#player").addEventListener("timeupdate",()=>{
   const pct = p.duration ? (p.currentTime/p.duration*100) : 0;
   $("#tpDone").style.width=pct.toFixed(2)+"%";
   $("#tpTime").textContent=`${clock(p.currentTime)} / ${clock(p.duration)}`;
+  $("#tpScrub").setAttribute("aria-valuenow",Math.round(pct)); $("#tpScrub").setAttribute("aria-valuetext",`${clock(p.currentTime)} of ${clock(p.duration)}`);
 });
 $("#player").addEventListener("ended",()=>{
   $("#btnAudio").dataset.on="false";
@@ -3246,10 +3292,10 @@ const FIGS={
 
 const HOW=[
   {n:"I", id:"read", name:"Reading Desk", fig:"read",
-   body:"The whole Bible, in <b>any of sixteen English translations</b>, on a page ruled the way a scribe ruled one. <b>Click a verse</b> to mark it. On larger screens a pointing hand appears in the margin; on phones a sheet slides up with your marks, the cross-references, and Tyndale's sourced note.",
+   body:"Read the full canonical text in the <b>complete English translations exposed by the source API</b>. <b>Click a verse</b> to save it to your Notebook. Your last chapter, translation, text size, theme, saved verses, and margin notes persist on this device; Threads and sourced Tyndale notes stay one click away.",
    go:"Open the reading desk"},
   {n:"II", id:"chronicle", name:"Chronicle", fig:"chronicle",
-   body:"The book is long and most of it isn't plot. These are <b>48 passages in canonical order</b> that carry the story, gathered into six quires. Each one has a hook written for someone who isn't religious. Read them all and you know the shape of the thing.",
+   body:"The book is long. These are <b>48 selected passages in canonical order</b> that form a useful narrative spine, gathered into six quires. Each one has a short editorial hook; use the sequence as an entry point, then open the full chapters around it.",
    go:"See the 48"},
   {n:"III", id:"atlas", name:"Atlas", fig:"atlas",
    body:"Fifty-six places on <b>real survey coordinates</b>, drawn as walled towns and scalloped hills the way a medieval mapmaker would have. The size of a town is set by <b>how many verses name it</b> — so Jerusalem is a fortress and Emmaus is a hut. Drag, zoom, or find anywhere by name in the index.",
@@ -3261,8 +3307,8 @@ const HOW=[
    body:"The Bible argues with itself constantly. This draws the <b>344,799-link cross-reference web</b> outward from any verse you choose: thicker and closer means a stronger link, green is the Hebrew Bible, blue is the New Testament. It is the fastest way to see the book as a conversation rather than a monologue.",
    go:"Pull a thread"},
   {n:"VI", id:"scriptorium", name:"Scriptorium", fig:"scriptorium",
-   body:"The game. You are an apprentice scribe, and a finished copy had to be checked against its exemplar line by line — a <b>collation</b>. Sit for a leaf's collation, answer eight questions built from that passage's real text, and get six right: the leaf is <b>gilded</b> and stays gold. Forty-eight to go.",
-   go:"Enter the workshop"}
+   body:"Retrieval practice modeled on manuscript <b>collation</b>. Choose one of the forty-eight guided passages, answer eight questions generated from its actual text, and score six or better to <b>gild</b> the leaf. Progress is saved on this device.",
+   go:"Practice a passage"}
 ];
 
 function buildFront(){
@@ -3283,34 +3329,18 @@ buildFront(); drawVine();
 
 /* ── deep linking ─────────────────────────────────────────── */
 function parseHash(){
-  const h = (location.hash||"").replace(/^#/,"").trim();
-  if(!h || h==="frontispiece"){ showLeaf("frontispiece", false); return; }
-  const parts = h.split("/");
-  const leaf = parts[0];
-  if(leaf==="read" && parts[1]){
-    S.book = parts[1].toUpperCase();
-    S.chapter = Math.max(1, parseInt(parts[2],10)||1);
-    showLeaf("read", false);
-    // wait for books to load then apply
-    const apply = ()=>{
-      if(S.byId[S.book]){
-        $("#selBook").value = S.book;
-        fillChapterSelect($("#selChapter"), S.book);
-        $("#selChapter").value = Math.min(S.chapter, S.byId[S.book].numberOfChapters||S.chapter);
-        S.chapter = +$("#selChapter").value;
-        loadChapter();
-      }
-    };
-    if(S.books.length) apply(); else setTimeout(apply, 400);
-    return;
+  const h=(location.hash||"").replace(/^#/,"").trim(); if(!h||h==="frontispiece"){ showLeaf("frontispiece",false); return; }
+  const parts=h.split("/"),leaf=parts[0];
+  if(leaf==="read"&&parts[1]){
+    const b=parts[1].toUpperCase(); if(S.books.length&&!S.byId[b]) return;
+    S.book=b; S.chapter=Math.max(1,parseInt(parts[2],10)||1); S.targetVerse=Math.max(1,parseInt(parts[3],10)||0)||null;
+    if(S.byId[S.book]) S.chapter=Math.min(S.chapter,S.byId[S.book].numberOfChapters||S.chapter);
+    if(S.books.length){ $("#selBook").value=S.book; fillChapterSelect($("#selChapter"),S.book); $("#selChapter").value=S.chapter; }
+    showLeaf("read",false); loadChapter(); return;
   }
-  if(["chronicle","atlas","cast","threads","scriptorium","sources","frontispiece"].includes(leaf)){
-    showLeaf(leaf, false);
-  } else {
-    showLeaf("frontispiece", false);
-  }
+  if(["chronicle","atlas","cast","threads","scriptorium","sources","frontispiece"].includes(leaf)) showLeaf(leaf,false); else showLeaf("frontispiece",false);
 }
-window.addEventListener("hashchange", parseHash);
+window.addEventListener("hashchange",parseHash);
 
 // boot first so books exist, then honour the hash
 boot().then(()=>{
