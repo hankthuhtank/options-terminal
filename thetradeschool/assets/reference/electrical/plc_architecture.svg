@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560" role="img" aria-label="How a PLC is put together">
+<rect width="1000" height="560" fill="#12151A"/>
+<rect x="0" y="0" width="1000" height="4" fill="#F0B429"/>
+<text x="36" y="52" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="26" font-weight="700" letter-spacing="-0.01em">How a PLC is put together</text>
+<text x="36" y="78" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="14">Signal flows one way each scan: field devices → input image → program → output image → loads.</text>
+<line x1="36" y1="96" x2="964" y2="96" stroke="#2E3540"/>
+<text x="40" y="132" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="10" font-weight="500" text-anchor="start" letter-spacing="0.06em">FIELD INPUT DEVICES</text>
+<rect x="40" y="152" width="190" height="40" rx="6" fill="#1A1F26" stroke="#2E3540"/>
+<text x="56" y="178" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">START pushbutton</text>
+<path d="M234 172 L300 172" stroke="#79A8FF" stroke-width="2" marker-end="url(#pin)"/>
+<rect x="40" y="208" width="190" height="40" rx="6" fill="#1A1F26" stroke="#2E3540"/>
+<text x="56" y="234" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">Proximity sensor</text>
+<path d="M234 228 L300 228" stroke="#79A8FF" stroke-width="2" marker-end="url(#pin)"/>
+<rect x="40" y="264" width="190" height="40" rx="6" fill="#1A1F26" stroke="#2E3540"/>
+<text x="56" y="290" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">Photo eye</text>
+<path d="M234 284 L300 284" stroke="#79A8FF" stroke-width="2" marker-end="url(#pin)"/>
+<rect x="310" y="140" width="130" height="230" rx="8" fill="#1A1F26" stroke="#F0B429" stroke-width="2"/>
+<text x="375" y="168" fill="#E9E5DC" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="13" font-weight="600" text-anchor="middle" letter-spacing="0.06em">INPUT</text>
+<text x="375" y="186" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="9" font-weight="500" text-anchor="middle" letter-spacing="0.06em">DI module</text>
+<rect x="326" y="206" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<rect x="326" y="230" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<rect x="326" y="254" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<rect x="326" y="278" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<rect x="326" y="302" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<rect x="326" y="326" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<rect x="470" y="140" width="130" height="230" rx="8" fill="#1A1F26" stroke="#455060" stroke-width="2"/>
+<text x="535" y="168" fill="#E9E5DC" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="13" font-weight="600" text-anchor="middle" letter-spacing="0.06em">CPU</text>
+<text x="535" y="186" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="9" font-weight="500" text-anchor="middle" letter-spacing="0.06em">program + memory</text>
+<rect x="486" y="206" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<rect x="486" y="230" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<rect x="486" y="254" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<rect x="486" y="278" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<rect x="486" y="302" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<rect x="486" y="326" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<rect x="630" y="140" width="130" height="230" rx="8" fill="#1A1F26" stroke="#F0B429" stroke-width="2"/>
+<text x="695" y="168" fill="#E9E5DC" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="13" font-weight="600" text-anchor="middle" letter-spacing="0.06em">OUTPUT</text>
+<text x="695" y="186" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="9" font-weight="500" text-anchor="middle" letter-spacing="0.06em">DO module</text>
+<rect x="646" y="206" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<rect x="646" y="230" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<rect x="646" y="254" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<rect x="646" y="278" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<rect x="646" y="302" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<rect x="646" y="326" width="98" height="16" rx="2" fill="none" stroke="#2E3540"/>
+<path d="M444 250 L464 250" stroke="#455060" stroke-width="3" marker-end="url(#pbus)"/>
+<path d="M604 250 L624 250" stroke="#455060" stroke-width="3" marker-end="url(#pbus)"/>
+<rect x="300" y="382" width="470" height="14" rx="4" fill="#2E3540"/>
+<text x="306" y="414" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="10" font-weight="500" text-anchor="start" letter-spacing="0.06em">BACKPLANE / BUS</text>
+<text x="800" y="132" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="10" font-weight="500" text-anchor="start" letter-spacing="0.06em">FIELD OUTPUT DEVICES</text>
+<path d="M764 172 L790 172" stroke="#F0B429" stroke-width="2" marker-end="url(#pout)"/>
+<rect x="800" y="152" width="160" height="40" rx="6" fill="#1A1F26" stroke="#2E3540"/>
+<text x="814" y="178" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">Contactor coil</text>
+<path d="M764 228 L790 228" stroke="#F0B429" stroke-width="2" marker-end="url(#pout)"/>
+<rect x="800" y="208" width="160" height="40" rx="6" fill="#1A1F26" stroke="#2E3540"/>
+<text x="814" y="234" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">Solenoid valve</text>
+<path d="M764 284 L790 284" stroke="#F0B429" stroke-width="2" marker-end="url(#pout)"/>
+<rect x="800" y="264" width="160" height="40" rx="6" fill="#1A1F26" stroke="#2E3540"/>
+<text x="814" y="290" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">Indicator lamp</text>
+<defs>
+<marker id="pin" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#79A8FF"/></marker>
+<marker id="pout" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0B429"/></marker>
+<marker id="pbus" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#455060"/></marker>
+</defs>
+<line x1="36" y1="440" x2="964" y2="440" stroke="#2E3540"/>
+<text x="36" y="470" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="14" text-anchor="start">Diagnostic order: module LED first, then terminal voltage, then the program.</text>
+<text x="36" y="494" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">An input LED that is lit proves the field device closed. It does not prove the program used it.</text>
+<text x="36" y="518" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">An output LED that is lit proves the program commanded the output. It does not prove the load ran.</text>
+</svg>

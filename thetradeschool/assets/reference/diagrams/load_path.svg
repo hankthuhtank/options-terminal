@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560">
+<rect width="1000" height="560" fill="#06110d"/>
+<text x="40" y="48" fill="#e8eee9" font-family="system-ui" font-size="28" font-weight="700">Load path (concept)</text>
+<text x="40" y="80" fill="#9fb0a7" font-family="system-ui" font-size="15">Gravity and lateral loads need a continuous path from the point of application down to the foundation.</text>
+<!-- simple stack -->
+<rect x="380" y="120" width="240" height="40" rx="6" fill="#1a2e24" stroke="#7ce3a0" stroke-width="2"/>
+<text x="500" y="146" text-anchor="middle" fill="#e8eee9" font-family="system-ui" font-size="14">Roof / floor load</text>
+<rect x="400" y="180" width="200" height="50" rx="6" fill="#1a2e24" stroke="#7ce3a0" stroke-width="2"/>
+<text x="500" y="210" text-anchor="middle" fill="#e8eee9" font-family="system-ui" font-size="14">Header / beam</text>
+<rect x="420" y="250" width="50" height="90" rx="4" fill="#12241c" stroke="#f0c45c"/>
+<rect x="530" y="250" width="50" height="90" rx="4" fill="#12241c" stroke="#f0c45c"/>
+<text x="500" y="360" text-anchor="middle" fill="#b8c5bd" font-family="system-ui" font-size="13">Posts / jack studs</text>
+<rect x="360" y="380" width="280" height="40" rx="6" fill="#1a2e24" stroke="#7ce3a0" stroke-width="2"/>
+<text x="500" y="406" text-anchor="middle" fill="#e8eee9" font-family="system-ui" font-size="14">Wall / plate</text>
+<rect x="340" y="440" width="320" height="50" rx="6" fill="#1a2e24" stroke="#d7ff64" stroke-width="2"/>
+<text x="500" y="470" text-anchor="middle" fill="#e8eee9" font-family="system-ui" font-size="14">Foundation</text>
+<text x="40" y="530" fill="#9fb0a7" font-family="system-ui" font-size="14">Break any link (missing jack stud, undersized header, discontinuous wall) and the load has nowhere honest to go.</text>
+</svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+<rect width="1200" height="800" fill="#06110d"/>
+<rect x="40" y="40" width="1120" height="720" rx="28" fill="#081711" stroke="#23372d"/>
+<text x="90" y="112" fill="#d9e2dd" font-family="Arial, Helvetica, sans-serif" font-size="54" font-weight="700">Welding PPE works as a system</text>
+<text x="90" y="150" fill="#9fb0a7" font-family="Arial, Helvetica, sans-serif" font-size="24">The helmet is only one layer. Heat, sparks, UV, fumes and noise all need control.</text>
+<g transform="translate(135,250)">
+<rect x="0" y="0" width="170" height="160" rx="18" fill="#0c231b" stroke="#79e1c0" stroke-width="3"/>
+<path d="M55 35 H130 L145 88 L82 126 L28 98 L38 53 Z" fill="#444" stroke="#c2c8cb" stroke-width="4"/>
+<rect x="78" y="60" width="38" height="36" fill="#0a0a0a" stroke="#9aa1a6" stroke-width="3"/>
+<text x="85" y="190" fill="#d9e2dd" font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle">Helmet / lens</text>
+</g>
+<g transform="translate(365,250)">
+<rect x="0" y="0" width="170" height="160" rx="18" fill="#0c231b" stroke="#79e1c0" stroke-width="3"/>
+<path d="M42 58 C52 26 86 18 94 50 C119 45 133 72 126 110 C117 132 86 140 66 132 C46 127 31 99 42 58 Z" fill="#98643c"/>
+<text x="85" y="190" fill="#d9e2dd" font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle">Gloves</text>
+</g>
+<g transform="translate(595,250)">
+<rect x="0" y="0" width="170" height="160" rx="18" fill="#0c231b" stroke="#79e1c0" stroke-width="3"/>
+<path d="M58 34 H112 L128 132 H42 Z" fill="#6f4f34"/>
+<text x="85" y="190" fill="#d9e2dd" font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle">Jacket / sleeves</text>
+</g>
+<g transform="translate(825,250)">
+<rect x="0" y="0" width="170" height="160" rx="18" fill="#0c231b" stroke="#79e1c0" stroke-width="3"/>
+<ellipse cx="84" cy="78" rx="34" ry="44" fill="#4f5e59"/>
+<rect x="60" y="64" width="48" height="28" rx="6" fill="#d2d7d5"/>
+<text x="84" y="190" fill="#d9e2dd" font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle">Respiratory / fume control</text>
+</g>
+<text x="120" y="560" fill="#cbe6db" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700">What learners should remember</text>
+<text x="120" y="605" fill="#a7b7af" font-family="Arial, Helvetica, sans-serif" font-size="22">• Helmet shade protects your eyes from arc radiation and visible brightness.</text>
+<text x="120" y="638" fill="#a7b7af" font-family="Arial, Helvetica, sans-serif" font-size="22">• Leather gloves and clothing protect against sparks, heat and hot metal.</text>
+<text x="120" y="671" fill="#a7b7af" font-family="Arial, Helvetica, sans-serif" font-size="22">• Ventilation and fume control matter just as much as the face shield.</text>
+</svg>

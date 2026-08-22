@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+<rect width="1200" height="800" fill="#06110d"/>
+<rect x="40" y="40" width="1120" height="720" rx="28" fill="#081711" stroke="#23372d"/>
+<text x="90" y="112" fill="#d9e2dd" font-family="Arial, Helvetica, sans-serif" font-size="54" font-weight="700">Building envelope at a window opening</text>
+<text x="90" y="150" fill="#9fb0a7" font-family="Arial, Helvetica, sans-serif" font-size="24">The goal is continuity: water out, air controlled, insulation uninterrupted where possible.</text>
+<rect x="180" y="220" width="140" height="320" fill="#4b3d2b"/>
+<rect x="320" y="220" width="28" height="320" fill="#68d8e8"/>
+<rect x="348" y="220" width="110" height="320" fill="#5a4a33"/>
+<rect x="458" y="220" width="170" height="320" fill="#2a3038"/>
+<rect x="628" y="220" width="120" height="320" fill="#313b30"/>
+<rect x="402" y="310" width="190" height="140" fill="#09130f" stroke="#7ce3ee" stroke-width="6"/>
+<path d="M372 292 H548 L592 336" stroke="#dcc8a2" stroke-width="10" fill="none"/>
+<path d="M348 430 H600" stroke="#dcc8a2" stroke-width="10"/>
+<path d="M120 315 l45 14" stroke="#68d8e8" stroke-width="8" stroke-linecap="round"/><path d="M120 390 l45 14" stroke="#68d8e8" stroke-width="8" stroke-linecap="round"/><path d="M120 465 l45 14" stroke="#68d8e8" stroke-width="8" stroke-linecap="round"/>
+<text x="190" y="585" fill="#b9c7c0" font-family="Arial, Helvetica, sans-serif" font-size="24">Cladding</text>
+<text x="300" y="620" fill="#b9c7c0" font-family="Arial, Helvetica, sans-serif" font-size="24">Drainage plane</text>
+<text x="420" y="585" fill="#b9c7c0" font-family="Arial, Helvetica, sans-serif" font-size="24">Sheathing / framing</text>
+<text x="530" y="620" fill="#b9c7c0" font-family="Arial, Helvetica, sans-serif" font-size="24">Air / thermal layers</text>
+<text x="665" y="585" fill="#b9c7c0" font-family="Arial, Helvetica, sans-serif" font-size="24">Interior finish</text>
+<text x="760" y="260" fill="#cbe6db" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700">What to notice</text>
+<text x="760" y="310" fill="#a7b7af" font-family="Arial, Helvetica, sans-serif" font-size="22">• Water should lap out, not trap inward.</text>
+<text x="760" y="345" fill="#a7b7af" font-family="Arial, Helvetica, sans-serif" font-size="22">• The WRB / drainage layer has to stay continuous.</text>
+<text x="760" y="380" fill="#a7b7af" font-family="Arial, Helvetica, sans-serif" font-size="22">• Flashing at the head and sill is a path, not decoration.</text>
+<text x="760" y="415" fill="#a7b7af" font-family="Arial, Helvetica, sans-serif" font-size="22">• Openings are where continuity is usually lost.</text>
+<text x="760" y="450" fill="#a7b7af" font-family="Arial, Helvetica, sans-serif" font-size="22">• Every layer has a job in the assembly.</text>
+</svg>

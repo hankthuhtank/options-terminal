@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="520" viewBox="0 0 1000 520">
+<rect width="1000" height="520" fill="#06110d"/>
+<text x="40" y="48" fill="#e8eee9" font-family="system-ui" font-size="28" font-weight="700">Superheat and subcooling</text>
+<text x="40" y="80" fill="#9fb0a7" font-family="system-ui" font-size="15">Both compare a measured temperature to saturation temperature from the P–T chart for that refrigerant.</text>
+<rect x="40" y="120" width="440" height="340" rx="16" fill="#0a1511" stroke="#24362c"/>
+<text x="60" y="160" fill="#d7ff64" font-family="system-ui" font-size="18" font-weight="700">SUPERHEAT</text>
+<text x="60" y="200" fill="#e8eee9" font-family="system-ui" font-size="15">At the evaporator / suction side</text>
+<text x="60" y="240" fill="#b8c5bd" font-family="system-ui" font-size="15">Superheat = suction line temp</text>
+<text x="60" y="268" fill="#b8c5bd" font-family="system-ui" font-size="15">− evaporator saturation temp</text>
+<text x="60" y="310" fill="#b8c5bd" font-family="system-ui" font-size="14">Tells you whether vapor is fully boiled</text>
+<text x="60" y="338" fill="#b8c5bd" font-family="system-ui" font-size="14">and how much “extra” heat it picked up.</text>
+<rect x="520" y="120" width="440" height="340" rx="16" fill="#0a1511" stroke="#24362c"/>
+<text x="540" y="160" fill="#d7ff64" font-family="system-ui" font-size="18" font-weight="700">SUBCOOLING</text>
+<text x="540" y="200" fill="#e8eee9" font-family="system-ui" font-size="15">At the condenser / liquid line</text>
+<text x="540" y="240" fill="#b8c5bd" font-family="system-ui" font-size="15">Subcooling = condenser saturation temp</text>
+<text x="540" y="268" fill="#b8c5bd" font-family="system-ui" font-size="15">− liquid line temp</text>
+<text x="540" y="310" fill="#b8c5bd" font-family="system-ui" font-size="14">Tells you whether liquid is fully condensed</text>
+<text x="540" y="338" fill="#b8c5bd" font-family="system-ui" font-size="14">and how much it cooled below saturation.</text>
+</svg>

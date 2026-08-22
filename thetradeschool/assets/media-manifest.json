@@ -1,0 +1,22 @@
+{
+  "heroes": {
+    "electrical": {
+      "file": "assets/hero/electrical-mcc.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Mcc_room.jpg",
+      "creator": "Achim Hering",
+      "license": "CC BY 3.0 (also offered under GFDL)",
+      "note": "Cropped/resized local copy for the TradeSchool sector hero."
+    },
+    "hvac": {
+      "file": "assets/hero/hvac-rooftop.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Rooftop_Packaged_Units.JPG",
+      "creator": "P199",
+      "license": "Public domain",
+      "note": "Cropped/resized local copy for the TradeSchool sector hero."
+    },
+    "plumbing": {"file": "assets/reference/plumbing/water_heater.jpg", "credit": "See docs/CREDITS.md"},
+    "industrial": {"file": "assets/reference/industrial/centrifugal_pump.png", "credit": "See docs/CREDITS.md"},
+    "welding": {"file": "assets/reference/welding/tig_welding.jpg", "credit": "See docs/CREDITS.md"},
+    "construction": {"file": "assets/reference/construction/light_framing.jpg", "credit": "See docs/CREDITS.md"}
+  }
+}

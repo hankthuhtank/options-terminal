@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="520" viewBox="0 0 1000 520" role="img" aria-label="Three ways a photoelectric sensor sees a target">
+<rect width="1000" height="520" fill="#12151A"/>
+<rect x="0" y="0" width="1000" height="4" fill="#F0B429"/>
+<text x="36" y="52" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="26" font-weight="700" letter-spacing="-0.01em">Three ways a photoelectric sensor sees a target</text>
+<text x="36" y="78" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="14">The sensing mode decides where you mount, what you align, and what a dirty lens does to the signal.</text>
+<line x1="36" y1="96" x2="964" y2="96" stroke="#2E3540"/>
+<rect x="40" y="130" width="920" height="112" rx="12" fill="#1A1F26" stroke="#2E3540"/>
+<text x="64" y="158" fill="#F0B429" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="12" font-weight="600" text-anchor="start" letter-spacing="0.06em">THROUGH-BEAM</text>
+<text x="64" y="182" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">Separate emitter and receiver. Longest range, most reliable, two devices to wire and align.</text>
+<rect x="560" y="164" width="34" height="48" rx="4" fill="none" stroke="#455060" stroke-width="2"/>
+<rect x="860" y="164" width="34" height="48" rx="4" fill="none" stroke="#455060" stroke-width="2"/>
+<path d="M594 188 L860 188" stroke="#F0B429" stroke-width="2" stroke-dasharray="8 5"/>
+<text x="560" y="230" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="9" font-weight="500" text-anchor="start" letter-spacing="0.06em">EMITTER</text>
+<text x="894" y="230" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="9" font-weight="500" text-anchor="end" letter-spacing="0.06em">RECEIVER</text>
+<rect x="40" y="254" width="920" height="112" rx="12" fill="#1A1F26" stroke="#2E3540"/>
+<text x="64" y="282" fill="#F0B429" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="12" font-weight="600" text-anchor="start" letter-spacing="0.06em">RETROREFLECTIVE</text>
+<text x="64" y="306" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">One device plus a reflector. One cable, shorter range, shiny targets can false-trigger.</text>
+<rect x="560" y="288" width="34" height="48" rx="4" fill="none" stroke="#455060" stroke-width="2"/>
+<rect x="860" y="288" width="12" height="48" fill="#455060"/>
+<path d="M594 304 L860 304" stroke="#F0B429" stroke-width="2" stroke-dasharray="8 5"/>
+<path d="M860 322 L594 322" stroke="#F0B429" stroke-width="2" stroke-dasharray="8 5" opacity="0.6"/>
+<text x="560" y="354" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="9" font-weight="500" text-anchor="start" letter-spacing="0.06em">SENSOR</text>
+<text x="894" y="354" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="9" font-weight="500" text-anchor="end" letter-spacing="0.06em">REFLECTOR</text>
+<rect x="40" y="378" width="920" height="112" rx="12" fill="#1A1F26" stroke="#2E3540"/>
+<text x="64" y="406" fill="#F0B429" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="12" font-weight="600" text-anchor="start" letter-spacing="0.06em">DIFFUSE</text>
+<text x="64" y="430" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">One device, no reflector. Target itself returns the light, so range depends on target color and finish.</text>
+<rect x="560" y="412" width="34" height="48" rx="4" fill="none" stroke="#455060" stroke-width="2"/>
+<rect x="810" y="406" width="46" height="60" rx="3" fill="#455060" opacity="0.45"/>
+<path d="M594 428 L810 428" stroke="#F0B429" stroke-width="2" stroke-dasharray="8 5"/>
+<path d="M810 446 L594 446" stroke="#F0B429" stroke-width="2" stroke-dasharray="8 5" opacity="0.4"/>
+<text x="560" y="478" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="9" font-weight="500" text-anchor="start" letter-spacing="0.06em">SENSOR</text>
+<text x="856" y="478" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="9" font-weight="500" text-anchor="end" letter-spacing="0.06em">TARGET</text>
+<line x1="36" y1="508" x2="964" y2="508" stroke="#2E3540"/>
+<text x="36" y="538" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="14" text-anchor="start">Light-on or dark-on is a separate setting from the sensing mode. Check both before calling a sensor bad.</text>
+<text x="36" y="562" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">Output type (PNP or NPN) decides how it lands on the PLC input card. Wrong type reads as a dead sensor.</text>
+</svg>

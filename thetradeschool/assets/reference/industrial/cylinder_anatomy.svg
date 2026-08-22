@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560" role="img" aria-label="Inside a hydraulic cylinder">
+<rect width="1000" height="560" fill="#12151A"/>
+<rect x="0" y="0" width="1000" height="4" fill="#E4712F"/>
+<text x="36" y="52" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="26" font-weight="700" letter-spacing="-0.01em">Inside a hydraulic cylinder</text>
+<text x="36" y="78" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="14">Force comes from pressure times area. The rod steals area on the retract side, so the two directions are not equal.</text>
+<line x1="36" y1="96" x2="964" y2="96" stroke="#2E3540"/>
+<rect x="120" y="150" width="560" height="120" rx="6" fill="#1A1F26" stroke="#455060" stroke-width="3"/>
+<rect x="420" y="156" width="30" height="108" fill="#E4712F" opacity="0.8"/>
+<rect x="450" y="199.0" width="228" height="22" fill="#455060"/>
+<rect x="160" y="124" width="26" height="26" fill="none" stroke="#E4712F" stroke-width="2"/>
+<rect x="614" y="124" width="26" height="26" fill="none" stroke="#E4712F" stroke-width="2"/>
+<text x="173" y="116" fill="#E4712F" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="10" font-weight="500" text-anchor="middle" letter-spacing="0.06em">CAP END PORT</text>
+<text x="627" y="116" fill="#E4712F" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="10" font-weight="500" text-anchor="middle" letter-spacing="0.06em">ROD END PORT</text>
+<rect x="123" y="153" width="297" height="114" fill="#E4712F" opacity="0.14"/>
+<path d="M435 256 L300 330" stroke="#455060" stroke-width="1" stroke-dasharray="3 3"/>
+<circle cx="435" cy="256" r="2.5" fill="#455060"/>
+<text x="240" y="348" fill="#E9E5DC" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="11" font-weight="500" text-anchor="start" letter-spacing="0.06em">PISTON</text>
+<path d="M540 221.0 L520 330" stroke="#455060" stroke-width="1" stroke-dasharray="3 3"/>
+<circle cx="540" cy="221.0" r="2.5" fill="#455060"/>
+<text x="470" y="348" fill="#E9E5DC" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="11" font-weight="500" text-anchor="start" letter-spacing="0.06em">ROD</text>
+<path d="M674 176 L762 136" stroke="#455060" stroke-width="1" stroke-dasharray="3 3"/>
+<circle cx="674" cy="176" r="2.5" fill="#455060"/>
+<text x="770" y="134" fill="#E9E5DC" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="11" font-weight="500" text-anchor="start" letter-spacing="0.06em">ROD SEAL + WIPER</text>
+<text x="770" y="152" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="10" font-weight="500" text-anchor="start" letter-spacing="0.06em">leaks show here first</text>
+<rect x="700" y="250" width="260" height="180" rx="12" fill="#1A1F26" stroke="#2E3540"/>
+<text x="722" y="278" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="10" font-weight="500" text-anchor="start" letter-spacing="0.06em">AREA THAT SEES PRESSURE</text>
+<circle cx="782" cy="342" r="42" fill="#E4712F" opacity="0.75"/>
+<text x="782" y="400" fill="#E9E5DC" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="11" font-weight="500" text-anchor="middle" letter-spacing="0.06em">EXTEND</text>
+<text x="782" y="416" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="9" font-weight="500" text-anchor="middle" letter-spacing="0.06em">full bore</text>
+<circle cx="898" cy="342" r="42" fill="#E4712F" opacity="0.75"/>
+<circle cx="898" cy="342" r="17" fill="#1A1F26"/>
+<text x="898" y="400" fill="#E9E5DC" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="11" font-weight="500" text-anchor="middle" letter-spacing="0.06em">RETRACT</text>
+<text x="898" y="416" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="9" font-weight="500" text-anchor="middle" letter-spacing="0.06em">bore minus rod</text>
+<line x1="36" y1="452" x2="964" y2="452" stroke="#2E3540"/>
+<text x="36" y="482" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="14" text-anchor="start">Force = pressure × effective area.  Speed = flow ÷ effective area.</text>
+<text x="36" y="506" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">Same pump, same relief setting: a cylinder pushes harder and slower extending than it does retracting.</text>
+</svg>

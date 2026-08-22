@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="480" viewBox="0 0 1000 480" role="img" aria-label="Gear reduction is a torque multiplier">
+<rect width="1000" height="480" fill="#12151A"/>
+<rect x="0" y="0" width="1000" height="4" fill="#E4712F"/>
+<text x="36" y="52" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="26" font-weight="700" letter-spacing="-0.01em">Gear reduction is a torque multiplier</text>
+<text x="36" y="78" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="14">Count teeth, not guesses. Every reduction stage trades shaft speed for shaft torque.</text>
+<line x1="36" y1="96" x2="964" y2="96" stroke="#2E3540"/>
+<circle cx="260" cy="260" r="50" fill="none" stroke="#455060" stroke-width="3"/>
+<line x1="310.0" y1="260.0" x2="318.0" y2="260.0" stroke="#455060" stroke-width="4"/>
+<line x1="303.3" y1="285.0" x2="310.2" y2="289.0" stroke="#455060" stroke-width="4"/>
+<line x1="285.0" y1="303.3" x2="289.0" y2="310.2" stroke="#455060" stroke-width="4"/>
+<line x1="260.0" y1="310.0" x2="260.0" y2="318.0" stroke="#455060" stroke-width="4"/>
+<line x1="235.0" y1="303.3" x2="231.0" y2="310.2" stroke="#455060" stroke-width="4"/>
+<line x1="216.7" y1="285.0" x2="209.8" y2="289.0" stroke="#455060" stroke-width="4"/>
+<line x1="210.0" y1="260.0" x2="202.0" y2="260.0" stroke="#455060" stroke-width="4"/>
+<line x1="216.7" y1="235.0" x2="209.8" y2="231.0" stroke="#455060" stroke-width="4"/>
+<line x1="235.0" y1="216.7" x2="231.0" y2="209.8" stroke="#455060" stroke-width="4"/>
+<line x1="260.0" y1="210.0" x2="260.0" y2="202.0" stroke="#455060" stroke-width="4"/>
+<line x1="285.0" y1="216.7" x2="289.0" y2="209.8" stroke="#455060" stroke-width="4"/>
+<line x1="303.3" y1="235.0" x2="310.2" y2="231.0" stroke="#455060" stroke-width="4"/>
+<circle cx="260" cy="260" r="8" fill="#455060"/>
+<circle cx="430" cy="260" r="108" fill="none" stroke="#E4712F" stroke-width="3"/>
+<line x1="538.0" y1="260.0" x2="546.0" y2="260.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="534.3" y1="288.0" x2="542.0" y2="290.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="523.5" y1="314.0" x2="530.5" y2="318.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="506.4" y1="336.4" x2="512.0" y2="342.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="484.0" y1="353.5" x2="488.0" y2="360.5" stroke="#E4712F" stroke-width="4"/>
+<line x1="458.0" y1="364.3" x2="460.0" y2="372.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="430.0" y1="368.0" x2="430.0" y2="376.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="402.0" y1="364.3" x2="400.0" y2="372.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="376.0" y1="353.5" x2="372.0" y2="360.5" stroke="#E4712F" stroke-width="4"/>
+<line x1="353.6" y1="336.4" x2="348.0" y2="342.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="336.5" y1="314.0" x2="329.5" y2="318.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="325.7" y1="288.0" x2="318.0" y2="290.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="322.0" y1="260.0" x2="314.0" y2="260.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="325.7" y1="232.0" x2="318.0" y2="230.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="336.5" y1="206.0" x2="329.5" y2="202.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="353.6" y1="183.6" x2="348.0" y2="178.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="376.0" y1="166.5" x2="372.0" y2="159.5" stroke="#E4712F" stroke-width="4"/>
+<line x1="402.0" y1="155.7" x2="400.0" y2="148.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="430.0" y1="152.0" x2="430.0" y2="144.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="458.0" y1="155.7" x2="460.0" y2="148.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="484.0" y1="166.5" x2="488.0" y2="159.5" stroke="#E4712F" stroke-width="4"/>
+<line x1="506.4" y1="183.6" x2="512.0" y2="178.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="523.5" y1="206.0" x2="530.5" y2="202.0" stroke="#E4712F" stroke-width="4"/>
+<line x1="534.3" y1="232.0" x2="542.0" y2="230.0" stroke="#E4712F" stroke-width="4"/>
+<circle cx="430" cy="260" r="8" fill="#E4712F"/>
+<text x="260" y="348" fill="#E9E5DC" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="11" font-weight="500" text-anchor="middle" letter-spacing="0.06em">PINION  12 T</text>
+<text x="430" y="400" fill="#E9E5DC" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="11" font-weight="500" text-anchor="middle" letter-spacing="0.06em">GEAR  24 T</text>
+<rect x="620" y="150" width="340" height="196" rx="12" fill="#1A1F26" stroke="#2E3540"/>
+<text x="644" y="180" fill="#E4712F" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="13" font-weight="600" text-anchor="start" letter-spacing="0.06em">24 ÷ 12 = 2:1 REDUCTION</text>
+<text x="644" y="212" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">Output speed = input speed ÷ 2</text>
+<text x="644" y="236" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">Output torque ≈ input torque × 2</text>
+<text x="644" y="268" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">The gearbox never adds power.</text>
+<text x="644" y="290" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="12" text-anchor="start">Heat, noise and metal in the oil are</text>
+<text x="644" y="308" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="12" text-anchor="start">the evidence that it is losing some.</text>
+<line x1="36" y1="392" x2="964" y2="392" stroke="#2E3540"/>
+<text x="36" y="422" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="14" text-anchor="start">A gearbox that suddenly runs hot at the same load has lost lubrication, alignment or clearance — not ratio.</text>
+</svg>

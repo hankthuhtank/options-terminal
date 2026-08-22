@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="540" viewBox="0 0 1000 540" role="img" aria-label="The refrigerant you meet depends on the install date">
+<rect width="1000" height="540" fill="#12151A"/>
+<rect x="0" y="0" width="1000" height="4" fill="#E0607E"/>
+<text x="36" y="52" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="26" font-weight="700" letter-spacing="-0.01em">The refrigerant you meet depends on the install date</text>
+<text x="36" y="78" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="14">Three refrigerants are in the field at once. The nameplate decides the tools, the chart and the procedure.</text>
+<line x1="36" y1="96" x2="964" y2="96" stroke="#2E3540"/>
+<rect x="40" y="130" width="290" height="196" rx="12" fill="#1A1F26" stroke="#455060" stroke-width="2"/>
+<text x="62" y="162" fill="#455060" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="16" font-weight="600" text-anchor="start" letter-spacing="0.06em">R-22</text>
+<text x="62" y="182" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="10" font-weight="500" text-anchor="start" letter-spacing="0.06em">HCFC · A1</text>
+<text x="62" y="212" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="12" text-anchor="start">Legacy equipment only. Production ended.</text>
+<text x="62" y="231" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="12" text-anchor="start">Service uses recovered or reclaimed stock.</text>
+<rect x="355" y="130" width="290" height="196" rx="12" fill="#1A1F26" stroke="#79A8FF" stroke-width="2"/>
+<text x="377" y="162" fill="#79A8FF" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="16" font-weight="600" text-anchor="start" letter-spacing="0.06em">R-410A</text>
+<text x="377" y="182" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="10" font-weight="500" text-anchor="start" letter-spacing="0.06em">HFC · A1 · GWP ≈ 2088</text>
+<text x="377" y="212" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="12" text-anchor="start">Huge installed base. Still legal to service</text>
+<text x="377" y="231" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="12" text-anchor="start">indefinitely. Supply tightens as the</text>
+<text x="377" y="250" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="12" text-anchor="start">AIM Act phasedown continues.</text>
+<rect x="670" y="130" width="290" height="196" rx="12" fill="#1A1F26" stroke="#E0607E" stroke-width="2"/>
+<text x="692" y="162" fill="#E0607E" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="16" font-weight="600" text-anchor="start" letter-spacing="0.06em">R-454B / R-32</text>
+<text x="692" y="182" fill="#97A1AD" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="10" font-weight="500" text-anchor="start" letter-spacing="0.06em">A2L · GWP 466 / 675</text>
+<text x="692" y="212" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="12" text-anchor="start">What new residential and light commercial</text>
+<text x="692" y="231" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="12" text-anchor="start">systems use. Mildly flammable, so tools,</text>
+<text x="692" y="250" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="12" text-anchor="start">leak detection and procedures change.</text>
+<rect x="40" y="346" width="920" height="74" rx="10" fill="#1A1F26" stroke="#2E3540"/>
+<text x="64" y="374" fill="#E0607E" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="11" font-weight="600" text-anchor="start" letter-spacing="0.06em">1 JAN 2025</text>
+<text x="168" y="374" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">New residential systems can no longer be manufactured with R-410A.</text>
+<text x="64" y="402" fill="#E0607E" font-family="ui-monospace,'IBM Plex Mono',Menlo,monospace" font-size="11" font-weight="600" text-anchor="start" letter-spacing="0.06em">1 JAN 2026</text>
+<text x="168" y="402" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">Installation of new residential and light commercial systems over 700 GWP ends.</text>
+<line x1="36" y1="446" x2="964" y2="446" stroke="#2E3540"/>
+<text x="36" y="476" fill="#E9E5DC" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="14" text-anchor="start">A2L refrigerants cannot be dropped into R-410A equipment. The equipment itself has to be rated for them.</text>
+<text x="36" y="500" fill="#97A1AD" font-family="'Saira','Saira Condensed',system-ui,sans-serif" font-size="13" text-anchor="start">EPA 608 still covers handling. A2L-specific training and A2L-rated recovery, gauges and leak detection are what change on the truck.</text>
+</svg>

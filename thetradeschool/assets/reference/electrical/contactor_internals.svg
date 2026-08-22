@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#06110d"/>
+  <rect x="40" y="40" width="1120" height="620" rx="24" fill="#0a1511" stroke="#24362c"/>
+  <text x="70" y="95" fill="#e8eee9" font-family="system-ui,sans-serif" font-size="36" font-weight="700">Contactor — what the parts do</text>
+  <text x="70" y="135" fill="#9fb0a7" font-family="system-ui,sans-serif" font-size="18">Same ideas as a relay, built for higher load current and repeated switching.</text>
+
+  <!-- Coil -->
+  <rect x="90" y="200" width="220" height="160" rx="16" fill="#12241c" stroke="#7ce3a0" stroke-width="2"/>
+  <ellipse cx="200" cy="280" rx="70" ry="45" fill="none" stroke="#f0c45c" stroke-width="8"/>
+  <ellipse cx="200" cy="280" rx="40" ry="25" fill="none" stroke="#f0c45c" stroke-width="4"/>
+  <text x="200" y="390" text-anchor="middle" fill="#e8eee9" font-family="system-ui,sans-serif" font-size="20" font-weight="700">Coil</text>
+  <text x="200" y="418" text-anchor="middle" fill="#9fb0a7" font-family="system-ui,sans-serif" font-size="14">Creates magnetic pull</text>
+  <text x="200" y="438" text-anchor="middle" fill="#9fb0a7" font-family="system-ui,sans-serif" font-size="14">when energized</text>
+
+  <!-- Armature -->
+  <rect x="360" y="200" width="220" height="160" rx="16" fill="#12241c" stroke="#7ce3a0" stroke-width="2"/>
+  <rect x="400" cy="250" x="400" y="245" width="140" height="28" rx="6" fill="#d9e2dd"/>
+  <rect x="430" y="280" width="80" height="50" rx="4" fill="#8a9a90"/>
+  <text x="470" y="390" text-anchor="middle" fill="#e8eee9" font-family="system-ui,sans-serif" font-size="20" font-weight="700">Armature</text>
+  <text x="470" y="418" text-anchor="middle" fill="#9fb0a7" font-family="system-ui,sans-serif" font-size="14">Moves when coil pulls</text>
+  <text x="470" y="438" text-anchor="middle" fill="#9fb0a7" font-family="system-ui,sans-serif" font-size="14">Carries moving contacts</text>
+
+  <!-- Contacts -->
+  <rect x="630" y="200" width="220" height="160" rx="16" fill="#12241c" stroke="#7ce3a0" stroke-width="2"/>
+  <rect x="670" y="250" width="50" height="18" rx="3" fill="#c4d0c8"/>
+  <rect x="760" y="250" width="50" height="18" rx="3" fill="#c4d0c8"/>
+  <rect x="720" y="280" width="40" height="40" rx="4" fill="#f0c45c"/>
+  <text x="740" y="390" text-anchor="middle" fill="#e8eee9" font-family="system-ui,sans-serif" font-size="20" font-weight="700">Main contacts</text>
+  <text x="740" y="418" text-anchor="middle" fill="#9fb0a7" font-family="system-ui,sans-serif" font-size="14">Carry motor / load current</text>
+  <text x="740" y="438" text-anchor="middle" fill="#9fb0a7" font-family="system-ui,sans-serif" font-size="14">Wear under arcing</text>
+
+  <!-- Aux -->
+  <rect x="900" y="200" width="220" height="160" rx="16" fill="#12241c" stroke="#7ce3a0" stroke-width="2"/>
+  <rect x="950" y="255" width="40" height="14" rx="2" fill="#7ce3a0"/>
+  <rect x="1030" y="255" width="40" height="14" rx="2" fill="#7ce3a0"/>
+  <text x="1010" y="390" text-anchor="middle" fill="#e8eee9" font-family="system-ui,sans-serif" font-size="20" font-weight="700">Aux contacts</text>
+  <text x="1010" y="418" text-anchor="middle" fill="#9fb0a7" font-family="system-ui,sans-serif" font-size="14">Seal-in, interlock, status</text>
+  <text x="1010" y="438" text-anchor="middle" fill="#9fb0a7" font-family="system-ui,sans-serif" font-size="14">Not for load current</text>
+
+  <!-- Bottom note -->
+  <rect x="90" y="500" width="1020" height="120" rx="14" fill="#0e1c16" stroke="#2a4034"/>
+  <text x="120" y="545" fill="#d7ff64" font-family="system-ui,sans-serif" font-size="18" font-weight="700">Field recognition</text>
+  <text x="120" y="575" fill="#b8c5bd" font-family="system-ui,sans-serif" font-size="16">Coil voltage is often different from the load voltage. Main terminals are large; aux terminals are small.</text>
+  <text x="120" y="600" fill="#b8c5bd" font-family="system-ui,sans-serif" font-size="16">A burned coil or welded contacts is a different failure mode from a bad aux contact in a seal-in circuit.</text>
+</svg>
