@@ -1,4 +1,4 @@
 ---
 ---
 {% capture motor_page %}{% include_relative site.html %}{% endcapture %}
-{{ motor_page | replace: '</head>', '<link rel="stylesheet" href="education.css?v=1"></head>' | replace: '</body>', '<script src="education.js?v=1"></script></body>' }}
+{{ motor_page | replace: '</head>', '<link rel="stylesheet" href="education.css?v=1"></head>' | replace: '</body>', '<script src="education.js?v=1"></script><script src="visuals.js?v=1"></script></body>' }}
