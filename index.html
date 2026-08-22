@@ -204,6 +204,30 @@ header::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none
 .svc-marquee .chip.dot{color:var(--ghost-dim);padding:15px 4px}
 @keyframes marq{to{transform:translateX(-50%)}}
 
+/* ---------- CURRENT PROJECTS ---------- */
+.project-list{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(14,26,46,.28)}
+.project-row{position:relative;display:grid;grid-template-columns:52px minmax(190px,.72fr) minmax(280px,1.35fr) auto;align-items:center;gap:24px;padding:24px 18px;border-bottom:1px solid var(--line);text-decoration:none;transition:background .3s,padding .3s,border-color .3s}
+.project-row:last-child{border-bottom:none}
+.project-row::before{content:"";position:absolute;left:0;top:20%;bottom:20%;width:2px;background:linear-gradient(var(--cyan),var(--blue));transform:scaleY(0);transform-origin:center;transition:transform .3s}
+.project-row:hover{background:linear-gradient(90deg,rgba(91,155,213,.075),rgba(60,111,176,.025) 55%,transparent);padding-left:28px;border-color:rgba(91,155,213,.22)}
+.project-row:hover::before{transform:scaleY(1)}
+.project-num{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;color:var(--ghost-dim)}
+.project-name .kind{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:5px}
+.project-name h3{font-family:var(--disp);font-size:1.35rem;line-height:1.08;font-weight:600}
+.project-desc{color:var(--ghost);font-size:.94rem;line-height:1.5;max-width:560px}
+.project-open{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);white-space:nowrap;border:1px solid rgba(91,155,213,.24);border-radius:100px;padding:9px 14px;transition:background .25s,color .25s,border-color .25s}
+.project-row:hover .project-open{background:var(--cyan);border-color:var(--cyan);color:var(--void)}
+@media (max-width:820px){
+  .project-row{grid-template-columns:38px 1fr auto;gap:14px;padding:20px 12px}
+  .project-desc{grid-column:2/-1;margin-top:-4px;padding-right:4px}
+  .project-row:hover{padding-left:18px}
+}
+@media (max-width:560px){
+  .project-row{grid-template-columns:32px 1fr;padding:20px 8px}
+  .project-open{grid-column:2;justify-self:start;margin-top:3px}
+  .project-desc{grid-column:2}
+}
+
 /* ---------- PACKAGE showcase ---------- */
 .pkg-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
 .pkg-tab{font-family:var(--mono);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ghost);border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(6px);border-radius:100px;padding:12px 20px;cursor:pointer;display:inline-flex;align-items:center;gap:9px;transition:color .25s,border-color .25s,background .25s,transform .12s}
@@ -374,7 +398,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
     </a>
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks">Menu</button>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#services">Services</a></li>
+      <li><a href="#services">Projects</a></li>
       <li><a href="#packages">Packages</a></li>
       <li><a href="#process">Process</a></li>
       <li><a href="#desk">Trading</a></li>
@@ -418,78 +442,40 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
 </div>
 
 <main>
-<!-- SERVICES BENTO -->
+<!-- CURRENT PROJECTS -->
 <section class="section" id="services">
   <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="idx">01 / WHAT I DO</div>
-      <h2>More customers. Less busywork. <span class="grad">Lower bills.</span></h2>
-      <p>You run the shop and I run the parts that get people through the door and keep your costs down. No B.S, no fluff. Here's how I help a place like yours.</p>
+    <div class="sec-head reveal" style="margin-bottom:38px">
+      <div class="idx">01 / CURRENT PROJECTS</div>
+      <h2>Things I'm <span class="grad">building.</span></h2>
+      <p>Four projects built around the same idea: take something complicated or overlooked and make it easier to understand, use, or explore.</p>
     </div>
-  </div>
 
-  <div class="svc-marquee reveal" aria-hidden="true">
-    <div class="track">
-      <span class="chip">☕ <b>Coffee shops</b></span><span class="chip dot">/</span>
-      <span class="chip">🍽️ <b>Restaurants</b></span><span class="chip dot">/</span>
-      <span class="chip">💈 <b>Barbershops</b></span><span class="chip dot">/</span>
-      <span class="chip">💅 <b>Salons</b></span><span class="chip dot">/</span>
-      <span class="chip">🌮 <b>Food trucks</b></span><span class="chip dot">/</span>
-      <span class="chip">🔧 <b>Home services</b></span><span class="chip dot">/</span>
-      <span class="chip">🏠 <b>Households</b></span><span class="chip dot">/</span>
-      <span class="chip">☕ <b>Coffee shops</b></span><span class="chip dot">/</span>
-      <span class="chip">🍽️ <b>Restaurants</b></span><span class="chip dot">/</span>
-      <span class="chip">💈 <b>Barbershops</b></span><span class="chip dot">/</span>
-      <span class="chip">💅 <b>Salons</b></span><span class="chip dot">/</span>
-      <span class="chip">🌮 <b>Food trucks</b></span><span class="chip dot">/</span>
-      <span class="chip">🔧 <b>Home services</b></span><span class="chip dot">/</span>
-      <span class="chip">🏠 <b>Households</b></span><span class="chip dot">/</span>
-    </div>
-  </div>
-
-  <div class="wrap" style="margin-top:54px">
-    <div class="bento reveal">
-      <article class="cell web tilt">
-        <span class="cnum">01</span>
-        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></span>
-        <h3>A website that brings people in</h3>
-        <p>Your shop, online and open 24/7. Folks find your menu, your hours, your photos, and your story — and decide you're the spot before they even call. Fast, polished, and built to turn a quick phone search into someone walking through your door. The kind of site you're standing in right now.</p>
-        <div class="ctags"><span>Menu &amp; info</span><span>Photos</span><span>Mobile-first</span><span>Yours to edit</span></div>
-        <a class="clink" href="https://yourfuturesite.org" target="_blank" rel="noopener">See a live build — yourfuturesite.org →</a>
-      </article>
-      <article class="cell social tilt">
-        <span class="cnum">02</span>
-        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.4 8.4 0 01-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.4 8.4 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></span>
-        <h3>Your social media, handled</h3>
-        <p>You shouldn't be up at 11pm wondering what to post. I keep your Instagram and Facebook alive with on-brand posts, reels, and replies so you stay focused and look professional without lifting a finger.</p>
-        <div class="ctags"><span>Posts &amp; reels</span><span>Captions</span><span>Replies &amp; DMs</span><span>Done monthly</span></div>
-      </article>
-      <article class="cell found tilt">
-        <span class="cnum">03</span>
-        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.3-7-11a7 7 0 0114 0c0 4.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.4"/></svg></span>
-        <h3>Be the one they find on Google</h3>
-        <p>When someone nearby searches "coffee near me" or "best tacos in town," you want to be the first thing they see with great photos, right hours, glowing reviews. I get your Google profile working for you.</p>
-        <div class="ctags"><span>Google profile</span><span>Maps</span><span>Reviews</span><span>"Near me"</span></div>
-      </article>
-      <article class="cell smart tilt">
-        <span class="cnum">04</span>
-        <span class="cico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>
-        <h3>Everything they need, in one place</h3>
-        <p>Hours, location, parking, your full menu or service list, photos, and the answers to the questions you're tired of hearing on the phone — all on one clean, easy page. Folks show up already knowing what to expect.</p>
-        <div class="ctags"><span>Hours &amp; location</span><span>Menu / services</span><span>Photos</span><span>FAQs</span></div>
-      </article>
-      <article class="cell bills">
-        <span class="cico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span>
-        <div class="btxt">
-          <h3 style="font-size:1.5rem;margin-bottom:6px">Lower your bills — shop <em>and</em> home</h3>
-          <p>Beyond the marketing, I help you keep more of what you earn. I've got access to deals most people never see, plus a sharp eye for the recurring costs quietly draining your account.</p>
-          <div class="bsplit">
-            <span class="bb"><b>Commercial</b> — internet, phone &amp; POS for less</span>
-            <span class="bb"><b>Residential</b> — cheaper fiber &amp; home Wi-Fi</span>
-          </div>
-        </div>
-        <a class="go" href="#savings">See what I can save you →</a>
-      </article>
+    <div class="project-list reveal">
+      <a class="project-row" href="/vellum/" target="_blank" rel="noopener">
+        <span class="project-num">01</span>
+        <span class="project-name"><span class="kind">Interactive reading</span><h3>Vellum</h3></span>
+        <span class="project-desc">An interactive reading desk for exploring the Bible through text, people, places, cross-references, notes, audio and guided study.</span>
+        <span class="project-open">Open project ↗</span>
+      </a>
+      <a class="project-row" href="https://thetradingdesk.org" target="_blank" rel="noopener">
+        <span class="project-num">02</span>
+        <span class="project-name"><span class="kind">Trading education</span><h3>The Trading Desk</h3></span>
+        <span class="project-desc">A visual-first trading education platform that simplifies terminology, market structure and trader psychology without the textbook feel.</span>
+        <span class="project-open">Open project ↗</span>
+      </a>
+      <a class="project-row" href="/thetradeschool/" target="_blank" rel="noopener">
+        <span class="project-num">03</span>
+        <span class="project-name"><span class="kind">Skilled trades education</span><h3>TheTradeSchool</h3></span>
+        <span class="project-desc">A visual learning platform for electrical, HVAC, plumbing, industrial maintenance, welding and construction built around real equipment and useful diagrams.</span>
+        <span class="project-open">Open project ↗</span>
+      </a>
+      <a class="project-row" href="/overtone/" target="_blank" rel="noopener">
+        <span class="project-num">04</span>
+        <span class="project-name"><span class="kind">Music education</span><h3>Overtone</h3></span>
+        <span class="project-desc">An interactive music-learning workspace with theory, ear training, a progression sketchpad and playable sound tools.</span>
+        <span class="project-open">Open project ↗</span>
+      </a>
     </div>
   </div>
 </section>
