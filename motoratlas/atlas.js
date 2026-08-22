@@ -10,6 +10,7 @@ load('diagnostics-data.js?v=1')
  .then(()=>load('beginner-data.js?v=1'))
  .then(()=>load('atlas-core.js?v=3'))
  .then(()=>load('beginner-ui.js?v=1'))
+ .then(()=>load('no-repeat.js?v=1'))
  .then(()=>load('diagnostics-v2.js?v=1'))
  .catch(err=>{console.error('MotorAtlas loader:',err);document.body.setAttribute('data-load-error','true')});
 })();
