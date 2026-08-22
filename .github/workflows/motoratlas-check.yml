@@ -1,0 +1,21 @@
+name: MotorAtlas build check
+on:
+  push:
+    paths:
+      - '.github/workflows/motoratlas-check.yml'
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JavaScript and required files
+        run: |
+          node --check motoratlas/atlas-data.js
+          node --check motoratlas/atlas.js
+          test -s motoratlas/index.html
+          test -s motoratlas/atlas.css
+          grep -q 'atlas-data.js' motoratlas/index.html
+          grep -q 'atlas.js' motoratlas/index.html
+          echo 'MotorAtlas static build checks passed.'
