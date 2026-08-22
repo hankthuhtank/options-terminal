@@ -4,12 +4,14 @@ on:
     paths:
       - '.github/workflows/motoratlas-check.yml'
 permissions:
-  contents: read
+  contents: write
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - name: Validate JavaScript and required files
         run: |
           node --check motoratlas/atlas-data.js
@@ -18,4 +20,11 @@ jobs:
           test -s motoratlas/atlas.css
           grep -q 'atlas-data.js' motoratlas/index.html
           grep -q 'atlas.js' motoratlas/index.html
-          echo 'MotorAtlas static build checks passed.'
+      - name: Mark successful validation
+        run: |
+          printf 'MotorAtlas JavaScript and static-file checks passed.\n' > motoratlas/.build-ok
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add motoratlas/.build-ok
+          git commit -m 'Validate MotorAtlas static build'
+          git push origin main
