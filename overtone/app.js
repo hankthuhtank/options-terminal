@@ -19,8 +19,8 @@ function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('sh
    1 · AUDIO
    Two engines. "Studio" streams real recorded notes from the
    FluidR3 General MIDI set and pitch-shifts between them.
-   "8-bit" is synthesised here from oscillators, the way the
-   NES and SNES had to do it. Drums are always synthesised.
+   "Synth" uses lightweight oscillators built into the browser.
+   Drums are always synthesised.
    ============================================================ */
 const SF_BASE='https://gleitz.github.io/midi-js-soundfonts/FluidR3_GM/';
 const SAMPLE_PCS={C:0,Eb:3,Gb:6,A:9};   /* one sample every minor 3rd */
@@ -55,8 +55,8 @@ const INSTRUMENTS=[
   ['choir_aahs','Choir'],
   ['synth_strings_1','Synth Strings']
 ];
-const CHIPS=[['chip_square','Square (NES pulse)'],['chip_pulse','Narrow pulse (12.5%)'],
-  ['chip_tri','Triangle (NES bass)'],['chip_saw','Saw lead']];
+const CHIPS=[['chip_square','Warm square'],['chip_pulse','Narrow pulse'],
+  ['chip_tri','Triangle'],['chip_saw','Saw lead']];
 
 const A={
   ctx:null, master:null, comp:null, mode:'sampled', sustain:false, hold:false, active:[],
@@ -185,16 +185,16 @@ const A={
     o.frequency.setValueAtTime(f,t);
     const peak=vel*.22;
     g.gain.setValueAtTime(.0001,t);
-    g.gain.linearRampToValueAtTime(peak,t+.004);          /* chips had almost no attack */
+    g.gain.linearRampToValueAtTime(peak,t+.004);          /* immediate synth attack */
     g.gain.linearRampToValueAtTime(peak*.7,t+Math.min(.12,dur*.4));
     g.gain.setValueAtTime(peak*.7,t+Math.max(.06,dur-.05));
-    g.gain.linearRampToValueAtTime(.0001,t+dur);          /* and a hard gate off */
+    g.gain.linearRampToValueAtTime(.0001,t+dur);          /* quick gated release */
     o.connect(g); g.connect(A.master); o.start(t); o.stop(t+dur+.02);
     A.reg(g,()=>{try{o.stop()}catch(e){}});
   },
 
   chord(midis,dur=1.5,vel=.6,when=0,arp=false){
-    if(arp){ /* the NES trick: cycle the chord fast enough that it fuses */
+    if(arp){ /* rapid arpeggiation: cycle chord tones fast enough to blend */
       const step=.035;
       for(let i=0;i<Math.floor(dur/step);i++) A.note(midis[i%midis.length],step*1.05,vel,when+i*step);
       return;
@@ -238,7 +238,6 @@ const midiOf=(pc,oct)=>12*(oct+1)+pc;
 const scaleById=id=>OT.SCALES.find(s=>s.id===id);
 const chordById=id=>OT.CHORDS.find(c=>c.id===id);
 const progById =id=>OT.PROGS.find(p=>p.id===id);
-const vgmById  =id=>OT.VGM.find(v=>v.id===id);
 
 /* chord quality of each degree of a scale, derived from the scale itself */
 function diatonic(iv,degIndex,size=4){
@@ -482,7 +481,7 @@ function buildInstSel(){
   const s=$('#instSel');
   s.innerHTML=`<optgroup label="Sampled instruments">${INSTRUMENTS.map(([v,n])=>
       `<option value="${v}">${esc(n)}</option>`).join('')}</optgroup>`+
-    `<optgroup label="Chip voices">${CHIPS.map(([v,n])=>
+    `<optgroup label="Synth voices">${CHIPS.map(([v,n])=>
       `<option value="${v}">${esc(n)}</option>`).join('')}</optgroup>`;
   s.value = A.mode==='chip'?A.chip:A.inst;
   s.onchange=()=>{
@@ -522,8 +521,8 @@ const VIEWS=[
   ['rhythm','Rhythm Room','Metronome · sequencer','M12 2 6 22h12L12 2zM9 15h6M12 8v7'],
   ['perc','Practice Room','Rudiments · gap click','M4 14a8 8 0 0 1 16 0v3H4zM4 17v2M20 17v2M8 6l2 4M16 6l-2 4'],
   ['world','Around the World','Twelve traditions','M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20M2 12h20M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20'],
-  ['codex','Game Codex','62 tracks, taken apart','M6 3h12a1 1 0 0 1 1 1v16l-7-4-7 4V4a1 1 0 0 1 1-1z'],
-  ['enc','Encyclopedia','62 terms','M4 4h11a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4zM4 4v14'],
+  ['sketch','Sketchpad','Build a progression','M4 17V7m5 10V4m5 13V9m5 11V6'],
+  ['enc','Encyclopedia','Plain-language reference','M4 4h11a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4zM4 4v14'],
   ['path','The Path','10 stages, in order','M12 4 2 9l10 5 10-5zM6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5']
 ];
 function go(v){ location.hash=v; }
@@ -538,6 +537,8 @@ function route(){
   if(id==='chords'&&typeof Chords!=='undefined'&&!Chords.mounted){ Chords.mount(); Chords.mounted=true; }
   if(id==='perc'&&typeof Perc!=='undefined'&&!Perc.mounted){ Perc.mount(); Perc.mounted=true; }
   if(id!=='perc'&&typeof Perc!=='undefined') Perc.stopAll();
+  if(id!=='sketch'&&typeof Sketch!=='undefined') Sketch.stop();
+  store.set('lastView',id);
 }
 function buildTabs(){
   $('#railNav').innerHTML=VIEWS.map(([v,n,sub,path],i)=>
@@ -557,8 +558,8 @@ const GATES=[
    'M4 20V10M10 20V4M16 20v-8M22 20v-4'],
   ['ear','Ear Training','Seven drills that turn listening into understanding. The skill everything else rests on.','var(--patina)',
    'M12 3a7 7 0 0 0-7 7v5a3 3 0 0 0 3 3h1v-8H5M19 18a3 3 0 0 0 3-3v-5a7 7 0 0 0-7-7M19 10v8h-1'],
-  ['codex','Game Codex','Forty-two tracks from the NES to now, with the theory device behind each one.','var(--wine)',
-   'M6 3h12a1 1 0 0 1 1 1v16l-7-4-7 4V4a1 1 0 0 1 1-1z'],
+  ['sketch','Progression Sketchpad','Build a four-chord loop in any key, hear it instantly, and learn the function of each chord.','var(--wine)',
+   'M4 17V7m5 10V4m5 13V9m5 11V6'],
   ['perc','Practice Room','Rudiments, a gap click, polyrhythms and a subdivision ladder. For drummers.','var(--brass)',
    'M4 14a8 8 0 0 1 16 0v3H4zM4 17v2M20 17v2M8 6l2 4M16 6l-2 4']
 ];
@@ -568,11 +569,26 @@ function buildHome(){
       <span class="gi"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${path}"/></svg></span>
       <h4>${esc(t)}</h4><p>${esc(d)}</p></button>`).join('');
+  buildHomeStatus();
 }
+function buildHomeStatus(){
+  const done=store.get('path',[]);
+  const pct=Math.round(done.length/PATH.length*100);
+  const open=PATH.findIndex((_,i)=>!done.includes(i));
+  const next=open===-1?PATH.length-1:open;
+  const best=Math.max(...Ear.drills.map(([id])=>store.get('best.'+id,0)),0);
+  const el=$('#homeStatus'); if(!el) return;
+  el.innerHTML=`<div class="home-status">
+    <div class="hstat primary"><div class="copy"><span class="plabel">Continue learning</span><h3>${esc(PATH[next][0])}</h3><p>${esc(PATH[next][1])}</p></div><button class="btn btn-brass" onclick="go('path')">Open path</button></div>
+    <div class="hstat"><span class="plabel">Learning path</span><div class="num">${pct}%</div><p>${done.length} of ${PATH.length} stages marked complete.</p><div class="practice-line"><i style="width:${pct}%"></i></div></div>
+    <div class="hstat"><span class="plabel">Best ear streak</span><div class="num">${best}</div><p>Best saved streak across the ear-training drills.</p></div>
+  </div>`;
+}
+
 function heroDemo(){
   A.resume();
   const root=60, prog=progById('royalroad');
-  toast('The Royal Road — the progression under a lot of Japanese game music.');
+  toast('Royal Road progression — a smooth IV–V–iii–vi loop common in Japanese pop.');
   let t=0;
   prog.steps.forEach(([deg,cid])=>{
     const ch=chordById(cid);
@@ -667,7 +683,6 @@ const Lab={
             <p class="note-txt"><span class="kv">Where you hear it</span>${esc(sc.ctx)}</p>
             <p class="note-txt"><span class="kv">The trap</span><b>${esc(sc.trap)}</b></p>
           </div>
-          ${Lab.vgmPanel(sc.vgm)}
         </div>
       </div>`;
   },
@@ -697,19 +712,6 @@ const Lab={
     const base=midiOf(Lab.root,3)+sc.iv[i];
     A.chord(rel.map(r=>base+r),1.6,.6,0,A.mode==='chip'&&Lab.arp);
   },
-  vgmPanel(ids){
-    if(!ids||!ids.length) return '';
-    const list=ids.map(vgmById).filter(Boolean);
-    if(!list.length) return '';
-    return `<div class="panel">
-      <div class="panel-h"><span class="plabel">Heard in</span></div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        ${list.map(v=>`<button class="card" style="padding:14px" onclick="Codex.open('${v.id}')">
-          <h4 style="font-size:.98rem">${esc(v.t)}</h4>
-          <span class="sub">${esc(v.g)} · ${esc(v.c)} · ${v.y} · ${esc(v.sys)}</span>
-        </button>`).join('')}
-      </div></div>`;
-  },
 
   /* ---------- chords ---------- */
   chords(){
@@ -736,7 +738,7 @@ const Lab={
               <span class="plabel">Inversion</span>
               ${[0,1,2,3].filter(i=>i<ch.iv.length).map(i=>
                 `<button class="chip ${i===Lab.inv?'on':''}" onclick="Lab.setInv(${i})">${i===0?'Root':i+(i===1?'st':i===2?'nd':'rd')}</button>`).join('')}
-              ${A.mode==='chip'?`<button class="chip pat ${Lab.arp?'on':''}" onclick="Lab.toggleArp()">NES arpeggio</button>`:''}
+              ${A.mode==='chip'?`<button class="chip pat ${Lab.arp?'on':''}" onclick="Lab.toggleArp()">Rapid arpeggio</button>`:''}
             </div>
             <div class="degs">${notes.map((m,i)=>
               `<button class="deg ${i===0?'root':''}" onclick="A.resume();A.note(${m},1.1,.8)">
@@ -811,7 +813,6 @@ const Lab={
             <p class="note-txt"><span class="kv">Why it works</span>${esc(p.ctx)}</p>
             <p class="note-txt"><span class="kv">The trap</span><b>${esc(p.trap)}</b></p>
           </div>
-          ${Lab.vgmPanel(p.vgm)}
         </div>
       </div>`;
   },
@@ -917,24 +918,24 @@ const Lab={
    10 · EAR TRAINING
    ============================================================ */
 const Ear={
-  game:'interval', q:null, score:0, streak:0, locked:false,
-  games:[['interval','Intervals'],['chord','Chord quality'],['scale','Scales & modes'],
+  drill:'interval', q:null, score:0, streak:0, locked:false,
+  drills:[['interval','Intervals'],['chord','Chord quality'],['scale','Scales & modes'],
     ['prog','Progressions'],['meter','Time signatures'],['read','Read the staff'],['pitch','Name the note']],
   mount(g){
-    if(g){ Ear.game=g; Ear.score=0; Ear.streak=0; }
-    const best=store.get('best.'+Ear.game,0);
+    if(g){ Ear.drill=g; Ear.score=0; Ear.streak=0; }
+    const best=store.get('best.'+Ear.drill,0);
     $('#earBody').innerHTML=`
-      <div class="row" style="margin-bottom:18px">${Ear.games.map(([v,n])=>
-        `<button class="chip ${v===Ear.game?'on':''}" onclick="Ear.mount('${v}')">${esc(n)}</button>`).join('')}</div>
+      <div class="row" style="margin-bottom:18px">${Ear.drills.map(([v,n])=>
+        `<button class="chip ${v===Ear.drill?'on':''}" onclick="Ear.mount('${v}')">${esc(n)}</button>`).join('')}</div>
       <div class="panel" style="max-width:660px;margin:0 auto">
         <div class="score-bar">
           <span>Score <b>${Ear.score}</b></span>
           <span>Streak <b class="st">${Ear.streak}</b></span>
           <span>Best <b>${best}</b></span>
         </div>
-        <div class="staffbox" id="earStaff" style="display:${Ear.game==='read'?'block':'none'}"></div>
+        <div class="staffbox" id="earStaff" style="display:${Ear.drill==='read'?'block':'none'}"></div>
         <div style="text-align:center;margin:20px 0">
-          <button class="btn btn-brass" onclick="Ear.play()" id="earPlay">${Ear.game==='read'?'Hear it':'Play it'}</button>
+          <button class="btn btn-brass" onclick="Ear.play()" id="earPlay">${Ear.drill==='read'?'Hear it':'Play it'}</button>
           <button class="btn btn-ghost" onclick="Ear.next()">Skip</button>
         </div>
         <div class="answers" id="earAns"></div>
@@ -952,7 +953,7 @@ const Ear={
       read:'Every Good Boy Deserves Fudge for the lines, FACE for the spaces. Say the landmark note nearest it, then step.',
       meter:'Count along out loud. Find the beat that feels strongest \u2014 that is beat one, and the gap between them is your answer.',
       pitch:'This one rewards absolute pitch, which most people do not have. Treat a lucky streak as luck.'
-    })[Ear.game];
+    })[Ear.drill];
   },
   pick(arr,n){
     const p=[...arr].sort(()=>Math.random()-.5).slice(0,n);
@@ -960,7 +961,7 @@ const Ear={
   },
   next(){
     Ear.locked=false;
-    const g=Ear.game;
+    const g=Ear.drill;
     if(g==='interval'){
       const pool=OT.INTERVALS.filter(i=>i.s>0&&i.s<=12);
       const opts=Ear.pick(pool,6), ans=opts[Math.floor(Math.random()*opts.length)];
@@ -997,7 +998,7 @@ const Ear={
     }
     $('#earMsg').textContent='';
     const st=$('#earStaff');
-    if(st) st.innerHTML = Ear.game==='read'
+    if(st) st.innerHTML = Ear.drill==='read'
       ? Staff.render([Ear.q.ans],{clef:Ear.q.clef,alt:'Name this note'}) : '';
     setTimeout(Ear.play,220);
   },
@@ -1006,7 +1007,7 @@ const Ear={
       `<button data-ok="${correct?1:0}" onclick="Ear.answer(this)">${esc(label)}</button>`).join('');
   },
   play(){
-    A.resume(); const q=Ear.q, g=Ear.game; if(!q) return;
+    A.resume(); const q=Ear.q, g=Ear.drill; if(!q) return;
     if(g==='interval'){ A.note(q.root,.8,.75); A.note(q.root+q.ans.s,.8,.75,.55);
       setTimeout(()=>A.chord([q.root,q.root+q.ans.s],1.2,.55),1300); }
     else if(g==='chord'){ A.chord(q.ans.iv.map(i=>q.root+i),1.7,.6); }
@@ -1037,10 +1038,10 @@ const Ear={
     const ok=btn.dataset.ok==='1';
     $$('#earAns button').forEach(b=>{ if(b.dataset.ok==='1') b.classList.add('right'); });
     if(!ok) btn.classList.add('wrong');
-    if(ok&&Ear.game==='meter'&&Ear.q.ans.hint) $('#earMsg').textContent=Ear.q.ans.hint;
+    if(ok&&Ear.drill==='meter'&&Ear.q.ans.hint) $('#earMsg').textContent=Ear.q.ans.hint;
     if(ok){ Ear.score++; Ear.streak++;
-      const best=store.get('best.'+Ear.game,0);
-      if(Ear.streak>best) store.set('best.'+Ear.game,Ear.streak);
+      const best=store.get('best.'+Ear.drill,0);
+      if(Ear.streak>best) store.set('best.'+Ear.drill,Ear.streak);
       $('#earMsg').textContent=['Correct.','Yes.','That is it.','Clean.'][Math.floor(Math.random()*4)];
     } else {
       Ear.streak=0;
@@ -1048,7 +1049,7 @@ const Ear={
     }
     $$('.score-bar b')[0].textContent=Ear.score;
     $$('.score-bar b')[1].textContent=Ear.streak;
-    $$('.score-bar b')[2].textContent=store.get('best.'+Ear.game,0);
+    $$('.score-bar b')[2].textContent=store.get('best.'+Ear.drill,0);
     setTimeout(Ear.next,ok?1000:2100);
   }
 };
@@ -1217,82 +1218,6 @@ const Rhythm={
 };
 
 /* ============================================================
-   12 · GAME CODEX
-   ============================================================ */
-const Codex={
-  era:'all', q:'',
-  mount(){
-    $('#codexBody').innerHTML=`
-      <div class="searchbar">
-        ${OT.ERAS.map(([v,n])=>`<button class="chip ${v===Codex.era?'on':''}"
-          onclick="Codex.setEra('${v}')">${esc(n)}</button>`).join('')}
-        <label class="search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
-          <input id="codexQ" placeholder="Search track, game or composer…" oninput="Codex.search(this.value)"></label>
-        <button class="chip pat" onclick="Codex.chips()">Sound hardware</button>
-      </div>
-      <div class="cards" id="codexGrid"></div>
-      <div class="count" id="codexCount"></div>`;
-    Codex.render();
-  },
-  setEra(e){ Codex.era=e; Codex.mount(); },
-  search(v){ Codex.q=v.toLowerCase(); Codex.render(); },
-  list(){
-    return OT.VGM.filter(v=>(Codex.era==='all'||v.era===Codex.era) &&
-      (!Codex.q||(v.t+' '+v.g+' '+v.c+' '+v.dev+' '+v.sys).toLowerCase().includes(Codex.q)));
-  },
-  render(){
-    const l=Codex.list();
-    $('#codexGrid').innerHTML=l.map(v=>
-      `<button class="card" onclick="Codex.open('${v.id}')">
-        <h4>${esc(v.t)}</h4>
-        <span class="sub">${esc(v.g)} · ${v.y}</span>
-        <p>${esc(v.why)}</p>
-        <span class="tagrow"><span class="tg acc">${esc(v.dev)}</span><span class="tg">${esc(v.sys)}</span></span>
-      </button>`).join('') || `<p class="hint">Nothing matches that. Try “Uematsu”, “SNES” or “Lydian”.</p>`;
-    $('#codexCount').textContent=`${l.length} of ${OT.VGM.length} entries`;
-  },
-  open(id){
-    const v=vgmById(id); if(!v) return;
-    const link=v.link||{};
-    let btn='';
-    if(link.scale) btn=`<button class="btn btn-brass" onclick="Codex.toLab('scale','${link.scale}')">Play this scale</button>`;
-    else if(link.prog) btn=`<button class="btn btn-brass" onclick="Codex.toLab('prog','${link.prog}')">Play this progression</button>`;
-    else if(link.chord) btn=`<button class="btn btn-brass" onclick="Codex.toLab('chord','${link.chord}')">Play this chord</button>`;
-    else if(link.rhythm) btn=`<button class="btn btn-brass" onclick="Codex.toLab('rhythm','${link.rhythm}')">Load this groove</button>`;
-    openModal(v.t,`
-      <h3>${esc(v.t)}</h3>
-      <p class="msub">${esc(v.g)} · ${esc(v.c)} · ${v.y} · ${esc(v.sys)}</p>
-      <div class="row" style="margin-bottom:6px">
-        <span class="tg acc">${esc(v.dev)}</span><span class="tg pat">${esc(v.sys)}</span>
-      </div>
-      <div class="mrow"><span class="k">What is going on</span><span class="v">${esc(v.why)}</span></div>
-      <div class="mrow"><span class="k">Listen for</span><span class="v"><b>${esc(v.listen)}</b></span></div>
-      <div class="row" style="margin-top:20px">${btn}</div>
-      <p class="hint" style="margin-top:16px">Analysis is the common reading rather than the only one —
-         music this good rarely has a single correct label.</p>`);
-  },
-  toLab(kind,id){
-    closeModal();
-    if(kind==='scale'){ Lab.scale=id; go('lab'); Lab.mount('scales'); setTimeout(()=>Lab.playScale(),250); }
-    if(kind==='prog'){ Lab.prog=id; go('lab'); Lab.mount('progs'); setTimeout(()=>Lab.startProg(),250); }
-    if(kind==='chord'){ Lab.chord=id; Lab.inv=0; go('lab'); Lab.mount('chords'); setTimeout(()=>Lab.playChord(),250); }
-    if(kind==='rhythm'){ go('rhythm'); setTimeout(()=>{Rhythm.loadPreset(id); Rhythm.startSeq();},250); }
-  },
-  chips(){
-    openModal('Sound hardware',`
-      <h3>The chips that shaped the writing</h3>
-      <p class="msub">Every limit below produced a compositional habit you can still hear</p>
-      ${OT.CHIPS.map(c=>`
-        <div class="mrow"><span class="k">${esc(c.n)}</span><span class="v">
-          <b>${esc(c.sys)} · ${c.y} · ${esc(c.ch)}</b><br>
-          <span style="font-family:var(--mono);font-size:.74rem;color:var(--faint)">${c.spec.map(esc).join(' · ')}</span>
-          <br><br>${esc(c.why)}<br><br><b>${esc(c.trick)}</b>
-        </span></div>`).join('')}`);
-  }
-};
-
-/* ============================================================
    13 · ENCYCLOPEDIA
    ============================================================ */
 const Enc={
@@ -1343,7 +1268,7 @@ const PATH=[
   ['Rhythm, time and groove','Time signatures, subdivision, syncopation and swing — plus why perfectly quantised music often feels dead.','Groove lives in the spaces between beats as much as on them.'],
   ['Your instrument, mapped','Taking all of the above onto the fretboard, the keys or the voice, so theory becomes something under your fingers.','Theory you cannot play is trivia. Put every idea on the instrument.'],
   ['Ear training and transcription','Recognising intervals, chord quality and progressions by ear, then writing down music you love.','Your ear is the final instrument. Train it and the other tools become optional.'],
-  ['Form, style and listening','Song structure, leitmotif, adaptive game scoring, and how to take apart anything you hear.','Great music feels inevitable because the structure is invisible. Learn to see it.']
+  ['Form, style and listening','Song structure, motif, arrangement, production choices, and how to take apart anything you hear.','Great music feels inevitable because the structure is invisible. Learn to see it.']
 ];
 const Path={
   mount(){
@@ -1362,7 +1287,7 @@ const Path={
     const done=store.get('path',[]);
     const k=done.indexOf(i);
     k>-1?done.splice(k,1):done.push(i);
-    store.set('path',done); Path.mount();
+    store.set('path',done); Path.mount(); buildHomeStatus();
     if(k===-1){ A.resume(); A.note(72,.5,.5); }
   }
 };
@@ -1381,7 +1306,8 @@ addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
 function boot(){
   buildTabs(); buildHome(); buildInstSel();
   Strings.init(); KB.render(); KB.bind();
-  Lab.mount(); Ear.mount(); Rhythm.mount(); Codex.mount(); Enc.mount(); Path.mount();
+  Lab.mount(); Ear.mount(); Rhythm.mount(); Enc.mount(); Path.mount();
+  if(typeof Sketch!=='undefined') Sketch.mount();
   addEventListener('hashchange',route); route();
   /* the audio context can only start from a gesture */
   const wake=()=>{ A.resume(); if(A.mode==='sampled') A.load(A.inst);

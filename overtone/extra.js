@@ -187,35 +187,6 @@ const World={
   }
 };
 
-/* ------------------------------------------------------------
-   HOOK THE MOTIF PLAYER INTO THE CODEX
-   ------------------------------------------------------------ */
-Codex.open=function(id){
-  const v=vgmById(id); if(!v) return;
-  const link=v.link||{};
-  let btn='';
-  if(link.scale) btn=`<button class="chip" onclick="Codex.toLab('scale','${link.scale}')">Open the scale in the Bench</button>`;
-  else if(link.prog) btn=`<button class="chip" onclick="Codex.toLab('prog','${link.prog}')">Open the progression</button>`;
-  else if(link.chord) btn=`<button class="chip" onclick="Codex.toLab('chord','${link.chord}')">Open the chord</button>`;
-  else if(link.rhythm) btn=`<button class="chip" onclick="Codex.toLab('rhythm','${link.rhythm}')">Load the groove</button>`;
-  openModal(v.t,`
-    <h3>${esc(v.t)}</h3>
-    <p class="msub">${esc(v.g)} \u00b7 ${esc(v.c)} \u00b7 ${v.y} \u00b7 ${esc(v.sys)}</p>
-    <div class="row" style="margin-bottom:6px">
-      <span class="tg acc">${esc(v.dev)}</span><span class="tg pat">${esc(v.sys)}</span>
-    </div>
-    <div class="mrow"><span class="k">What is going on</span><span class="v">${esc(v.why)}</span></div>
-    <div class="mrow"><span class="k">Listen for</span><span class="v"><b>${esc(v.listen)}</b></span></div>
-    <div class="mrow"><span class="k">Hear the device</span><span class="v">
-      Rather than a clip of the track, here is a phrase built on the same device so you can hear the technique
-      on its own \u2014 then go and listen to the original and you will catch it immediately.
-      <div class="row" style="margin-top:10px">${btn}</div>
-    </span></div>
-    ${Motif.html(v.motif)}
-    <p class="hint" style="margin-top:16px">Analysis is the common reading rather than the only one \u2014
-       music this good rarely has a single correct label.</p>`);
-};
-
 /* stop any phrase when a modal closes */
 (function(){
   const orig=window.closeModal;

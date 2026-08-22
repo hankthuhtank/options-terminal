@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>OVERTONE — hear how music works</title>
-<meta name="description" content="A playable music theory workbench. Scales, chords, progressions, ear training and a video game music codex — every panel makes sound, with real sampled instruments or 8-bit chip voices.">
+<meta name="description" content="A playable music theory workbench for scales, chords, rhythm, ear training, instrument shapes, and composition — every core idea can be heard and explored.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Archivo:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -397,6 +397,45 @@ footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(-
 .polyrow .pb.on{background:var(--patina);box-shadow:0 0 14px var(--patina);transform:scale(1.2)}
 .staffbox{background:var(--ebony);border:1px solid var(--line);border-radius:11px;padding:8px 4px;
   overflow-x:auto;margin-top:12px}
+
+/* ---------- v2 polish ---------- */
+:root{--panel2:#181411;--glass:rgba(34,27,23,.78)}
+body{background:
+  radial-gradient(circle at 78% 8%,rgba(95,184,166,.055),transparent 28%),
+  radial-gradient(circle at 22% 0%,rgba(217,164,65,.06),transparent 34%),var(--void)}
+.hero{position:relative;border-bottom:1px solid var(--line);margin-bottom:28px}
+.hero::after{content:"";position:absolute;right:2%;top:18%;width:min(34vw,420px);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,rgba(217,164,65,.08),transparent 67%);filter:blur(10px);pointer-events:none}
+.hero p{font-size:clamp(1rem,1.6vw,1.16rem)}
+.gate{min-height:178px}.gate .gi{background:color-mix(in srgb,var(--acc,var(--brass)) 10%,transparent)}
+.panel,.card,.wcard,.stage{box-shadow:0 10px 34px -30px rgba(0,0,0,.95)}
+.panel{background:linear-gradient(155deg,var(--wood),var(--panel2))}
+.btn:active,.chip:active,.gate:active,.card:active{transform:translateY(0)}
+.sel{min-width:154px}
+.home-status{margin:16px 0 4px;display:grid;grid-template-columns:1.35fr .8fr .8fr;gap:12px}
+.hstat{border:1px solid var(--line);border-radius:var(--r);background:rgba(18,16,15,.75);padding:18px;min-height:112px}
+.hstat .num{font-family:var(--disp);font-size:2rem;line-height:1;color:var(--ivory);margin:7px 0 5px}
+.hstat p{font-size:.82rem;color:var(--dim)}
+.hstat.primary{display:flex;align-items:center;justify-content:space-between;gap:18px;background:linear-gradient(135deg,var(--brass-glow),var(--wood))}
+.hstat.primary .copy{max-width:55ch}.hstat.primary h3{font-size:1.2rem;margin:4px 0 6px}
+.sketch-grid{display:grid;grid-template-columns:1fr .7fr;gap:14px;align-items:start}
+.sketch-slots{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:15px 0}
+.sketch-slot{min-height:118px;border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px;text-align:left;transition:.18s;position:relative}
+.sketch-slot:hover,.sketch-slot.on{border-color:var(--brass);background:var(--brass-glow)}
+.sketch-slot .slotn{font-family:var(--mono);font-size:.52rem;letter-spacing:.15em;color:var(--faint);text-transform:uppercase}
+.sketch-slot b{display:block;font-family:var(--disp);font-size:1.6rem;margin:12px 0 2px}
+.sketch-slot small{font-family:var(--mono);font-size:.61rem;color:var(--brass)}
+.degree-pick{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
+.degree-pick button{padding:12px 7px;border:1px solid var(--line);border-radius:9px;background:var(--panel);text-align:center;transition:.16s}
+.degree-pick button:hover{border-color:var(--brass);background:var(--raise)}
+.degree-pick b{display:block;font-family:var(--disp);font-size:1rem}.degree-pick small{font-family:var(--mono);font-size:.52rem;color:var(--faint)}
+.sketch-playhead{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--brass);transform:scaleX(0);transform-origin:left;opacity:0}
+.sketch-slot.playing .sketch-playhead{opacity:1;animation:slotSweep var(--slotdur,1s) linear forwards}
+@keyframes slotSweep{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.practice-line{height:7px;background:var(--line);border-radius:8px;overflow:hidden;margin-top:10px}.practice-line i{height:100%;display:block;background:linear-gradient(90deg,var(--brass),var(--patina))}
+@media(max-width:900px){.home-status,.sketch-grid{grid-template-columns:1fr}.sketch-slots{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.rig .tog{display:none}.sel{min-width:0;max-width:160px}.home-status{grid-template-columns:1fr 1fr}.hstat.primary{grid-column:1/-1}.degree-pick{grid-template-columns:repeat(4,1fr)}.hero{padding-top:22px}.hero h1{font-size:clamp(3rem,16vw,5rem)}}
+
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
   #strings{opacity:.35}
@@ -444,7 +483,7 @@ footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(-
       <select class="sel" id="instSel" aria-label="Instrument"></select>
       <div class="tog" role="group" aria-label="Sound engine">
         <button id="mStudio" class="on" onclick="setMode('sampled')">Studio</button>
-        <button id="mChip" onclick="setMode('chip')">8-bit</button>
+        <button id="mChip" onclick="setMode('chip')">Synth</button>
       </div>
       <button class="icon-btn" id="volBtn" onclick="toggleMute()" aria-label="Mute">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -461,13 +500,14 @@ footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(-
   <div class="hero">
     <h1>Music, made<span>audible on the page.</span></h1>
     <p>A theory workbench you can play. Every scale, chord and progression here makes sound —
-       with real sampled instruments or the chip voices that raised a generation. Start anywhere.</p>
+       with sampled instruments or a built-in synth engine. Learn by hearing, seeing and playing the idea yourself.</p>
     <div class="hero-cta">
       <button class="btn btn-brass" onclick="heroDemo()">Play me something</button>
-      <button class="btn btn-ghost" onclick="go('codex')">The game music codex</button>
+      <button class="btn btn-ghost" onclick="go('sketch')">Build a progression</button>
     </div>
   </div>
   <div class="gates" id="gates"></div>
+  <div id="homeStatus"></div>
 </section>
 
 <!-- LAB -->
@@ -475,8 +515,7 @@ footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(-
   <div class="vhead">
     <div class="eyebrow">The Bench</div>
     <h2>Pick a sound. <em>Hear what it does.</em></h2>
-    <p>Scales, chords and progressions in any of the twelve keys, laid out on the keyboard and wired to the
-       game music that made them famous.</p>
+    <p>Scales, chords and progressions in any of the twelve keys, laid out on the keyboard and explained in plain language.</p>
   </div>
   <div class="row" style="margin-bottom:18px" id="labTabs"></div>
   <div id="labBody"></div>
@@ -508,7 +547,7 @@ footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(-
   <div class="vhead">
     <div class="eyebrow">Ear Training</div>
     <h2>The only skill that <em>transfers to everything.</em></h2>
-    <p>Five drills, from naming intervals to identifying modes and progressions. Your streak and best score
+    <p>Seven drills, from naming intervals to identifying modes and progressions. Your streak and best score
        stay on this device.</p>
   </div>
   <div id="earBody"></div>
@@ -525,15 +564,14 @@ footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(-
   <div id="rhythmBody"></div>
 </section>
 
-<!-- CODEX -->
-<section class="view" id="v-codex">
+<!-- SKETCHPAD -->
+<section class="view" id="v-sketch">
   <div class="vhead">
-    <div class="eyebrow">The Codex</div>
-    <h2>Forty years of game music, <em>taken apart.</em></h2>
-    <p>What each composer actually did, why it works, and the hardware they were fighting. Open any entry and
-       you can play the device yourself.</p>
+    <div class="eyebrow">Progression Sketchpad</div>
+    <h2>Build something. <em>Then hear why it works.</em></h2>
+    <p>Choose a key, pick four diatonic chords, set the tempo and loop the result. Your sketch is saved on this device.</p>
   </div>
-  <div id="codexBody"></div>
+  <div id="sketchBody"></div>
 </section>
 
 <!-- WORLD -->
@@ -570,7 +608,7 @@ footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(-
 </main>
 
 <footer><div class="wrap">
-  <p>Overtone · built for a musician · sampled instruments from the FluidR3 General MIDI set</p>
+  <p>Overtone · interactive music theory and practice · sampled instruments from the FluidR3 General MIDI set</p>
 </div></footer>
 </div>
 
@@ -614,9 +652,9 @@ footer p{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(-
 
 <script src="theory.js"></script>
 <script src="encyclopedia.js"></script>
-<script src="vgm.js"></script>
 <script src="world.js"></script>
 <script src="app.js"></script>
+<script src="sketch.js"></script>
 <script src="chords.js"></script>
 <script src="extra.js"></script>
 <script src="tools.js"></script>

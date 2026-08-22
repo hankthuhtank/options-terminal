@@ -12,7 +12,6 @@ OT.ENC_CATS = [
   ['rhythm','Rhythm & Time'],
   ['instruments','Instruments'],
   ['production','Sound & Production'],
-  ['games','Game Audio'],
   ['practice','Ear & Practice']
 ];
 
@@ -49,7 +48,7 @@ OT.ENCYCLOPEDIA = [
 {t:'Tonic & Tonality',cat:'fundamentals',tag:'home base',
  def:'The tonic is the note the music treats as home. Tonality is the system of gravity that pulls back toward it.',
  why:'Expectation and resolution are the emotional engine of most Western music, and both depend on there being a home to leave and return to.',
- watch:'Modal and atonal music weaken or remove that gravity deliberately. Ambient game music often refuses to resolve so it can loop forever without fatigue.'},
+ watch:'Modal and atonal music weaken or remove that gravity deliberately. Ambient and minimalist music often weakens resolution so a texture can continue without sounding finished.'},
 
 /* ---------------- HARMONY ---------------- */
 {t:'Interval',cat:'harmony',tag:'the distance between two notes',
@@ -66,7 +65,7 @@ OT.ENCYCLOPEDIA = [
  watch:'The bass note changes the emotional weight enormously even though the chord "is" the same. First inversion sounds lighter and less final than root position.'},
 {t:'Seventh Chord',cat:'harmony',tag:'adding the fourth note',
  def:'A triad with another third stacked on top, producing a seventh above the root.',
- why:'Sevenths are where harmony stops being primary-colour and starts having shades. Jazz, soul and most Japanese game scoring live here.',
+ why:'Sevenths are where harmony stops being primary-colour and starts having shades. Jazz, soul, R&B and sophisticated pop harmony live here.',
  watch:'The dominant 7th contains a tritone between its 3rd and 7th. That internal dissonance is the mechanism of functional harmony, not a flaw.'},
 {t:'Extensions (9ths, 11ths, 13ths)',cat:'harmony',tag:'stacking past the seventh',
  def:'Continuing to stack thirds beyond the 7th, producing tones named by their distance above the root in the octave above.',
@@ -102,7 +101,7 @@ OT.ENCYCLOPEDIA = [
  watch:'Because it splits the octave evenly, it is its own inversion. That symmetry is what makes tritone substitution possible in jazz.'},
 {t:'Pedal Tone',cat:'harmony',tag:'a bass note that refuses to move',
  def:'A sustained or repeated note, usually in the bass, held while the harmony above it changes.',
- why:'It creates tension and stillness at once. Game music uses it constantly because it lets a loop stay grounded while the surface keeps moving.',
+ why:'It creates tension and stillness at once. Film, ambient and minimalist writing use it because it lets the harmony stay grounded while the surface keeps moving.',
  watch:'The dissonances that occur against the pedal are features, not errors. The ear forgives almost anything over a strong held bass.'},
 
 /* ---------------- MELODY & FORM ---------------- */
@@ -112,7 +111,7 @@ OT.ENCYCLOPEDIA = [
  watch:'Modes are the same notes started from a different degree. The notes do not change — where the gravity sits does, and that changes everything.'},
 {t:'Mode',cat:'melody',tag:'same notes, different centre',
  def:'A scale derived by treating a different degree of a parent scale as the tonic. Dorian is the major scale started from its second degree.',
- why:'Modes give you seven distinct emotional colours out of one set of notes, which is why film and game composers reach for them constantly.',
+ why:'Modes give you seven distinct emotional colours out of one set of notes, which is why film, jazz and folk writers reach for them constantly.',
  watch:'A mode only sounds modal if the harmony supports it. Play D Dorian over a C major chord and you will just hear C major.'},
 {t:'Motif',cat:'melody',tag:'the smallest memorable idea',
  def:'A short rhythmic or melodic fragment — sometimes only three or four notes — that a piece develops and repeats.',
@@ -120,7 +119,7 @@ OT.ENCYCLOPEDIA = [
  watch:'A motif can survive being transposed, inverted, reversed or re-harmonised and still be recognisable. That durability is what makes it a motif.'},
 {t:'Leitmotif',cat:'melody',tag:'a theme attached to a thing',
  def:'A recurring musical idea tied to a character, place or concept, transformed as their situation changes.',
- why:'Wagner formalised it for opera; film and games inherited it wholesale. It lets music carry plot information without a word.',
+ why:'Wagner formalised it for opera; film scoring inherited it wholesale. It lets music carry plot information without a word.',
  watch:'The power is in the transformation. Hearing a hero\u2019s theme in minor, slow, on a solo instrument tells you what happened without a cutscene.'},
 {t:'Phrase & Period',cat:'melody',tag:'musical sentences',
  def:'A phrase is a complete musical thought, commonly four bars. Two phrases that answer each other form a period.',
@@ -136,7 +135,7 @@ OT.ENCYCLOPEDIA = [
  watch:'Contrary motion — one line rising while another falls — is the fastest way to make two parts sound independent rather than parallel.'},
 {t:'Ostinato',cat:'melody',tag:'a figure that will not stop',
  def:'A short pattern repeated persistently, usually in the bass or an inner voice.',
- why:'It creates momentum and hypnosis at the same time, which is why it dominates game music that has to loop for hours without irritating anyone.',
+ why:'It creates momentum and hypnosis at the same time, which is why it appears constantly in minimalism, electronic music and film scoring.',
  watch:'Repetition works because of what changes around it. An ostinato with nothing developing above it becomes wallpaper within a minute.'},
 
 /* ---------------- RHYTHM ---------------- */
@@ -150,7 +149,7 @@ OT.ENCYCLOPEDIA = [
  watch:'Compound meters like 6/8 group beats in threes. They are counted in two but felt in six, which is why they swing naturally.'},
 {t:'Syncopation',cat:'rhythm',tag:'accents where they should not be',
  def:'Emphasising the weak parts of the beat — the off-beats or the spaces between them.',
- why:'It is the primary source of groove in funk, hip-hop, Latin and most game music with any bounce to it.',
+ why:'It is a primary source of groove in funk, hip-hop, R&B, Latin music and modern pop.',
  watch:'Syncopation only exists relative to a pulse the listener is already tracking. Remove the steady reference and it stops reading as syncopated.'},
 {t:'Swing',cat:'rhythm',tag:'the long-short subdivision',
  def:'Playing paired eighth notes unevenly — the first longer than the second — rather than as mathematical halves.',
@@ -222,34 +221,8 @@ OT.ENCYCLOPEDIA = [
  watch:'Shift a sample too far and the artefacts show — the classic chipmunk effect. Good sample sets record many notes so each is used near its true pitch.'},
 {t:'FM Synthesis',cat:'production',tag:'oscillators modulating each other',
  def:'Generating complex timbres by using one oscillator to modulate the frequency of another.',
- why:'It produces metallic, bell-like and aggressive tones that subtractive synthesis struggles with — and it is the sound of the Sega Genesis and the DX7.',
+ why:'It produces metallic, bell-like and aggressive tones that subtractive synthesis struggles with; the Yamaha DX7 made the method famous in pop production.',
  watch:'It is famously unintuitive to program. Small parameter changes produce enormous timbral jumps, which is why most people used presets.'},
-
-/* ---------------- GAME AUDIO ---------------- */
-{t:'Chiptune',cat:'games',tag:'music written for sound chips',
- def:'Music produced by the sound hardware of early computers and consoles, using a handful of simple waveform generators.',
- why:'The constraints shaped a compositional style. With three or four voices, every note had to justify its channel.',
- watch:'Modern chiptune often emulates the sound without the limits. Authentic hardware writing sounds different because the restrictions were real.'},
-{t:'Arpeggio Chords',cat:'games',tag:'faking harmony with one voice',
- def:'Cycling through a chord\u2019s notes so fast they fuse into a single buzzing timbre.',
- why:'It let NES composers imply full chords using one of their few channels. The distinctive ringing texture people call the 8-bit sound is really a workaround.',
- watch:'The speed is the point. Slow it down and it becomes an ordinary arpeggio; run it at frame rate and the ear hears a chord.'},
-{t:'Adaptive Music',cat:'games',tag:'a score that reacts',
- def:'Music that changes in response to gameplay — layers fading in, sections switching, tempo shifting with tension.',
- why:'It is the fundamental difference between scoring a film and scoring a game. The composer does not know how long the scene will last.',
- watch:'Transitions are the hard part. Cutting between cues without a musical seam is most of the craft in modern game audio.'},
-{t:'Vertical & Horizontal Layering',cat:'games',tag:'the two adaptive techniques',
- def:'Vertical layering adds or removes simultaneous parts. Horizontal re-sequencing changes which section plays next.',
- why:'Together they let one piece of music cover wildly different play situations without ever sounding wrong.',
- watch:'Vertical is seamless but limited in variety. Horizontal offers more contrast but has to solve the transition problem at every switch.'},
-{t:'Loop Point',cat:'games',tag:'where the track restarts',
- def:'The designated return position in a track, usually after an intro that plays only once.',
- why:'Game music must repeat indefinitely without irritating the player, so composers write to disguise the seam rather than hide it.',
- watch:'The best loops avoid full cadences at the join. Resolving completely and then starting again makes the repetition obvious.'},
-{t:'Tracker',cat:'games',tag:'the vertical sequencer',
- def:'Software that displays music as scrolling columns of hexadecimal note and effect data, one column per channel.',
- why:'It is how most demoscene and console music was written, and it remains the natural interface for chip composition.',
- watch:'Effects columns are where the character lives — pitch slides, vibrato and arpeggio commands are what make tracker music sound alive.'},
 
 /* ---------------- EAR & PRACTICE ---------------- */
 {t:'Relative Pitch',cat:'practice',tag:'hearing relationships',
