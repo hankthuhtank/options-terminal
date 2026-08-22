@@ -1,0 +1,23 @@
+name: Validate TradeSchool V16
+on:
+  push:
+    paths:
+      - 'thetradeschool/index.html'
+      - 'thetradeschool/js/content/v16-beginner.js'
+      - 'thetradeschool/js/core/beginner-v16.js'
+      - 'thetradeschool/css/v16-beginner.css'
+      - '.github/workflows/tradeschool-v16-check.yml'
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check JavaScript syntax
+        run: |
+          node --check thetradeschool/js/content/v16-beginner.js
+          node --check thetradeschool/js/core/beginner-v16.js
+      - name: Check published wiring
+        run: |
+          grep -q 'v16-beginner.css' thetradeschool/index.html
+          grep -q 'v16-beginner.js' thetradeschool/index.html
+          grep -q 'beginner-v16.js' thetradeschool/index.html
