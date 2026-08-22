@@ -1295,6 +1295,31 @@ html[data-theme="dark"] .gilt-track{background:#4A4236;}
   .theme-pill{padding:0 6px;}
 }
 </style>
+
+<style id="vellum-daily-leaf-v5">
+/* V5 — Daily Leaf: a date-stable, translation-aware passage on the frontispiece */
+.daily-wrap{max-width:980px;margin:0 auto;padding:42px 56px 6px}
+.daily-leaf{position:relative;border-top:1px solid var(--rule-hard);border-bottom:1px solid var(--rule-hard);padding:26px 0 28px}
+.daily-leaf::before{content:"";position:absolute;top:-3px;left:50%;width:7px;height:7px;background:var(--gold);transform:translateX(-50%) rotate(45deg)}
+.daily-head{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:18px}
+.daily-kicker{font-family:var(--mono);font-size:calc(10px * var(--text-scale));letter-spacing:.19em;text-transform:uppercase;color:var(--vermilion)}
+.daily-note{font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));letter-spacing:.08em;color:var(--gall-faint);text-align:right}
+.daily-body{display:grid;grid-template-columns:94px minmax(0,1fr);gap:24px;align-items:start}
+.daily-initial{width:94px;height:94px;margin-top:2px}.daily-initial svg{width:100%;height:100%;display:block}
+.daily-quote{margin:0;color:var(--gall);font-family:var(--serif);font-size:calc(24px * var(--text-scale));line-height:1.48;font-style:italic;max-width:760px}
+.daily-quote::before,.daily-quote::after{color:var(--gold);font-style:normal}.daily-quote::before{content:"“"}.daily-quote::after{content:"”"}
+.daily-quote[data-loading="true"]::before,.daily-quote[data-loading="true"]::after,.daily-quote[data-error="true"]::before,.daily-quote[data-error="true"]::after{content:""}
+.daily-meta{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:15px}
+.daily-ref{font-family:var(--caps);font-size:calc(14px * var(--text-scale));letter-spacing:.10em;text-transform:uppercase;color:var(--gall)}
+.daily-trans{font-family:var(--mono);font-size:calc(9.5px * var(--text-scale));letter-spacing:.10em;text-transform:uppercase;color:var(--gall-faint)}
+.daily-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:18px}
+.daily-action{font-family:var(--mono);font-size:calc(10px * var(--text-scale));letter-spacing:.12em;text-transform:uppercase;color:var(--vermilion);padding:4px 0;border-bottom:1px solid transparent;transition:color .15s,border-color .15s,opacity .15s}
+.daily-action:hover:not(:disabled){border-bottom-color:var(--vermilion)}.daily-action:disabled{color:var(--gall-faint);cursor:default;opacity:.85}
+.daily-retry{border:1px solid var(--rule-hard);padding:8px 11px;background:var(--vellum-lit)}
+html[data-theme="dark"] .daily-leaf{border-color:rgba(232,223,200,.26)}
+@media(max-width:760px){.daily-wrap{padding:28px 16px 4px}.daily-leaf{padding:22px 0 24px}.daily-head{align-items:flex-start;flex-direction:column;gap:4px}.daily-note{text-align:left}.daily-body{grid-template-columns:64px minmax(0,1fr);gap:14px}.daily-initial{width:64px;height:64px}.daily-quote{font-size:calc(19px * var(--text-scale));line-height:1.48}.daily-actions{gap:14px;margin-top:14px}}
+@media(max-width:460px){.daily-body{grid-template-columns:1fr}.daily-initial{display:none}.daily-quote{font-size:calc(18.5px * var(--text-scale))}}
+</style>
 <body>
 
 <!-- ══ mobile binding bar ═══════════════════════════════════ -->
@@ -1394,6 +1419,29 @@ html[data-theme="dark"] .gilt-track{background:#4A4236;}
         <button class="resume-go" id="resumeGo">Return to the desk →</button>
       </div>
     </div>
+  </div>
+
+  <div class="daily-wrap">
+    <section class="daily-leaf" id="dailyLeaf" aria-labelledby="dailyLeafTitle">
+      <div class="daily-head">
+        <div class="daily-kicker" id="dailyLeafTitle">The Daily Leaf</div>
+        <div class="daily-note" id="dailyDate">A passage for today</div>
+      </div>
+      <div class="daily-body">
+        <div class="daily-initial" id="dailyInitial" aria-hidden="true"></div>
+        <div>
+          <blockquote class="daily-quote" id="dailyQuote" data-loading="true" aria-live="polite">Choosing today’s leaf…</blockquote>
+          <div class="daily-meta">
+            <strong class="daily-ref" id="dailyRef">—</strong>
+            <span class="daily-trans" id="dailyTrans"></span>
+          </div>
+          <div class="daily-actions">
+            <button class="daily-action" id="dailySave" disabled>Save to Notebook</button>
+            <button class="daily-action" id="dailyOpen" disabled>Open passage →</button>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="how" id="howRows"></div>
@@ -1912,7 +1960,7 @@ const store = {
 const S = {
   trans:"BSB", books:[], byId:{}, book:"GEN", chapter:1, targetVerse:null,
   chapterData:null, marked:new Set(), saved:{}, notes:[], xrefs:null,
-  gilt:{}, leaf:"frontispiece", collation:null, readerSize:1, focus:false
+  gilt:{}, leaf:"frontispiece", collation:null, readerSize:1, focus:false, daily:null
 };
 
 /* ── theme (light / dark) ─────────────────────────────────── */
@@ -1983,6 +2031,95 @@ function illuminate(letter){
   </svg>`;
 }
 
+
+
+/* ═══ DAILY LEAF ════════════════════════════════════════════
+   A curated reference selected deterministically from the
+   visitor's local calendar date. The text itself still comes
+   from the active translation/source API and is cached locally.
+   ═══════════════════════════════════════════════════════════ */
+const DAILY_POOL=[
+  ["GEN",1,3],["GEN",12,2],["EXO",14,14],["DEU",6,5],["JOS",1,9],["1SA",16,7],
+  ["PSA",19,1],["PSA",23,4],["PSA",27,1],["PSA",34,8],["PSA",46,10],["PSA",51,10],
+  ["PSA",90,12],["PSA",103,12],["PSA",118,24],["PSA",119,105],["PRO",3,5],["PRO",4,23],
+  ["PRO",16,9],["PRO",17,17],["ECC",3,1],["ECC",4,9],["ISA",40,31],["ISA",41,10],
+  ["ISA",43,2],["ISA",55,8],["JER",29,11],["LAM",3,23],["MIC",6,8],["MAT",5,9],
+  ["MAT",5,14],["MAT",6,21],["MAT",6,34],["MAT",7,12],["MAT",11,28],["MAT",22,39],
+  ["MRK",9,24],["LUK",6,31],["LUK",10,27],["LUK",12,34],["JHN",1,5],["JHN",8,32],
+  ["JHN",13,34],["JHN",14,6],["JHN",15,5],["JHN",16,33],["ACT",20,35],["ROM",8,28],
+  ["ROM",12,2],["ROM",12,18],["1CO",13,13],["1CO",16,14],["2CO",4,18],["2CO",5,7],
+  ["GAL",6,9],["EPH",2,10],["EPH",4,32],["PHP",4,6],["PHP",4,8],["PHP",4,13],
+  ["COL",3,12],["COL",3,23],["1TH",5,16],["1TH",5,18],["2TI",1,7],["HEB",4,12],
+  ["HEB",11,1],["HEB",12,1],["JAS",1,5],["JAS",1,19],["1PE",5,7],["1JN",4,18],["REV",21,4]
+];
+function localDayKey(d=new Date()){
+  const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${day}`;
+}
+function dailyRefFor(d=new Date()){
+  const serial=Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000);
+  const [b,c,v]=DAILY_POOL[((serial%DAILY_POOL.length)+DAILY_POOL.length)%DAILY_POOL.length];
+  return {b,c,v};
+}
+function updateDailySaveState(){
+  const btn=$("#dailySave"); if(!btn||!S.daily) return;
+  const saved=!!S.saved[savedKey(S.daily.b,S.daily.c,S.daily.v)];
+  btn.disabled=saved||!S.daily.text; btn.textContent=saved?"Saved to Notebook":"Save to Notebook";
+}
+function paintDailyLeaf(item,stale=false){
+  if(!item||!item.text) return false;
+  S.daily=item;
+  const q=$("#dailyQuote"); q.removeAttribute("data-loading"); q.removeAttribute("data-error"); q.textContent=item.text;
+  $("#dailyRef").textContent=`${name(item.b)} ${item.c}:${item.v}`;
+  $("#dailyTrans").textContent=item.transName||item.trans||S.trans;
+  $("#dailyInitial").innerHTML=illuminate((item.text.trim()[0]||"I"));
+  $("#dailyOpen").disabled=false;
+  const date=new Date();
+  $("#dailyDate").textContent=(stale?"Last opened leaf · ":"The leaf for ")+new Intl.DateTimeFormat(undefined,{month:"long",day:"numeric"}).format(stale&&item.loadedAt?new Date(item.loadedAt):date);
+  updateDailySaveState();
+  return true;
+}
+async function renderDailyLeaf(){
+  const q=$("#dailyQuote"); if(!q) return;
+  const day=localDayKey(), ref=dailyRefFor(), cacheKey=`vellum:daily:${day}:${S.trans}`;
+  q.dataset.loading="true"; q.removeAttribute("data-error"); q.textContent="Choosing today’s leaf…";
+  $("#dailyRef").textContent=`${name(ref.b)} ${ref.c}:${ref.v}`; $("#dailyTrans").textContent=S.trans;
+  $("#dailySave").disabled=true; $("#dailyOpen").disabled=true;
+  const cached=await store.get(cacheKey);
+  if(cached&&cached.text) paintDailyLeaf(cached,false);
+  try{
+    const d=await get(`/${S.trans}/${ref.b}/${ref.c}.json`);
+    const node=(d.chapter?.content||[]).find(x=>x.type==="verse"&&x.number===ref.v);
+    const text=node?verseText(node):"";
+    if(!text) throw new Error("verse unavailable");
+    const item={...ref,text,day,trans:S.trans,transName:d.translation?.shortName||d.translation?.id||S.trans,loadedAt:Date.now()};
+    await store.set(cacheKey,item); await store.set("vellum:daily:last",item); paintDailyLeaf(item,false);
+  }catch(_){
+    if(cached&&cached.text) return;
+    const last=await store.get("vellum:daily:last");
+    if(last&&last.text){ paintDailyLeaf(last,true); return; }
+    S.daily=null; q.removeAttribute("data-loading"); q.dataset.error="true"; q.textContent="Today’s leaf could not be fetched. The rest of Vellum is still available.";
+    $("#dailyRef").textContent="Source temporarily unavailable"; $("#dailyTrans").textContent="";
+    $("#dailyInitial").innerHTML=""; $("#dailySave").disabled=true; $("#dailyOpen").disabled=true;
+  }
+}
+async function saveDailyLeaf(){
+  if(!S.daily||!S.daily.text) return;
+  const x=S.daily,key=savedKey(x.b,x.c,x.v),old=S.saved[key]||{};
+  if(S.saved[key]){ updateDailySaveState(); return; }
+  S.saved[key]={b:x.b,c:x.c,v:x.v,text:x.text,note:old.note||"",at:Date.now()};
+  await store.set("vellum:marks",S.saved); updateResume(); updateDailySaveState();
+  if(S.book===x.b&&S.chapter===x.c&&S.chapterData){
+    S.marked.add(x.v); const el=$(`.verse[data-v="${x.v}"]`); if(el){ el.dataset.marked="true"; el.setAttribute("aria-pressed","true"); }
+    placeManicules(); renderNotes();
+  }
+  toast("Daily Leaf saved to your Notebook");
+}
+function openDailyLeaf(){ if(S.daily) openReference(S.daily.b,S.daily.c,S.daily.v); }
+$("#dailySave")?.addEventListener("click",saveDailyLeaf);
+$("#dailyOpen")?.addEventListener("click",openDailyLeaf);
+
+
 /* ═══ READ ═════════════════════════════════════════════════ */
 function applyReaderSize(v,save=true){
   S.readerSize=Math.max(.88,Math.min(1.26,Number(v)||1));
@@ -2026,6 +2163,7 @@ async function boot(){
   try{ bk=await get(`/${S.trans}/books.json`); }
   catch(_){ if(S.trans!=="BSB"){ S.trans="BSB"; try{ bk=await get(`/BSB/books.json`); }catch(__){} } }
   if(!bk){
+    renderDailyLeaf();
     $("#scripture").innerHTML=`<div class="err"><b>The reading library is offline</b>Vellum can still open the Chronicle, Atlas, Register, Colophon, and your saved progress. The Reading Desk needs the source API or a chapter you previously opened on this device.<br><button class="tool" id="retryLibrary" style="margin-top:12px"><span class="dot"></span>Retry library</button></div>`;
     const rb=$("#retryLibrary"); if(rb) rb.addEventListener("click",()=>location.reload());
     return false;
@@ -2037,7 +2175,7 @@ async function boot(){
   $("#selBook").value=S.book; $("#thBook").value="JHN";
   fillChapterSelect($("#selChapter"),S.book); $("#selChapter").value=S.chapter;
   fillChapterSelect($("#thChapter"),"JHN"); $("#thChapter").value=1;
-  buildChronicle(); buildQuireGrid(); loadTranslations();
+  buildChronicle(); buildQuireGrid(); loadTranslations(); renderDailyLeaf();
   if(!location.hash.startsWith("#read/")) await loadChapter();
   return true;
 }
@@ -2129,7 +2267,7 @@ function toggleVerse(v){
     const node=(S.chapterData?.chapter?.content||[]).find(n=>n.type==="verse"&&n.number===v), old=S.saved[key]||{};
     S.saved[key]={b:S.book,c:S.chapter,v,text:node?verseText(node):old.text||"",note:old.note||"",at:Date.now()};
   }
-  store.set("vellum:marks",S.saved); placeManicules(); renderNotes(); updateResume(); loadXrefs(v); if(window.innerWidth<1080) openGloss(true);
+  store.set("vellum:marks",S.saved); placeManicules(); renderNotes(); updateResume(); updateDailySaveState(); loadXrefs(v); if(window.innerWidth<1080) openGloss(true);
 }
 function exportNotebook(){
   const rows=Object.values(S.saved||{}).sort((a,b)=>(a.b||"").localeCompare(b.b||"")||a.c-b.c||a.v-b.v);
@@ -2139,7 +2277,7 @@ function exportNotebook(){
 }
 async function clearNotebook(){
   if(!Object.keys(S.saved||{}).length) return; if(!confirm("Clear every saved passage and margin note from this device?")) return;
-  S.saved={}; S.marked.clear(); await store.remove("vellum:marks"); $$(".verse[data-marked=true]").forEach(el=>{el.removeAttribute("data-marked");el.setAttribute("aria-pressed","false")}); placeManicules(); renderNotes(); updateResume(); toast("Notebook cleared");
+  S.saved={}; S.marked.clear(); await store.remove("vellum:marks"); $$(".verse[data-marked=true]").forEach(el=>{el.removeAttribute("data-marked");el.setAttribute("aria-pressed","false")}); placeManicules(); renderNotes(); updateResume(); updateDailySaveState(); toast("Notebook cleared");
 }
 function renderNotes(){
   const p=$("#paneNotes"); if(!p) return; const all=Object.values(S.saved||{}),vs=[...S.marked].sort((a,b)=>a-b),byNum={};
@@ -2988,7 +3126,7 @@ $("#selTrans").addEventListener("change",async e=>{
     const bk=await get(`/${S.trans}/books.json`);
     S.books=bk.books.filter(b=>!b.isApocryphal); S.byId={}; S.books.forEach(b=>S.byId[b.id]=b);
   }catch(err){}
-  loadChapter();
+  renderDailyLeaf(); loadChapter();
 });
 $("#prevCh").addEventListener("click",()=>{
   S.targetVerse=null;
