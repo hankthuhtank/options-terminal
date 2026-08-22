@@ -657,6 +657,47 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 }
 .gloss-toggle{ display: none; }
 
+.mobile-notebook-tab{display:none;}
+.mobile-notebook-tab .label{font-family:var(--mono);font-size:calc(10px * var(--text-scale));letter-spacing:.12em;text-transform:uppercase;line-height:1.2;}
+.mobile-notebook-tab .count{display:grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--vermilion);color:var(--vellum-lit);font-family:var(--mono);font-size:calc(10px * var(--text-scale));line-height:1;font-weight:600;}
+
+body[data-notebook-tab="hidden"] .mobile-notebook-tab{display:none !important;}
+
+@media(max-width:1080px){
+  .gloss-toggle{ display: none !important; }
+  .mobile-notebook-tab{
+    position:fixed;
+    top:50%;
+    right:0;
+    transform:translateY(-50%);
+    z-index:94;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:64px;
+    min-height:124px;
+    padding:14px 8px 14px 10px;
+    border:1px solid var(--rule-hard);
+    border-right:none;
+    border-radius:14px 0 0 14px;
+    background:linear-gradient(180deg,var(--vellum-lit),var(--vellum));
+    color:var(--gall);
+    box-shadow:-12px 0 28px rgba(43,36,27,.18);
+    transition:transform .25s ease, opacity .2s ease, background .18s ease, color .18s ease;
+  }
+  .mobile-notebook-tab:hover{background:var(--vellum-deep);}
+  .mobile-notebook-tab .label{writing-mode:vertical-rl;transform:rotate(180deg);}
+  body[data-gloss="open"] .mobile-notebook-tab{transform:translateY(-50%) translateX(110%);opacity:0;pointer-events:none;}
+}
+
+@media(max-width:760px){
+  .mobile-notebook-tab{width:58px;min-height:112px;padding:12px 7px 12px 8px;gap:7px;}
+  .mobile-notebook-tab .label{font-size:calc(9px * var(--text-scale));}
+  .mobile-notebook-tab .count{min-width:20px;height:20px;font-size:calc(9px * var(--text-scale));}
+}
+
 /* Dim behind the open drawer */
 body[data-gloss="open"]::after{
   content: "";
@@ -1320,7 +1361,197 @@ html[data-theme="dark"] .daily-leaf{border-color:rgba(232,223,200,.26)}
 @media(max-width:760px){.daily-wrap{padding:28px 16px 4px}.daily-leaf{padding:22px 0 24px}.daily-head{align-items:flex-start;flex-direction:column;gap:4px}.daily-note{text-align:left}.daily-body{grid-template-columns:64px minmax(0,1fr);gap:14px}.daily-initial{width:64px;height:64px}.daily-quote{font-size:calc(19px * var(--text-scale));line-height:1.48}.daily-actions{gap:14px;margin-top:14px}}
 @media(max-width:460px){.daily-body{grid-template-columns:1fr}.daily-initial{display:none}.daily-quote{font-size:calc(18.5px * var(--text-scale))}}
 </style>
+
+<style id="vellum-v7-responsive-css">
+/* V7 — full responsive refinement + quiet manuscript motes */
+html{min-width:0;}
+body{min-width:0;min-height:100vh;}
+.book,.leaf,.wide,.column,.spread,.desk,.thread-stage,.atlas-shell{min-width:0;}
+svg,img{max-width:100%;}
+select,input,textarea,button{max-width:100%;}
+
+/* Atmospheric layer: always behind the reading surface, never interactive. */
+.particle-field{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;contain:strict;}
+.particle-field .mote{position:absolute;left:var(--x);bottom:-12vh;width:var(--s);height:var(--s);border-radius:50%;background:var(--gold-lt);opacity:var(--o);filter:blur(var(--b));box-shadow:0 0 8px rgba(168,131,44,.18);animation:mote-rise var(--d) linear var(--delay) infinite;will-change:transform,opacity;}
+.particle-field .mote:nth-child(3n){background:var(--vermilion-lt);box-shadow:0 0 7px rgba(179,43,23,.12);}
+.particle-field .mote:nth-child(5n){background:var(--gall-faint);box-shadow:none;}
+html[data-theme="dark"] .particle-field .mote{opacity:calc(var(--o) * 1.18);box-shadow:0 0 10px rgba(212,172,73,.17);}
+@keyframes mote-rise{
+  0%{transform:translate3d(0,10vh,0) scale(.72);opacity:0;}
+  10%{opacity:var(--o);}
+  78%{opacity:calc(var(--o) * .8);}
+  100%{transform:translate3d(var(--drift),-122vh,0) scale(1.22);opacity:0;}
+}
+
+/* Large desktop: use the space, but preserve readable line length. */
+@media(min-width:1440px){
+  :root{--spine:256px;--gloss:340px;--rail:60px;}
+  .wide{max-width:1280px;padding-left:54px;padding-right:54px;}
+  .column{max-width:830px;padding-left:64px;padding-right:64px;}
+  .thread-stage{grid-template-columns:minmax(0,1fr) 350px;}
+  .atlas-shell{grid-template-columns:minmax(0,1fr) 310px;}
+  .front-inner{max-width:820px;}
+  .daily-wrap{max-width:1040px;}
+}
+
+/* Laptop/tablet: controls wrap instead of becoming tiny. */
+@media(max-width:1180px){
+  .bindbar{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right));}
+  .spine{padding-bottom:env(safe-area-inset-bottom);}
+}
+@media(max-width:1080px){
+  .gloss{width:min(390px,92vw)!important;right:env(safe-area-inset-right)!important;}
+  .gloss-body{padding-bottom:calc(40px + env(safe-area-inset-bottom));}
+  .gloss-drag{height:calc(48px + env(safe-area-inset-top));padding-top:env(safe-area-inset-top);}
+  .gloss-tabs{flex-wrap:nowrap;}
+  .gloss-tab{min-height:46px;display:grid;place-items:center;}
+  .mobile-notebook-tab{right:env(safe-area-inset-right);}
+  .apparatus{align-items:stretch;}
+  .apparatus>.pick,.apparatus>.stepper,.apparatus>.tool,.apparatus>.read-size{flex-shrink:0;}
+}
+
+@media(max-width:900px){
+  .wide{padding-left:22px;padding-right:22px;}
+  .front-plate{padding-left:24px;padding-right:24px;}
+  .how{padding-left:22px;padding-right:22px;}
+  .atlas-shell,.thread-stage{border-left:0;border-right:0;}
+  .atlas-stage{min-height:390px;}
+  .thread-svg{width:100%;min-height:390px;}
+  .thread-side{border-left:0;border-top:1px solid var(--rule);}
+  .desk{gap:26px;}
+}
+
+/* Phone-first pass. */
+@media(max-width:640px){
+  :root{--lead:27px;}
+  .bindbar{height:calc(52px + env(safe-area-inset-top));padding-top:env(safe-area-inset-top);}
+  .wide{padding:22px 14px calc(76px + env(safe-area-inset-bottom));}
+  .column{padding:14px 14px calc(74px + env(safe-area-inset-bottom));}
+  .leaf-title{font-size:clamp(calc(25px * var(--text-scale)),8vw,calc(31px * var(--text-scale)));line-height:1.12;letter-spacing:.08em;overflow-wrap:anywhere;}
+  .leaf-sub{max-width:100%;}
+  .leaf-head{margin-bottom:24px;}
+
+  /* Frontispiece: illustrations stay useful instead of becoming postage stamps. */
+  .front-plate{padding:28px 16px 28px;}
+  .front-title{font-size:clamp(34px,12vw,54px);letter-spacing:.14em;overflow-wrap:anywhere;}
+  .front-lede{max-width:34rem;margin-bottom:26px;}
+  .how{padding:18px 14px 0;}
+  .how-row{grid-template-columns:28px minmax(0,1fr)!important;grid-template-areas:"num txt" ". fig"!important;gap:8px 12px!important;padding:20px 0 24px!important;}
+  .how-row.solo{grid-template-areas:"num txt"!important;}
+  .how-n{font-size:20px!important;text-align:left!important;}
+  .how-fig{grid-area:fig;width:100%!important;max-width:310px!important;aspect-ratio:1.65!important;margin:10px 0 0!important;}
+  .how-name{font-size:calc(16px * var(--text-scale));line-height:1.25;}
+  .how-body{font-size:calc(15.5px * var(--text-scale));line-height:25px;}
+  .front-go{width:100%;}
+  .big-btn{min-height:46px;width:100%;}
+
+  /* Reading controls: full-width selectors where space is tight. */
+  .apparatus{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:16px;}
+  .apparatus .pick{width:100%;min-width:0;}
+  .apparatus .pick select{width:100%;padding-right:24px;}
+  .apparatus .stepper{width:100%;}
+  .apparatus .stepper button{flex:1;width:auto;min-height:42px;}
+  .apparatus .tool,.apparatus .read-size{min-height:42px;justify-content:center;}
+  #btnFocus,#btnLink{width:100%;}
+  .opening{align-items:center;}
+  .scripture{overflow-wrap:anywhere;}
+  .verse{touch-action:manipulation;}
+  .vnum{margin-right:4px;}
+
+  /* Audio transport becomes thumb-friendly and wraps gracefully. */
+  .tp-row{gap:9px!important;flex-wrap:wrap;}
+  .tp-play{width:46px;height:46px;}
+  .tp-scrub{min-width:calc(100% - 145px);}
+  .tp-time{min-width:72px;}
+  .tp-row:nth-child(2){align-items:stretch;}
+  .tp-lab{width:100%;}
+  .rates{flex:1;}
+  .rate{flex:1;text-align:center;min-height:38px;display:grid;place-items:center;}
+  .tp-reader{width:100%;min-height:42px;}
+
+  /* Chronicle: one comfortable card per row on small screens. */
+  .folios{grid-template-columns:1fr;}
+  .folio{min-height:94px;padding:14px 14px 15px;}
+  .folio-name{font-size:calc(17px * var(--text-scale));line-height:22px;}
+  .folio-hook{font-size:calc(13.5px * var(--text-scale));line-height:20px;}
+  .era-bar{align-items:center;}
+  .era-rule{min-width:32px;}
+
+  /* Atlas: dedicate enough vertical room to touch/pan, then a searchable index. */
+  .atlas-stage{min-height:360px;}
+  .atlas-ctl{top:8px;right:8px;}
+  .atlas-ctl button{width:46px;height:46px;}
+  .atlas-index{max-height:none;}
+  .idx-list{max-height:260px;}
+  .idx{min-height:48px;padding:11px 13px;}
+  .idx .nm{font-size:calc(15.5px * var(--text-scale));}
+  .idx-seek{min-height:44px;font-size:calc(16px * var(--text-scale));}
+
+  /* Register: one profile target per row so names never become cramped. */
+  .rollbar{gap:9px;}
+  .rollbar .seek{width:100%;min-height:46px;font-size:calc(16px * var(--text-scale));}
+  .roster{grid-template-columns:1fr;}
+  .person{min-height:54px;padding:12px 13px;display:flex;flex-direction:column;justify-content:center;}
+  .person-name{font-size:calc(16px * var(--text-scale));}
+  .profile{padding:18px 15px;}
+  .kinset{gap:8px;}
+  .chip{min-height:38px;display:inline-flex;align-items:center;}
+
+  /* Threads: visual stays legible, controls are full width, side panel follows it. */
+  #leaf-threads .apparatus{grid-template-columns:1fr 1fr 1fr;}
+  .thread-svg{min-height:360px;}
+  .tlabel{font-size:17px;}
+  .thread-side{padding:16px 14px;}
+
+  /* Scriptorium: 4 leaves wide is large enough to tap and still shows progress. */
+  .quire-grid{grid-template-columns:repeat(4,1fr);gap:7px;}
+  .leafcell{min-height:64px;}
+  .collation{padding:18px 14px;min-height:0;}
+  .opts{gap:2px;}
+  .opt{min-height:48px;padding:12px 12px;}
+
+  /* Sources and notebook. */
+  .sources{grid-template-columns:1fr;}
+  .source{padding:18px 16px;}
+  .gloss{width:min(390px,94vw)!important;}
+  .gloss-tab{font-size:calc(10px * var(--text-scale));letter-spacing:.08em;}
+  .mobile-notebook-tab{width:54px;min-height:106px;border-radius:12px 0 0 12px;}
+}
+
+@media(max-width:460px){
+  .apparatus{grid-template-columns:1fr;}
+  #leaf-threads .apparatus{grid-template-columns:1fr 1fr;}
+  #leaf-threads .apparatus .pick:last-child{grid-column:1/-1;}
+  .opening{align-items:flex-start;}
+  .opening .initial{display:none;}
+  .book-title{font-size:calc(27px * var(--text-scale));}
+  .daily-wrap{padding-left:14px;padding-right:14px;}
+  .daily-actions{align-items:stretch;flex-direction:column;gap:8px;}
+  .daily-action{width:max-content;max-width:100%;}
+  .quire-grid{grid-template-columns:repeat(3,1fr);}
+  .leafcell{min-height:70px;}
+  .atlas-stage{min-height:330px;}
+  .atlas-scale{display:none;}
+  .thread-svg{min-height:330px;}
+  .profile h3{font-size:calc(22px * var(--text-scale));}
+  .footer-rule{overflow-wrap:anywhere;}
+}
+
+/* Short landscape phones/tablets: don't let drawers bury the close button. */
+@media(max-height:560px) and (max-width:1080px){
+  .gloss-drag{height:42px;min-height:42px;padding-top:0;}
+  .gloss-tabs{min-height:40px;}
+  .gloss-tab{min-height:40px;padding:7px 3px;}
+  .mobile-notebook-tab{top:56%;min-height:92px;}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .particle-field{display:none;}
+}
+</style>
+
 <body>
+<div class="particle-field" id="particleField" aria-hidden="true"></div>
 
 <!-- ══ mobile binding bar ═══════════════════════════════════ -->
 <div class="bindbar">
@@ -1673,6 +1904,11 @@ html[data-theme="dark"] .daily-leaf{border-color:rgba(232,223,200,.26)}
 </main>
 
 </div><!-- /.book -->
+
+<button class="mobile-notebook-tab" id="mobileNotebookTab" type="button" aria-label="Open Notebook" aria-expanded="false" hidden>
+  <span class="label">Notebook</span>
+  <span class="count" id="mobileNotebookCount">0</span>
+</button>
 
 <!-- ══ help ═════════════════════════════════════════════════ -->
 <div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
@@ -2295,6 +2531,7 @@ function renderNotes(){
   $("#askGloss")?.addEventListener("click",explainMarked); $("#exportNotes")?.addEventListener("click",exportNotebook); $("#clearNotes")?.addEventListener("click",clearNotebook);
   $$(".savedjump",p).forEach(b=>b.addEventListener("click",()=>openReference(b.dataset.b,+b.dataset.c,+b.dataset.v)));
   $$(".margin-note",p).forEach(t=>t.addEventListener("input",()=>{ const item=S.saved[t.dataset.key]; if(!item) return; item.note=t.value; item.at=Date.now(); store.set("vellum:marks",S.saved); updateResume(); }));
+  updateNotebookLauncher();
 }
 function openReference(b,c,v){
   S.book=b; S.chapter=+c; S.targetVerse=v?+v:null;
@@ -2922,12 +3159,13 @@ async function loadThreads(){
 }
 function drawThreads(v){
   if(!thData) return; const row=thData.chapter.content.find(r=>r.verse===+v); if(!row) return;
-  const b=$("#thBook").value,c=+$("#thChapter").value,W=760,H=620,cx=W/2,cy=H/2,R=232,refs=row.references.slice(0,narrow()?8:14),max=Math.max(...refs.map(r=>r.score||1),1);
+  const compact=narrow(), b=$("#thBook").value,c=+$("#thChapter").value,W=compact?620:760,H=620,cx=W/2,cy=H/2,R=compact?196:232,refs=row.references.slice(0,compact?8:14),max=Math.max(...refs.map(r=>r.score||1),1);
+  $("#threadSvg").setAttribute("viewBox",`0 0 ${W} ${H}`);
   let h=`<circle class="thub-ring" cx="${cx}" cy="${cy}" r="${R}" stroke-dasharray="2 6"/><circle class="thub-ring" cx="${cx}" cy="${cy}" r="${R*.62}" stroke-dasharray="2 6"/>`;
   const nodes=refs.map((r,i)=>{ const a=i/refs.length*Math.PI*2-Math.PI/2,rr=R*(.60+.40*((r.score||1)/max)); return {r,x:cx+Math.cos(a)*rr,y:cy+Math.sin(a)*rr,a}; });
   nodes.forEach((n,i)=>{ const w=1+((n.r.score||1)/max)*4.2,mx=cx+(n.x-cx)*.45+(n.y-cy)*.16,my=cy+(n.y-cy)*.45-(n.x-cx)*.16; h+=`<path class="tlink" data-i="${i}" d="M${cx},${cy} Q${mx.toFixed(1)},${my.toFixed(1)} ${n.x.toFixed(1)},${n.y.toFixed(1)}" stroke-width="${w.toFixed(2)}"/>`; });
-  nodes.forEach((n,i)=>{ const isNT=NT.has(n.r.book),rad=3.5+((n.r.score||1)/max)*3.5,right=Math.cos(n.a)>-.15,label=refStr(n.r.book,n.r.chapter,n.r.verse,n.r.endVerse); h+=`<g class="tnode" tabindex="0" role="button" aria-label="Open ${esc(label)}" data-i="${i}" data-b="${n.r.book}" data-c="${n.r.chapter}" data-v="${n.r.verse}"><circle cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${rad.toFixed(1)}" fill="${isNT?"var(--lapis)":"var(--verdigris)"}"/><text class="tlabel" x="${(n.x+(right?rad+7:-rad-7)).toFixed(1)}" y="${(n.y+3.5).toFixed(1)}" text-anchor="${right?"start":"end"}">${esc(label)}</text></g>`; });
-  h+=`<circle class="thub" cx="${cx}" cy="${cy}" r="9"/><text class="tlabel" x="${cx}" y="${cy+30}" text-anchor="middle" style="font-size:calc(12px * var(--text-scale));fill:var(--vermilion)">${esc(name(b))} ${c}:${v}</text>`; $("#threadSvg").innerHTML=h;
+  nodes.forEach((n,i)=>{ const isNT=NT.has(n.r.book),rad=(compact?6:3.5)+((n.r.score||1)/max)*(compact?5:3.5),right=Math.cos(n.a)>-.15,label=refStr(n.r.book,n.r.chapter,n.r.verse,n.r.endVerse),hit=compact?30:16; h+=`<g class="tnode" tabindex="0" role="button" aria-label="Open ${esc(label)}" data-i="${i}" data-b="${n.r.book}" data-c="${n.r.chapter}" data-v="${n.r.verse}"><circle cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${hit}" fill="transparent"/><circle cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${rad.toFixed(1)}" fill="${isNT?"var(--lapis)":"var(--verdigris)"}"/><text class="tlabel" x="${(n.x+(right?rad+8:-rad-8)).toFixed(1)}" y="${(n.y+4).toFixed(1)}" text-anchor="${right?"start":"end"}">${esc(label)}</text></g>`; });
+  h+=`<circle class="thub" cx="${cx}" cy="${cy}" r="${compact?11:9}"/><text class="tlabel" x="${cx}" y="${cy+(compact?34:30)}" text-anchor="middle" style="font-size:${compact?17:12}px;fill:var(--vermilion)">${esc(name(b))} ${c}:${v}</text>`; $("#threadSvg").innerHTML=h;
   $$(".tnode",$("#threadSvg")).forEach(g=>{ const i=g.dataset.i,go=()=>openReference(g.dataset.b,+g.dataset.c,+g.dataset.v); g.addEventListener("mouseenter",()=>$(`.tlink[data-i="${i}"]`)?.classList.add("hot")); g.addEventListener("mouseleave",()=>$(`.tlink[data-i="${i}"]`)?.classList.remove("hot")); g.addEventListener("click",go); g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go();}}); });
   const ot=refs.filter(r=>!NT.has(r.book)).length; $("#threadSide").innerHTML=`<div class="gl-head">${esc(name(b))} ${c}:${v}</div><p style="font-size:calc(15px * var(--text-scale));line-height:25px;color:var(--gall-soft)">${row.references.length} link${row.references.length===1?"":"s"} in the dataset; the strongest ${refs.length} are drawn. ${ot} point into the Hebrew Bible, ${refs.length-ot} into the New Testament.</p><p style="font-size:calc(14px * var(--text-scale));line-height:23px;color:var(--gall-faint)">Distance from the centre and line weight track the relevance score. Click or press Enter on a node to read it.</p><div style="margin-top:16px"><div class="mono" style="color:var(--verdigris);margin-bottom:5px">● Hebrew Bible</div><div class="mono" style="color:var(--lapis)">● New Testament</div></div>`;
 }
@@ -3082,7 +3320,9 @@ function showLeaf(id,push){
   if(id==="atlas") requestAnimationFrame(()=>drawAtlas()); if(id==="read") requestAnimationFrame(placeManicules); if(id==="cast") loadRoll(); if(id==="threads"&&S.books.length) loadThreads(); if(changed) scrollTop();
   document.title=id==="frontispiece"?"VELLUM — the book, taken apart":`VELLUM — ${id==="cast"?"Register":id[0].toUpperCase()+id.slice(1)}`;
   if(push!==false){ let hash="#"+id; if(id==="read") hash=`#read/${S.book}/${S.chapter}${S.targetVerse?`/${S.targetVerse}`:""}`; if(location.hash!==hash) history.pushState(null,"",hash); }
+  if(window.innerWidth<1080 && id!=="read" && document.body.dataset.gloss==="open") openGloss(false);
   updateResume();
+  updateNotebookLauncher();
 }
 
 /* Keep a reference so we can put the panel back where it belongs on desktop */
@@ -3108,6 +3348,21 @@ function openGloss(on){
   const btn = $("#btnGloss");
   if(btn){ btn.dataset.on = on ? "true" : "false"; btn.setAttribute("aria-expanded",on?"true":"false"); }
   document.body.dataset.gloss = (on && mobile) ? "open" : "closed";
+  updateNotebookLauncher();
+}
+
+function updateNotebookLauncher(){
+  const tab = $("#mobileNotebookTab"), count = $("#mobileNotebookCount"), panel = $("#glossPanel");
+  if(!tab || !count || !panel) return;
+  const total = Object.keys(S.saved||{}).length;
+  count.textContent = String(total);
+  const mobile = window.innerWidth < 1080;
+  const visible = mobile && S.leaf === "read";
+  document.body.dataset.notebookTab = visible ? "visible" : "hidden";
+  tab.hidden = !visible;
+  const open = mobile && panel.dataset.open === "true";
+  tab.setAttribute("aria-expanded", open ? "true" : "false");
+  tab.setAttribute("aria-label", `${open?"Close":"Open"} Notebook. ${total} saved passage${total===1?"":"s"}.`);
 }
 
 /* ═══ WIRING ═══════════════════════════════════════════════ */
@@ -3155,6 +3410,7 @@ $("#btnFocus").addEventListener("click",()=>applyFocus(!S.focus));
 $("#btnLink").addEventListener("click",async()=>{ const url=location.origin+location.pathname+`#read/${S.book}/${S.chapter}`; try{ await navigator.clipboard.writeText(url); toast("Chapter link copied"); }catch(_){ prompt("Copy this link",url); } });
 $("#resumeGo")?.addEventListener("click",()=>{ showLeaf("read"); loadChapter(); });
 $("#btnGloss").addEventListener("click",()=> openGloss($("#glossPanel").dataset.open!=="true"));
+$("#mobileNotebookTab")?.addEventListener("click",()=> openGloss($("#glossPanel").dataset.open!=="true"));
 $("#glossClose").addEventListener("click",()=> openGloss(false));
 document.addEventListener("click", e=>{
   if(document.body.dataset.gloss === "open" && !e.target.closest(".gloss") && !e.target.closest("#btnGloss")){
@@ -3336,6 +3592,7 @@ window.addEventListener("resize",()=>{
     if(S.leaf==="atlas" && VIEW) drawAtlas();
     if(S.leaf==="threads" && thData){ const v=$("#thVerse").value; if(v) drawThreads(v); }
     if(S.leaf==="read") placeManicules();
+    updateNotebookLauncher();
   },180);
 });
 
@@ -3479,6 +3736,35 @@ function parseHash(){
   if(["chronicle","atlas","cast","threads","scriptorium","sources","frontispiece"].includes(leaf)) showLeaf(leaf,false); else showLeaf("frontispiece",false);
 }
 window.addEventListener("hashchange",parseHash);
+
+/* Quiet floating pigment/dust motes behind the manuscript.
+   Seeded by date so the field feels alive without jumping on every render. */
+let particleCompact=null;
+function buildParticleField(force=false){
+  const field=$("#particleField"); if(!field) return;
+  const compact=window.innerWidth<700;
+  if(!force && particleCompact===compact && field.childElementCount) return;
+  particleCompact=compact; field.innerHTML="";
+  if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const now=new Date(), seed0=now.getFullYear()*10000+(now.getMonth()+1)*100+now.getDate();
+  let seed=(seed0^0x9e3779b9)>>>0;
+  const rnd=()=>{ seed=(Math.imul(seed,1664525)+1013904223)>>>0; return seed/4294967296; };
+  const count=compact?12:26, frag=document.createDocumentFragment();
+  for(let i=0;i<count;i++){
+    const m=document.createElement("i"); m.className="mote";
+    m.style.setProperty("--x",`${(2+rnd()*96).toFixed(2)}%`);
+    m.style.setProperty("--s",`${(.9+rnd()*3.1).toFixed(2)}px`);
+    m.style.setProperty("--o",`${(.08+rnd()*.19).toFixed(3)}`);
+    m.style.setProperty("--b",rnd()<.36?`${(.35+rnd()*.65).toFixed(2)}px`:"0px");
+    m.style.setProperty("--d",`${(19+rnd()*27).toFixed(2)}s`);
+    m.style.setProperty("--delay",`${(-rnd()*42).toFixed(2)}s`);
+    m.style.setProperty("--drift",`${(-70+rnd()*140).toFixed(1)}px`);
+    frag.appendChild(m);
+  }
+  field.appendChild(frag);
+}
+buildParticleField(true);
+window.addEventListener("resize",()=>buildParticleField());
 
 // boot first so books exist, then honour the hash
 boot().then(()=>{
