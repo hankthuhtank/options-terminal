@@ -4,6 +4,7 @@ const head=document.head;
 const addCss=href=>{const l=document.createElement('link');l.rel='stylesheet';l.href=href;head.appendChild(l)};
 addCss('diagnostics-v2.css?v=1');
 addCss('beginner-v1.css?v=1');
+const typeFix=document.createElement('style');typeFix.textContent='.beginner-sheet h4,.word-answer b,.diff-head h3,.wheel-readout b{font-family:var(--head)}';head.appendChild(typeFix);
 const load=src=>new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=()=>reject(new Error('Failed to load '+src));document.body.appendChild(s)});
 load('diagnostics-data.js?v=1')
  .then(()=>load('beginner-data.js?v=1'))
