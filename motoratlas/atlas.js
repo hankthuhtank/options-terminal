@@ -1,6 +1,14 @@
 (()=>{
 'use strict';
 const head=document.head;
+const brand=document.querySelector('.topbar .brand');
+if(brand){
+  brand.setAttribute('aria-label','MotorAtlas home');
+  brand.innerHTML='<img src="/assets/project-logos/motoratlas.svg" alt="MotorAtlas" class="site-brand-logo">';
+  const brandStyle=document.createElement('style');
+  brandStyle.textContent='.brand .site-brand-logo{display:block;width:232px;max-width:38vw;max-height:60px;object-fit:contain;object-position:left center}@media(max-width:720px){.brand .site-brand-logo{width:194px;max-width:56vw;max-height:52px}}';
+  head.appendChild(brandStyle);
+}
 const addCss=href=>{const l=document.createElement('link');l.rel='stylesheet';l.href=href;head.appendChild(l)};
 addCss('diagnostics-v2.css?v=1');
 addCss('beginner-v1.css?v=1');
