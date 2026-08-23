@@ -103,3 +103,14 @@ const Sketch={
       <p class="note-txt"><span class="kv">Try this</span>Change only one slot at a time. The fastest way to hear harmonic function is to keep three chords fixed and compare the fourth.</p>`;
   }
 };
+
+/* Project brand — one shared SVG asset, no helper file. */
+(()=>{
+  const style=document.createElement('style');
+  style.textContent='.project-brand-logo{display:block;width:210px;max-width:34vw;max-height:54px;object-fit:contain;object-position:left center}#rail .project-brand-logo{width:188px;max-width:100%;max-height:52px}@media(max-width:720px){.project-brand-logo{width:178px;max-width:46vw;max-height:48px}}';
+  document.head.appendChild(style);
+  const top=document.querySelector('a.brand[href="#home"]');
+  if(top) top.innerHTML='<img class="project-brand-logo" src="/assets/project-logos/overtone.svg" alt="Overtone">';
+  const rail=document.querySelector('a.rail-top[href="#home"]');
+  if(rail) rail.innerHTML='<img class="project-brand-logo" src="/assets/project-logos/overtone.svg" alt="Overtone">';
+})();
