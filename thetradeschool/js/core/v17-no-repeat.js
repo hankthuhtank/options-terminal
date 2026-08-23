@@ -7,6 +7,20 @@ const $=(s,c=document)=>c.querySelector(s);
 const $$=(s,c=document)=>[...c.querySelectorAll(s)];
 const byId=id=>D.concepts.find(c=>c.id===id);
 
+function applyBrand(){
+  const brand=$('.topbar .brand',app);
+  if(!brand||brand.dataset.logo==='1')return;
+  brand.dataset.logo='1';
+  brand.setAttribute('aria-label','The Trade School home');
+  brand.innerHTML='<img src="/assets/project-logos/tradeschool.svg" alt="The Trade School" class="site-brand-logo">';
+  if(!document.getElementById('projectBrandCss')){
+    const s=document.createElement('style');
+    s.id='projectBrandCss';
+    s.textContent='.site-brand-logo{display:block;width:226px;max-width:34vw;max-height:60px;object-fit:contain;object-position:left center}@media(max-width:700px){.site-brand-logo{width:190px;max-width:52vw;max-height:52px}}';
+    document.head.appendChild(s);
+  }
+}
+
 function cleanUnit(){
   $$('.inline-topic[data-v16="1"]',app).forEach(topic=>{
     if(topic.dataset.v17)return;
@@ -62,7 +76,7 @@ function cleanConcept(){
   $('.v16-system-picture',article)?.remove();
 }
 
-function clean(){cleanUnit();cleanConcept();}
+function clean(){applyBrand();cleanUnit();cleanConcept();}
 let timer=0;
 const schedule=()=>{clearTimeout(timer);timer=setTimeout(clean,35)};
 new MutationObserver(schedule).observe(app,{childList:true,subtree:true});
