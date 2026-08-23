@@ -1,0 +1,174 @@
+name: Apply clean project logos
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/logo-clean-apply.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply logos directly to existing sites
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          def replace_once(text, old, new, label):
+              if old not in text:
+                  raise SystemExit(f"Missing expected text for {label}")
+              return text.replace(old, new, 1)
+
+          # ---------- SAFI ROOT: flatten existing wrapper and update project list ----------
+          site = Path("site.html").read_text(encoding="utf-8")
+
+          old_about = """      <p>I'm a first-generation Lebanese-American based in <strong>Paris, Texas</strong>. My background is in customer-facing work and operations, so I tend to look at things from both the business and user side.</p>
+      <p><strong>Safi Solutions</strong> started with websites. It grew into the home for whatever I'm building — SaaS concepts, educational tools, business systems, and custom web work.</p>
+      <p>The common thread is simple: <strong>find a problem and make the solution easier to use.</strong></p>"""
+          new_about = """      <p>I'm a first-generation Lebanese-American based in <strong>Paris, Texas</strong>. Most of my background is in customer-facing work and operations, so I tend to look at a project from both sides — what makes sense for the business and what actually feels good for the person using it.</p>
+      <p><strong>Safi Solutions</strong> started with websites, but I realized pretty quickly that I enjoy the problem-solving part more than any one service. That has grown into custom websites, SaaS concepts, educational platforms, business tools, and whatever else seems worth building.</p>
+      <p>A lot of my work starts the same way: I find something confusing, clunky, or overlooked and start picking it apart until I can make it simpler, more visual, or more useful. Some of those ideas become my own projects; others are things I build for clients.</p>
+      <p>I'm always learning new industries and new tools, and that's honestly part of what I like most about it. The common thread is still simple: <strong>find the friction and build something better around it.</strong></p>"""
+          if old_about in site:
+              site = site.replace(old_about, new_about, 1)
+
+          logo_css = """
+/* project logos: direct assets, no brand helper files */
+.project-logo{display:block;width:auto;height:auto;max-width:196px;max-height:62px;object-fit:contain;object-position:left center}
+.project-name{min-width:0}
+@media(max-width:820px){.project-logo{max-width:186px;max-height:58px}}
+@media(max-width:560px){.project-logo{max-width:172px;max-height:54px}}
+"""
+          marker = "/* ---------- YOUR FUTURE SITE ---------- */"
+          site = replace_once(site, marker, logo_css + "\n" + marker, "Safi project logo CSS")
+
+          names = {
+              "<h3>Vellum</h3>": '<img class="project-logo" src="/assets/project-logos/vellum.svg" alt="Vellum">',
+              "<h3>The Trading Desk</h3>": '<img class="project-logo" src="/assets/project-logos/tradingdesk.svg" alt="The Trading Desk">',
+              "<h3>TheTradeSchool</h3>": '<img class="project-logo" src="/assets/project-logos/tradeschool.svg" alt="The Trade School">',
+              "<h3>Overtone</h3>": '<img class="project-logo" src="/assets/project-logos/overtone.svg" alt="Overtone">',
+          }
+          for old, new in names.items():
+              site = replace_once(site, old, new, old)
+
+          site = site.replace("Four projects built around the same idea:", "Five projects built around the same idea:", 1)
+
+          motor_row = """
+      <a class="project-row" href="/motoratlas/" target="_blank" rel="noopener">
+        <span class="project-num">05</span>
+        <span class="project-name"><span class="kind">Automotive education</span><img class="project-logo" src="/assets/project-logos/motoratlas.svg" alt="MotorAtlas"></span>
+        <span class="project-desc">A visual, parts-first automotive reference for learning vehicle components, system flow, failure symptoms and diagnostic thinking.</span>
+        <span class="project-open">Open project ↗</span>
+      </a>"""
+          pattern = re.compile(r'(<a class="project-row" href="/overtone/" target="_blank" rel="noopener">.*?</a>)', re.S)
+          site, n = pattern.subn(lambda m: m.group(1) + motor_row, site, count=1)
+          if n != 1:
+              raise SystemExit("Could not append MotorAtlas project row")
+
+          Path("index.html").write_text(site, encoding="utf-8")
+          Path("site.html").unlink()
+
+          # ---------- OVERTONE ----------
+          p = Path("overtone/index.html")
+          text = p.read_text(encoding="utf-8")
+          css = """
+.project-brand-logo{display:block;width:210px;max-width:32vw;max-height:54px;object-fit:contain;object-position:left center}
+#rail .project-brand-logo{width:188px;max-width:100%;max-height:52px}
+@media(max-width:720px){.project-brand-logo{width:178px;max-width:46vw;max-height:48px}}
+"""
+          text = text.replace("</style>", css + "\n</style>", 1)
+          text, n = re.subn(r'<a class="brand" href="#home" aria-label="Overtone home">.*?</a>',
+                            '<a class="brand" href="#home" aria-label="Overtone home"><img class="project-brand-logo" src="/assets/project-logos/overtone.svg" alt="Overtone"></a>',
+                            text, count=1, flags=re.S)
+          if n != 1:
+              raise SystemExit("Overtone top brand not found")
+          text, n = re.subn(r'<a class="rail-top" href="#home">.*?</a>',
+                            '<a class="rail-top" href="#home"><img class="project-brand-logo" src="/assets/project-logos/overtone.svg" alt="Overtone"></a>',
+                            text, count=1, flags=re.S)
+          if n != 1:
+              raise SystemExit("Overtone rail brand not found")
+          p.write_text(text, encoding="utf-8")
+
+          # ---------- VELLUM ----------
+          p = Path("vellum/index.html")
+          text = p.read_text(encoding="utf-8")
+          old = '<span class="wordmark">VELL<b>V</b>M</span>'
+          count = text.count(old)
+          if count < 2:
+              raise SystemExit(f"Expected Vellum wordmark at least twice, found {count}")
+          text = text.replace(old, '<span class="wordmark"><img class="vellum-brand-logo" src="/assets/project-logos/vellum.svg" alt="Vellum"></span>')
+          css = """
+.wordmark .vellum-brand-logo{display:block;width:212px;max-width:100%;height:auto;max-height:58px;object-fit:contain;object-position:left center}
+.bindbar .wordmark .vellum-brand-logo{width:168px;max-height:42px;margin:0 auto}
+@media(max-width:390px){.bindbar .wordmark .vellum-brand-logo{width:148px}}
+"""
+          text = text.replace("</style>", css + "\n</style>", 1)
+          p.write_text(text, encoding="utf-8")
+
+          # ---------- THE TRADE SCHOOL ----------
+          p = Path("thetradeschool/js/core/app.js")
+          text = p.read_text(encoding="utf-8")
+          pattern = re.compile(r'<div class="brand" onclick="go\(\x27\x27\)">\s*<div class="brand-mark"><span></span></div>\s*<div>TradeSchool <small>VISUAL TRADE EDUCATION</small></div>\s*</div>')
+          replacement = "<div class=\"brand\" onclick=\"go('')\" aria-label=\"The Trade School home\"><img class=\"site-brand-logo\" src=\"/assets/project-logos/tradeschool.svg\" alt=\"The Trade School\"></div>"
+          text, n = pattern.subn(replacement, text, count=1)
+          if n != 1:
+              raise SystemExit("TradeSchool brand block not found")
+          p.write_text(text, encoding="utf-8")
+          p = Path("thetradeschool/css/main.css")
+          text = p.read_text(encoding="utf-8")
+          text += """
+/* Direct project logo */
+.site-brand-logo{display:block;width:226px;max-width:34vw;max-height:60px;object-fit:contain;object-position:left center}
+@media(max-width:700px){.site-brand-logo{width:190px;max-width:52vw;max-height:52px}}
+"""
+          p.write_text(text, encoding="utf-8")
+
+          # ---------- MOTORATLAS ----------
+          p = Path("motoratlas/index.html")
+          text = p.read_text(encoding="utf-8")
+          text, n = re.subn(r'<a class="brand" href="#top">.*?</a>',
+                            '<a class="brand" href="#top" aria-label="MotorAtlas home"><img class="site-brand-logo" src="/assets/project-logos/motoratlas.svg" alt="MotorAtlas"></a>',
+                            text, count=1, flags=re.S)
+          if n != 1:
+              raise SystemExit("MotorAtlas brand anchor not found")
+          p.write_text(text, encoding="utf-8")
+          p = Path("motoratlas/atlas.css")
+          text = p.read_text(encoding="utf-8")
+          text += """
+/* Direct project logo */
+.brand .site-brand-logo{display:block;width:232px;max-width:38vw;max-height:60px;object-fit:contain;object-position:left center}
+@media(max-width:720px){.brand .site-brand-logo{width:194px;max-width:56vw;max-height:52px}}
+"""
+          p.write_text(text, encoding="utf-8")
+
+          # The temporary workflow should not remain in the repository.
+          wf = Path(".github/workflows/logo-clean-apply.yml")
+          if wf.exists():
+              wf.unlink()
+          PY
+
+      - name: Verify and commit
+        shell: bash
+        run: |
+          test ! -e site.html
+          test ! -e overtone/site.html
+          test ! -e vellum/site.html
+          test ! -e overtone/brand.js
+          test ! -e vellum/brand.js
+          test ! -e motoratlas/brand.js
+          git diff --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Apply clean project logos"
+          git push
