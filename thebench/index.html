@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>The Bench — learn to code by watching it run</title>
+<meta name="description" content="An interactive field manual for C++, Java, JavaScript, HTML, CSS, SQL, servers and shipping. Every example runs in the browser and can be stepped through one line at a time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='13' fill='none' stroke='%23e3ac3f' stroke-width='4'/></svg>">
+</head>
+<body>
+
+<div id="boot"><pre></pre></div>
+
+<header class="masthead">
+  <button class="icon-btn" id="railToggle" aria-label="Open the course index">☰</button>
+
+  <a class="mark" href="#" id="mark">
+    <span class="mark-pad" aria-hidden="true"></span>
+    <b>THE BENCH</b>
+    <span>field manual</span>
+  </a>
+
+  <nav class="tabs" aria-label="Sections">
+    <button data-view="home">Overview</button>
+    <button data-view="lesson">Course</button>
+    <button data-view="pad">Bench</button>
+    <button data-view="glossary">Glossary</button>
+  </nav>
+
+  <div class="head-tools">
+    <button class="icon-btn" id="themeBtn" aria-label="Switch between dark and light">◐</button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="rail" id="rail" aria-label="Course index"></aside>
+  <main class="stage" id="stage" tabindex="-1"></main>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="modal-back" id="modal">
+  <div class="modal"><div class="modal-body" id="modalBody"></div></div>
+</div>
+
+<script src="engine.js"></script>
+<script src="interp.js"></script>
+<script src="sql.js"></script>
+<script src="glossary.js"></script>
+<script src="curriculum-1.js"></script>
+<script src="curriculum-2.js"></script>
+<script src="curriculum-3.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
