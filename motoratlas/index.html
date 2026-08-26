@@ -10,8 +10,35 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Saira+Condensed:wght@500;600;700;800&family=Chivo:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="atlas.css?v=4">
 <link rel="stylesheet" href="features.css?v=1">
+
+<style id="ss-loader-style">
+#ss-themed-loader{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;background:#090b0c;color:#f1efe8;overflow:hidden;transition:opacity .46s ease,visibility .46s ease}
+#ss-themed-loader.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
+#ss-themed-loader::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(circle at center,#000 0,transparent 76%)}
+.ss-motor-loader{position:relative;width:min(510px,86vw);font-family:"IBM Plex Mono",monospace}
+.ss-motor-head{display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.11);padding-bottom:11px;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:#647076}.ss-motor-head b{font-weight:500;color:#f0a43b}
+.ss-motor-name{font-family:"Saira Condensed",sans-serif;font-size:clamp(54px,14vw,88px);font-weight:800;line-height:.8;letter-spacing:-.035em;text-transform:uppercase;margin:30px 0 24px}.ss-motor-name span{color:#f0a43b}
+.ss-engine-bank{height:86px;border:1px solid rgba(255,255,255,.11);background:#0e1112;display:flex;align-items:end;justify-content:center;gap:9px;padding:13px 22px;position:relative;overflow:hidden}
+.ss-engine-bank::before{content:"ENGINE / SYSTEM INDEX";position:absolute;left:10px;top:8px;font-size:7px;letter-spacing:.12em;color:#4f5a5f}.ss-engine-bank::after{content:"";position:absolute;left:0;right:0;height:1px;top:0;background:linear-gradient(90deg,transparent,#75c7d1,transparent);box-shadow:0 0 16px rgba(117,199,209,.4);animation:ss-motor-scan 1.25s linear infinite}
+.ss-piston{width:48px;height:48px;border:1px solid rgba(255,255,255,.13);position:relative}.ss-piston i{position:absolute;left:8px;right:8px;top:7px;height:15px;background:#f0a43b;animation:ss-motor-piston .7s ease-in-out infinite alternate}.ss-piston:nth-child(2) i{animation-delay:-.35s}.ss-piston:nth-child(4) i{animation-delay:-.35s}
+.ss-motor-status{margin-top:17px;display:flex;justify-content:space-between;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:#647076}.ss-motor-status strong{color:#75c7d1;font-weight:500}
+@keyframes ss-motor-piston{from{transform:translateY(0)}to{transform:translateY(20px)}}
+@keyframes ss-motor-scan{from{transform:translateY(0)}to{transform:translateY(84px)}}
+@media(prefers-reduced-motion:reduce){.ss-piston i,.ss-engine-bank::after{animation:none}}
+</style>
+
 </head>
 <body>
+
+<div id="ss-themed-loader" aria-hidden="true">
+  <div class="ss-motor-loader">
+    <div class="ss-motor-head"><span>Reference plate / startup</span><b>Machine online</b></div>
+    <div class="ss-motor-name">MOTOR<span>ATLAS</span></div>
+    <div class="ss-engine-bank"><div class="ss-piston"><i></i></div><div class="ss-piston"><i></i></div><div class="ss-piston"><i></i></div><div class="ss-piston"><i></i></div></div>
+    <div class="ss-motor-status"><span>Indexing the machine…</span><strong>Parts · systems · diagnosis</strong></div>
+  </div>
+</div>
+
 <div class="ambient-grid" aria-hidden="true"></div>
 <nav class="topbar" id="topbar">
   <div class="shell nav-inner">
@@ -142,5 +169,27 @@
 <script src="beginner-data.js?v=2"></script>
 <script src="atlas-core.js?v=4"></script>
 <script src="features.js?v=1"></script>
+
+<script id="ss-loader-script">
+(()=>{
+  const el=document.getElementById('ss-themed-loader');
+  if(!el) return;
+  const started=performance.now();
+  let leaving=false;
+  const leave=()=>{
+    if(leaving) return;
+    leaving=true;
+    const wait=Math.max(0,1100-(performance.now()-started));
+    setTimeout(()=>{
+      el.classList.add('is-leaving');
+      setTimeout(()=>el.remove(),520);
+    },wait);
+  };
+  if(document.readyState==='complete') leave();
+  else window.addEventListener('load',leave,{once:true});
+  setTimeout(leave,2200);
+})();
+</script>
+
 </body>
 </html>

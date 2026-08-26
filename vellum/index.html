@@ -292,6 +292,29 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 
 
 
+
+<style id="ss-loader-style">
+#ss-themed-loader{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;background:#e4dac4;color:#2b241b;overflow:hidden;transition:opacity .48s ease,visibility .48s ease}
+#ss-themed-loader.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
+#ss-themed-loader::before{content:"";position:absolute;inset:0;opacity:.52;background:radial-gradient(circle at 18% 16%,rgba(168,131,44,.12),transparent 32%),radial-gradient(circle at 82% 78%,rgba(76,107,79,.09),transparent 34%),repeating-linear-gradient(0deg,transparent 0 31px,rgba(43,36,27,.055) 31px 32px)}
+.ss-vellum-loader{position:relative;width:min(430px,82vw);text-align:center;font-family:"Cardo",Georgia,serif}
+.ss-vellum-kicker{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#746754;margin-bottom:22px}
+.ss-vellum-book{width:112px;height:74px;margin:0 auto 24px;position:relative;perspective:600px}
+.ss-vellum-book::before,.ss-vellum-book::after{content:"";position:absolute;top:0;width:52px;height:68px;background:#ede5d3;border:1px solid rgba(43,36,27,.34);box-shadow:inset 0 0 0 5px rgba(168,131,44,.04)}
+.ss-vellum-book::before{right:50%;transform-origin:right center;transform:rotateY(-12deg);border-radius:3px 0 0 3px}
+.ss-vellum-book::after{left:50%;transform-origin:left center;transform:rotateY(12deg);border-radius:0 3px 3px 0}
+.ss-vellum-book i{position:absolute;z-index:3;left:50%;top:3px;bottom:3px;width:1px;background:#a8832c;box-shadow:0 0 10px rgba(168,131,44,.25)}
+.ss-vellum-book span{position:absolute;z-index:4;left:18px;right:18px;height:1px;background:rgba(43,36,27,.18);animation:ss-vellum-write 1.2s ease-in-out infinite alternate}
+.ss-vellum-book span:nth-child(1){top:23px}.ss-vellum-book span:nth-child(2){top:35px;animation-delay:.16s}.ss-vellum-book span:nth-child(3){top:47px;animation-delay:.32s}
+.ss-vellum-name{font-family:"Cinzel",Georgia,serif;font-size:clamp(28px,7vw,42px);font-weight:700;letter-spacing:.34em;text-indent:.34em}
+.ss-vellum-sub{margin-top:9px;font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.19em;text-transform:uppercase;color:#746754}
+.ss-vellum-rule{height:1px;width:180px;margin:22px auto 12px;background:linear-gradient(90deg,transparent,#b32b17 30%,#a8832c 70%,transparent);position:relative;overflow:hidden}
+.ss-vellum-rule::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent);transform:translateX(-100%);animation:ss-vellum-sweep 1s ease-in-out infinite}
+@keyframes ss-vellum-write{from{transform:scaleX(.42);opacity:.45}to{transform:scaleX(1);opacity:.9}}
+@keyframes ss-vellum-sweep{to{transform:translateX(100%)}}
+@media(prefers-reduced-motion:reduce){.ss-vellum-book span,.ss-vellum-rule::after{animation:none}}
+</style>
+
 </head>
 <style>
 /* ── reading apparatus ───────────────────────────────────── */
@@ -1635,6 +1658,17 @@ html[data-theme="dark"] .particle-field .mote{opacity:calc(var(--o) * 1.18);box-
 </style>
 
 <body>
+
+<div id="ss-themed-loader" aria-hidden="true">
+  <div class="ss-vellum-loader">
+    <div class="ss-vellum-kicker">Interactive reading desk</div>
+    <div class="ss-vellum-book"><span></span><span></span><span></span><i></i></div>
+    <div class="ss-vellum-name">VELLUM</div>
+    <div class="ss-vellum-sub">Opening the folio</div>
+    <div class="ss-vellum-rule"></div>
+  </div>
+</div>
+
 <div class="particle-field" id="particleField" aria-hidden="true"></div>
 
 <!-- ══ mobile binding bar ═══════════════════════════════════ -->
@@ -3857,5 +3891,27 @@ boot().then(()=>{
 });
 
 </script>
+
+<script id="ss-loader-script">
+(()=>{
+  const el=document.getElementById('ss-themed-loader');
+  if(!el) return;
+  const started=performance.now();
+  let leaving=false;
+  const leave=()=>{
+    if(leaving) return;
+    leaving=true;
+    const wait=Math.max(0,1100-(performance.now()-started));
+    setTimeout(()=>{
+      el.classList.add('is-leaving');
+      setTimeout(()=>el.remove(),520);
+    },wait);
+  };
+  if(document.readyState==='complete') leave();
+  else window.addEventListener('load',leave,{once:true});
+  setTimeout(leave,2200);
+})();
+</script>
+
 </body>
 </html>

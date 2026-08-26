@@ -12,8 +12,39 @@
   <link rel="stylesheet" href="css/main.css" />
   <link rel="stylesheet" href="css/v15.css" />
   <link rel="stylesheet" href="css/v16-beginner.css?v=1" />
+
+<style id="ss-loader-style">
+#ss-themed-loader{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;background:#07100d;color:#f2f7f1;overflow:hidden;transition:opacity .45s ease,visibility .45s ease}
+#ss-themed-loader.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
+#ss-themed-loader::before{content:"";position:absolute;inset:-20%;background-image:linear-gradient(rgba(215,255,100,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(215,255,100,.045) 1px,transparent 1px);background-size:38px 38px;transform:perspective(500px) rotateX(58deg) translateY(22%);transform-origin:center bottom;opacity:.75}
+.ss-trade-loader{position:relative;width:min(470px,86vw);font-family:"Saira",system-ui,sans-serif}
+.ss-trade-top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(223,255,230,.13);padding-bottom:12px;font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#91a198}
+.ss-trade-top b{color:#d7ff64;font-weight:500}
+.ss-trade-name{font-family:"Saira Condensed",sans-serif;font-size:clamp(50px,13vw,82px);font-weight:700;line-height:.78;letter-spacing:-.045em;text-transform:uppercase;margin:30px 0 28px}.ss-trade-name span{color:#d7ff64}
+.ss-trade-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.ss-trade-node{height:46px;border:1px solid rgba(223,255,230,.14);background:#0f1c17;display:grid;place-items:center;position:relative;overflow:hidden}
+.ss-trade-node::after{content:"";width:7px;height:7px;border-radius:50%;background:#31453a;box-shadow:0 0 0 transparent;animation:ss-trade-live 1.2s infinite}
+.ss-trade-node:nth-child(2)::after{animation-delay:.14s}.ss-trade-node:nth-child(3)::after{animation-delay:.28s}.ss-trade-node:nth-child(4)::after{animation-delay:.42s}.ss-trade-node:nth-child(5)::after{animation-delay:.56s}.ss-trade-node:nth-child(6)::after{animation-delay:.7s}
+.ss-trade-labels{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:7px;font-family:"IBM Plex Mono",monospace;font-size:7px;letter-spacing:.08em;color:#708279;text-align:center;text-transform:uppercase}
+.ss-trade-status{margin-top:24px;display:flex;align-items:center;gap:12px;font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:#91a198}.ss-trade-status i{display:block;height:1px;flex:1;background:rgba(223,255,230,.12);overflow:hidden;position:relative}.ss-trade-status i::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,#d7ff64,transparent);animation:ss-trade-scan 1s linear infinite}
+@keyframes ss-trade-live{0%,100%{background:#31453a;box-shadow:none}45%{background:#d7ff64;box-shadow:0 0 16px rgba(215,255,100,.65)}}
+@keyframes ss-trade-scan{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+@media(prefers-reduced-motion:reduce){.ss-trade-node::after,.ss-trade-status i::after{animation:none}}
+</style>
+
 </head>
 <body>
+
+<div id="ss-themed-loader" aria-hidden="true">
+  <div class="ss-trade-loader">
+    <div class="ss-trade-top"><span>FIELD SYSTEM / STARTUP</span><b>SHOP ONLINE</b></div>
+    <div class="ss-trade-name">TRADE<span>SCHOOL</span></div>
+    <div class="ss-trade-grid"><div class="ss-trade-node"></div><div class="ss-trade-node"></div><div class="ss-trade-node"></div><div class="ss-trade-node"></div><div class="ss-trade-node"></div><div class="ss-trade-node"></div></div>
+    <div class="ss-trade-labels"><span>Power</span><span>Air</span><span>Water</span><span>Metal</span><span>Machine</span><span>Build</span></div>
+    <div class="ss-trade-status"><span>Bringing the shop online</span><i></i></div>
+  </div>
+</div>
+
   <div id="app"></div>
 
   <!-- Base curriculum -->
@@ -40,5 +71,27 @@
   <script src="js/core/labs-v15.js"></script>
   <script src="js/core/beginner-v16.js?v=1"></script>
   <script src="js/core/v17-no-repeat.js?v=1"></script>
+
+<script id="ss-loader-script">
+(()=>{
+  const el=document.getElementById('ss-themed-loader');
+  if(!el) return;
+  const started=performance.now();
+  let leaving=false;
+  const leave=()=>{
+    if(leaving) return;
+    leaving=true;
+    const wait=Math.max(0,1100-(performance.now()-started));
+    setTimeout(()=>{
+      el.classList.add('is-leaving');
+      setTimeout(()=>el.remove(),520);
+    },wait);
+  };
+  if(document.readyState==='complete') leave();
+  else window.addEventListener('load',leave,{once:true});
+  setTimeout(leave,2200);
+})();
+</script>
+
 </body>
 </html>
