@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f1efe8">
+<title>MoveDesk — Compare the Move Before You Make It</title>
+<meta name="description" content="MoveDesk turns two locations into a live relocation brief with route, weather, climate, moving budget and a personalized action plan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<link rel="stylesheet" href="styles.css?v=1">
+</head>
+<body>
+<div id="boot" aria-hidden="true">
+  <div class="boot-card">
+    <div class="boot-meta"><span>MOVE/DESK // RELOCATION TABLE</span><b>ROUTE 01</b></div>
+    <div class="boot-name">MOVE<span>/</span>DESK</div>
+    <svg class="boot-route" viewBox="0 0 640 145"><path class="route-grid" d="M0 32H640M0 72H640M0 112H640M80 0V145M180 0V145M280 0V145M380 0V145M480 0V145M580 0V145"/><path class="route-path" d="M55 104C150 38 215 116 311 65S466 24 586 86"/><circle class="route-a" cx="55" cy="104" r="8"/><circle class="route-b" cx="586" cy="86" r="8"/><circle class="route-dot" cx="55" cy="104" r="5"/></svg>
+    <div class="boot-foot"><span>Plotting the move</span><i></i><b>FROM → TO</b></div>
+  </div>
+</div>
+
+<header class="topbar">
+  <a href="#top" class="brand"><b>MOVE<span>/</span>DESK</b><small>RELOCATION INTELLIGENCE</small></a>
+  <nav><a href="#compare">Compare</a><a href="#route">Route</a><a href="#climate">Climate</a><a href="#budget">Budget</a><a href="#plan">Plan</a></nav>
+  <div class="api-chip"><i></i>LIVE DATA</div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="fold fold-a"></div><div class="fold fold-b"></div>
+  <div class="hero-shell">
+    <div class="hero-copy">
+      <div class="kicker">TWO PLACES. ONE DECISION.</div>
+      <h1>Know the move<br><em>before you make it.</em></h1>
+      <p>Compare the route, live weather, recent climate, time zones, elevation and your own moving costs. Then turn the result into an actual move plan.</p>
+    </div>
+    <form class="route-form" id="routeForm">
+      <div class="location-field from-field"><span class="field-code">A / FROM</span><label for="fromInput">CURRENT LOCATION</label><div class="search-box"><i></i><input id="fromInput" autocomplete="off" placeholder="Paris, TX or 75460"><button type="button" class="clear-field" data-clear="fromInput">×</button></div><div class="suggestions" id="fromSuggestions"></div><small id="fromResolved">Search a city or ZIP code</small></div>
+      <div class="route-switch" aria-hidden="true"><span>→</span></div>
+      <div class="location-field to-field"><span class="field-code">B / TO</span><label for="toInput">NEW LOCATION</label><div class="search-box"><i></i><input id="toInput" autocomplete="off" placeholder="Nashville, TN"><button type="button" class="clear-field" data-clear="toInput">×</button></div><div class="suggestions" id="toSuggestions"></div><small id="toResolved">Search a city or ZIP code</small></div>
+      <button class="build-brief" type="submit"><span>BUILD MY MOVE BRIEF</span><b>↗</b></button>
+      <button class="sample-move" id="sampleMove" type="button">LOAD PARIS, TX → NASHVILLE, TN</button>
+    </form>
+  </div>
+</section>
+
+<section class="brief hidden" id="brief">
+  <section class="compare-band" id="compare">
+    <div class="compare-side from-side"><div class="place-label">A / YOU ARE HERE</div><h2 id="fromName">—</h2><p id="fromMeta">—</p><div class="big-temp"><b id="fromTemp">—</b><span id="fromCondition">CURRENT WEATHER</span></div></div>
+    <div class="versus"><span>MOVE</span><i></i><b id="moveMiles">— MI</b><small id="moveTime">ROUTE</small></div>
+    <div class="compare-side to-side"><div class="place-label">B / YOU'RE GOING HERE</div><h2 id="toName">—</h2><p id="toMeta">—</p><div class="big-temp"><b id="toTemp">—</b><span id="toCondition">CURRENT WEATHER</span></div></div>
+  </section>
+
+  <section class="route-section section-pad" id="route">
+    <div class="section-head"><div><span class="section-num">01 / ROUTE TABLE</span><h2>See the move<br><em>on the table.</em></h2></div><p>The driving route is requested from OSRM/OpenStreetMap routing when available. If routing fails, MoveDesk falls back to straight-line distance and labels it clearly.</p></div>
+    <div class="map-shell"><div class="map-top"><span id="mapRouteLabel">A → B</span><div><b id="routeDistance">—</b><small id="routeDuration">—</small></div></div><div id="map"></div><div class="map-overlay"><div><span>TIME ZONE SHIFT</span><b id="timezoneShift">—</b></div><div><span>ELEVATION SHIFT</span><b id="elevationShift">—</b></div><div><span>STRAIGHT LINE</span><b id="airDistance">—</b></div></div></div>
+  </section>
+
+  <section class="weather-section section-pad">
+    <div class="section-head"><div><span class="section-num">02 / NEXT 7 DAYS</span><h2>Weather on<br><em>both sides.</em></h2></div><p>Current conditions and daily forecasts come directly from Open-Meteo for the resolved coordinates.</p></div>
+    <div class="forecast-split"><article><div class="forecast-head"><span id="fromForecastName">FROM</span><b id="fromWeatherSummary">—</b></div><div class="forecast-row" id="fromForecast"></div></article><article><div class="forecast-head"><span id="toForecastName">TO</span><b id="toWeatherSummary">—</b></div><div class="forecast-row" id="toForecast"></div></article></div>
+  </section>
+
+  <section class="climate-section section-pad" id="climate">
+    <div class="section-head"><div><span class="section-num">03 / CLIMATE DNA</span><h2>Not today's weather.<br><em>The pattern.</em></h2></div><p>MoveDesk builds a lightweight climate fingerprint from the last three complete calendar years of daily Open-Meteo archive data.</p></div>
+    <div class="climate-board"><div class="climate-loading" id="climateLoading">Building 36 months of climate context…</div><div class="climate-side" id="fromClimate"></div><div class="climate-center"><span>MONTH</span><div id="monthAxis"></div></div><div class="climate-side" id="toClimate"></div></div>
+    <div class="climate-takeaways" id="climateTakeaways"></div>
+  </section>
+
+  <section class="budget-section section-pad" id="budget">
+    <div class="section-head"><div><span class="section-num">04 / MOVE MATH</span><h2>Make the cost<br><em>visible.</em></h2></div><p>These are your assumptions, not hidden estimates. Change any number and the move math updates instantly.</p></div>
+    <div class="budget-console">
+      <div class="budget-inputs">
+        <label>CURRENT HOUSING / MO<input id="currentHousing" type="number" min="0" value="1200"></label><label>NEW HOUSING / MO<input id="newHousing" type="number" min="0" value="1500"></label>
+        <label>MOVERS / TRUCK QUOTE<input id="movingQuote" type="number" min="0" value="1600"></label><label>VEHICLE MPG<input id="moveMpg" type="number" min="1" step=".1" value="25"></label>
+        <label>GAS PRICE / GAL<input id="moveGas" type="number" min="0" step=".01" value="3.25"></label><label>HOTEL NIGHTS<input id="hotelNights" type="number" min="0" value="0"></label>
+        <label>HOTEL / NIGHT<input id="hotelRate" type="number" min="0" value="140"></label><label>OTHER ONE-TIME COSTS<input id="otherCost" type="number" min="0" value="500"></label>
+      </div>
+      <div class="budget-output"><div class="budget-ticket"><span>EST. ONE-TIME MOVE</span><b id="oneTimeCost">$0</b><small id="fuelMoveCost">Includes $0 driving fuel</small></div><div class="budget-ticket annual"><span>FIRST-YEAR HOUSING CHANGE</span><b id="annualHousingDelta">$0</b><small id="monthlyHousingDelta">$0 / month</small></div><div class="budget-bars"><div><span>MOVE / TRUCK</span><i id="barTruck"></i></div><div><span>DRIVE FUEL</span><i id="barFuel"></i></div><div><span>HOTEL</span><i id="barHotel"></i></div><div><span>OTHER</span><i id="barOther"></i></div></div></div>
+    </div>
+  </section>
+
+  <section class="plan-section section-pad" id="plan">
+    <div class="section-head"><div><span class="section-num">05 / ACTION PLAN</span><h2>Turn research<br><em>into a move.</em></h2></div><p>Choose what applies to your household. MoveDesk reshapes the checklist around distance, state changes, climate and your selected needs.</p></div>
+    <div class="profile-controls"><label><input type="checkbox" id="hasVehicle" checked><span>VEHICLE</span></label><label><input type="checkbox" id="hasPets"><span>PETS</span></label><label><input type="checkbox" id="hasKids"><span>SCHOOL-AGE KIDS</span></label><label><input type="checkbox" id="isRenter" checked><span>RENTER</span></label><label><input type="checkbox" id="remoteWork"><span>REMOTE WORK</span></label></div>
+    <div class="plan-grid"><article><div class="plan-head"><span>01</span><b>BEFORE YOU LEAVE</b></div><div class="checklist" id="beforeList"></div></article><article><div class="plan-head"><span>02</span><b>ARRIVAL WEEK</b></div><div class="checklist" id="arrivalList"></div></article><article><div class="plan-head"><span>03</span><b>FIRST 30 DAYS</b></div><div class="checklist" id="monthList"></div></article></div>
+    <div class="official-links" id="officialLinks"></div>
+  </section>
+
+  <footer><div><b>MOVE/DESK</b><span>A Safi Solutions utility.</span></div><div><a href="https://open-meteo.com/" target="_blank" rel="noopener">Weather + geocoding: Open-Meteo ↗</a><a href="https://project-osrm.org/" target="_blank" rel="noopener">Routing: OSRM / OSM ↗</a></div></footer>
+</section>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="app.js?v=1"></script>
+</body>
+</html>
