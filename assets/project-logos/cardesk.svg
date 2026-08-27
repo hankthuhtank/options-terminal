@@ -1,16 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 180" role="img" aria-labelledby="t d">
 <title id="t">CarDesk</title><desc id="d">CarDesk vehicle intelligence logo</desc>
 <defs>
-  <linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#1685ff"/><stop offset=".58" stop-color="#32b8ff"/><stop offset="1" stop-color="#ff9b21"/></linearGradient>
+  <linearGradient id="arc" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#23d5ff"/><stop offset=".62" stop-color="#1687ff"/><stop offset="1" stop-color="#ff9b3f"/></linearGradient>
+  <linearGradient id="desk" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#2bd7ff"/><stop offset="1" stop-color="#1687ff"/></linearGradient>
 </defs>
-<g transform="translate(20 31)">
-  <path d="M8 78h31c11 0 21-5 28-14l26-34c7-9 17-14 29-14h55c10 0 20 4 27 12l18 20h40" fill="none" stroke="url(#g)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M14 96h37c12 0 23-5 31-15l23-29c6-8 16-13 26-13h42c10 0 19 4 26 11l16 17h27" fill="none" stroke="#ffffff" stroke-opacity=".92" stroke-width="5" stroke-linecap="round"/>
-  <circle cx="28" cy="96" r="17" fill="#08111e" stroke="#1685ff" stroke-width="7"/><circle cx="218" cy="67" r="17" fill="#08111e" stroke="#ff9b21" stroke-width="7"/>
-  <circle cx="28" cy="96" r="5" fill="#8ed4ff"/><circle cx="218" cy="67" r="5" fill="#ffd18b"/>
-  <circle cx="136" cy="24" r="10" fill="#08111e" stroke="#32b8ff" stroke-width="5"/><circle cx="136" cy="24" r="3" fill="#fff"/>
-  <path d="M0 58h34M0 39h53M184 92h54" stroke="url(#g)" stroke-width="5" stroke-linecap="round" opacity=".85"/>
+<g transform="translate(18 15)">
+  <circle cx="77" cy="77" r="59" fill="#07131f" stroke="#233b52" stroke-width="4"/>
+  <path d="M31 96A51 51 0 1 1 127 51" fill="none" stroke="url(#arc)" stroke-width="10" stroke-linecap="round"/>
+  <g stroke="#8fa9c0" stroke-width="3" stroke-linecap="round" opacity=".85">
+    <path d="M39 83l-10 2"/><path d="M45 60l-9-5"/><path d="M61 43l-5-9"/><path d="M84 38V27"/><path d="M106 45l6-9"/><path d="M122 62l10-5"/>
+  </g>
+  <path d="M77 77L116 48" stroke="#ff9b3f" stroke-width="6" stroke-linecap="round"/><circle cx="77" cy="77" r="9" fill="#0b1825" stroke="#ffb15d" stroke-width="4"/>
+  <path d="M31 105h14l12-19c5-8 13-13 23-13h36c8 0 16 3 22 9l16 16h10c8 0 14 6 14 14v3H25v-2c0-4 3-8 6-8Z" fill="#0d2234" stroke="#dfeaf3" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M71 77h34c6 0 11 2 15 6l11 11H58l8-12c1-3 3-5 5-5Z" fill="#153149" stroke="#43d4ff" stroke-width="2"/>
+  <circle cx="56" cy="114" r="12" fill="#07131f" stroke="#23d5ff" stroke-width="5"/><circle cx="137" cy="114" r="12" fill="#07131f" stroke="#ff9b3f" stroke-width="5"/>
 </g>
-<text x="300" y="104" font-family="Inter,Arial,sans-serif" font-size="76" font-weight="780" letter-spacing="-4" fill="#f7f9fc">Car<tspan fill="url(#g)">Desk</tspan></text>
-<text x="304" y="139" font-family="IBM Plex Mono,monospace" font-size="13" font-weight="600" letter-spacing="5.5" fill="#7f91aa">VEHICLE INTELLIGENCE</text>
+<text x="210" y="101" font-family="Arial,Helvetica,sans-serif" font-size="79" font-weight="800" letter-spacing="-4.5" fill="#f5f8fb">Car<tspan fill="url(#desk)">Desk</tspan></text>
+<text x="214" y="136" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" letter-spacing="6" fill="#7f96aa">VEHICLE INTELLIGENCE</text>
 </svg>
