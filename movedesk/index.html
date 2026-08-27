@@ -3,20 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#07111d">
+<meta name="theme-color" content="#090916">
 <title>MoveDesk — Relocation Intelligence</title>
 <meta name="description" content="MoveDesk turns two locations into a relocation command center with route, destination essentials, move math, climate context and a personalized action plan.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-<link rel="stylesheet" href="styles.css?v=2">
+<link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
-<div id="boot" aria-hidden="true"><div class="boot-card"><img src="/assets/project-logos/movedesk.svg" alt="" class="boot-logo"><div class="boot-route"><i></i></div><div class="boot-foot"><span>Building relocation workspace</span><b>ROUTE · COST · TASKS</b></div></div></div>
+<div id="boot" aria-hidden="true"><div class="boot-card"><img src="/assets/project-logos/movedesk.svg?v=3" alt="" class="boot-logo"><div class="boot-route"><i></i></div><div class="boot-foot"><span>Building relocation workspace</span><b>ROUTE · COST · TASKS</b></div></div></div>
 
 <header class="topbar">
-  <a href="#top" class="brand"><img src="/assets/project-logos/movedesk.svg" alt="MoveDesk"></a>
+  <a href="#top" class="brand"><img src="/assets/project-logos/movedesk.svg?v=3" alt="MoveDesk"></a>
   <nav><a href="#compare">Overview</a><a href="#route">Route</a><a href="#budget">Move math</a><a href="#plan">Action plan</a></nav>
   <div class="api-chip"><i></i>LIVE DATA</div>
 </header>
@@ -87,15 +87,8 @@
   <details class="climate-drawer" id="climate">
     <summary><div><span>05 / WEATHER + CLIMATE CONTEXT</span><b>Open secondary climate view</b></div><i>+</i></summary>
     <div class="climate-content">
-      <section class="weather-section">
-        <div class="section-head small"><div><h2>Next 7 days.</h2></div><p>A quick check for both ends of the move. It stays secondary to the actual relocation planning.</p></div>
-        <div class="forecast-split"><article><div class="forecast-head"><span id="fromForecastName">FROM</span><b id="fromWeatherSummary">—</b></div><div class="forecast-row" id="fromForecast"></div></article><article><div class="forecast-head"><span id="toForecastName">TO</span><b id="toWeatherSummary">—</b></div><div class="forecast-row" id="toForecast"></div></article></div>
-      </section>
-      <section class="climate-section">
-        <div class="section-head small"><div><h2>Recent climate pattern.</h2></div><p>A lightweight fingerprint built from the last three complete calendar years of Open-Meteo archive data.</p></div>
-        <div class="climate-board"><div class="climate-loading" id="climateLoading">Building 36 months of climate context…</div><div class="climate-side" id="fromClimate"></div><div class="climate-center"><span>MONTH</span><div id="monthAxis"></div></div><div class="climate-side" id="toClimate"></div></div>
-        <div class="climate-takeaways" id="climateTakeaways"></div>
-      </section>
+      <section class="weather-section"><div class="section-head small"><div><h2>Next 7 days.</h2></div><p>A quick check for both ends of the move. It stays secondary to the actual relocation planning.</p></div><div class="forecast-split"><article><div class="forecast-head"><span id="fromForecastName">FROM</span><b id="fromWeatherSummary">—</b></div><div class="forecast-row" id="fromForecast"></div></article><article><div class="forecast-head"><span id="toForecastName">TO</span><b id="toWeatherSummary">—</b></div><div class="forecast-row" id="toForecast"></div></article></div></section>
+      <section class="climate-section"><div class="section-head small"><div><h2>Recent climate pattern.</h2></div><p>A lightweight fingerprint built from the last three complete calendar years of Open-Meteo archive data.</p></div><div class="climate-board"><div class="climate-loading" id="climateLoading">Building 36 months of climate context…</div><div class="climate-side" id="fromClimate"></div><div class="climate-center"><span>MONTH</span><div id="monthAxis"></div></div><div class="climate-side" id="toClimate"></div></div><div class="climate-takeaways" id="climateTakeaways"></div></section>
     </div>
   </details>
 
