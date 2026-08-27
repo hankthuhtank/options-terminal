@@ -1,14 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 180" role="img" aria-labelledby="t d">
-<title id="t">MoveDesk</title><desc id="d">MoveDesk relocation intelligence logo</desc>
-<defs><linearGradient id="r" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1e7cff"/><stop offset=".56" stop-color="#21c0ff"/><stop offset="1" stop-color="#ffb21c"/></linearGradient></defs>
-<g transform="translate(20 24)">
-  <path d="M16 99h42c15 0 29-7 38-19l34-45c8-11 21-18 35-18h29c14 0 27 6 36 17l27 31h31" fill="none" stroke="url(#r)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M16 118h53c16 0 31-8 41-21l30-38c7-9 18-14 29-14h15c12 0 23 5 31 14l19 22h54" fill="none" stroke="#f7f9fc" stroke-opacity=".88" stroke-width="5" stroke-linecap="round"/>
-  <circle cx="24" cy="108" r="18" fill="#07111f" stroke="#1e7cff" stroke-width="7"/><circle cx="272" cy="73" r="18" fill="#07111f" stroke="#ffb21c" stroke-width="7"/>
-  <circle cx="24" cy="108" r="5" fill="#8ad4ff"/><circle cx="272" cy="73" r="5" fill="#ffd886"/>
-  <circle cx="169" cy="25" r="10" fill="#07111f" stroke="#21c0ff" stroke-width="5"/><circle cx="169" cy="25" r="3" fill="#fff"/>
-  <path d="M0 68h44M0 48h70M219 102h58" stroke="url(#r)" stroke-width="5" stroke-linecap="round" opacity=".82"/>
+<title id="t">MoveDesk</title><desc id="d">MoveDesk relocation command center logo</desc>
+<defs>
+  <linearGradient id="map" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7c5cff"/><stop offset=".55" stop-color="#5b7cff"/><stop offset="1" stop-color="#36d6c6"/></linearGradient>
+  <linearGradient id="desk" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#ff6b6b"/><stop offset="1" stop-color="#ff9e57"/></linearGradient>
+</defs>
+<g transform="translate(18 24)">
+  <path d="M18 28 70 12l48 18 52-18 48 17v89l-48-17-52 17-48-18-52 18Z" fill="#0b1425" stroke="#334766" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M70 12v88M118 30v88M170 12v89" stroke="#263d5c" stroke-width="2"/>
+  <path d="M32 92c27-34 51-12 72-35 19-21 35-9 50 4 16 14 28 4 48-23" fill="none" stroke="url(#map)" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="32" cy="92" r="9" fill="#07101d" stroke="#36d6c6" stroke-width="5"/>
+  <path d="M198 16c-16 0-28 12-28 28 0 22 28 47 28 47s28-25 28-47c0-16-12-28-28-28Zm0 39a11 11 0 1 1 0-22 11 11 0 0 1 0 22Z" fill="url(#desk)"/>
+  <g transform="translate(55 86)"><rect x="0" y="0" width="42" height="36" rx="5" fill="#ff9e57"/><path d="M0 12h42M21 0v36" stroke="#ffe1bf" stroke-width="3"/><path d="M28 25h8M32 21l4 4-4 4" fill="none" stroke="#6f3618" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></g>
 </g>
-<text x="326" y="104" font-family="Inter,Arial,sans-serif" font-size="75" font-weight="780" letter-spacing="-4" fill="#f7f9fc">Move<tspan fill="url(#r)">Desk</tspan></text>
-<text x="331" y="139" font-family="IBM Plex Mono,monospace" font-size="13" font-weight="600" letter-spacing="5.2" fill="#7f91aa">RELOCATION INTELLIGENCE</text>
+<text x="270" y="101" font-family="Arial,Helvetica,sans-serif" font-size="78" font-weight="800" letter-spacing="-4.5" fill="#f7f8fb">Move<tspan fill="url(#desk)">Desk</tspan></text>
+<text x="275" y="136" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" letter-spacing="5.7" fill="#8d9bb0">RELOCATION COMMAND CENTER</text>
 </svg>
