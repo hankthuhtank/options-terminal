@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090b0d">
+<title>CarDesk — Your Vehicle, Decoded</title>
+<meta name="description" content="CarDesk turns a VIN into a live vehicle workspace with NHTSA decoding, recalls, complaint signals, ownership math, diagnostics and a private service log.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=1">
+</head>
+<body>
+<div id="boot" aria-hidden="true">
+  <div class="boot-shell">
+    <div class="boot-head"><span>CAR/DESK // VEHICLE INTELLIGENCE BAY</span><b>SESSION 01</b></div>
+    <div class="boot-mark"><span>CAR</span><i>/</i><span>DESK</span></div>
+    <div class="boot-car">
+      <svg viewBox="0 0 660 170" role="presentation">
+        <path class="boot-outline" d="M50 115h45l28-52c8-15 23-24 40-24h264c18 0 34 8 45 22l43 54h82c17 0 31 14 31 31v2H29v-2c0-17 9-31 21-31Z"/>
+        <path class="boot-glass" d="M168 61h105v54H130l28-43c3-5 6-8 10-11Zm126 0h121c12 0 22 5 29 14l31 40H294V61Z"/>
+        <circle cx="151" cy="145" r="26"/><circle cx="518" cy="145" r="26"/>
+        <path class="boot-scan" d="M15 0v170"/>
+      </svg>
+    </div>
+    <div class="boot-status"><span>Reading chassis architecture</span><i></i><b>READY</b></div>
+  </div>
+</div>
+
+<div class="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
+<header class="topbar">
+  <a class="brand" href="#top" aria-label="CarDesk home">
+    <span class="brand-word">CAR<span>/</span>DESK</span>
+    <small>VEHICLE INTELLIGENCE BAY</small>
+  </a>
+  <nav class="nav-links" aria-label="CarDesk sections">
+    <a href="#vehicle">Vehicle</a><a href="#safety">Safety</a><a href="#cost">Cost</a><a href="#diagnostics">Diagnostics</a><a href="#service">Service</a>
+  </nav>
+  <div class="top-actions"><button class="garage-btn" id="garageBtn" type="button"><span>GARAGE</span><b id="garageCount">0</b></button></div>
+</header>
+
+<main id="top">
+<section class="hero" id="hero">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="shell hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow"><i></i>LIVE NHTSA VEHICLE DATA</div>
+      <h1>One VIN.<br><em>Your whole car.</em></h1>
+      <p>Decode the hardware, surface safety issues, see complaint patterns, run ownership math, keep a service history and turn a 17-character VIN into something you can actually use.</p>
+      <form class="vin-console" id="vinForm">
+        <label for="vinInput">ENTER A 17-CHARACTER VIN</label>
+        <div class="vin-row"><input id="vinInput" maxlength="17" autocomplete="off" spellcheck="false" placeholder="1HGCM82633A004352" aria-describedby="vinHint"><button type="submit">DECODE VEHICLE <span>→</span></button></div>
+        <div class="vin-foot"><span id="vinHint">No account. Vehicle history stays in this browser.</span><button type="button" id="sampleVin">LOAD SAMPLE VIN</button></div>
+      </form>
+    </div>
+    <div class="hero-bay" aria-hidden="true">
+      <div class="bay-label"><span>DIAGNOSTIC BAY / 01</span><b id="heroBayStatus">AWAITING VIN</b></div>
+      <svg viewBox="0 0 760 420" class="hero-car">
+        <defs><filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <g class="floor"><path d="M30 350H730M75 310H685M130 270H630"/><path d="M140 240 72 365M250 240 210 365M380 240V365M510 240 550 365M620 240 688 365"/></g>
+        <path class="car-wire" d="M105 277h69l37-104c8-22 30-37 54-37h226c24 0 47 11 62 30l74 91h47c27 0 49 22 49 49v16H60v-12c0-18 15-33 33-33h12Z"/>
+        <path class="car-glass" d="M270 163h103v91H222l34-78c3-7 8-11 14-13Zm128 0h89c17 0 31 7 42 20l58 71H398v-91Z"/>
+        <circle class="wheel" cx="190" cy="321" r="56"/><circle class="wheel" cx="591" cy="321" r="56"/><circle class="hub" cx="190" cy="321" r="21"/><circle class="hub" cx="591" cy="321" r="21"/>
+        <g class="hotspots"><circle data-zone="power" cx="505" cy="247" r="9"/><circle data-zone="drive" cx="390" cy="311" r="9"/><circle data-zone="safety" cx="330" cy="202" r="9"/><circle data-zone="body" cx="655" cy="275" r="9"/></g>
+        <path class="scanner" d="M40 100H720"/>
+      </svg>
+      <div class="bay-readout"><span id="bayMake">MAKE —</span><span id="bayEngine">POWER —</span><span id="bayDrive">DRIVE —</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="workspace shell hidden" id="workspace">
+  <section class="identity-panel" id="vehicle">
+    <div class="identity-main">
+      <div class="section-code">01 / VEHICLE IDENTITY</div>
+      <div class="identity-title"><div><span id="vehicleYear">—</span><h2 id="vehicleName">Vehicle</h2><p id="vehicleTrim">VIN decoded vehicle profile</p></div><button class="save-vehicle" id="saveVehicle" type="button">+ SAVE TO GARAGE</button></div>
+      <div class="vin-stamp"><span>VIN</span><b id="vehicleVin">—</b><button id="copyVin" type="button">COPY</button></div>
+    </div>
+    <div class="identity-status"><span>DATA SOURCE</span><b>NHTSA vPIC</b><i></i><span>STATUS</span><strong id="decodeStatus">DECODED</strong></div>
+  </section>
+
+  <section class="dna-section section-block">
+    <div class="section-heading"><div><div class="section-code">02 / VEHICLE DNA</div><h2>What this machine<br><em>actually is.</em></h2></div><p>CarDesk turns raw VIN fields into a hardware fingerprint. Empty fields stay empty instead of being guessed.</p></div>
+    <div class="dna-layout">
+      <div class="dna-grid" id="dnaGrid"></div>
+      <div class="system-scan">
+        <div class="scan-head"><span>INTERACTIVE SYSTEM MAP</span><b id="scanMode">POWERTRAIN</b></div>
+        <div class="scan-visual">
+          <svg viewBox="0 0 620 310" id="systemSvg" role="img" aria-label="Vehicle system diagram">
+            <path class="sys-body" d="M59 204h65l33-78c6-15 20-25 36-25h211c17 0 32 7 42 19l62 74h52c17 0 31 14 31 31v16H31v-12c0-14 12-25 28-25Z"/>
+            <circle class="sys-wheel" cx="154" cy="239" r="43"/><circle class="sys-wheel" cx="478" cy="239" r="43"/>
+            <path class="sys-line power" d="M429 183h-88l-80 49h-78M341 183l83 49h54"/>
+            <path class="sys-line signal" d="M210 128h190M245 128l-36 68M364 128l70 68"/>
+            <g class="sys-node"><circle data-sys="engine" cx="428" cy="182" r="8"/><circle data-sys="trans" cx="342" cy="183" r="8"/><circle data-sys="front" cx="155" cy="239" r="8"/><circle data-sys="rear" cx="478" cy="239" r="8"/><circle data-sys="cabin" cx="302" cy="128" r="8"/></g>
+          </svg>
+        </div>
+        <div class="scan-tabs" id="scanTabs"><button class="active" data-mode="power">POWERTRAIN</button><button data-mode="safety">SAFETY</button><button data-mode="identity">BUILD</button></div>
+        <div class="scan-copy" id="scanCopy"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="safety-section section-block" id="safety">
+    <div class="section-heading"><div><div class="section-code">03 / SAFETY SIGNAL</div><h2>Recalls and<br><em>owner complaints.</em></h2></div><p>Live NHTSA recall and complaint data for the decoded year, make and model. Complaint counts are reports, not failure-rate statistics.</p></div>
+    <div class="signal-grid">
+      <article class="signal-card recalls"><div class="signal-top"><span>OPEN RECALL SEARCH</span><b id="recallCount">—</b></div><div id="recallList" class="signal-list loading-block">Waiting for vehicle…</div></article>
+      <article class="signal-card complaints"><div class="signal-top"><span>COMPLAINT COMPONENT SIGNAL</span><b id="complaintCount">—</b></div><div id="complaintChart" class="complaint-chart loading-block">Waiting for vehicle…</div></article>
+    </div>
+    <div class="tech-strip" id="techStrip"></div>
+  </section>
+
+  <section class="cost-section section-block" id="cost">
+    <div class="section-heading"><div><div class="section-code">04 / OWNERSHIP MATH</div><h2>Know what the car<br><em>costs to keep.</em></h2></div><p>Adjust the assumptions. CarDesk does the math instantly and keeps the assumptions visible.</p></div>
+    <div class="cost-console">
+      <div class="cost-inputs">
+        <label>ANNUAL MILES<input id="milesYear" type="number" min="0" value="12000"></label>
+        <label>AVERAGE MPG<input id="mpg" type="number" min="1" step="0.1" value="25"></label>
+        <label>FUEL PRICE / GAL<input id="fuelPrice" type="number" min="0" step="0.01" value="3.25"></label>
+        <label>INSURANCE / MONTH<input id="insurance" type="number" min="0" step="1" value="165"></label>
+        <label>PAYMENT / MONTH<input id="payment" type="number" min="0" step="1" value="0"></label>
+        <label>MAINTENANCE / YEAR<input id="maintenance" type="number" min="0" step="1" value="900"></label>
+      </div>
+      <div class="cost-output">
+        <div class="cost-orbit"><svg viewBox="0 0 220 220"><circle cx="110" cy="110" r="88"/><circle id="costRing" cx="110" cy="110" r="88"/></svg><div><span>EST. YEARLY</span><b id="annualCost">$0</b></div></div>
+        <div class="cost-metrics"><div><span>MONTHLY</span><b id="monthlyCost">$0</b></div><div><span>COST / MILE</span><b id="mileCost">$0.00</b></div><div><span>FUEL / YEAR</span><b id="fuelCost">$0</b></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="diag-section section-block" id="diagnostics">
+    <div class="section-heading"><div><div class="section-code">05 / QUICK DIAGNOSTICS</div><h2>Start with the code.<br><em>Then think.</em></h2></div><p>A small generic OBD-II reference for common codes. It is a starting point, not a parts cannon.</p></div>
+    <div class="diag-console">
+      <div class="diag-input"><label for="obdCode">ENTER OBD-II CODE</label><div><input id="obdCode" maxlength="5" placeholder="P0420"><button id="decodeObd" type="button">DECODE</button></div><div class="quick-codes"><button>P0300</button><button>P0420</button><button>P0171</button><button>P0455</button><button>P0128</button></div></div>
+      <div class="diag-result" id="obdResult"><span>CODE DESK</span><h3>Enter a code.</h3><p>CarDesk will explain the system, what the code actually says, and a sensible first check.</p></div>
+    </div>
+  </section>
+
+  <section class="service-section section-block" id="service">
+    <div class="section-heading"><div><div class="section-code">06 / PRIVATE SERVICE LOG</div><h2>Your maintenance<br><em>timeline.</em></h2></div><p>Saved locally in this browser by VIN. No account and no remote database.</p></div>
+    <div class="service-layout">
+      <form class="service-form" id="serviceForm"><div class="service-form-head"><span>ADD SERVICE EVENT</span><b id="serviceVehicle">CURRENT VEHICLE</b></div><label>DATE<input id="serviceDate" type="date" required></label><label>MILEAGE<input id="serviceMiles" type="number" min="0" placeholder="82500"></label><label>SERVICE / REPAIR<input id="serviceType" required placeholder="Oil change, tires, brake pads…"></label><label>COST<input id="serviceCost" type="number" min="0" step="0.01" placeholder="89.00"></label><label>NOTES<textarea id="serviceNotes" rows="3" placeholder="Optional details"></textarea></label><button type="submit">ADD TO TIMELINE</button></form>
+      <div class="service-timeline"><div class="timeline-head"><span>VEHICLE HISTORY</span><div><b id="serviceTotal">$0</b><small>LOGGED COST</small></div></div><div id="serviceList" class="timeline-list"></div></div>
+    </div>
+  </section>
+
+  <footer class="source-desk"><div><b>CAR/DESK</b><span>Built as a Safi Solutions utility.</span></div><div class="source-links"><a href="https://vpic.nhtsa.dot.gov/api/" target="_blank" rel="noopener">NHTSA vPIC ↗</a><a href="https://www.nhtsa.gov/nhtsa-datasets-and-apis" target="_blank" rel="noopener">NHTSA Safety Data ↗</a></div></footer>
+</section>
+</main>
+
+<div class="drawer" id="garageDrawer" aria-hidden="true"><div class="drawer-head"><div><span>LOCAL GARAGE</span><b>Saved vehicles</b></div><button id="closeGarage" type="button">CLOSE</button></div><div id="garageList" class="garage-list"></div></div><div class="scrim" id="scrim"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="app.js?v=1"></script>
+</body>
+</html>
