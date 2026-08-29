@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070707">
+<title>SPOT — Put your brand somewhere real.</title>
+<meta name="description" content="A live physical-placement auction concept by Safi Solutions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=1">
+</head>
+<body>
+<div class="boot" id="boot" aria-hidden="true"><div class="boot-mark">SP<span>O</span>T</div><div class="boot-line"><i></i></div><small>OPENING AUCTION FLOOR</small></div>
+<header class="topbar">
+  <a class="brand" href="#top"><img src="/assets/project-logos/spot.svg" alt="SPOT"></a>
+  <div class="auction-mini"><i></i><span>AUCTION LIVE</span><b id="miniTimer">14D 00:00:00</b></div>
+  <nav><a href="#auction">Auction</a><a href="#activity">Activity</a><a href="#how">How it works</a></nav>
+  <button class="ghost-btn" id="openBidTop" type="button">Place a bid</button>
+</header>
+
+<main id="top">
+<section class="hero" id="auction">
+  <div class="hero-noise"></div>
+  <div class="hero-copy">
+    <div class="eyebrow"><i></i>PHYSICAL AD SPACE / AUCTION 001</div>
+    <h1>Your brand.<br><em>On something real.</em></h1>
+    <p>Ten sticker placements. One everyday object. Highest bid owns the spot for the entire run.</p>
+    <div class="hero-stats"><div><span>CURRENT TOTAL</span><b id="totalBid">$2,265</b></div><div><span>SPOTS CLAIMED</span><b id="claimed">6 / 10</b></div><div><span>TOTAL BIDS</span><b id="bidCount">31</b></div></div>
+  </div>
+
+  <div class="stage-wrap">
+    <div class="stage-label"><span>LIVE OBJECT 01</span><b>14-IN LAPTOP / LID</b></div>
+    <div class="laptop-scene" id="laptopScene">
+      <div class="lid">
+        <div class="lid-shine"></div>
+        <div class="center-mark">S</div>
+        <button class="spot s1" data-spot="1"><span>01</span><b>AVAILABLE</b><small>$125</small></button>
+        <button class="spot s2 won" data-spot="2"><span>02</span><b class="brand-chip supa">SUPA</b><small>$260</small></button>
+        <button class="spot s3" data-spot="3"><span>03</span><b>AVAILABLE</b><small>$170</small></button>
+        <button class="spot s4 won" data-spot="4"><span>04</span><b class="brand-chip nxo">NXO</b><small>$420</small></button>
+        <button class="spot s5 won" data-spot="5"><span>05</span><b class="brand-chip fig">FIG</b><small>$315</small></button>
+        <button class="spot s6" data-spot="6"><span>06</span><b>AVAILABLE</b><small>$150</small></button>
+        <button class="spot s7 won" data-spot="7"><span>07</span><b class="brand-chip apex">APEX</b><small>$375</small></button>
+        <button class="spot s8 won" data-spot="8"><span>08</span><b class="brand-chip data">DATA</b><small>$290</small></button>
+        <button class="spot s9" data-spot="9"><span>09</span><b>AVAILABLE</b><small>$110</small></button>
+        <button class="spot s10 won" data-spot="10"><span>10</span><b class="brand-chip stripe">STRIPE</b><small>$450</small></button>
+      </div>
+      <div class="hinge"></div><div class="base"></div><div class="floor-glow"></div>
+    </div>
+    <div class="stage-hint">CLICK A PLACEMENT <span>↗</span></div>
+  </div>
+</section>
+
+<section class="ticker" aria-label="live auction activity"><div class="ticker-track" id="tickerTrack"></div></section>
+
+<section class="auction-board section" id="activity">
+  <div class="section-head"><div><span>01 / AUCTION FLOOR</span><h2>Every spot has<br><em>its own market.</em></h2></div><p>Hover the board, compare locations, then open any position to see the minimum next bid and activity.</p></div>
+  <div class="board-grid" id="boardGrid"></div>
+</section>
+
+<section class="brand-run section">
+  <div class="brand-run-copy"><span>02 / AFTER THE AUCTION</span><h2>The object becomes<br><em>a moving billboard.</em></h2><p>Winning placements stay visible on the digital twin, then get replaced by a real-world photo once the stickers are applied.</p><div class="run-metrics"><div><b>365</b><span>DAYS IN THE WILD</span></div><div><b>10</b><span>BRANDS MAX</span></div><div><b>1</b><span>PHYSICAL OBJECT</span></div></div></div>
+  <div class="inwild-card"><div class="iw-top"><span>IN THE WILD</span><b>PROOF MODE</b></div><div class="photo-placeholder"><div class="ph-laptop"><span>SUPA</span><span>STRIPE</span><span>NXO</span><span>APEX</span><span>DATA</span></div></div><footer><div><small>OBJECT STATUS</small><b>Awaiting physical install</b></div><button type="button" id="showProof">Preview proof mode</button></footer></div>
+</section>
+
+<section class="how section" id="how">
+  <div class="section-head"><div><span>03 / HOW IT WORKS</span><h2>Ridiculously simple<br><em>on purpose.</em></h2></div><p>The weird idea is the product. The software just makes buying the physical placement frictionless.</p></div>
+  <div class="steps"><article><span>01</span><b>Pick a spot</b><p>Every physical area has its own size, current bid and history.</p></article><article><span>02</span><b>Upload the brand</b><p>Preview the logo in the selected placement before bidding.</p></article><article><span>03</span><b>Bid + deposit</b><p>Production version would take a Stripe deposit and refund it automatically if outbid.</p></article><article><span>04</span><b>Win the real estate</b><p>The winning logo becomes part of both the digital twin and the physical object.</p></article></div>
+</section>
+
+<footer class="site-foot"><img src="/assets/project-logos/spot.svg" alt="SPOT"><span>V1 concept by Safi Solutions</span><a href="/">Back to Safi Solutions ↗</a></footer>
+</main>
+
+<div class="drawer-scrim" id="scrim"></div>
+<aside class="bid-drawer" id="bidDrawer" aria-hidden="true">
+  <header><div><span>PLACEMENT</span><b id="drawerSpot">SPOT 01</b></div><button id="closeDrawer" type="button">×</button></header>
+  <div class="drawer-preview"><div class="preview-area" id="logoPreview"><span>YOUR<br>LOGO</span></div><div class="preview-meta"><small>SIZE</small><b id="spotSize">3.8 × 2.2 IN</b><small>POSITION</small><b id="spotPosition">UPPER LEFT</b></div></div>
+  <div class="bid-market"><div><span>CURRENT BID</span><b id="currentBid">$125</b></div><div><span>NEXT MINIMUM</span><b id="nextBid">$135</b></div></div>
+  <label class="upload">BRAND / LOGO<input id="logoUpload" type="file" accept="image/*"><span>Choose image <b>PNG / JPG / SVG</b></span></label>
+  <label class="bid-input">YOUR BID<div><span>$</span><input id="bidAmount" inputmode="decimal" type="number" min="0"><button id="quickPlus" type="button">+25</button></div></label>
+  <div class="deposit"><span>EST. 20% DEPOSIT</span><b id="depositAmount">$27</b></div>
+  <button class="bid-submit" id="submitBid" type="button">PLACE DEMO BID <span>→</span></button>
+  <p class="demo-note">V1 demo only — no card is charged. Production would use server-side bid validation + Stripe.</p>
+  <div class="history"><header><span>RECENT ACTIVITY</span><b id="historyCount">3 BIDS</b></header><div id="historyList"></div></div>
+</aside>
+<div class="toast" id="toast"></div>
+<script src="app.js?v=1"></script>
+</body>
+</html>
