@@ -1,0 +1,56 @@
+name: Repair SPOT auth startup
+
+on:
+  push:
+    paths:
+      - '.github/workflows/spot-auth-startup-repair.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch SPOT auth startup
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          js_path = Path('spot/v3.js')
+          s = js_path.read_text()
+
+          # Remove dead owner-claim handler. The HTML no longer contains
+          # #claimOwner/#ownerCode, so this line throws during startup and stops
+          # loadSession() from ever running.
+          lines = s.splitlines()
+          lines = [line for line in lines if not line.startswith("$('#claimOwner').onclick=")]
+          s = '\n'.join(lines) + ('\n' if s.endswith('\n') else '')
+
+          # Adopt the successful session immediately instead of waiting on a
+          # later auth event.
+          old = "const {error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;toast('Signed in');closePanels()"
+          new = "const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;session=data.session;await loadProfile();syncAccount();renderAccount();toast('Signed in');closePanels()"
+          if old not in s:
+              raise SystemExit('Expected sign-in block not found')
+          s = s.replace(old, new, 1)
+
+          # Owner bootstrap is permanently closed after the first owner claim.
+          s = s.replace("$('#ownerSetup').hidden=profile?.role==='admin';", "$('#ownerSetup').hidden=true;", 1)
+
+          js_path.write_text(s)
+
+          html_path = Path('spot/index.html')
+          h = html_path.read_text()
+          h = h.replace('<button class="owner-link" id="ownerSetup">Owner setup</button>', '<button class="owner-link" id="ownerSetup" hidden>Owner setup</button>')
+          h = h.replace('spot-client.js?v=1', 'spot-client.js?v=2')
+          h = h.replace('v3.js?v=3', 'v3.js?v=4')
+          html_path.write_text(h)
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add spot/v3.js spot/index.html
+          git commit -m "Fix SPOT startup crash and admin session" || exit 0
+          git push
