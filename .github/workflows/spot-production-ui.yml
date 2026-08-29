@@ -1,0 +1,71 @@
+name: Finalize SPOT production UI
+
+on:
+  push:
+    paths:
+      - '.github/workflows/spot-production-ui.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch production UI
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          js=Path('spot/v3.js')
+          s=js.read_text()
+          anchor="async function loadMarket(){"
+          helper="function effectiveStatus(a){if(!a)return null;const now=Date.now(),start=a.starts_at?new Date(a.starts_at).getTime():null,end=a.ends_at?new Date(a.ends_at).getTime():null;if(a.status==='live'&&start&&start>now)return'upcoming';if(a.status==='upcoming'&&(!start||start<=now)&&(!end||end>now))return'live';if((a.status==='live'||a.status==='upcoming')&&end&&end<=now)return'ended';return a.status}\n"
+          if helper not in s:
+              s=s.replace(anchor,helper+anchor,1)
+          old="auction=(auctions||[]).find(a=>a.status==='live')||(auctions||[])[0]||null;"
+          new="const normalized=(auctions||[]).map(a=>({...a,status:effectiveStatus(a)})).filter(a=>a.status!=='ended');auction=normalized.find(a=>a.status==='live')||normalized[0]||null;"
+          if old in s:s=s.replace(old,new,1)
+          old="$('#auctionLabel').textContent=auction.status==='live'?'LIVE AUCTION':'UPCOMING';"
+          new="const isLive=auction.status==='live';$('#auctionLabel').textContent=isLive?'LIVE AUCTION':'UPCOMING';$('#timerLabel').textContent=isLive?'AUCTION ENDS':'BIDDING OPENS';$('#auctionStatusText').textContent=isLive?'LIVE':'UPCOMING';"
+          if old in s:s=s.replace(old,new,1)
+          old="function tickCountdown(){if(!auction?.ends_at){$('#endsIn').textContent='—';return}const ms=new Date(auction.ends_at)-Date.now();if(ms<=0){$('#endsIn').textContent='ENDED';return}const d=Math.floor(ms/86400000),h=Math.floor(ms/3600000)%24,m=Math.floor(ms/60000)%60;$('#endsIn').textContent=`${d}D ${h}H ${m}M`}"
+          new="function tickCountdown(){if(!auction){$('#endsIn').textContent='—';return}const target=auction.status==='upcoming'?auction.starts_at:auction.ends_at;if(!target){$('#endsIn').textContent='—';return}const ms=new Date(target)-Date.now();if(ms<=0){$('#endsIn').textContent=auction.status==='upcoming'?'OPENING…':'ENDED';if(auction.status==='upcoming')setTimeout(loadMarket,1200);return}const d=Math.floor(ms/86400000),h=Math.floor(ms/3600000)%24,m=Math.floor(ms/60000)%60,s=Math.floor(ms/1000)%60;$('#endsIn').textContent=d?`${d}D ${h}H ${m}M`:`${h}H ${m}M ${s}S`}"
+          if old in s:s=s.replace(old,new,1)
+          old="async function openBid(id){selectedSpot=spots.find(s=>s.id===id);if(!selectedSpot)return;"
+          new="async function openBid(id){selectedSpot=spots.find(s=>s.id===id);if(!selectedSpot)return;if(auction?.status!=='live')return toast(auction?.starts_at?`Bidding opens ${new Date(auction.starts_at).toLocaleString()}`:'Bidding is not open yet');"
+          if old in s:s=s.replace(old,new,1)
+          old="const payload={title,slug,object_name:objectName,description:$('#aDesc').value.trim(),status:$('#aStatus').value,starts_at:$('#aStarts').value?new Date($('#aStarts').value).toISOString():null,ends_at:$('#aEnds').value?new Date($('#aEnds').value).toISOString():null,object_image_url:builder.imageUrl,proof_image_url:builder.proofUrl};"
+          new="let status=$('#aStatus').value;const starts=$('#aStarts').value?new Date($('#aStarts').value).toISOString():null,ends=$('#aEnds').value?new Date($('#aEnds').value).toISOString():null;if(['upcoming','live'].includes(status)&&!ends)return toast('Set an auction end time before publishing');if(starts&&ends&&new Date(ends)<=new Date(starts))return toast('End time must be after start time');if(status==='live'&&starts&&new Date(starts)>new Date())status='upcoming';if(status==='upcoming'&&(!starts||new Date(starts)<=new Date()))status='live';const canDeleteRemoved=!builder.auction||['draft','upcoming'].includes(builder.auction.status);const payload={title,slug,object_name:objectName,description:$('#aDesc').value.trim(),status,starts_at:starts,ends_at:ends,object_image_url:builder.imageUrl,proof_image_url:builder.proofUrl};"
+          if old not in s: raise SystemExit('save payload block not found')
+          s=s.replace(old,new,1)
+          s=s.replace("if(builder.originalIds.length&&['draft','upcoming'].includes(payload.status)){","if(builder.originalIds.length&&canDeleteRemoved){",1)
+          s=s.replace("$('#endsIn').textContent='—'}","$('#endsIn').textContent='—';$('#timerLabel').textContent='AUCTION';$('#auctionStatusText').textContent='—'}",1)
+          js.write_text(s)
+
+          html=Path('spot/index.html')
+          h=html.read_text()
+          h=h.replace('<button class="sign-btn" id="accountBtn">SIGN IN</button>','<button class="notice-btn" id="noticeBtn" hidden>ALERTS<span id="noticeBadge" hidden>0</span></button><button class="sign-btn" id="accountBtn">SIGN IN</button>',1)
+          h=h.replace('<span>AUCTION ENDS</span><b id="endsIn">—</b>','<span id="timerLabel">AUCTION ENDS</span><b id="endsIn">—</b>',1)
+          h=h.replace('<div class="stat"><span>STATUS</span><b>LIVE</b></div>','<div class="stat"><span>STATUS</span><b id="auctionStatusText">—</b></div>',1)
+          h=h.replace('<select id="aStatus"><option>draft</option><option>upcoming</option><option>live</option><option>ended</option><option>archived</option></select><small style="color:#64645f;font-size:10px;line-height:1.4">Draft = private. Upcoming = visible before start. Live = accepting bids. Ended = closed. Archived = completed history.</small>','<select id="aStatus"><option value="draft">Draft — private</option><option value="upcoming">Scheduled — starts automatically</option><option value="live">Live now</option><option value="ended">Ended — payment/review</option><option value="archived">Archived — history</option></select><small style="color:#64645f;font-size:10px;line-height:1.4">For Scheduled/Live auctions, SPOT uses the dates below to determine the real status automatically.</small>',1)
+          h=h.replace('Scheduled end. You still use End + Charge to finalize and collect the winners.','SPOT automatically closes and charges winners at this time. End + Charge remains your manual backup.',1)
+          panel='''<aside class="panel drawer notices-drawer" id="notificationsPanel"><div class="panel-head"><div><span>YOUR ACTIVITY</span><h2>Alerts</h2></div><button class="close" data-close>×</button></div><div class="notice-controls"><label><input id="emailNoticeToggle" type="checkbox" checked> Email important alerts</label><button id="markNoticesRead">MARK ALL READ</button></div><div id="noticeList"><div class="empty">No alerts yet.</div></div></aside>\n'''
+          h=h.replace('<div class="toast" id="toast"></div>',panel+'<div class="toast" id="toast"></div>',1)
+          h=h.replace('v3.css?v=3','v3.css?v=4')
+          h=h.replace('v3.js?v=4','v3.js?v=5')
+          h=h.replace('<script src="payments.js?v=3"></script>','<script src="payments.js?v=3"></script><script src="notifications.js?v=1"></script><script src="admin-health.js?v=1"></script>',1)
+          html.write_text(h)
+
+          css=Path('spot/v3.css')
+          c=css.read_text()
+          addon='''\n.notice-btn{position:relative;margin-left:9px;border:1px solid #303030;background:#111;color:#a8a8a0;border-radius:999px;padding:10px 13px;font:700 9px var(--mono);letter-spacing:.06em}.notice-btn:hover{border-color:#555;color:#fff}.notice-btn span{position:absolute;right:-5px;top:-6px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--acid);color:#080808;display:grid;place-items:center;font:800 9px var(--mono)}.notices-drawer{width:min(410px,96vw)}.notice-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0 14px;border-bottom:1px solid #222}.notice-controls label{display:flex;align-items:center;gap:8px;color:#85857e;font-size:11px}.notice-controls button{border:0;background:none;color:var(--acid);font:700 9px var(--mono);letter-spacing:.05em}.notice-item{position:relative;display:grid;grid-template-columns:10px 1fr;gap:10px;padding:15px 3px;border-bottom:1px solid #202020}.notice-item .notice-dot{width:7px;height:7px;border-radius:50%;background:#373737;margin-top:5px}.notice-item.unread .notice-dot{background:var(--acid);box-shadow:0 0 12px rgba(200,255,46,.3)}.notice-item b{font-size:12px}.notice-item p{margin:5px 0;color:#85857e;font-size:11px;line-height:1.5}.notice-item small{color:#565650;font:500 9px var(--mono)}.launch-health{border:1px solid var(--line);border-radius:16px;background:#0d0d0d;margin:-2px 0 18px;padding:15px}.health-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}.health-head span{display:block;color:var(--acid);font:500 9px var(--mono);letter-spacing:.1em}.health-head b{display:block;font-size:16px;margin-top:3px}.health-head small,.health-loading{color:#666;font-size:11px}.health-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.health-grid>div{display:flex;align-items:flex-start;gap:9px;padding:10px;border:1px solid #242424;border-radius:11px;background:#111}.health-grid b{display:block;font-size:11px}.health-grid small{display:block;color:#65655f;font-size:9px;line-height:1.35;margin-top:3px}.health-dot{flex:0 0 auto;width:8px;height:8px;border-radius:50%;margin-top:3px;background:#777}.health-dot.ok{background:var(--acid);box-shadow:0 0 10px rgba(200,255,46,.25)}.health-dot.warn{background:#e0a44c}.health-dot.bad{background:var(--red)}@media(max-width:800px){.health-grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.notice-btn{padding:9px 8px;font-size:8px;margin-left:3px}.health-grid{grid-template-columns:1fr}}\n'''
+          if '.notice-btn{' not in c:c+=addon
+          css.write_text(c)
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add spot/v3.js spot/index.html spot/v3.css
+          git commit -m "Finalize SPOT production UI and lifecycle" || exit 0
+          git push
