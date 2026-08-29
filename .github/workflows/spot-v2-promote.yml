@@ -5,6 +5,7 @@ on:
     paths:
       - 'spot/v2.html'
       - 'spot/v2.js'
+      - '.github/workflows/spot-v2-promote.yml'
 jobs:
   promote:
     runs-on: ubuntu-latest
