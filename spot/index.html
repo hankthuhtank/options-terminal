@@ -86,17 +86,17 @@
       <div class="builder-grid">
         <div>
           <div class="form-grid">
-            <div class="field"><label>TITLE</label><input id="aTitle" placeholder="Auction 002"></div>
-            <div class="field"><label>SLUG</label><input id="aSlug" placeholder="auction-002"></div>
-            <div class="field"><label>OBJECT NAME</label><input id="aObject" placeholder="Toolbox"></div>
-            <div class="field"><label>STATUS</label><select id="aStatus"><option>draft</option><option>upcoming</option><option>live</option><option>ended</option><option>archived</option></select></div>
-            <div class="field"><label>STARTS</label><input id="aStarts" type="datetime-local"></div>
-            <div class="field"><label>ENDS</label><input id="aEnds" type="datetime-local"></div>
+            <div class="field"><label>AUCTION NAME</label><input id="aTitle" placeholder="Auction 002"><small style="color:#64645f;font-size:10px;line-height:1.4">The public title bidders will see.</small></div>
+            <div class="field"><label>PUBLIC URL NAME</label><input id="aSlug" placeholder="auction-002"><small style="color:#64645f;font-size:10px;line-height:1.4">The short web-safe name for this auction. Use lowercase letters, numbers and dashes.</small></div>
+            <div class="field"><label>OBJECT NAME</label><input id="aObject" placeholder="Toolbox"><small style="color:#64645f;font-size:10px;line-height:1.4">What is physically being auctioned: laptop, toolbox, suitcase, car, etc.</small></div>
+            <div class="field"><label>STATUS</label><select id="aStatus"><option>draft</option><option>upcoming</option><option>live</option><option>ended</option><option>archived</option></select><small style="color:#64645f;font-size:10px;line-height:1.4">Draft = private. Upcoming = visible before start. Live = accepting bids. Ended/Archived = winner history.</small></div>
+            <div class="field"><label>STARTS</label><input id="aStarts" type="datetime-local"><small style="color:#64645f;font-size:10px;line-height:1.4">When bidding opens.</small></div>
+            <div class="field"><label>ENDS</label><input id="aEnds" type="datetime-local"><small style="color:#64645f;font-size:10px;line-height:1.4">When the highest valid bids become the winners.</small></div>
           </div>
-          <div class="field"><label>DESCRIPTION</label><textarea id="aDesc" rows="3" placeholder="Short description shown beside the object"></textarea></div>
+          <div class="field"><label>DESCRIPTION</label><textarea id="aDesc" rows="3" placeholder="Short description shown beside the object"></textarea><small style="color:#64645f;font-size:10px;line-height:1.4">Keep this short: what the object is and what the winner is buying.</small></div>
           <div class="form-grid">
-            <div class="field"><label>OBJECT PHOTO</label><input id="objectUpload" type="file" accept="image/png,image/jpeg,image/webp"></div>
-            <div class="field"><label>FINISHED / PROOF PHOTO</label><input id="proofUpload" type="file" accept="image/png,image/jpeg,image/webp"></div>
+            <div class="field"><label>OBJECT PHOTO</label><input id="objectUpload" type="file" accept="image/png,image/jpeg,image/webp"><small style="color:#64645f;font-size:10px;line-height:1.4">The clean photo bidders use to choose their exact logo location.</small></div>
+            <div class="field"><label>FINISHED / PROOF PHOTO</label><input id="proofUpload" type="file" accept="image/png,image/jpeg,image/webp"><small style="color:#64645f;font-size:10px;line-height:1.4">Upload after the auction when the winning logos are physically on the object.</small></div>
           </div>
           <div class="builder-guide"><b>Visual placement:</b> upload the object photo, click <b>Add Logo Spot</b>, drag the box anywhere on the photo, then pull the <b>orange corner</b> to resize it. The public auction uses this exact layout.</div>
           <div class="builder-surface" id="builderSurface"><div class="builder-empty">UPLOAD YOUR OBJECT PHOTO TO START</div></div>
@@ -105,7 +105,7 @@
           <div class="section-line" style="margin-bottom:10px"><div><div class="eyebrow">LOGO AREAS</div><h2 style="font-size:21px">Placement boxes</h2></div><button class="secondary" id="addSpotBtn">+ ADD LOGO SPOT</button></div>
           <div class="spot-list" id="adminSpots"><div class="empty">No logo spots yet.</div></div>
           <div class="spot-editor disabled" id="spotEditor">
-            <div class="field"><label>PLACEMENT NAME</label><input id="spotPosition" placeholder="Upper left"></div>
+            <div class="field"><label>PLACEMENT NAME</label><input id="spotPosition" placeholder="Upper left"><small style="color:#64645f;font-size:10px">A human-readable label such as Upper Left or Center Premium.</small></div>
             <div class="form-grid"><div class="field"><label>START BID</label><input id="spotStart" type="number" value="100"></div><div class="field"><label>MIN INCREMENT</label><input id="spotIncrement" type="number" value="10"></div><div class="field"><label>WIDTH %</label><input id="spotW" type="number" value="18"></div><div class="field"><label>HEIGHT %</label><input id="spotH" type="number" value="14"></div></div>
           </div>
           <button class="primary" id="saveAuctionBtn" style="width:100%;margin-top:12px">SAVE AUCTION</button>
@@ -114,6 +114,16 @@
     </section>
   </div>
 </section>
+
+<footer style="border-top:1px solid #202020;padding:28px 4vw 38px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;color:#65655f;font-size:11px">
+  <span style="margin-right:auto">© 2026 SPOT · Physical advertising auctions</span>
+  <a style="color:inherit;text-decoration:none" href="terms.html">Terms</a>
+  <a style="color:inherit;text-decoration:none" href="privacy.html">Privacy</a>
+  <a style="color:inherit;text-decoration:none" href="auction-rules.html">Auction Rules</a>
+  <a style="color:inherit;text-decoration:none" href="payments.html">Payments & Refunds</a>
+  <a style="color:inherit;text-decoration:none" href="content-policy.html">Brand Policy</a>
+  <a style="color:inherit;text-decoration:none" href="contact.html">Contact</a>
+</footer>
 
 <div class="scrim" id="scrim"></div>
 
