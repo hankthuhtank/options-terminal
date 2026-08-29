@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="v3.css?v=2">
+<link rel="stylesheet" href="v3.css?v=3">
 </head>
 <body>
 <header class="top"><div class="brand">SP<i>O</i>T</div><nav><button class="nav-btn active" data-view="home">HOME</button><button class="nav-btn" data-view="winners">WINNERS</button><button class="nav-btn" data-view="how">HOW IT WORKS</button><button class="nav-btn" id="adminNav" data-view="admin" hidden>ADMIN</button></nav><button class="sign-btn" id="accountBtn">SIGN IN</button></header>
@@ -23,5 +23,5 @@
 <section class="panel modal" id="authModal"><div class="panel-head"><div><span>SPOT ACCOUNT</span><h2>Bidder access</h2></div><button class="close" data-close>×</button></div><div id="authGuest"><div class="auth-tabs"><button class="active" data-auth="signin">SIGN IN</button><button data-auth="signup">CREATE ACCOUNT</button></div><div class="field" id="signupNameField" hidden><label>DISPLAY NAME</label><input id="signupName" placeholder="Your name"></div><div class="field"><label>EMAIL</label><input id="authEmail" type="email" placeholder="you@company.com"></div><div class="field"><label>PASSWORD</label><input id="authPassword" type="password" placeholder="••••••••"></div><button class="primary" id="authSubmit" style="width:100%">SIGN IN</button><button class="forgot" id="forgotPassword">Forgot password?</button><p class="auth-note">Accounts keep your bidding identity, company details, payment method and logo uploads tied to you.</p></div><div id="authAccount" hidden><div class="account-email" id="accountEmail"></div><div class="field"><label>USERNAME</label><input id="profileUsername"></div><div class="field"><label>DISPLAY NAME</label><input id="profileDisplay"></div><div class="field"><label>COMPANY</label><input id="profileCompany"></div><div class="field"><label>WEBSITE</label><input id="profileWebsite"></div><button class="primary" id="saveProfile" style="width:100%">SAVE PROFILE</button><button class="owner-link" id="ownerSetup" hidden>Owner setup</button><button class="danger" id="signOut" style="width:100%;margin-top:14px">SIGN OUT</button></div></section>
 <section class="panel modal" id="ownerModal"><div class="panel-head"><div><span>SETUP CLOSED</span><h2>Owner access claimed</h2></div><button class="close" data-close>×</button></div><p class="auth-note">The one-time SPOT owner setup has already been completed.</p></section>
 <div class="toast" id="toast"></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="spot-client.js?v=2"></script><script src="v3.js?v=4"></script><script src="payments.js?v=2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="spot-client.js?v=2"></script><script src="v3.js?v=4"></script><script src="payments.js?v=3"></script>
 </body></html>
