@@ -1,0 +1,49 @@
+name: TAKEOVER shield UI
+on:
+  push:
+    paths:
+      - '.github/workflows/takeover-shield-ui.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch shield UI
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('spot/takeover-v2.js')
+          s=p.read_text()
+          s=s.replace("config={starting_price:10,min_increment:1,purchases_enabled:true}","config={starting_price:10,min_increment:1,purchases_enabled:true,page_shield_until:null}",1)
+          s=s.replace("async function refreshBoard(){const {data,error}=await sb.from('takeover_spots').select(boardCols).order('spot_number');if(error)return;spots=data||[];renderBoard();renderChrome()}","async function refreshBoard(){const [{data:board,error},{data:cfg}]=await Promise.all([sb.from('takeover_spots').select(boardCols).order('spot_number'),sb.from('takeover_config').select('starting_price,min_increment,purchases_enabled,page_shield_until').eq('singleton',true).maybeSingle()]);if(error)return;spots=board||[];if(cfg)config=cfg;renderBoard();renderChrome()}",1)
+          s=s.replace("select('starting_price,min_increment,purchases_enabled')","select('starting_price,min_increment,purchases_enabled,page_shield_until')",1)
+          old="function renderChrome(){const account=$('#accountBtn');account.textContent=session?'MY SPOTS':'SIGN IN';$('#adminBtn').hidden=!isAdmin;const cost=spots.reduce((n,s)=>n+(own(s)?0:minTake(s)),0),page=$('#takePageBtn');page.textContent=cost>0?`TAKE THE PAGE · ${cash(cost)}`:'YOU OWN THE PAGE';page.disabled=cost<=0||!config.purchases_enabled;$('#pauseFlag').hidden=config.purchases_enabled;if(session)updateAlertBadge();else $('#alertBtn').hidden=true}"
+          new="function shieldActive(){return !!config.page_shield_until&&new Date(config.page_shield_until).getTime()>Date.now()}\nfunction ownsWholePage(){return spots.length===12&&spots.every(s=>own(s))}\nfunction shieldBlocked(){return shieldActive()&&!ownsWholePage()}\nfunction shieldRemaining(){if(!shieldActive())return'';let ms=Math.max(0,new Date(config.page_shield_until).getTime()-Date.now()),h=Math.floor(ms/3600000),m=Math.floor(ms/60000)%60,s=Math.floor(ms/1000)%60;return `${h}H ${m}M ${s}S`}\nfunction renderChrome(){const account=$('#accountBtn');account.textContent=session?'MY SPOTS':'SIGN IN';$('#adminBtn').hidden=!isAdmin;const cost=spots.reduce((n,s)=>n+(own(s)?0:minTake(s)),0),page=$('#takePageBtn'),shield=$('#shieldFlag'),blocked=shieldBlocked();if(shield){shield.hidden=!shieldActive();if(shieldActive())shield.textContent=`FULL TAKEOVER · ${shieldRemaining()} PROTECTED`}page.textContent=ownsWholePage()?(shieldActive()?`PAGE PROTECTED · ${shieldRemaining()}`:'YOU OWN THE PAGE'):(blocked?'PAGE TAKEOVER PROTECTED':cost>0?`TAKE THE PAGE · ${cash(cost)}`:'YOU OWN THE PAGE');page.disabled=cost<=0||!config.purchases_enabled||blocked;$('#pauseFlag').hidden=config.purchases_enabled;if(session)updateAlertBadge();else $('#alertBtn').hidden=true}"
+          if old not in s: raise SystemExit('renderChrome block not found')
+          s=s.replace(old,new,1)
+          s=s.replace("function openTakeover(n){mode='takeover';","function openTakeover(n){if(shieldBlocked())return toast(`Full-page takeover protected for ${shieldRemaining()}`);mode='takeover';",1)
+          s=s.replace("function openPage(){mode='takeover';","function openPage(){if(shieldBlocked())return toast(`Full-page takeover protected for ${shieldRemaining()}`);mode='takeover';",1)
+          old="if(!s.owner_key){const b=document.createElement('button');b.className='available-cell';b.innerHTML=`<span>SPOT ${String(n).padStart(2,'0')}</span><b>TAKE FOR ${cash(minTake(s))}</b>`;b.onclick=()=>openTakeover(n);a.appendChild(b)}else{const b=document.createElement('button');b.className='take-pill';b.textContent=own(s)?`DEFEND · ${cash(Number(s.current_price)+Number(config.min_increment))}`:`TAKE · ${cash(minTake(s))}`;b.onclick=()=>own(s)?openDefend(n):openTakeover(n);a.appendChild(b)}"
+          new="if(!s.owner_key){const b=document.createElement('button');b.className='available-cell';b.innerHTML=shieldBlocked()?`<span>SPOT ${String(n).padStart(2,'0')}</span><b>PROTECTED</b>`:`<span>SPOT ${String(n).padStart(2,'0')}</span><b>TAKE FOR ${cash(minTake(s))}</b>`;b.disabled=shieldBlocked();b.onclick=()=>openTakeover(n);a.appendChild(b)}else{const b=document.createElement('button');b.className='take-pill';b.textContent=own(s)?`DEFEND · ${cash(Number(s.current_price)+Number(config.min_increment))}`:shieldBlocked()?'PROTECTED':`TAKE · ${cash(minTake(s))}`;b.disabled=!own(s)&&shieldBlocked();b.onclick=()=>own(s)?openDefend(n):openTakeover(n);a.appendChild(b)}"
+          if old not in s: raise SystemExit('board button block not found')
+          s=s.replace(old,new,1)
+          s=s.replace("$('#checkoutBtn').disabled=!config.purchases_enabled||totalDue()<=0","$('#checkoutBtn').disabled=!config.purchases_enabled||totalDue()<=0||shieldBlocked()",1)
+          s=s.replace("loadState().catch(e=>toast(e.message));","let lastShield=false;setInterval(()=>{const active=shieldActive();renderChrome();if(lastShield&&!active)renderBoard();lastShield=active},1000);\nloadState().catch(e=>toast(e.message));",1)
+          p.write_text(s)
+
+          h=Path('spot/index.html')
+          x=h.read_text()
+          x=x.replace('<span class="chrome-btn" id="pauseFlag" hidden>PURCHASES PAUSED</span>','<span class="chrome-btn" id="pauseFlag" hidden>PURCHASES PAUSED</span>\n      <span class="chrome-btn primary" id="shieldFlag" hidden>FULL TAKEOVER PROTECTED</span>',1)
+          x=x.replace('A full-page takeover lasts until somebody breaks it by taking one spot back.','A full-page takeover is exclusive for 24 hours. After the shield expires, it lasts until somebody breaks it by taking one spot back.',1)
+          x=x.replace('A competitor can break the takeover by taking any individual spot for more.','Buying all twelve gives 24 hours of protected full-page control. After that, a competitor can break it by taking any individual spot for more.',1)
+          x=x.replace('If somebody changes one of these prices while you are in Checkout, the purchase is rejected and automatically refunded instead of assigning stale territory.','A full 12-spot purchase gets 24 hours of exclusive protection. If the board changes or protection activates while you are in Checkout, the purchase is rejected and automatically refunded instead of assigning stale territory.',1)
+          x=x.replace('takeover-v2.js?v=1','takeover-v2.js?v=2',1)
+          h.write_text(x)
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add spot/takeover-v2.js spot/index.html
+          git commit -m "Add 24-hour full-page protection UI"
+          git push
