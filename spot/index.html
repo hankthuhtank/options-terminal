@@ -20,6 +20,7 @@
     <div class="identity"><b>TAKEOVER</b><span>THE WEBPAGE BELONGS TO WHOEVER WANTS IT MOST.</span></div>
     <div class="controls">
       <span class="chrome-btn" id="pauseFlag" hidden>PURCHASES PAUSED</span>
+      <span class="chrome-btn primary" id="shieldFlag" hidden>FULL TAKEOVER PROTECTED</span>
       <button class="chrome-btn primary" id="takePageBtn">TAKE THE PAGE</button>
       <button class="chrome-btn" id="rulesBtn">RULES</button>
       <button class="chrome-btn alert" id="alertBtn" hidden>ALERTS <span class="badge" id="alertBadge" hidden>0</span></button>
@@ -41,7 +42,7 @@
       <div class="rule"><b>1 · Pay more and it becomes yours.</b><span>Available spots start at the listed price. Occupied spots can be taken for $1 more.</span></div>
       <div class="rule"><b>2 · You keep it until somebody takes it.</b><span>No daily reset. No countdown. Ownership is indefinite.</span></div>
       <div class="rule"><b>3 · Grow into neighboring spots.</b><span>Connected spots visually merge into larger advertising territory.</span></div>
-      <div class="rule"><b>4 · Take all twelve to own the page.</b><span>A full-page takeover lasts until somebody breaks it by taking one spot back.</span></div>
+      <div class="rule"><b>4 · Take all twelve to own the page.</b><span>A full-page takeover is exclusive for 24 hours. After the shield expires, it lasts until somebody breaks it by taking one spot back.</span></div>
     </div>
     <button class="action" id="introGotIt">I GET IT</button>
   </div>
@@ -60,7 +61,7 @@
     <div id="signinGate"><p class="hint">No passwords. Sign in with a one-click email link, then Stripe handles the payment.</p><button class="action" id="continueSignin">SIGN IN TO CONTINUE</button></div>
     <div id="signedAs" class="hint" hidden></div>
     <button class="action" id="checkoutBtn" hidden>PAY & TAKE OVER</button>
-    <p class="hint">If somebody changes one of these prices while you are in Checkout, the purchase is rejected and automatically refunded instead of assigning stale territory.</p>
+    <p class="hint">A full 12-spot purchase gets 24 hours of exclusive protection. If the board changes or protection activates while you are in Checkout, the purchase is rejected and automatically refunded instead of assigning stale territory.</p>
   </div>
 </section>
 
@@ -97,7 +98,7 @@
       <div class="rule"><b>Pay more. Take the spot.</b><span>Minimum increase is $1 unless the board owner changes it globally.</span></div>
       <div class="rule"><b>Keep it until you are outbid.</b><span>There is no timer and no automatic reset.</span></div>
       <div class="rule"><b>Defend by raising your own price.</b><span>You only pay the difference between your current level and your new level.</span></div>
-      <div class="rule"><b>Own all twelve. Own the page.</b><span>A competitor can break the takeover by taking any individual spot for more.</span></div>
+      <div class="rule"><b>Own all twelve. Own the page.</b><span>Buying all twelve gives 24 hours of protected full-page control. After that, a competitor can break it by taking any individual spot for more.</span></div>
     </div>
     <p class="rules-copy"><strong>Payments are purchases of advertising placement, not refundable deposits.</strong> If the board changes while Stripe Checkout is still open and your payment can no longer claim the quoted territory, TAKEOVER automatically refunds that stale transaction.</p>
     <div class="legal-links"><a href="terms.html" target="_blank">TERMS</a><a href="privacy.html" target="_blank">PRIVACY</a><a href="payments.html" target="_blank">PAYMENTS</a><a href="content-policy.html" target="_blank">AD POLICY</a><a href="contact.html" target="_blank">CONTACT</a></div>
@@ -119,6 +120,6 @@
 
 <div class="toast" id="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="takeover-v2.js?v=1"></script>
+<script src="takeover-v2.js?v=2"></script>
 </body>
 </html>
