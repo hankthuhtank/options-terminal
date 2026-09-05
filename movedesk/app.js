@@ -12,25 +12,86 @@ function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('on');
 const boot=$('#boot');const leaveBoot=()=>{if(!boot)return;boot.classList.add('out');setTimeout(()=>boot.remove(),500)};
 if(document.readyState==='complete')setTimeout(leaveBoot,1050);else window.addEventListener('load',()=>setTimeout(leaveBoot,720),{once:true});setTimeout(leaveBoot,2400);
 
-/* location search */
+/* Location results are explicit choices; a shared name must not silently pick a city. */
 const resolved={from:null,to:null};
+let buildRequest=0;
 setupSearch('fromInput','fromSuggestions','fromResolved','from');setupSearch('toInput','toSuggestions','toResolved','to');
-function setupSearch(inputId,listId,statusId,side){const input=$('#'+inputId),list=$('#'+listId);let timer=0,seq=0;
- input.addEventListener('input',()=>{resolved[side]=null;$('#'+statusId).textContent='Searching…';clearTimeout(timer);const q=input.value.trim();if(q.length<2){list.classList.remove('on');$('#'+statusId).textContent='Search a city or ZIP code';return}const my=++seq;timer=setTimeout(async()=>{try{const a=await searchLocations(q);if(my!==seq)return;renderSuggestions(a,list,side,input,statusId)}catch(e){list.classList.remove('on');$('#'+statusId).textContent='Search unavailable — try again'}},260)});
- input.addEventListener('focus',()=>{if(list.children.length)list.classList.add('on')});
- document.addEventListener('click',e=>{if(!e.target.closest('.'+(side==='from'?'from-field':'to-field')))list.classList.remove('on')});
+function closeSuggestions(side){$('#'+side+'Suggestions').classList.remove('on');$('#'+side+'Input').setAttribute('aria-expanded','false')}
+function setupSearch(inputId,listId,statusId,side){
+ const input=$('#'+inputId),list=$('#'+listId);let timer=0,seq=0;
+ input.setAttribute('aria-controls',listId);input.setAttribute('aria-expanded','false');input.setAttribute('aria-describedby',statusId);
+ input.addEventListener('input',()=>{
+   resolved[side]=null;const my=++seq;clearTimeout(timer);list.innerHTML='';closeSuggestions(side);
+   const q=input.value.trim();$('#'+statusId).textContent=q.length<2?'Search a city or ZIP code':'Searching…';
+   if(q.length<2)return;
+   timer=setTimeout(async()=>{try{const choices=await searchLocations(q);if(my!==seq)return;renderSuggestions(choices,list,side,input,statusId)}catch(e){if(my!==seq)return;closeSuggestions(side);$('#'+statusId).textContent='Search unavailable — try again'}},260);
+ });
+ input.addEventListener('focus',()=>{if(list.children.length&&!resolved[side]){list.classList.add('on');input.setAttribute('aria-expanded','true')}});
+ input.addEventListener('keydown',e=>{
+   if(e.key==='ArrowDown'&&list.classList.contains('on')){e.preventDefault();list.querySelector('button')?.focus()}
+   if(e.key==='Enter'&&list.classList.contains('on')&&list.querySelector('button')){e.preventDefault();list.querySelector('button').focus()}
+   if(e.key==='Escape')closeSuggestions(side);
+ });
+ list.addEventListener('keydown',e=>{
+   const buttons=$$('button',list),i=buttons.indexOf(document.activeElement);
+   if(e.key==='Escape'){e.preventDefault();closeSuggestions(side);input.focus()}
+   if(e.key==='ArrowDown'){e.preventDefault();buttons[Math.min(i+1,buttons.length-1)]?.focus()}
+   if(e.key==='ArrowUp'){e.preventDefault();if(i<=0)input.focus();else buttons[i-1]?.focus()}
+ });
+ document.addEventListener('click',e=>{if(!e.target.closest('.'+side+'-field'))closeSuggestions(side)});
+ document.addEventListener('focusin',e=>{if(!e.target.closest('.'+side+'-field'))closeSuggestions(side)});
 }
 async function searchLocations(q){const r=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=7&language=en&format=json`);if(!r.ok)throw new Error('Geocoding failed');const j=await r.json();return j.results||[]}
 function locLabel(x){return [x.name,x.admin1,x.country_code].filter(Boolean).join(', ')}
-function renderSuggestions(a,list,side,input,statusId){if(!a.length){list.innerHTML='<button type="button"><b>No locations found</b><span>Try city + state or a ZIP code</span></button>';list.classList.add('on');return}list.innerHTML=a.map((x,i)=>`<button type="button" data-i="${i}"><b>${esc(x.name)}</b><span>${esc([x.admin1,x.country,x.postcodes?.[0]].filter(Boolean).join(' · '))}</span></button>`).join('');list.classList.add('on');list.onclick=e=>{const b=e.target.closest('button[data-i]');if(!b)return;const x=a[+b.dataset.i];resolved[side]=x;input.value=locLabel(x);$('#'+statusId).textContent=`${Number(x.latitude).toFixed(3)}, ${Number(x.longitude).toFixed(3)} · ${x.timezone||'timezone —'}`;list.classList.remove('on')}}
-$$('.clear-field').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.clear,side=id.startsWith('from')?'from':'to';$('#'+id).value='';resolved[side]=null;$('#'+(side==='from'?'fromResolved':'toResolved')).textContent='Search a city or ZIP code';$('#'+id).focus()}));
-async function resolveInput(side){if(resolved[side])return resolved[side];const q=$('#'+(side==='from'?'fromInput':'toInput')).value.trim();if(!q)throw new Error(`Enter a ${side==='from'?'current':'destination'} location`);const a=await searchLocations(q);if(!a.length)throw new Error(`Could not resolve ${q}`);resolved[side]=a[0];return a[0]}
-
+function chooseLocation(side,x){
+ resolved[side]=x;$('#'+side+'Input').value=locLabel(x);
+ $('#'+side+'Resolved').textContent=`${Number(x.latitude).toFixed(3)}, ${Number(x.longitude).toFixed(3)} · ${x.timezone||'timezone —'}`;
+ closeSuggestions(side);$('#routeError').hidden=true;
+}
+function renderSuggestions(choices,list,side,input,statusId){
+ if(!choices.length){list.innerHTML='<p class="suggestion-empty" role="status">No locations found. Try a city and state, or a ZIP code.</p>';$('#'+statusId).textContent='No locations found'}
+ else{list.innerHTML=choices.map((x,i)=>`<button type="button" data-i="${i}"><b>${esc(x.name)}</b><span>${esc([x.admin1,x.country,x.postcodes?.[0]].filter(Boolean).join(' · '))}</span></button>`).join('');$('#'+statusId).textContent='Choose your location below';}
+ list.classList.add('on');input.setAttribute('aria-expanded','true');
+ list.onclick=e=>{const button=e.target.closest('button[data-i]');if(!button)return;chooseLocation(side,choices[+button.dataset.i]);input.focus()};
+}
+$$('.clear-field').forEach(button=>button.addEventListener('click',()=>{const input=$('#'+button.dataset.clear);input.value='';input.dispatchEvent(new Event('input'));input.focus()}));
+async function resolveInput(side){
+ if(resolved[side])return resolved[side];
+ const input=$('#'+side+'Input'),q=input.value.trim();
+ if(!q)throw new Error(`Enter a ${side==='from'?'current':'destination'} location`);
+ const choices=await searchLocations(q);
+ if(input.value.trim()!==q)throw new Error('The location changed. Choose the updated location and build again.');
+ if(!choices.length)throw new Error(`Could not find ${q}. Try a city and state, or ZIP code.`);
+ if(choices.length>1){renderSuggestions(choices,$('#'+side+'Suggestions'),side,input,side+'Resolved');input.focus();throw new Error(`Choose the exact ${side==='from'?'current':'destination'} location from the suggestions.`)}
+ chooseLocation(side,choices[0]);return choices[0];
+}
+function showRouteError(message){const box=$('#routeError');box.textContent=message;box.hidden=false}
 $('#routeForm').addEventListener('submit',e=>{e.preventDefault();buildBrief()});
-$('#sampleMove').addEventListener('click',async()=>{$('#fromInput').value='Paris, Texas';$('#toInput').value='Nashville, Tennessee';resolved.from=null;resolved.to=null;await buildBrief()});
-async function buildBrief(){const btn=$('.build-brief');btn.disabled=true;btn.querySelector('span').textContent='BUILDING MOVE BRIEF…';
- try{const [from,to]=await Promise.all([resolveInput('from'),resolveInput('to')]);state.from=from;state.to=to;updateResolvedLabels();const [fw,tw,route]=await Promise.all([fetchWeather(from),fetchWeather(to),fetchRoute(from,to)]);state.fromWeather=fw;state.toWeather=tw;state.route=route;renderCore();$('#brief').classList.remove('hidden');setTimeout(()=>{$('#compare').scrollIntoView({behavior:'smooth',block:'start'});renderMap()},80);calcBudget();renderPlan();loadClimate();}catch(err){toast(err.message||'Could not build move brief')}finally{btn.disabled=false;btn.querySelector('span').textContent='BUILD MY MOVE BRIEF'}}
-function updateResolvedLabels(){[['from','fromResolved'],['to','toResolved']].forEach(([s,id])=>{const x=state[s];$('#'+id).textContent=x?`${Number(x.latitude).toFixed(3)}, ${Number(x.longitude).toFixed(3)} · ${x.timezone||'timezone —'}`:'Search a city or ZIP code'})}
+$('#sampleMove').addEventListener('click',async()=>{
+ const button=$('#sampleMove');button.disabled=true;
+ try{
+   const [from,to]=await Promise.all([searchLocations('Paris, Texas'),searchLocations('Nashville, Tennessee')]);
+   const a=from.find(x=>x.country_code==='US'&&x.admin1==='Texas'),b=to.find(x=>x.country_code==='US'&&x.admin1==='Tennessee');
+   if(!a||!b)throw new Error('The sample locations are temporarily unavailable. Search for your own move above.');
+   chooseLocation('from',a);chooseLocation('to',b);await buildBrief();
+ }catch(e){showRouteError(e.message)}finally{button.disabled=false}
+});
+async function buildBrief(){
+ const request=++buildRequest,button=$('.build-brief');button.disabled=true;button.querySelector('span').textContent='BUILDING MOVE PLAN…';$('#routeError').hidden=true;$('#routeForm').setAttribute('aria-busy','true');
+ try{
+   const [from,to]=await Promise.all([resolveInput('from'),resolveInput('to')]);
+   if(request!==buildRequest)return;
+   const [fw,tw,route]=await Promise.all([fetchWeather(from),fetchWeather(to),fetchRoute(from,to)]);
+   if(request!==buildRequest)return;
+   if(resolved.from!==from||resolved.to!==to)throw new Error('The location changed. Choose the updated locations and build again.');
+   Object.assign(state,{from,to,fromWeather:fw,toWeather:tw,route});
+   renderCore();$('#brief').classList.remove('hidden');
+   setTimeout(()=>{if(request!==buildRequest)return;$('#compare').scrollIntoView({behavior:'smooth',block:'start'});renderMap()},80);
+   calcBudget();renderPlan();loadClimate();
+   window.dispatchEvent(new CustomEvent('movedesk:ready',{detail:{from,to}}));
+ }catch(error){if(request===buildRequest)showRouteError(error.message||'Could not build the move plan. Please try again.')}
+ finally{if(request===buildRequest){button.disabled=false;button.querySelector('span').textContent='BUILD MY MOVE PLAN';$('#routeForm').setAttribute('aria-busy','false')}}
+}
 
 /* live weather */
 async function fetchWeather(x){const u=new URL('https://api.open-meteo.com/v1/forecast');u.searchParams.set('latitude',x.latitude);u.searchParams.set('longitude',x.longitude);u.searchParams.set('current','temperature_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m');u.searchParams.set('daily','weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,sunrise,sunset');u.searchParams.set('temperature_unit','fahrenheit');u.searchParams.set('wind_speed_unit','mph');u.searchParams.set('precipitation_unit','inch');u.searchParams.set('timezone','auto');u.searchParams.set('forecast_days','7');const r=await fetch(u);if(!r.ok)throw new Error('Weather service unavailable');return r.json()}
@@ -58,8 +119,15 @@ function renderMap(){if(!window.L||!state.from||!state.to)return;const a=state.f
  if(state.route.geometry?.coordinates){const pts=state.route.geometry.coordinates.map(([lon,lat])=>[lat,lon]);line=L.polyline(pts,{color:'#16181d',weight:4,opacity:.82});}else line=L.polyline([[a.latitude,a.longitude],[b.latitude,b.longitude]],{color:'#16181d',weight:3,dashArray:'8 8',opacity:.75});line.addTo(state.map);state.layers.push(line);state.map.fitBounds(line.getBounds().pad(.12));setTimeout(()=>state.map.invalidateSize(),120)}
 
 /* climate */
-async function loadClimate(){state.climate={from:null,to:null};$('#climateLoading').classList.remove('done');$('#climateLoading').textContent='Building 36 months of climate context…';const year=new Date().getFullYear(),start=`${year-3}-01-01`,end=`${year-1}-12-31`;
- try{const [a,b]=await Promise.all([fetchArchive(state.from,start,end),fetchArchive(state.to,start,end)]);state.climate.from=aggregateClimate(a);state.climate.to=aggregateClimate(b);renderClimate()}catch(e){$('#climateLoading').textContent='Climate archive could not be loaded. Live weather and route data are still available.'}}
+async function loadClimate(){
+ const request=buildRequest,from=state.from,to=state.to;
+ state.climate={from:null,to:null};
+ ['fromClimate','toClimate','monthAxis','climateTakeaways'].forEach(id=>$('#'+id).textContent='');
+ $('#climateLoading').classList.remove('done');$('#climateLoading').textContent='Building 36 months of climate context…';
+ const year=new Date().getFullYear(),start=`${year-3}-01-01`,end=`${year-1}-12-31`;
+ try{const [a,b]=await Promise.all([fetchArchive(from,start,end),fetchArchive(to,start,end)]);if(request!==buildRequest||state.from!==from||state.to!==to)return;state.climate.from=aggregateClimate(a);state.climate.to=aggregateClimate(b);renderClimate()}
+ catch(e){if(request===buildRequest)$('#climateLoading').textContent='Climate archive could not be loaded. Live weather and route data are still available.'}
+}
 async function fetchArchive(x,start,end){const u=new URL('https://archive-api.open-meteo.com/v1/archive');u.searchParams.set('latitude',x.latitude);u.searchParams.set('longitude',x.longitude);u.searchParams.set('start_date',start);u.searchParams.set('end_date',end);u.searchParams.set('daily','temperature_2m_max,temperature_2m_min,precipitation_sum');u.searchParams.set('temperature_unit','fahrenheit');u.searchParams.set('precipitation_unit','inch');u.searchParams.set('timezone','auto');const r=await fetch(u);if(!r.ok)throw new Error('Archive unavailable');return r.json()}
 function aggregateClimate(j){const out=Array.from({length:12},()=>({hi:0,lo:0,p:0,n:0})),d=j.daily||{};(d.time||[]).forEach((date,i)=>{const m=+date.slice(5,7)-1,x=out[m];if(Number.isFinite(d.temperature_2m_max?.[i])&&Number.isFinite(d.temperature_2m_min?.[i])){x.hi+=d.temperature_2m_max[i];x.lo+=d.temperature_2m_min[i];x.n++}x.p+=+d.precipitation_sum?.[i]||0});out.forEach(x=>{x.hi=x.n?x.hi/x.n:0;x.lo=x.n?x.lo/x.n:0;x.p=x.p/3});return out}
 const MONTHS=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];

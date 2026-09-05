@@ -893,12 +893,12 @@
       const open = S.mod === m.id;
       const d = m.lessons.filter(l => S.done[l.id]).length;
       h += '<div class="drawer' + (open ? ' open' : '') + '" data-drawer="' + esc(m.id) + '">' +
-        '<button class="drawer-btn">' +
+        '<button class="drawer-btn" aria-expanded="' + open + '" aria-controls="module-' + esc(m.id) + '">' +
           '<span class="ref">' + esc(m.code) + '</span>' +
           '<span><strong>' + esc(m.title) + '</strong><em>' + esc(m.tag) + '</em></span>' +
           '<span class="tally">' + d + '/' + m.lessons.length + '</span>' +
         '</button>' +
-        '<div class="drawer-list">' +
+        '<div class="drawer-list" id="module-' + esc(m.id) + '">' +
           m.lessons.map(l => '<button data-lesson="' + esc(l.id) + '" class="' + (S.lesson === l.id ? 'on ' : '') + (S.done[l.id] ? 'done' : '') + '">' +
             '<span class="dot"></span><span>' + esc(l.title) + '</span></button>').join('') +
         '</div>' +
@@ -910,6 +910,7 @@
       const id = b.parentElement.dataset.drawer;
       S.mod = S.mod === id ? null : id;
       save(); buildRail();
+      [...$('#rail').querySelectorAll('[data-drawer]')].find(el => el.dataset.drawer === id)?.querySelector('button').focus();
     }));
     $$('[data-lesson]', rail).forEach(b => b.addEventListener('click', () => {
       setView('lesson', { id: b.dataset.lesson });
@@ -917,8 +918,20 @@
     }));
   }
 
-  function openRail() { $('#rail').classList.add('out'); $('#scrim').classList.add('on'); }
-  function closeRail() { $('#rail').classList.remove('out'); $('#scrim').classList.remove('on'); }
+  const smallScreen = matchMedia('(max-width: 900px)');
+  function syncRail() {
+    const open = $('#rail').classList.contains('out');
+    $('#rail').inert = smallScreen.matches && !open;
+    $('#railToggle').setAttribute('aria-expanded',String(open));
+    $('#railToggle').setAttribute('aria-controls','rail');
+  }
+  function openRail() { $('#rail').classList.add('out'); $('#scrim').classList.add('on'); syncRail(); $('#rail').querySelector('button')?.focus(); }
+  function closeRail() {
+    const restore = smallScreen.matches && $('#rail').contains(document.activeElement);
+    $('#rail').classList.remove('out'); $('#scrim').classList.remove('on'); syncRail();
+    if(restore) $('#railToggle').focus();
+  }
+  smallScreen.addEventListener('change',closeRail); syncRail();
 
   /* ==========================================================================
      WIRING

@@ -547,8 +547,10 @@ function buildTabs(){
         stroke-linecap="round" stroke-linejoin="round"><path d="${path}"/></svg>
       <span><b>${esc(n)}</b><small>${esc(sub)}</small></span></a>`).join('');
 }
-function openNav(){ document.body.classList.add('nav'); }
-function closeNav(){ document.body.classList.remove('nav'); }
+function openNav(){ document.body.classList.add('nav');$('#menuBtn').setAttribute('aria-expanded','true'); }
+function closeNav(){ document.body.classList.remove('nav');$('#menuBtn').setAttribute('aria-expanded','false'); }
+$('#menuBtn').setAttribute('aria-controls','rail');$('#menuBtn').setAttribute('aria-expanded','false');
+addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('nav')){closeNav();$('#menuBtn').focus()}});
 
 /* ============================================================
    7 · HOME
@@ -1295,11 +1297,26 @@ const Path={
 /* ============================================================
    15 · MODAL + BOOT
    ============================================================ */
+let modalReturn=null;
 function openModal(title,html){
+  if(!$('#modal').classList.contains('open'))modalReturn=document.activeElement;
   $('#mTitle').textContent=title; $('#mBody').innerHTML=html;
+  $('#modal').setAttribute('aria-labelledby','mTitle');
   $('#modal').classList.add('open'); document.body.style.overflow='hidden';
+  $('#modal .mbar button').focus({preventScroll:true});
 }
-function closeModal(){ $('#modal').classList.remove('open'); document.body.style.overflow=''; }
+function closeModal(){
+  const wasOpen=$('#modal').classList.contains('open');
+  $('#modal').classList.remove('open'); document.body.style.overflow='';
+  if(wasOpen&&modalReturn?.isConnected)modalReturn.focus({preventScroll:true});
+}
+$('#modal').addEventListener('keydown',e=>{
+  if(e.key!=='Tab')return;
+  const controls=[...$('#modal').querySelectorAll('button,a[href],input,select,textarea,[tabindex="0"]')].filter(el=>!el.disabled&&el.getClientRects().length);
+  const first=controls[0],last=controls[controls.length-1];
+  if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}
+  else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}
+});
 $('#modal').addEventListener('click',e=>{ if(e.target.id==='modal') closeModal(); });
 addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
 

@@ -836,3 +836,12 @@ kbd {
   .transport button { width: 26px; }
   .btn { padding: 6px 9px; }
 }
+
+/* Keep the curriculum legible and keyboard selection visible. */
+.drawer-btn strong,.drawer-list button{font-size:.875rem;line-height:1.5}
+.drawer-list button{min-height:40px}
+.drawer-btn:focus-visible,.drawer-list button:focus-visible{outline:2px solid var(--gold);outline-offset:-3px}
+@media(max-width:900px){.tabs button{font-size:.875rem;min-height:44px}.masthead{gap:10px}.tabs{min-width:0}.tabs button{flex-shrink:0}.drawer-list button{min-height:44px}}
+
+
+@media(max-width:600px){:root{--head:104px}.masthead{height:var(--head);flex-wrap:wrap;gap:0 12px;padding:7px 14px}.tabs{order:4;flex:0 0 100%;margin:0;justify-content:space-between}.head-tools{margin-left:auto}}

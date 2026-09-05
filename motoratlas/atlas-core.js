@@ -16,7 +16,10 @@ let caseStep=0;
 const topbar=$('#topbar'), menuBtn=$('#menuBtn'), navLinks=$('#navLinks');
 addEventListener('scroll',()=>topbar?.classList.toggle('scrolled',scrollY>28),{passive:true});
 menuBtn?.addEventListener('click',()=>{const open=navLinks.classList.toggle('open');menuBtn.setAttribute('aria-expanded',String(open))});
-$$('#navLinks a').forEach(a=>a.addEventListener('click',()=>navLinks?.classList.remove('open')));
+function closeMenu(){navLinks?.classList.remove('open');menuBtn?.setAttribute('aria-expanded','false')}
+$$('#navLinks a').forEach(a=>a.addEventListener('click',closeMenu));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&navLinks?.classList.contains('open')){closeMenu();menuBtn?.focus()}});
+document.addEventListener('click',e=>{if(!e.target.closest('#topbar'))closeMenu()});
 
 /* ---------- counts ---------- */
 const totalParts=DATA.systems.reduce((n,s)=>n+s.parts.length,0);
@@ -133,7 +136,14 @@ function renderFlow(){
 
 /* ---------- global search ---------- */
 const gs=$('#globalSearch');
-const results=document.createElement('div');results.className='global-results';gs.closest('.hero-search').appendChild(results);
+const results=document.createElement('div');results.className='global-results';results.id='globalSearchResults';gs.closest('.hero-search').appendChild(results);
+gs.setAttribute('aria-label','Search all systems and components');gs.setAttribute('aria-controls',results.id);gs.setAttribute('aria-expanded','false');
+function closeResults(){results.classList.remove('open');gs.setAttribute('aria-expanded','false')}
+results.addEventListener('keydown',e=>{
+ const buttons=$$('button',results),i=buttons.indexOf(document.activeElement);
+ if(e.key==='Escape'){e.preventDefault();closeResults();gs.focus()}
+ else if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();const next=i+(e.key==='ArrowDown'?1:-1);if(next<0)gs.focus();else buttons[Math.min(next,buttons.length-1)]?.focus()}
+});
 function searchAll(q){
   q=norm(q);if(!q)return[];const out=[];
   DATA.systems.forEach(s=>{
@@ -144,15 +154,20 @@ function searchAll(q){
 let currentSearch=[];
 function renderGlobalResults(){
   currentSearch=searchAll(gs.value);
-  if(!norm(gs.value)){results.classList.remove('open');results.innerHTML='';return}
+  if(!norm(gs.value)){closeResults();results.innerHTML='';return}
   results.innerHTML=currentSearch.length?currentSearch.map((r,i)=>`<button type="button" data-result="${i}"><span>${r.type==='part'?'PART':'SYSTEM'}</span><b>${esc(r.label)}</b><small>${esc(r.sub)}</small></button>`).join(''):`<div class="no-result">No indexed component matched “${esc(gs.value)}”.</div>`;
-  results.classList.add('open');
+  results.classList.add('open');gs.setAttribute('aria-expanded','true');
   $$('[data-result]',results).forEach(b=>b.addEventListener('click',()=>openSearchResult(+b.dataset.result)));
 }
-function openSearchResult(i){const r=currentSearch[i];if(!r)return;activeSystem=r.s;activePart=r.p||r.s.parts[0];activeTab='quick';renderSystemStrip();renderPartList();renderManual();renderSystemVisual();renderFlow();results.classList.remove('open');$('#explorer').scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>$('#workbench').scrollIntoView({behavior:'smooth',block:'start'}),450)}
-gs.addEventListener('input',renderGlobalResults);gs.addEventListener('keydown',e=>{if(e.key==='Enter'&&currentSearch[0]){e.preventDefault();openSearchResult(0)}if(e.key==='Escape')results.classList.remove('open')});
+function openSearchResult(i){const r=currentSearch[i];if(!r)return;activeSystem=r.s;activePart=r.p||r.s.parts[0];activeTab='quick';renderSystemStrip();renderPartList();renderManual();renderSystemVisual();renderFlow();closeResults();$('#partTitle').setAttribute('tabindex','-1');$('#partTitle').focus({preventScroll:true});$('#workbench').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})}
+gs.addEventListener('input',renderGlobalResults);gs.addEventListener('keydown',e=>{
+ if(e.key==='ArrowDown'){e.preventDefault();renderGlobalResults();results.querySelector('button')?.focus()}
+ if(e.key==='Enter'){e.preventDefault();renderGlobalResults();if(currentSearch[0])openSearchResult(0)}
+ if(e.key==='Escape')closeResults();
+});
+document.addEventListener('focusin',e=>{if(!e.target.closest('.hero-search'))closeResults()});
 document.addEventListener('keydown',e=>{if(e.key==='/'&&!/input|textarea/i.test(document.activeElement.tagName)){e.preventDefault();gs.focus();gs.select()}});
-document.addEventListener('click',e=>{if(!e.target.closest('.hero-search'))results.classList.remove('open')});
+document.addEventListener('click',e=>{if(!e.target.closest('.hero-search'))closeResults()});
 
 /* ---------- architecture ---------- */
 function renderArchitecture(key){

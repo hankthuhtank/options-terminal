@@ -429,7 +429,18 @@ function init(){
   $('#modalClose').onclick=()=>$('#infoModal').close();
   $('#modeToggle').onclick=()=>{fieldMode=!fieldMode;document.body.classList.toggle('field-mode',fieldMode);$('#modeLabel').textContent=fieldMode?'FIELD':'BEGINNER';$('#modeToggle').setAttribute('aria-pressed',fieldMode)};
   $('[data-open="quickStart"]').onclick=openQuickStart;$('[data-open="sources"]').onclick=openSources;
-  $('#menuBtn').onclick=()=>{const m=$('#mobileMenu'),open=!m.classList.contains('open');m.classList.toggle('open',open);m.setAttribute('aria-hidden',String(!open))};$$('#mobileMenu a').forEach(a=>a.onclick=()=>$('#mobileMenu').classList.remove('open'));
+  const menuButton=$('#menuBtn'),mobileMenu=$('#mobileMenu');
+  function setMenu(open,restore=false){
+    mobileMenu.classList.toggle('open',open);mobileMenu.setAttribute('aria-hidden',String(!open));mobileMenu.inert=!open;
+    menuButton.setAttribute('aria-expanded',String(open));menuButton.setAttribute('aria-label',open?'Close menu':'Open menu');
+    if(restore)menuButton.focus();
+  }
+  menuButton.setAttribute('aria-controls','mobileMenu');setMenu(false);
+  menuButton.onclick=()=>setMenu(!mobileMenu.classList.contains('open'));
+  $$('#mobileMenu a').forEach(a=>a.onclick=()=>setMenu(false));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&mobileMenu.classList.contains('open'))setMenu(false,true)});
+  document.addEventListener('click',e=>{if(!e.target.closest('#mobileMenu,#menuBtn'))setMenu(false)});
+  matchMedia('(max-width:1000px)').addEventListener('change',()=>setMenu(false));
   window.addEventListener('scroll',()=>{const h=document.documentElement.scrollHeight-innerHeight;$('#pageProgress').style.width=`${h?scrollY/h*100:0}%`},{passive:true});
 }
 

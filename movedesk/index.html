@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-<link rel="stylesheet" href="styles.css?v=3">
+<link rel="stylesheet" href="styles.css?v=20260905">
 </head>
 <body>
 <div id="boot" aria-hidden="true"><div class="boot-card"><img src="/assets/project-logos/movedesk.svg?v=3" alt="" class="boot-logo"><div class="boot-route"><i></i></div><div class="boot-foot"><span>Building relocation workspace</span><b>ROUTE · COST · TASKS</b></div></div></div>
@@ -32,9 +32,10 @@
     </div>
     <form class="route-form" id="routeForm">
       <div class="route-form-top"><span>BUILD A MOVE</span><small>City or ZIP code</small></div>
-      <div class="location-field from-field"><span class="field-code">FROM</span><label for="fromInput">CURRENT LOCATION</label><div class="search-box"><i></i><input id="fromInput" autocomplete="off" placeholder="Paris, TX or 75460"><button type="button" class="clear-field" data-clear="fromInput">×</button></div><div class="suggestions" id="fromSuggestions"></div><small id="fromResolved">Search a city or ZIP code</small></div>
+      <div class="location-field from-field"><span class="field-code">FROM</span><label for="fromInput">CURRENT LOCATION</label><div class="search-box"><i></i><input id="fromInput" autocomplete="off" placeholder="Paris, TX or 75460"><button type="button" class="clear-field" data-clear="fromInput" aria-label="Clear current location">×</button></div><div class="suggestions" id="fromSuggestions"></div><small id="fromResolved">Search a city or ZIP code</small></div>
       <div class="route-switch" aria-hidden="true"><span>↓</span></div>
-      <div class="location-field to-field"><span class="field-code">TO</span><label for="toInput">NEW LOCATION</label><div class="search-box"><i></i><input id="toInput" autocomplete="off" placeholder="Nashville, TN"><button type="button" class="clear-field" data-clear="toInput">×</button></div><div class="suggestions" id="toSuggestions"></div><small id="toResolved">Search a city or ZIP code</small></div>
+      <div class="location-field to-field"><span class="field-code">TO</span><label for="toInput">NEW LOCATION</label><div class="search-box"><i></i><input id="toInput" autocomplete="off" placeholder="Nashville, TN"><button type="button" class="clear-field" data-clear="toInput" aria-label="Clear destination">×</button></div><div class="suggestions" id="toSuggestions"></div><small id="toResolved">Search a city or ZIP code</small></div>
+      <p id="routeError" class="route-error" role="alert" hidden></p>
       <button class="build-brief" type="submit"><span>BUILD MY MOVE PLAN</span><b>→</b></button>
       <button class="sample-move" id="sampleMove" type="button">TRY PARIS, TX → NASHVILLE, TN</button>
     </form>
@@ -97,7 +98,7 @@
 </main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-<script src="app.js?v=2"></script>
-<script src="extras.js?v=1"></script>
+<script src="app.js?v=20260905"></script>
+<script src="extras.js?v=20260905"></script>
 </body>
 </html>

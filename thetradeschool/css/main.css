@@ -697,3 +697,10 @@ input[type="range"]{width:100%;accent-color:var(--lime)}
   .lesson-nav-btns{margin-left:0}
   .lesson-nav-btn{max-width:none;width:100%}
 }
+
+/* Search results are controls, with a truthful empty state. */
+button.search-result{width:100%;font:inherit;text-align:left;color:inherit;background:transparent;border:0;border-bottom:1px solid var(--line);cursor:pointer}
+button.search-result:focus-visible{outline:2px solid #7fb7f0;outline-offset:-3px;background:#7fb7f012}
+button.search-result small{display:block;font-size:.875rem;line-height:1.55}
+.search-empty{padding:24px;font-size:1rem;line-height:1.7}
+.search-close{background:transparent;border:0;color:inherit;font-size:1.6rem;min-height:44px;min-width:44px;cursor:pointer}

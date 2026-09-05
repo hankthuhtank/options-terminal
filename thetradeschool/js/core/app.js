@@ -91,9 +91,9 @@
           </div>
         </header>
         <main class="main">${content}</main>
-        <div class="search-modal" id="searchModal" onclick="modalClick(event)">
+        <div class="search-modal" id="searchModal" role="dialog" aria-modal="true" aria-label="Search TradeSchool" onclick="modalClick(event)">
           <div class="search-box" onclick="event.stopPropagation()">
-            <div class="search-input"><span>⌕</span><input id="searchField" autocomplete="off" placeholder="What are you trying to understand?" /></div>
+            <div class="search-input"><span>⌕</span><input id="searchField" type="search" aria-label="Search topics" aria-controls="searchResults" autocomplete="off" placeholder="What are you trying to understand?" /><button type="button" class="search-close" onclick="closeSearch()" aria-label="Close search">×</button></div>
             <div class="search-results" id="searchResults"></div>
           </div>
         </div>
@@ -1354,13 +1354,29 @@
 
   window.toggleComplete = idc => {state.progress[idc]=!state.progress[idc];saveProgress();renderConcept(idc);toast(state.progress[idc]?"Concept completed.":"Marked incomplete.")};
 
+  let searchReturn=null;
   window.openSearch = () => {
+    searchReturn=document.activeElement;
     id("searchModal").classList.add("open");
     const f=id("searchField");f.value="";updateSearch("");setTimeout(()=>f.focus(),10);
     f.oninput=()=>updateSearch(f.value);
-    f.onkeydown=e=>{if(e.key==="Escape")closeSearch()};
+    f.onkeydown=e=>{
+      if(e.key==='ArrowDown'){e.preventDefault();id('searchResults').querySelector('button')?.focus()}
+      if(e.key==='Enter'){e.preventDefault();id('searchResults').querySelector('button')?.click()}
+    };
+    id('searchModal').onkeydown=e=>{
+      if(e.defaultPrevented)return;
+      if(e.key==='Escape'){e.preventDefault();closeSearch()}
+      const controls=[...id('searchModal').querySelectorAll('input,button')],index=controls.indexOf(document.activeElement);
+      if(e.key==='ArrowDown'&&index>0){e.preventDefault();controls[Math.min(index+1,controls.length-1)]?.focus()}
+      if(e.key==='ArrowUp'&&index>0){e.preventDefault();controls[Math.max(0,index-1)]?.focus()}
+      if(e.key==='Tab'){
+        if(e.shiftKey&&index===0){e.preventDefault();controls[controls.length-1]?.focus()}
+        else if(!e.shiftKey&&index===controls.length-1){e.preventDefault();controls[0]?.focus()}
+      }
+    };
   };
-  window.closeSearch=()=>id("searchModal")?.classList.remove("open");
+  window.closeSearch=()=>{const modal=id("searchModal");if(!modal?.classList.contains("open"))return;modal.classList.remove("open");if(searchReturn?.isConnected)searchReturn.focus({preventScroll:true})};
   window.modalClick=e=>{if(e.target.id==="searchModal")closeSearch()};
   function bindSearchHotkey(){
     document.onkeydown=e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openSearch()}if(e.key==="Escape")closeSearch()};
@@ -1369,7 +1385,7 @@
     const clean=q.toLowerCase().replace(/what( the hell)? is|what's|explain|how does|how do|why does/g,"").trim();
     const words=clean.split(/\s+/).filter(Boolean);
     const ranked=D.concepts.map(c=>{const hay=(c.title+" "+c.oneLine+" "+c.plain+" "+c.eyebrow).toLowerCase();let score=0;words.forEach(w=>{if(c.title.toLowerCase().includes(w))score+=5;if(hay.includes(w))score+=1});return {c,score}}).filter(x=>!words.length||x.score>0).sort((a,b)=>b.score-a.score).slice(0,10);
-    id("searchResults").innerHTML=(ranked.length?ranked:D.concepts.slice(0,8).map(c=>({c,score:0}))).map(({c})=>`<div class="search-result" onclick="closeSearch();go('concept/${c.id}')"><div><b>${esc(c.title)}</b><small>${esc(c.oneLine)}</small></div><code>${esc(categoryById(c.category,worldOf(c))?.name||"")}</code></div>`).join("");
+    id("searchResults").innerHTML=ranked.length?ranked.map(({c})=>`<button type="button" class="search-result" onclick="closeSearch();go('concept/${c.id}')"><span><b>${esc(c.title)}</b><small>${esc(c.oneLine)}</small></span><code>${esc(categoryById(c.category,worldOf(c))?.name||"")}</code></button>`).join(""):`<p class="search-empty" role="status">No topics match “${esc(q)}”. Try a part, system, or trade name.</p>`;
   }
 
   window.toast = msg => {const t=id("toast");if(!t)return;t.textContent=msg;t.classList.add("show");clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>t.classList.remove("show"),2200)};

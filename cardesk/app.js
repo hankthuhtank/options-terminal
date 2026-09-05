@@ -4,6 +4,7 @@ const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelect
 const fmt=new Intl.NumberFormat('en-US',{maximumFractionDigits:0}), money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(Number(n)||0);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const state={vehicle:null,recalls:[],complaints:[]};
+let decodeRequest=0;
 const GARAGE_KEY='cardesk.garage.v1', SERVICE_KEY='cardesk.service.v1';
 let toastT;
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),1900)}
@@ -26,11 +27,13 @@ $('#vinForm').addEventListener('submit',e=>{e.preventDefault();decodeVin($('#vin
 async function decodeVin(raw){
   const vin=cleanVin(raw); $('#vinInput').value=vin;
   if(!/^[A-HJ-NPR-Z0-9]{17}$/.test(vin)){toast('VIN must be 17 valid characters');$('#vinInput').focus();return}
+  const request=++decodeRequest;
   setBusy(true);
   try{
     const res=await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValuesExtended/${encodeURIComponent(vin)}?format=json`);
     if(!res.ok)throw new Error('VIN service unavailable');
     const json=await res.json(), v=json.Results&&json.Results[0];
+    if(request!==decodeRequest)return;
     if(!v)throw new Error('No decode returned');
     if(v.ErrorCode && !String(v.ErrorCode).split(',').includes('0') && (!v.Make||!v.Model)) throw new Error(v.ErrorText||'VIN could not be decoded');
     state.vehicle={...v,VIN:vin};
@@ -38,9 +41,9 @@ async function decodeVin(raw){
     $('#workspace').classList.remove('hidden');
     $('#workspace').scrollIntoView({behavior:'smooth',block:'start'});
     Promise.allSettled([loadRecalls(),loadComplaints()]);
-  }catch(err){toast(err.message||'Could not decode VIN')}finally{setBusy(false)}
+  }catch(err){if(request===decodeRequest)toast(err.message||'Could not decode VIN')}finally{if(request===decodeRequest)setBusy(false)}
 }
-function setBusy(on){const b=$('#vinForm button[type=submit]');b.disabled=on;b.innerHTML=on?'DECODING…':'DECODE VEHICLE <span>→</span>';$('#heroBayStatus').textContent=on?'READING VIN':'AWAITING VIN'}
+function setBusy(on){const b=$('#vinForm button[type=submit]');b.disabled=on;b.innerHTML=on?'DECODING…':'DECODE VEHICLE <span>→</span>';$('#heroBayStatus').textContent=on?'READING VIN':state.vehicle?'VEHICLE DECODED':'AWAITING VIN'}
 function name(v){return [v.Make,v.Model].filter(Boolean).join(' ')||'Unknown vehicle'}
 function renderVehicle(){const v=state.vehicle;if(!v)return;
   $('#vehicleYear').textContent=val(v.ModelYear); $('#vehicleName').textContent=name(v); $('#vehicleTrim').textContent=[v.Trim,v.Series,v.BodyClass].filter(Boolean).join(' · ')||'Decoded vehicle profile';
@@ -66,12 +69,12 @@ function renderScan(mode){const v=state.vehicle;if(!v)return;$$('#scanTabs butto
 $('#scanTabs').addEventListener('click',e=>{const b=e.target.closest('button[data-mode]');if(b)renderScan(b.dataset.mode)});
 
 /* safety APIs */
-async function loadRecalls(){const v=state.vehicle;if(!v)return;$('#recallList').textContent='Checking NHTSA recall database…';
- try{const u=`https://api.nhtsa.gov/recalls/recallsByVehicle?make=${encodeURIComponent(v.Make)}&model=${encodeURIComponent(v.Model)}&modelYear=${encodeURIComponent(v.ModelYear)}`;const r=await fetch(u);if(!r.ok)throw new Error();const j=await r.json();state.recalls=j.results||j.Results||[];renderRecalls()}catch(e){$('#recallCount').textContent='—';$('#recallList').innerHTML='<div class="loading-block">Recall service could not be reached. Try again later.</div>'}}
+async function loadRecalls(){const v=state.vehicle;if(!v)return;state.recalls=[];$('#recallCount').textContent='—';$('#recallList').textContent='Checking NHTSA recall database…';
+ try{const u=`https://api.nhtsa.gov/recalls/recallsByVehicle?make=${encodeURIComponent(v.Make)}&model=${encodeURIComponent(v.Model)}&modelYear=${encodeURIComponent(v.ModelYear)}`;const r=await fetch(u);if(!r.ok)throw new Error();const j=await r.json();if(state.vehicle!==v)return;state.recalls=j.results||j.Results||[];renderRecalls()}catch(e){if(state.vehicle!==v)return;$('#recallCount').textContent='—';$('#recallList').innerHTML='<div class="loading-block">Recall service could not be reached. Try again later.</div>'}}
 function renderRecalls(){const a=state.recalls;$('#recallCount').textContent=a.length;if(!a.length){$('#recallList').innerHTML='<div class="loading-block">No recalls were returned for this year / make / model search. Verify VIN-specific status with NHTSA or the manufacturer.</div>';return}
  $('#recallList').innerHTML=a.map(x=>`<div class="recall-item"><div class="recall-meta"><span>${esc(x.NHTSACampaignNumber||'NHTSA RECALL')}</span><span>${esc(x.ReportReceivedDate||'')}</span></div><h3>${esc(x.Component||'Recall')}</h3><p>${esc(shorten(x.Summary||x.Consequence||'',210))}</p><details><summary>READ CONSEQUENCE + REMEDY</summary><p><b>Consequence:</b> ${esc(x.Consequence||'Not provided')}</p><p><b>Remedy:</b> ${esc(x.Remedy||'Not provided')}</p></details></div>`).join('')}
-async function loadComplaints(){const v=state.vehicle;if(!v)return;$('#complaintChart').textContent='Reading complaint components…';
- try{const u=`https://api.nhtsa.gov/complaints/complaintsByVehicle?make=${encodeURIComponent(v.Make)}&model=${encodeURIComponent(v.Model)}&modelYear=${encodeURIComponent(v.ModelYear)}`;const r=await fetch(u);if(!r.ok)throw new Error();const j=await r.json();state.complaints=j.results||j.Results||[];renderComplaints()}catch(e){$('#complaintCount').textContent='—';$('#complaintChart').innerHTML='<div class="loading-block">Complaint service could not be reached.</div>'}}
+async function loadComplaints(){const v=state.vehicle;if(!v)return;state.complaints=[];$('#complaintCount').textContent='—';$('#complaintChart').textContent='Reading complaint components…';
+ try{const u=`https://api.nhtsa.gov/complaints/complaintsByVehicle?make=${encodeURIComponent(v.Make)}&model=${encodeURIComponent(v.Model)}&modelYear=${encodeURIComponent(v.ModelYear)}`;const r=await fetch(u);if(!r.ok)throw new Error();const j=await r.json();if(state.vehicle!==v)return;state.complaints=j.results||j.Results||[];renderComplaints()}catch(e){if(state.vehicle!==v)return;$('#complaintCount').textContent='—';$('#complaintChart').innerHTML='<div class="loading-block">Complaint service could not be reached.</div>'}}
 function renderComplaints(){const a=state.complaints;$('#complaintCount').textContent=a.length;if(!a.length){$('#complaintChart').innerHTML='<div class="loading-block">No complaint records were returned for this search.</div>';return}const counts={};
  a.forEach(x=>{let c=x.components||x.Component||x.component||x.COMPONENT||'Uncategorized';if(Array.isArray(c))c=c.join(',');String(c).split(/,|;/).map(s=>s.trim()).filter(Boolean).forEach(s=>counts[s]=(counts[s]||0)+1)});const rows=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,8),max=rows[0]?.[1]||1;
  $('#complaintChart').innerHTML=rows.map(([k,n])=>`<div class="complaint-row"><span title="${esc(k)}">${esc(k)}</span><div class="complaint-bar"><i style="width:${Math.max(4,n/max*100)}%"></i></div><b>${n}</b></div>`).join('')+`<div class="complaint-note">${fmt.format(a.length)} NHTSA complaint records returned. This is a count of submitted reports for this model search — not a defect rate and not normalized by vehicles sold.</div>`}
@@ -104,8 +107,9 @@ $('#garageBtn').addEventListener('click',openGarage);$('#closeGarage').addEventL
 $('#garageList').addEventListener('click',e=>{const card=e.target.closest('.garage-card');if(!card)return;const vin=card.dataset.vin;if(e.target.closest('[data-load]')){closeGarage();$('#vinInput').value=vin;decodeVin(vin)}if(e.target.closest('[data-remove]')){saveGarage(getGarage().filter(x=>x.VIN!==vin));if(state.vehicle?.VIN===vin)updateSaveButton();toast('Removed from garage')}});renderGarage();
 
 /* service log */
-$('#serviceDate').value=new Date().toISOString().slice(0,10);
-$('#serviceForm').addEventListener('submit',e=>{e.preventDefault();const v=state.vehicle;if(!v){toast('Decode a vehicle first');return}const all=getServices(),list=all[v.VIN]||[];list.push({id:Date.now(),date:$('#serviceDate').value,miles:+$('#serviceMiles').value||0,type:$('#serviceType').value.trim(),cost:+$('#serviceCost').value||0,notes:$('#serviceNotes').value.trim()});all[v.VIN]=list;saveServices(all);e.target.reset();$('#serviceDate').value=new Date().toISOString().slice(0,10);renderServices();toast('Service event added')});
+function localDate(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+$('#serviceDate').value=localDate();
+$('#serviceForm').addEventListener('submit',e=>{e.preventDefault();const v=state.vehicle;if(!v){toast('Decode a vehicle first');return}const all=getServices(),list=all[v.VIN]||[];list.push({id:Date.now(),date:$('#serviceDate').value,miles:+$('#serviceMiles').value||0,type:$('#serviceType').value.trim(),cost:+$('#serviceCost').value||0,notes:$('#serviceNotes').value.trim()});all[v.VIN]=list;saveServices(all);e.target.reset();$('#serviceDate').value=localDate();renderServices();toast('Service event added')});
 function renderServices(){const v=state.vehicle;if(!v)return;const a=(getServices()[v.VIN]||[]).slice().sort((x,y)=>String(y.date).localeCompare(String(x.date)));$('#serviceTotal').textContent=money(a.reduce((s,x)=>s+(+x.cost||0),0));$('#serviceList').innerHTML=a.length?a.map(x=>`<div class="timeline-item" data-id="${x.id}"><span class="date">${esc(x.date||'—')}</span><span class="miles">${x.miles?fmt.format(x.miles)+' MI':'MILES —'}</span><div class="copy"><h4>${esc(x.type)}</h4>${x.notes?`<p>${esc(x.notes)}</p>`:''}</div><div><span class="price">${money(x.cost)}</span><button data-del>REMOVE</button></div></div>`).join(''):'<div class="timeline-empty">No service events logged for this VIN yet.</div>'}
 $('#serviceList').addEventListener('click',e=>{const row=e.target.closest('.timeline-item');if(!row||!e.target.closest('[data-del]')||!state.vehicle)return;const all=getServices();all[state.vehicle.VIN]=(all[state.vehicle.VIN]||[]).filter(x=>String(x.id)!==row.dataset.id);saveServices(all);renderServices()});
 

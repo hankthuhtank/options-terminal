@@ -3445,12 +3445,15 @@ function showLeaf(id,push){
 
 /* Keep a reference so we can put the panel back where it belongs on desktop */
 let glossHome = null;
-function openGloss(on){
+let glossReturn = null;
+function openGloss(on, reflow=false){
   const g = $("#glossPanel");
   if(!g) return;
   if(!glossHome) glossHome = g.parentElement;
 
   const mobile = window.innerWidth < 1080;
+  const wasOpen = document.body.dataset.gloss === "open";
+  if(on && mobile && !wasOpen && !reflow) glossReturn = document.activeElement;
 
   if(on && mobile){
     // Move to body so no ancestor transform can trap position:fixed
@@ -3466,7 +3469,12 @@ function openGloss(on){
   const btn = $("#btnGloss");
   if(btn){ btn.dataset.on = on ? "true" : "false"; btn.setAttribute("aria-expanded",on?"true":"false"); }
   document.body.dataset.gloss = (on && mobile) ? "open" : "closed";
+  g.setAttribute('aria-label','Notebook');
+  if(on && mobile){g.setAttribute('role','dialog');g.setAttribute('aria-modal','true')}
+  else{g.removeAttribute('role');g.removeAttribute('aria-modal')}
   updateNotebookLauncher();
+  if(!reflow && on && mobile && !wasOpen) $('#glossClose')?.focus({preventScroll:true});
+  if(!reflow && !on && wasOpen && glossReturn?.isConnected){glossReturn.focus({preventScroll:true});glossReturn=null;}
 }
 
 function updateNotebookLauncher(){
@@ -3583,7 +3591,7 @@ $("#burger").setAttribute("aria-expanded","false");
 $("#burger").addEventListener("click",e=>{
   const open=document.body.dataset.spine!=="open"; document.body.dataset.spine=open?"open":"closed"; e.currentTarget.setAttribute("aria-expanded",open?"true":"false");
 });
-$("#scrim").addEventListener("click",()=> document.body.dataset.spine="closed");
+$("#scrim").addEventListener("click",()=>{ document.body.dataset.spine="closed"; $("#burger").setAttribute("aria-expanded","false"); });
 
 /* ── help ─────────────────────────────────────────────────── */
 let helpReturn=null;
@@ -3597,9 +3605,16 @@ $("#help").addEventListener("click",e=>{ if(e.target.id==="help") openHelp(false
 /* ── keys ─────────────────────────────────────────────────── */
 const LEAVES=["read","chronicle","atlas","cast","threads","scriptorium","sources"];
 document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){ openHelp(false); openGloss(false); document.body.dataset.spine="closed"; $('#burger').setAttribute('aria-expanded','false'); return; }
+  if(e.key==='Tab' && document.body.dataset.gloss==='open'){
+    const controls=[...$('#glossPanel').querySelectorAll('button,a[href],input,select,textarea,[tabindex="0"]')].filter(el=>!el.disabled&&el.getClientRects().length);
+    const first=controls[0],last=controls[controls.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}
+    return;
+  }
   if(e.metaKey||e.ctrlKey||e.altKey) return;
-  if(/input|select|textarea/i.test(e.target.tagName)) return;
-  if(e.key==="Escape"){ openHelp(false); openGloss(false); document.body.dataset.spine="closed"; return; }
+  if(/input|select|textarea/i.test(e.target.tagName)||e.target.isContentEditable) return;
   if(e.key==="?"||(e.key==="/"&&e.shiftKey)){ e.preventDefault(); openHelp(true); return; }
   if(e.key==="0"){ showLeaf("frontispiece"); return; }
   if(/^[1-7]$/.test(e.key)){ showLeaf(LEAVES[+e.key-1]); return; }
@@ -3710,6 +3725,7 @@ window.addEventListener("resize",()=>{
     if(S.leaf==="atlas" && VIEW) drawAtlas();
     if(S.leaf==="threads" && thData){ const v=$("#thVerse").value; if(v) drawThreads(v); }
     if(S.leaf==="read") placeManicules();
+    openGloss($('#glossPanel').dataset.open==='true',true);
     updateNotebookLauncher();
   },180);
 });
