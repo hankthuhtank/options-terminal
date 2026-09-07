@@ -81,8 +81,9 @@
         notes: {
           4: 'Three slots exist: positions 0, 1 and 2.',
           6: 'The bug. <= lets i reach 3, which is one past the end.',
-          7: 'This line is where the error is reported, but line 7 is where it was caused.'
+          7: 'The array access fails here in this trainer. The loop condition above allowed the invalid index.'
         },
+        callout: { kind: 'note', text: 'This teaching runtime reports an out-of-bounds read. In production C++, reading past a built-in array has undefined behavior: a helpful error is not guaranteed. Fix the loop bound rather than relying on a crash.' },
         expectError: true,
         terms: ['Stack Trace', 'Runtime Error', 'Off-by-one'],
         challenge: {

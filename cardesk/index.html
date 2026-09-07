@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=3">
+<link rel="stylesheet" href="styles.css?v=20260907">
 </head>
 <body>
 <div id="boot" aria-hidden="true"><div class="boot-wrap"><img src="/assets/project-logos/cardesk.svg" alt=""><div class="boot-track"><i></i></div><p>Connecting vehicle systems</p></div></div>
@@ -100,13 +100,13 @@
 
   <section class="section-block" id="safety">
     <div class="section-heading"><div><span class="section-kicker">02 / SAFETY SIGNALS</span><h2>What deserves<br><em>your attention.</em></h2></div><p>Live recall results and owner complaint patterns for the decoded year, make and model.</p></div>
-    <div class="signal-grid"><article class="signal-card"><header><span>RECALLS</span><b id="recallCount">—</b></header><div id="recallList" class="signal-list loading-block">Waiting for vehicle…</div></article><article class="signal-card"><header><span>OWNER COMPLAINT SIGNAL</span><b id="complaintCount">—</b></header><div id="complaintChart" class="complaint-chart loading-block">Waiting for vehicle…</div></article></div>
+    <div class="recall-priority"><div><b>Check your specific vehicle first.</b><p>The model results below cannot tell you which recalls are still open on your VIN.</p></div><a href="https://www.nhtsa.gov/recalls" target="_blank" rel="noopener">Check VIN recall status ↗</a></div><div class="signal-grid"><article class="signal-card"><header><span>RECALLS</span><b id="recallCount">—</b></header><div id="recallList" class="signal-list loading-block">Waiting for vehicle…</div></article><article class="signal-card"><header><span>OWNER COMPLAINT SIGNAL</span><b id="complaintCount">—</b></header><div id="complaintChart" class="complaint-chart loading-block">Waiting for vehicle…</div></article></div>
     <div class="tech-strip" id="techStrip"></div>
   </section>
 
   <section class="section-block" id="cost">
-    <div class="section-heading"><div><span class="section-kicker">03 / OWNERSHIP MATH</span><h2>What does it cost<br><em>to keep?</em></h2></div><p>Adjust your real assumptions and see yearly, monthly and per-mile ownership cost instantly.</p></div>
-    <div class="cost-console"><div class="cost-inputs"><label>ANNUAL MILES<input id="milesYear" type="number" min="0" value="12000"></label><label>AVERAGE MPG<input id="mpg" type="number" min="1" step="0.1" value="25"></label><label>FUEL PRICE / GAL<input id="fuelPrice" type="number" min="0" step="0.01" value="3.25"></label><label>INSURANCE / MONTH<input id="insurance" type="number" min="0" value="165"></label><label>PAYMENT / MONTH<input id="payment" type="number" min="0" value="0"></label><label>MAINTENANCE / YEAR<input id="maintenance" type="number" min="0" value="900"></label></div><div class="cost-output"><div class="cost-orbit"><svg viewBox="0 0 220 220"><circle cx="110" cy="110" r="88"/><circle id="costRing" cx="110" cy="110" r="88"/></svg><div><span>EST. YEARLY</span><b id="annualCost">$0</b></div></div><div class="cost-metrics"><div><span>MONTHLY</span><b id="monthlyCost">$0</b></div><div><span>COST / MILE</span><b id="mileCost">$0.00</b></div><div><span>FUEL / YEAR</span><b id="fuelCost">$0</b></div></div></div></div>
+    <div class="section-heading"><div><span class="section-kicker">03 / OWNERSHIP MATH</span><h2>What does it cost<br><em>to keep?</em></h2></div><p>Build a cash budget from your own numbers. The starting values are examples, not estimates for the decoded vehicle. Choose fuel or electricity below.</p></div>
+    <p class="budget-context">Includes energy, insurance, payments and maintenance. Excludes depreciation, purchase/down payment, taxes, registration, parking and tolls. Add those separately for a complete decision.</p><div class="cost-console"><div class="cost-inputs"><label>ENERGY MODEL<select id="energyModel"><option value="fuel">Gas / diesel / non-plug-in hybrid</option><option value="ev">Battery electric</option></select></label><label>ANNUAL MILES<input id="milesYear" type="number" min="0" value="12000"></label><label id="mpgLabel">AVERAGE MPG<input id="mpg" type="number" min="1" step="0.1" value="25"></label><label id="gasLabel">FUEL PRICE / GAL<input id="fuelPrice" type="number" min="0" step="0.01" value="3.25"></label><label id="kwhLabel" hidden>KWH / 100 MILES<input id="kwhUse" type="number" min="0.1" step="0.1" value="30"></label><label id="electricLabel" hidden>ELECTRICITY / KWH<input id="electricPrice" type="number" min="0" step="0.01" value="0.16"></label><label>INSURANCE / MONTH<input id="insurance" type="number" min="0" value="165"></label><label>PAYMENT / MONTH<input id="payment" type="number" min="0" value="0"></label><label>MAINTENANCE / YEAR<input id="maintenance" type="number" min="0" value="900"></label></div><div class="cost-output"><div class="cost-orbit"><svg viewBox="0 0 220 220"><circle cx="110" cy="110" r="88"/><circle id="costRing" cx="110" cy="110" r="88"/></svg><div><span>ANNUAL CASH BUDGET</span><b id="annualCost">$0</b></div></div><div class="cost-metrics"><div><span>MONTHLY</span><b id="monthlyCost">$0</b></div><div><span>COST / MILE</span><b id="mileCost">$0.00</b></div><div><span>ENERGY / YEAR</span><b id="fuelCost">$0</b></div></div><div id="costBreakdown" class="cash-breakdown"></div><p id="costExplanation" class="budget-context" aria-live="polite"></p></div></div><details class="budget-context"><summary>Where the energy math comes from</summary><p>Fuel: miles ÷ MPG × price per gallon. Electric: miles ÷ 100 × kWh per 100 miles × price per kWh. Use wall-energy consumption (including charging losses) and your actual blended charging price. Plug-in hybrids need separate fuel and electric mileage budgets.</p><a href="https://www.epa.gov/greenvehicles/fuel-economy-and-ev-range-testing" target="_blank" rel="noopener">EPA: energy use and MPGe</a></details>
   </section>
 
   <section class="section-block" id="diagnostics">
@@ -125,7 +125,7 @@
 
 <div class="drawer" id="garageDrawer" aria-hidden="true"><div class="drawer-head"><div><span>MY GARAGE</span><b>Saved vehicles</b></div><button id="closeGarage" type="button">Close</button></div><div id="garageList" class="garage-list"></div></div><div class="scrim" id="scrim"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="app.js?v=20260905"></script>
+<script src="app.js?v=20260907"></script>
 <script src="extras.js?v=1"></script>
 </body>
 </html>

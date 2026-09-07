@@ -81,8 +81,19 @@ function renderComplaints(){const a=state.complaints;$('#complaintCount').textCo
 function shorten(s,n){s=String(s||'').replace(/\s+/g,' ').trim();return s.length>n?s.slice(0,n-1)+'…':s}
 
 /* cost calculator */
-['milesYear','mpg','fuelPrice','insurance','payment','maintenance'].forEach(id=>$('#'+id).addEventListener('input',calcCost));
-function calcCost(){const miles=+$ ('#milesYear').value||0,mpg=+$ ('#mpg').value||0,gas=+$ ('#fuelPrice').value||0,ins=+$ ('#insurance').value||0,pay=+$ ('#payment').value||0,maint=+$ ('#maintenance').value||0;const fuel=mpg>0?miles/mpg*gas:0,total=fuel+ins*12+pay*12+maint;$('#annualCost').textContent=money(total);$('#monthlyCost').textContent=money(total/12);$('#mileCost').textContent=miles?`$${(total/miles).toFixed(2)}`:'$0.00';$('#fuelCost').textContent=money(fuel);const ratio=Math.min(1,total/20000),circ=553;$('#costRing').style.strokeDashoffset=String(circ-(circ*.12+circ*.78*ratio))}calcCost();
+['milesYear','mpg','fuelPrice','insurance','payment','maintenance','energyModel','kwhUse','electricPrice'].forEach(id=>$('#'+id).addEventListener('input',calcCost));
+function calcCost(){
+ const ids=['milesYear','insurance','payment','maintenance',...($('#energyModel').value==='ev'?['kwhUse','electricPrice']:['mpg','fuelPrice'])];
+ const valid=ids.every(id=>{const el=$('#'+id);return el.value.trim()!==''&&el.validity.valid&&Number.isFinite(Number(el.value))});
+ const ev=$('#energyModel').value==='ev';['mpgLabel','gasLabel'].forEach(id=>$('#'+id).hidden=ev);['kwhLabel','electricLabel'].forEach(id=>$('#'+id).hidden=!ev);
+ if(!valid){['annualCost','monthlyCost','mileCost','fuelCost'].forEach(id=>$('#'+id).textContent='—');$('#costBreakdown').innerHTML='';$('#costExplanation').textContent='Enter valid, non-negative values in each visible field to calculate your budget.';return}
+ const num=id=>Number($('#'+id).value),miles=num('milesYear'),energy=ev?miles/100*num('kwhUse')*num('electricPrice'):miles/num('mpg')*num('fuelPrice');
+ const rows=[['Energy',energy],['Insurance',num('insurance')*12],['Payments',num('payment')*12],['Maintenance',num('maintenance')]],total=rows.reduce((sum,r)=>sum+r[1],0);
+ $('#annualCost').textContent=money(total);$('#monthlyCost').textContent=money(total/12);$('#mileCost').textContent=miles?`$${(total/miles).toFixed(2)}`:'—';$('#fuelCost').textContent=money(energy);
+ $('#costRing').style.strokeDashoffset=String(553*(1-(total?energy/total:0)));
+ $('#costBreakdown').innerHTML=rows.map(([label,value])=>`<div><span>${label}</span><b>${money(value)}</b><i style="width:${total?value/total*100:0}%"></i></div>`).join('');
+ $('#costExplanation').textContent=`${ev?'Electricity':'Fuel'} is ${total?Math.round(energy/total*100):0}% of this annual cash budget. The ring shows that share. ${miles?'Change one assumption to see its effect.':'Per-mile cost needs annual mileage above zero.'}`;
+}calcCost();
 
 /* OBD */
 const CODES={

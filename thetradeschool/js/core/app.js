@@ -3,7 +3,7 @@
   const app = document.getElementById("app");
 
   const state = {
-    progress: JSON.parse(localStorage.getItem("tradeschool-progress") || "{}"),
+    progress: (()=>{try{const p=JSON.parse(localStorage.getItem("tradeschool-progress")||"{}");return p&&typeof p==="object"&&!Array.isArray(p)?p:{}}catch(_){return{}}})(),
     circuit: { voltage:24, r1:12, r2:12, mode:"series", closed:true },
     ladder: {
       inputs:{START:false, STOP:true, SENSOR:false, FAULT:false},
@@ -121,7 +121,7 @@
           <div class="eyebrow">Built for people who work with their hands and tools</div>
           <h1>Know what you're looking at<br><span>before you touch it.</span></h1>
           <p>TradeSchool teaches the systems behind electrical, HVAC, plumbing, industrial maintenance, welding, and construction — so when you're on a job, the equipment and the problem make sense.</p>
-          <div class="hero-actions"><button class="solid-btn hero-action" onclick="showWorlds()">Start a trade</button><button class="ghost-btn hero-action" onclick="openSearch()">Jump to a topic</button></div>
+          <div class="hero-actions"><button class="solid-btn hero-action" onclick="showWorlds()">Start a trade</button><button class="ghost-btn hero-action" onclick="go('tool/fieldcheck')">Try a field decision</button><button class="ghost-btn hero-action" onclick="openSearch()">Find a topic</button></div>
           <div class="home-proof"><span><b>${D.concepts.length}</b> topics across 6 trades</span><span><b>${Object.keys(D.visualAssets||{}).length}</b> checked visuals</span><span>Standards reviewed ${esc((D.standards&&D.standards.reviewed)||'')}</span></div>
         </div>
         <div class="home-hero-strip" aria-hidden="true">
@@ -140,7 +140,7 @@
       </section>
       <section class="research-note">
         <div><small>HOW THIS IS BUILT</small><h2>Every visual and every claim has to earn its place.</h2></div>
-        <p>A photo stays only if it shows the equipment it says it shows. A sentence stays only if it is true of this one topic and not of every other topic on the site.</p>
+        <p>A photo stays only if it shows the equipment it says it shows. Use the named standards and sources to check technical claims. Interactive labs simplify real equipment; they do not establish service limits or qualify a repair.</p>
         <div class="method-rows">
           <div class="method-row"><b>${Object.keys(D.visualAssets||{}).length}</b><span>topics carry a checked visual. ${(D.removedMedia?Object.keys(D.removedMedia).length:0)} images were removed for showing the wrong thing, including a bottle jack labelled as a hydraulic cylinder and a museum exhibit labelled as a compressor.</span></div>
           <div class="method-row"><b>${(D.boilerplateRemoved||[]).length}</b><span>generic sentences were deleted. One safety line had been repeated on 104 different topics. A line that fits everything teaches nothing about anything.</span></div>

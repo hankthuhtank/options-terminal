@@ -24,6 +24,7 @@
   const KEY = 'bench.v1';
   let S = { view: 'home', mod: null, lesson: null, done: {}, drafts: {}, theme: 'dark', pad: null };
   try { Object.assign(S, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) {}
+  ['done','drafts','predictions'].forEach(k=>{if(!S[k]||typeof S[k]!=='object'||Array.isArray(S[k]))S[k]={}});
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
 
   document.documentElement.dataset.theme = S.theme || 'dark';
@@ -569,7 +570,7 @@
     h += '<section class="hero">' +
       '<span class="legend">A field manual for building software</span>' +
       '<h1>Learn to code by <em>watching it run.</em></h1>' +
-      '<p>C++, Java, JavaScript, HTML, CSS, SQL, servers and shipping — in one place, in an order that builds on itself. Every example here is live: edit it, run it, and scrub through the execution one step at a time to see exactly what the machine did.</p>' +
+      '<p>C++, Java, JavaScript, HTML, CSS, SQL, servers and shipping — in one place, in an order that builds on itself. Run supported C++, Java and JavaScript examples in a teaching interpreter; preview HTML and try SQL in the browser. Predict a result, test it, then trace the changes that explain it.</p>' +
       '<div class="hero-actions">' +
         '<button class="btn primary big" data-go="' + esc(next.id) + '">' + (doneN ? 'Continue · ' + esc(next.title) : 'Start at the beginning') + ' →</button>' +
         '<button class="btn big" data-view="pad">Open the bench</button>' +
@@ -602,7 +603,7 @@
     h += '<div class="map-grid">' +
       howCard('Run everything', 'Do not read the code samples. Run them, then break them on purpose and run them again. The error message is part of the lesson.') +
       howCard('Scrub the trace', 'After running, drag the execution slider. You will see every variable change, every function call pushed onto the stack, and every line of output as it appears.') +
-      howCard('Do the challenge', 'Each lesson ends with a small change to make. It is checked automatically. Recall is what turns reading into knowing.') +
+      howCard('Do the challenge', 'Lessons with a challenge give you a small change to make and a check on the result. In other lessons, explain the example and try a variation before marking it complete.') +
     '</div>';
 
     h += '</div>';
@@ -654,7 +655,9 @@
     h += '</div>';
 
     /* bench */
-    h += '<div><div data-benchhost></div>';
+    h += '<div>';
+    if (['cpp','java','js'].includes(L.lang) && L.code) h += '<div class="prediction-panel"><span class="legend">Before you run</span><h3>What will it print?</h3><label for="outputPrediction">Predict the output, one line at a time. Leave it empty if you expect no output.</label><textarea id="outputPrediction" rows="3" spellcheck="false"></textarea><button class="btn sm" type="button" id="comparePrediction">Run &amp; compare</button><p id="predictionResult" aria-live="polite">Your prediction is a starting point. A mismatch gives you something specific to trace.</p></div>';
+    h += '<div data-benchhost></div><details class="runtime-note"><summary>What this bench can run</summary><p>C++, Java and JavaScript use a limited teaching interpreter, not their production compilers or engines. Unsupported features may fail here even when valid in the language. HTML runs in a sandboxed browser preview; SQL uses this app’s local teaching engine. Reference-only examples are marked as such.</p></details>';
     if (L.challenge) {
       h += '<div class="panel challenge">' +
         '<div class="panel-head"><span class="legend">Challenge</span></div>' +
@@ -706,6 +709,8 @@
     b.cfgKey = draftKey;
     activeBench = b;
 
+    const prediction=$('#outputPrediction');
+    if(prediction){prediction.value=typeof S.predictions[L.id]==='string'?S.predictions[L.id]:'';prediction.addEventListener('input',()=>{S.predictions[L.id]=prediction.value;save()});$('#comparePrediction').addEventListener('click',()=>{b.run();const result=b.lastResult,out=$('#predictionResult');if(!result?.ok){out.textContent='The program did not finish successfully. Read the runtime error, adjust the code and try again.';return}const clean=t=>String(t||'').replace(/\r\n/g,'\n').trim();const expected=clean(prediction.value),actual=clean(result.output);out.textContent=expected===actual?'Your prediction matches. Now change one value and predict again before running.':'The result differs. Compare the program output with your prediction, then scrub the trace to find the first change you did not expect.';out.dataset.match=String(expected===actual)})}
     currentLesson = L;
   }
 

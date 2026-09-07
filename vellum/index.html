@@ -315,6 +315,7 @@ body[data-spine="open"] .scrim{display:block;opacity:1;}
 @media(prefers-reduced-motion:reduce){.ss-vellum-book span,.ss-vellum-rule::after{animation:none}}
 </style>
 
+<link rel="stylesheet" href="reading-guide.css?v=20260907">
 </head>
 <style>
 /* ── reading apparatus ───────────────────────────────────── */
@@ -1793,7 +1794,7 @@ html[data-theme="dark"] .particle-field .mote{opacity:calc(var(--o) * 1.18);box-
     </section>
   </div>
 
-  <div class="how" id="howRows"></div>
+  <section class="reading-invitation how"><span>YOUR FIRST CLOSE READING</span><h2>A question becomes a story.</h2><p>Try Luke 10:25–37. Watch how a question about who counts as a neighbor becomes a question about who acts as one. Read the passage, gather evidence, then write your interpretation.</p><button class="big-btn" id="startCloseReading">Read with a guide →</button><a href="https://www.biblegateway.com/passage/?search=Luke+10%3A25-37&amp;version=WEB" target="_blank" rel="noopener">Compare the source text ↗</a></section><div class="how" id="howRows"></div>
 
   <div class="how" style="padding-top:10px">
     <div class="how-row solo">
@@ -1815,7 +1816,7 @@ html[data-theme="dark"] .particle-field .mote{opacity:calc(var(--o) * 1.18);box-
       <div class="rail-label">margin</div>
     </aside>
 
-    <div class="column" id="readColumn">
+    <div class="column" id="readColumn"><details class="reading-guide" id="readingGuide"><summary>Close-reading notebook <span>Observe · Interpret · Revisit</span></summary><div class="reading-guide-body"><p>Start with what the passage actually says. Keep your interpretation separate from the evidence and from questions still open.</p><label for="readingReference">Passage / translation</label><input id="readingReference" placeholder="For example: Luke 10:25–37 · WEB"><nav aria-label="Reading steps"><button type="button" data-reading-step="0" aria-pressed="true">1 · Observe</button><button type="button" data-reading-step="1" aria-pressed="false">2 · Interpret</button><button type="button" data-reading-step="2" aria-pressed="false">3 · Revisit</button></nav><h3 id="readingPromptTitle" tabindex="-1"></h3><p id="readingPrompt"></p><label for="readingNote" id="readingNoteLabel">Your observation</label><textarea id="readingNote" rows="4" placeholder="Write a few sentences, with verse references where useful."></textarea><p class="reading-save" id="readingSave" aria-live="polite"></p><div class="reading-controls"><button type="button" id="readingNext">Next: interpret →</button><button type="button" id="readingExport">Download these notes</button></div><details><summary>A worked example from Luke 10</summary><p><b>Observation:</b> verse 29 asks who the speaker’s neighbor is; verse 36 asks which traveler acted as a neighbor. Verse 37 identifies the one who showed mercy.</p><p><b>Interpretation:</b> the change in question directs attention toward action. That is a reading supported by the passage, rather than a quotation or the only possible theological interpretation.</p><p><b>Revisit:</b> how do verses 25–28 shape the exchange? What do different translations make clearer?</p></details></div></details>
       <div class="apparatus">
         <span class="pick"><select id="selBook" aria-label="Book"></select></span>
         <span class="stepper">
@@ -2059,23 +2060,23 @@ html[data-theme="dark"] .particle-field .mote{opacity:calc(var(--o) * 1.18);box-
 
 /* ── The Chronicle: 48 leaves, six quires ─────────────────── */
 const QUIRES = [
-  { n:"I",  name:"Beginnings", note:"Genesis 1–11. Not history yet — origin stories, told to explain why the world is like this." },
-  { n:"II", name:"The Family", note:"Genesis 12–50. One household, four generations, and a great deal of lying." },
-  { n:"III",name:"Out of Egypt", note:"A slave revolt, a desert, and a set of laws that outlived everyone who wrote them." },
-  { n:"IV", name:"The Land and the Kings", note:"Settlement, warlords, then monarchy — and the monarchy going wrong almost immediately." },
-  { n:"V",  name:"Exile and Wisdom", note:"The state collapses. What survives is poetry, argument, and a hard question about suffering." },
-  { n:"VI", name:"The Gospels and After", note:"A rural teacher is executed by Rome. His followers write it down and it spreads." }
+  { n:"I",  name:"Beginnings", note:"Genesis 1–11. Read the opening narratives for patterns of creation, human action and consequence." },
+  { n:"II", name:"The Family", note:"Genesis 12–50. Follow the family narratives through promises, conflict, migration and reconciliation." },
+  { n:"III",name:"Out of Egypt", note:"Exodus and Numbers. Follow the biblical account of departure from Egypt, covenant and wilderness journeys." },
+  { n:"IV", name:"The Land and the Kings", note:"Joshua through Kings, with Ruth. Compare the narratives of leadership, loyalty and the use of power." },
+  { n:"V",  name:"Exile and Wisdom", note:"Narrative, prophecy and wisdom selections. This thematic grouping is a reading sequence, not a date for each book." },
+  { n:"VI", name:"The Gospels and After", note:"Gospel narratives, Acts and Revelation. Follow accounts of Jesus, the early movement and visions of renewal." }
 ];
 
 const CHRONICLE = [
   // I — Beginnings
   {q:0,b:"GEN",c:1, t:"The making", h:"Seven days, and a refrain that repeats like a drumbeat: it was good."},
   {q:0,b:"GEN",c:3, t:"The garden", h:"A tree, a question, and the first thing anyone ever hides."},
-  {q:0,b:"GEN",c:4, t:"Brothers", h:"The first murder starts as an argument between a farmer and a herdsman about gifts."},
+  {q:0,b:"GEN",c:4, t:"Brothers", h:"Cain and Abel bring offerings; Cain later kills Abel. What does the narrator tell us about anger and responsibility?"},
   {q:0,b:"GEN",c:7, t:"The flood", h:"The world un-made on purpose, and one boat of exceptions."},
   {q:0,b:"GEN",c:11,t:"Babel", h:"A tower, and the invention of not understanding each other."},
   // II — The Family
-  {q:1,b:"GEN",c:12,t:"Go", h:"An old man is told to leave everything for land he will never own."},
+  {q:1,b:"GEN",c:12,t:"Go", h:"Abram is called to leave his country. What is promised, and what remains unknown when he sets out?"},
   {q:1,b:"GEN",c:18,t:"Bargaining", h:"Abraham haggles with God over how many decent people a city needs to be spared."},
   {q:1,b:"GEN",c:22,t:"The knife", h:"The hardest chapter in the book. It stops at the last possible second."},
   {q:1,b:"GEN",c:28,t:"The ladder", h:"A liar on the run sleeps on a stone and dreams a stairway."},
@@ -2087,8 +2088,8 @@ const CHRONICLE = [
   {q:2,b:"EXO",c:3, t:"The bush", h:"A fugitive shepherd, a fire that doesn't consume, and a name that's barely a name."},
   {q:2,b:"EXO",c:12,t:"Passover", h:"The night the empire finally lets go — and the meal that still marks it."},
   {q:2,b:"EXO",c:14,t:"The sea", h:"Water opens. Then it closes."},
-  {q:2,b:"EXO",c:20,t:"Ten sentences", h:"The most quoted list ever written, and shorter than you remember."},
-  {q:2,b:"EXO",c:32,t:"The calf", h:"Moses is gone six weeks. They melt their jewellery into a god."},
+  {q:2,b:"EXO",c:20,t:"Ten sentences", h:"Read the commandments alongside the opening reminder of deliverance from Egypt."},
+  {q:2,b:"EXO",c:32,t:"The calf", h:"While Moses is on the mountain, the people ask Aaron to make gods for them. Trace the choices in the episode."},
   {q:2,b:"NUM",c:13,t:"The scouts", h:"Twelve men survey the same land. Ten of them see giants."},
   // IV — The Land and the Kings
   {q:3,b:"JOS",c:6, t:"Jericho", h:"A siege won by walking in circles and shouting."},
@@ -2096,7 +2097,7 @@ const CHRONICLE = [
   {q:3,b:"JDG",c:16,t:"Samson", h:"Strength, a haircut, and a man who brings the house down on himself."},
   {q:3,b:"RUT",c:1, t:"Where you go", h:"A foreign widow refuses to go home. The entire book is four chapters long."},
   {q:3,b:"1SA",c:3, t:"Speak", h:"A boy hears his name in the dark three times and doesn't know who's calling."},
-  {q:3,b:"1SA",c:17,t:"The sling", h:"The most misquoted underdog story in the world. Read what he actually says."},
+  {q:3,b:"1SA",c:17,t:"The sling", h:"Compare what David, Saul and Goliath say about the conflict and the source of their confidence."},
   {q:3,b:"2SA",c:11,t:"The roof", h:"A king takes what he wants, then arranges for the husband to die in combat."},
   {q:3,b:"1KI",c:3, t:"Cut the child in half", h:"Solomon identifies the real mother by threatening to kill the baby."},
   {q:3,b:"1KI",c:18,t:"Carmel", h:"Elijah against four hundred and fifty prophets, settled with a dare and a bonfire."},
@@ -2105,19 +2106,19 @@ const CHRONICLE = [
   {q:4,b:"2KI",c:5, t:"Naaman", h:"A foreign general wants a miracle with dignity. He's told to go wash in a muddy river."},
   {q:4,b:"2KI",c:25,t:"The city falls", h:"Babylon takes Jerusalem apart piece by piece and the story nearly ends here."},
   {q:4,b:"JOB",c:1, t:"The wager", h:"A good man loses everything, and the book spends forty chapters refusing to explain why."},
-  {q:4,b:"PSA",c:23,t:"The shepherd", h:"Six verses that turn up at almost every funeral in the English-speaking world."},
+  {q:4,b:"PSA",c:23,t:"The shepherd", h:"Follow the images of shepherd, path, valley and table. How does the form of address change?"},
   {q:4,b:"ISA",c:6, t:"Send me", h:"A vision so large the doorframes shake, and a volunteer who doesn't think he's fit."},
   {q:4,b:"DAN",c:3, t:"The furnace", h:"Three men refuse to bow. Someone counts a fourth figure in the fire."},
   {q:4,b:"JON",c:1, t:"Overboard", h:"A prophet runs from his assignment because he's afraid God will forgive his enemies."},
-  {q:4,b:"EST",c:4, t:"For such a time", h:"God is never once mentioned in this book. A queen saves her people anyway."},
+  {q:4,b:"EST",c:4, t:"For such a time", h:"Esther faces a decision about speaking to the king. What risks and responsibilities shape her response?"},
   // VI — The Gospels and After
   {q:5,b:"LUK",c:2, t:"The birth", h:"A census, a feeding trough, and shepherds. No kings, no snow, no innkeeper."},
   {q:5,b:"MAT",c:5, t:"On the mountain", h:"Blessed are the people nobody in the audience would have called blessed."},
-  {q:5,b:"LUK",c:10,t:"The Samaritan", h:"The hero of the story belongs to the ethnic group the listeners despised."},
-  {q:5,b:"LUK",c:15,t:"The younger son", h:"He rehearses an apology the whole way home. His father isn't listening to it."},
-  {q:5,b:"JHN",c:11,t:"Lazarus", h:"The shortest verse in the Bible sits in the middle of this chapter."},
-  {q:5,b:"LUK",c:22,t:"The last meal", h:"Bread, wine, and everyone at the table swearing they'd never run."},
-  {q:5,b:"JHN",c:19,t:"The execution", h:"Roman capital punishment, described plainly and without adjectives."},
+  {q:5,b:"LUK",c:10,t:"The Samaritan", h:"A question about a neighbor becomes a story about showing mercy. Compare the questions in verses 29 and 36."},
+  {q:5,b:"LUK",c:15,t:"The younger son", h:"The son prepares a speech and returns home. Compare his words with the actions of his father and brother."},
+  {q:5,b:"JHN",c:11,t:"Lazarus", h:"Pay attention to grief, delay and the responses to Lazarus. Verse lengths differ across languages and translations."},
+  {q:5,b:"LUK",c:22,t:"The last meal", h:"A meal, a dispute about greatness and a prediction of denial. What do the speakers understand at each stage?"},
+  {q:5,b:"JHN",c:19,t:"The execution", h:"Read the crucifixion account closely: speakers, actions, quotations and the testimony the narrator emphasizes."},
   {q:5,b:"LUK",c:24,t:"The road", h:"Two people walk seven miles arguing with a stranger they don't recognise."},
   {q:5,b:"ACT",c:2, t:"Pentecost", h:"Wind, fire, and a crowd of foreigners each hearing their own language."},
   {q:5,b:"ACT",c:9, t:"The Damascus road", h:"The movement's most effective persecutor is blinded and switches sides."},
@@ -3929,5 +3930,6 @@ boot().then(()=>{
 })();
 </script>
 
+<script src="reading-guide.js?v=20260907"></script>
 </body>
 </html>

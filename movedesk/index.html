@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-<link rel="stylesheet" href="styles.css?v=20260905">
+<link rel="stylesheet" href="styles.css?v=20260907">
 </head>
 <body>
 <div id="boot" aria-hidden="true"><div class="boot-card"><img src="/assets/project-logos/movedesk.svg?v=3" alt="" class="boot-logo"><div class="boot-route"><i></i></div><div class="boot-foot"><span>Building relocation workspace</span><b>ROUTE · COST · TASKS</b></div></div></div>
@@ -54,7 +54,7 @@
     <div class="section-head compact"><div><span class="section-num">01 / MOVE AT A GLANCE</span><h2>Your relocation<br><em>control panel.</em></h2></div><p>The information that changes what you actually need to do is kept up front. Weather is context now — not the product.</p></div>
     <div class="command-grid">
       <article class="command-card route-summary-card"><span class="card-kicker">TRIP</span><h3 id="routeDistance">—</h3><p id="routeDuration">—</p><div class="mini-metrics"><div><span>TIME ZONE</span><b id="timezoneShift">—</b></div><div><span>ELEVATION</span><b id="elevationShift">—</b></div><div><span>AIR DISTANCE</span><b id="airDistance">—</b></div></div><a href="#route">Open route →</a></article>
-      <article class="command-card essentials-card"><div class="card-line"><span class="card-kicker">DESTINATION ESSENTIALS</span><b id="essentialsStatus">LIVE</b></div><div class="essential-grid"><div><span>Hospitals</span><b id="essentialHospitals">—</b></div><div><span>Schools</span><b id="essentialSchools">—</b></div><div><span>Groceries</span><b id="essentialGrocery">—</b></div><div><span>Parks</span><b id="essentialParks">—</b></div><div><span>Pharmacies</span><b id="essentialPharmacy">—</b></div><div><span>Fuel</span><b id="essentialFuel">—</b></div></div><small>Nearby counts within roughly 7.5 miles when OpenStreetMap data is available.</small></article>
+      <article class="command-card essentials-card"><div class="card-line"><span class="card-kicker">DESTINATION ESSENTIALS</span><b id="essentialsStatus">LIVE</b></div><div class="essential-grid"><div><span>Hospitals + clinics</span><b id="essentialHospitals">—</b></div><div><span>Schools</span><b id="essentialSchools">—</b></div><div><span>Food shops</span><b id="essentialGrocery">—</b></div><div><span>Parks</span><b id="essentialParks">—</b></div><div><span>Pharmacies</span><b id="essentialPharmacy">—</b></div><div><span>Fuel</span><b id="essentialFuel">—</b></div></div><small>Mapped entries within roughly 7.5 miles. Food shops include convenience stores. Coverage can be incomplete or duplicated; counts do not measure quality or availability.</small></article>
       <article class="command-card move-date-card"><span class="card-kicker">MOVE DATE</span><label for="moveDate">WHEN ARE YOU MOVING?</label><input id="moveDate" type="date"><div class="countdown"><b id="moveCountdown">Set a date</b><span id="movePhase">Build a timeline around your move.</span></div><div class="progress-track"><i id="moveProgressBar"></i></div><small id="moveProgressText">Timeline starts when you choose a date.</small></article>
       <article class="command-card prep-card"><span class="card-kicker">DOCUMENTS + PREP</span><div class="prep-checks"><label><input type="checkbox" data-prep="housing"><span>Lease / closing paperwork</span></label><label><input type="checkbox" data-prep="insurance"><span>Insurance documents</span></label><label><input type="checkbox" data-prep="records"><span>School / pet records</span></label><label><input type="checkbox" data-prep="quote"><span>Moving quote / reservation</span></label></div><small>Saved on this device.</small></article>
     </div>
@@ -66,11 +66,11 @@
   </section>
 
   <section class="budget-section section-pad" id="budget">
-    <div class="section-head"><div><span class="section-num">03 / MOVE MATH</span><h2>Make the cost<br><em>visible.</em></h2></div><p>Use your actual quotes and housing numbers. Change any assumption and the move total updates instantly.</p></div>
+    <div class="section-head"><div><span class="section-num">03 / MOVE MATH</span><h2>Make the cost<br><em>visible.</em></h2></div><p>The starting amounts are examples. Replace them with your quotes. The total covers one vehicle’s driving fuel, movers/truck, lodging and other one-time costs; housing is shown separately.</p></div>
     <div class="budget-console">
       <div class="budget-inputs">
         <label>CURRENT HOUSING / MO<input id="currentHousing" type="number" min="0" value="1200"></label><label>NEW HOUSING / MO<input id="newHousing" type="number" min="0" value="1500"></label>
-        <label>MOVERS / TRUCK QUOTE<input id="movingQuote" type="number" min="0" value="1600"></label><label>VEHICLE MPG<input id="moveMpg" type="number" min="1" step=".1" value="25"></label>
+        <label>MOVERS / TRUCK QUOTE<input id="movingQuote" type="number" min="0" value="1600"></label><label>DRIVING MILES OVERRIDE<input id="manualMiles" type="number" min="0" step="1" placeholder="Use road route when blank"></label><label>VEHICLE MPG<input id="moveMpg" type="number" min="1" step=".1" value="25"></label>
         <label>GAS PRICE / GAL<input id="moveGas" type="number" min="0" step=".01" value="3.25"></label><label>HOTEL NIGHTS<input id="hotelNights" type="number" min="0" value="0"></label>
         <label>HOTEL / NIGHT<input id="hotelRate" type="number" min="0" value="140"></label><label>OTHER ONE-TIME COSTS<input id="otherCost" type="number" min="0" value="500"></label>
       </div>
@@ -80,7 +80,7 @@
 
   <section class="plan-section section-pad" id="plan">
     <div class="section-head"><div><span class="section-num">04 / ACTION PLAN</span><h2>What changes<br><em>because you moved.</em></h2></div><p>Choose what applies to your household. The checklist changes around state lines, distance, pets, kids, renting and remote work.</p></div>
-    <div class="profile-controls"><label><input type="checkbox" id="hasVehicle" checked><span>VEHICLE</span></label><label><input type="checkbox" id="hasPets"><span>PETS</span></label><label><input type="checkbox" id="hasKids"><span>SCHOOL-AGE KIDS</span></label><label><input type="checkbox" id="isRenter" checked><span>RENTER</span></label><label><input type="checkbox" id="remoteWork"><span>REMOTE WORK</span></label></div>
+    <div class="plan-compass" aria-live="polite"><div><span>YOUR NEXT ACTION</span><h3 id="nextMoveTask">Build your route to begin.</h3><p id="planCompletion">Progress is based on the tasks you check off.</p></div><button id="jumpNextTask" type="button">Go to task →</button></div><div class="profile-controls"><label><input type="checkbox" id="hasVehicle" checked><span>VEHICLE</span></label><label><input type="checkbox" id="hasPets"><span>PETS</span></label><label><input type="checkbox" id="hasKids"><span>SCHOOL-AGE KIDS</span></label><label><input type="checkbox" id="isRenter" checked><span>RENTER</span></label><label><input type="checkbox" id="remoteWork"><span>REMOTE WORK</span></label></div>
     <div class="plan-grid"><article><div class="plan-head"><span>01</span><b>BEFORE YOU LEAVE</b></div><div class="checklist" id="beforeList"></div></article><article><div class="plan-head"><span>02</span><b>ARRIVAL WEEK</b></div><div class="checklist" id="arrivalList"></div></article><article><div class="plan-head"><span>03</span><b>FIRST 30 DAYS</b></div><div class="checklist" id="monthList"></div></article></div>
     <div class="official-links" id="officialLinks"></div>
   </section>
@@ -89,7 +89,7 @@
     <summary><div><span>05 / WEATHER + CLIMATE CONTEXT</span><b>Open secondary climate view</b></div><i>+</i></summary>
     <div class="climate-content">
       <section class="weather-section"><div class="section-head small"><div><h2>Next 7 days.</h2></div><p>A quick check for both ends of the move. It stays secondary to the actual relocation planning.</p></div><div class="forecast-split"><article><div class="forecast-head"><span id="fromForecastName">FROM</span><b id="fromWeatherSummary">—</b></div><div class="forecast-row" id="fromForecast"></div></article><article><div class="forecast-head"><span id="toForecastName">TO</span><b id="toWeatherSummary">—</b></div><div class="forecast-row" id="toForecast"></div></article></div></section>
-      <section class="climate-section"><div class="section-head small"><div><h2>Recent climate pattern.</h2></div><p>A lightweight fingerprint built from the last three complete calendar years of Open-Meteo archive data.</p></div><div class="climate-board"><div class="climate-loading" id="climateLoading">Building 36 months of climate context…</div><div class="climate-side" id="fromClimate"></div><div class="climate-center"><span>MONTH</span><div id="monthAxis"></div></div><div class="climate-side" id="toClimate"></div></div><div class="climate-takeaways" id="climateTakeaways"></div></section>
+      <section class="climate-section"><div class="section-head small"><div><h2>Recent climate pattern.</h2></div><p>Recent weather context from the last three complete calendar years of Open-Meteo archive data. These modeled values are not station observations or 30-year climate normals. <a href="https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals" target="_blank" rel="noopener">About NOAA climate normals ↗</a></p></div><div class="climate-board"><div class="climate-loading" id="climateLoading">Building 36 months of climate context…</div><div class="climate-side" id="fromClimate"></div><div class="climate-center"><span>MONTH</span><div id="monthAxis"></div></div><div class="climate-side" id="toClimate"></div></div><div class="climate-takeaways" id="climateTakeaways"></div></section>
     </div>
   </details>
 
@@ -98,7 +98,7 @@
 </main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-<script src="app.js?v=20260905"></script>
-<script src="extras.js?v=20260905"></script>
+<script src="app.js?v=20260907"></script>
+<script src="extras.js?v=20260907"></script>
 </body>
 </html>

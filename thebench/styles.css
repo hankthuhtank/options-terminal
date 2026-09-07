@@ -845,3 +845,5 @@ kbd {
 
 
 @media(max-width:600px){:root{--head:104px}.masthead{height:var(--head);flex-wrap:wrap;gap:0 12px;padding:7px 14px}.tabs{order:4;flex:0 0 100%;margin:0;justify-content:space-between}.head-tools{margin-left:auto}}
+
+.prediction-panel{padding:24px;border:1px solid var(--gold-dim,#6b5b30);border-left:3px solid var(--gold);margin-bottom:18px}.prediction-panel h3{font-size:25px;margin:12px 0}.prediction-panel label{font-size:15px;line-height:1.6;display:block;margin:12px 0}.prediction-panel textarea{width:100%;padding:12px;background:transparent;color:inherit;border:1px solid var(--line,#665f53);font:15px/1.6 monospace;resize:vertical;margin-bottom:14px}.prediction-panel p{font-size:14px;line-height:1.65;margin:14px 0 0}.prediction-panel p[data-match=true]{color:var(--gold)}.runtime-note{margin:16px 0 24px;font-size:14px;line-height:1.65}.runtime-note summary{cursor:pointer;min-height:44px;padding:12px 0}.runtime-note p{max-width:65ch;opacity:.8}.prediction-panel :focus-visible{outline:2px solid var(--gold);outline-offset:4px}
